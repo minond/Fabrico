@@ -1,6 +1,6 @@
 <?php
 
-require 'mFrame.html.php';
+require 'mFrame.init.php';
 
 echo mHTML::el('div', array(
 	'id' => 'test',
