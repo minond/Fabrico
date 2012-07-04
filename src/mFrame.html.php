@@ -1,39 +1,23 @@
 <?php
 
 class mHTML {
-	private static $content = 'content';
+	/**
+	 * @name el
+	 * @param string element type
+	 * @param string element content
+	 * @param array element properties
+	 * @return string HTML element string
+	 */
+	public static function el ($type, $content = '', $props = array()) {
+		$wrap = '<%s %s>%s</%s>';
+		$prop = '%s="%s"';
+		$proplist = array();
 
-	public static function el ($type, $props = array()) {
-		$open = "<{$type}";
-		$close = "</{$type}>";
-		$text = '>';
-		$html = '';
-
-		foreach ($props as $prop => $value) {
-			if ($prop === self::$content) {
-				$text .= $value;
-			}
-			else {
-				$html .= " {$prop}='{$value}'";
-			}
+		foreach ($props as $key => $value) {
+			$proplist[] = sprintf($prop, $key, $value);
 		}
 
-		return $open . $html . $text . $close;
+		$proplist = implode($proplist, ' ');
+		return sprintf($wrap, $type, $proplist, $content, $type);
 	}
-}
-
-class mElement {
-	private $tag_str;
-
-	protected function tag ($str) {
-		$this->tag_str = $str;
-	}
-
-	public function html () {
-		
-	}
-}
-
-class Div extends mElement {
-	
 }

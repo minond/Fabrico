@@ -17,6 +17,8 @@ class mFrame {
 	 * initializes project and requested file settings
 	 */
 	public static function init () {
+		global $program;
+
 		self::$file = $_REQUEST[ self::$uri_query_file ];
 		self::$config = (object) parse_ini_file(self::$config_file, true);
 
@@ -25,7 +27,19 @@ class mFrame {
 		}
 		
 		self::$can_load = file_exists(self::get_file_requested());
+		$program->controller = self::get_controller_file(self::$file);
+
 		return self::$can_load;
+	}
+
+	public static function get_controller_file ($file) {
+		global $program, $directory;
+
+		return self::$config->loading->prefix .
+		       self::$config->project->path .
+		       $directory->controllers .
+		       self::get_clean_file($file) .
+		       self::$config->loading->suffix;
 	}
 
 	/**
@@ -41,7 +55,22 @@ class mFrame {
 	 * @return string requested file path
 	 */
 	public static function get_file_requested () {
-		return self::get_file_path(self::$file . self::$config->loading->suffix);
+		return self::get_file_path(
+			   self::get_clean_file(self::$file) . 
+			   self::$config->loading->suffix
+		);
+	}
+
+	/**
+	 * @name get_clean_file
+	 * @return string clean/valid file name
+	 */
+	public static function get_clean_file ($file) {
+		return preg_replace(
+			array('/\/$/', '/\s/', '/-/', '/\..+$/'), 
+			array('', '_', '_', ''), 
+			$file
+		);
 	}
 
 	/**
@@ -49,7 +78,7 @@ class mFrame {
 	 * @return string path to project file
 	 */
 	public static function get_file_path ($file) {
-		return	self::$config->loading->prefix . self::$config->project->path .$file;
+		return self::$config->loading->prefix . self::$config->project->path .$file;
 	}
 
 	/**

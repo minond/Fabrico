@@ -6,7 +6,7 @@ class util {
 	public static $out_wrap = '<pre>%s</pre>';
 
 	// log settings
-	public static $log_file = 'logs/debug.log';
+	public static $log_file;
 	public static $log_wrap = "\n[%s:%s]: %s\n";
 	public static $log_date = 'Y-m-d H:i:s';
 
@@ -55,3 +55,6 @@ class util {
 		}
 	}
 }
+
+// standard directory	
+util::$log_file = "{$directory->logs}/debug.log";
