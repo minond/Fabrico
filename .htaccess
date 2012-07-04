@@ -1,7 +1,0 @@
-RewriteEngine On
-
-RewriteBase /mFrame
-RewriteCond %{SCRIPT_FILENAME} !-d
-RewriteCond %{SCRIPT_FILENAME} !-f
-
-RewriteRule ^(.+)$ mFrame/mFrame.view.php?_file=$1&_uri=%{REQUEST_URI}&%{QUERY_STRING}
