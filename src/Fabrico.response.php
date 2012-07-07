@@ -30,25 +30,24 @@ class FabricoResponse {
 	public function out () {
 		die(json_encode($this->return));
 	}
-}
 
+	/**
+	 * @name error
+	 * @param string error title
+	 * @param string error message
+	 * @param string file name
+	 * @param int line number
+	 * @return stdClass error object
+	 */
+	public static function error ($title, $message, $filename, $line) {
+		$error = new stdClass;
 
-/**
- * @name FabricoError
- * @param string error title
- * @param string error message
- * @param string file name
- * @param int line number
- * @return stdClass error object
- */
-function FabricoError ($title, $message, $filename, $line) {
-	$error = new stdClass;
+		$error->title = $title;
+		$error->message = $message;
+		$error->filename = $filename;
+		$error->line = $line;
 
-	$error->title = $title;
-	$error->message = $message;
-	$error->filename = $filename;
-	$error->line = $line;
-
-	util::log(Fabrico::ERROR, $error);
-	return $error;
+		util::log(Fabrico::ERROR, $error);
+		return $error;
+	}
 }

@@ -401,7 +401,7 @@ class Fabrico {
 			);
 		}
 		else {
-			$err = FabricoError(self::NOT_ALLOWED, self::$method, __FILE__, __LINE__);
+			$err = FabricoResponse::error(self::NOT_ALLOWED, self::$method, __FILE__, __LINE__);
 			$ret = new FabricoResponse(self::ERROR, $err);
 		}
 		
@@ -418,7 +418,7 @@ class Fabrico {
 		$ret = new FabricoResponse(self::IN_PROCESS);
 
 		if (!file_exists(self::get_action_file(self::$action))) {
-			$err = FabricoError(self::UNKNOWN_FILE, self::get_action_file(self::$action), __FILE__, __LINE__);
+			$err = FabricoResponse::error(self::UNKNOWN_FILE, self::get_action_file(self::$action), __FILE__, __LINE__);
 			$ret = new FabricoResponse(self::ERROR, $err);
 		}
 		else {
@@ -442,12 +442,12 @@ class Fabrico {
 					);
 				}
 				else {
-					$err = FabricoError(self::UNKNOWN_ACTION, $action, __FILE__, __LINE__);
+					$err = FabricoResponse::error(self::UNKNOWN_ACTION, $action, __FILE__, __LINE__);
 					$ret = new FabricoResponse(self::ERROR, $err);
 				}
 			}
 			else {
-				$err = FabricoError(self::NOT_ALLOWED, self::$action, __FILE__, __LINE__);
+				$err = FabricoResponse::error(self::NOT_ALLOWED, self::$action, __FILE__, __LINE__);
 				$ret = new FabricoResponse(self::ERROR, $err);
 			}
 		}
