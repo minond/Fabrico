@@ -6,8 +6,7 @@ class util {
 	public static $out_wrap = '<pre>%s</pre>';
 
 	// log settings
-	public static $log_file;
-	public static $log_wrap = "\n[%s:%s]: %s\n";
+	public static $log_wrap = "%s %s project: %s\n";
 	public static $log_date = 'Y-m-d H:i:s';
 
 	public static function prepare_output () {
@@ -26,7 +25,15 @@ class util {
 			func_get_args()
 		);
 
-		echo sprintf(self::$out_wrap, implode($out, self::$out_delim));
+		$out = implode($out, self::$out_delim);
+		echo HTML::el('pre', array(
+			'content' => $out, 
+			'style' => HTML::style(array(
+				'cursor' => 'default',
+				'white-space' => 'pre-wrap',
+				'font-size' => '11px'
+			))
+		));
 	}
 
 	public static function coutd () {
@@ -39,8 +46,8 @@ class util {
 	}
 
 	public static function log () {
-		$project = mFrame::get_config()->project->name;
-		$filename = mFrame::get_file_path(self::$log_file);
+		$project = Fabrico::get_config()->project->name;
+		$filename = Fabrico::get_log_file();
 		$out = call_user_func_array(
 			array('self', 'prepare_output'),
 			func_get_args()
@@ -49,12 +56,9 @@ class util {
 		if (file_exists($filename)) {
 			$file = fopen($filename, 'a');
 			$text = implode($out, self::$out_delim);
-			$logtext = sprintf(self::$log_wrap, $project, date(self::$log_date), $text);
+			$logtext = sprintf(self::$log_wrap, date(self::$log_date), $project, $text);
 			fwrite($file, $logtext);
 			fclose($file);
 		}
 	}
 }
-
-// standard directory	
-util::$log_file = "{$directory->logs}/debug.log";
