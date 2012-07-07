@@ -1,9 +1,19 @@
+/**
+ * @name Fabrico
+ * @var object
+ */
 var Fabrico = {};
 
-function sprintf () {
+/**
+ * @name sprintf
+ * @param string template
+ * @param string* merge
+ * @return string updated template string
+ */
+var sprintf = function (template) {
 	for (var i = 1, max = arguments.length; i < max; i++) {
-		arguments[ 0 ] = arguments[ 0 ].replace("%s", arguments[ i ]);
+		template = template.replace("%s", arguments[ i ]);
 	}
 
-	return arguments[ 0 ];
+	return template;
 }

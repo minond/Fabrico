@@ -1,3 +1,7 @@
+/**
+ * @name controller
+ * @var object
+ */
 Fabrico.controller = {};
 
 /**

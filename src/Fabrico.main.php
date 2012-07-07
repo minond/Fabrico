@@ -336,7 +336,6 @@ class Fabrico {
 
 		// setup enviroment
 		foreach ($controller as $key => $value) {
-			global $$key;
 			$$key = $value;
 		}
 
@@ -397,7 +396,6 @@ class Fabrico {
 		if ($controller->allows(self::$action)) {
 			// set up enviroment
 			foreach ($env as $key => $value) {
-				global $$key;
 				$$key = $value;
 			}
 
@@ -430,7 +428,7 @@ class Fabrico {
 	 */
 	public static function is_view_request () {
 		return isset(self::$req[ self::$uri_query_file ]) && 
-			   strlen(self::$req[ self::$uri_query_file ]) &&
+		       strlen(self::$req[ self::$uri_query_file ]) &&
 		       !self::is_method_request() &&
 		       !self::is_action_request();
 	}
@@ -442,8 +440,8 @@ class Fabrico {
 	public static function is_method_request () {
 		return isset(self::$req[ self::$uri_query_file ]) && 
 		       isset(self::$req[ self::$uri_query_method ]) &&
-			   strlen(self::$req[ self::$uri_query_method ]) &&
-			   !self::is_action_request();
+		       strlen(self::$req[ self::$uri_query_method ]) &&
+		       !self::is_action_request();
 	}
 
 	/**
@@ -453,8 +451,8 @@ class Fabrico {
 	public static function is_action_request () {
 		return isset(self::$req[ self::$uri_query_file ]) && 
 		       isset(self::$req[ self::$uri_query_action ]) &&
-			   strlen(self::$req[ self::$uri_query_action ]) &&
-			   !self::is_method_request();
+		       strlen(self::$req[ self::$uri_query_action ]) &&
+		       !self::is_method_request();
 	}
 
 	/**
