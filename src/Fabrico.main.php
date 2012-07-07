@@ -40,7 +40,6 @@ class Fabrico {
 	/**
 	 * @name redirect
 	 * @var stdClass
-	 *
 	 * bad request handers
 	 */
 	public static $redirect;
@@ -48,7 +47,6 @@ class Fabrico {
 	/**
 	 * @name directory
 	 * @var stdClass
-	 *
 	 * standard project directory structure
 	 */
 	public static $directory;
@@ -56,7 +54,6 @@ class Fabrico {
 	/**
 	 * @name service
 	 * @var stdClass
-	 *
 	 * service loader/manager scripts
 	 */
 	public static $service;

@@ -9,7 +9,12 @@ class util {
 	public static $log_wrap = "%s %s project: %s\n";
 	public static $log_date = 'Y-m-d H:i:s';
 
-	public static function prepare_output () {
+	/**
+	 * @name prepare_output
+	 * @param mixed* list of variable to output/log
+	 * @return array of items
+	 */
+	private static function prepare_output () {
 		$out = array();
 
 		for ($i = 0, $max = func_num_args(); $i < $max; $i++) {
@@ -19,6 +24,11 @@ class util {
 		return $out;
 	}
 
+	/** 
+	 * @name cout
+	 * @param mixed* output
+	 * formats and outputs
+	 */
 	public static function cout () {
 		if (!Fabrico::is_debugging()) {
 			return false;
@@ -40,6 +50,11 @@ class util {
 		));
 	}
 
+	/**
+	 * @name coutd
+	 * @param mixed* output
+	 * formats, outputs, then ends script
+	 */
 	public static function coutd () {
 		if (!Fabrico::is_debugging()) {
 			return false;
@@ -53,7 +68,16 @@ class util {
 		die;
 	}
 
+	/**
+	 * @name log
+	 * @param mixed* log output
+	 * outputs items to a log file
+	 */
 	public static function log () {
+		if (!Fabrico::is_debugging()) {
+			return false;
+		}
+
 		$project = Fabrico::get_config()->project->info->name;
 		$filename = Fabrico::get_log_file();
 		$out = call_user_func_array(
