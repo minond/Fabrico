@@ -89,6 +89,18 @@ class Template {
  */
 class Resource {
 	/**
+	 * @name EXT_JS
+	 * @constant string
+	 */
+	const EXT_JS = 'js';
+
+	/**
+	 * @name EXT_CSS
+	 * @constant string
+	 */
+	const EXT_CSS = 'css';
+
+	/**
 	 * @name extension
 	 * @var regex string used to get a file's extension
 	 */
@@ -113,14 +125,14 @@ class Resource {
 			$url = Fabrico::get_resource_file($url, $extension);
 
 			switch ($extension) {
-				case 'js':
+				case self::EXT_JS:
 					self::$scripts[] = HTML::el('script', array(
 						'type' => 'text/javascript',
 						'src' => $url
 					));
 					break;
 
-				case 'css':
+				case self::EXT_CSS:
 					echo HTML::el('link', array(
 						'rel' => 'stylesheet',
 						'type' => 'text/css',
@@ -137,7 +149,14 @@ class Resource {
 					break;
 			}
 		}
+	}
 
-		return '';
+	/**
+	 * @name internal
+	 * @param string file name
+	 * @return string internal file name
+	 */
+	public static function internal ($file) {
+		return Fabrico::PATH_INTERNAL_STR . $file;
 	}
 }

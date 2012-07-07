@@ -20,6 +20,10 @@ class util {
 	}
 
 	public static function cout () {
+		if (!Fabrico::is_debugging()) {
+			return false;
+		}
+
 		$out = call_user_func_array(
 			array('self', 'prepare_output'),
 			func_get_args()
@@ -37,6 +41,10 @@ class util {
 	}
 
 	public static function coutd () {
+		if (!Fabrico::is_debugging()) {
+			return false;
+		}
+
 		call_user_func_array(
 			array('self', 'cout'),
 			func_get_args()
@@ -46,7 +54,7 @@ class util {
 	}
 
 	public static function log () {
-		$project = Fabrico::get_config()->project->name;
+		$project = Fabrico::get_config()->project->info->name;
 		$filename = Fabrico::get_log_file();
 		$out = call_user_func_array(
 			array('self', 'prepare_output'),

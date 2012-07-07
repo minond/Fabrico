@@ -98,6 +98,11 @@ class FabricoController {
 		return in_array($action, $this->allows);
 	}
 
+	/**
+	 * @name action
+	 * @param string action name
+	 * @param array optional arguments
+	 */
 	protected function action ($action, $args = array()) {
 		if ($this->allows($action)) {
 			require_once Fabrico::get_action_file($action);

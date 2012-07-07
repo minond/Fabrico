@@ -6,12 +6,19 @@ class Fabrico {
 	const SUCCESS = 'success';
 	const UNKNOWN_FILE = 'unknown file';
 
+	// resource file checks
+	const PATH_ABSOLUTE = '/http|^\//';
+	const PATH_INTERNAL = '/\^\//';
+	const PATH_INTERNAL_STR = '^/';
+
 	// project/page information
 	public static $file;
 	public static $controller;
+	private static $req;
 	private static $method;
 	private static $action;
 	private static $config;
+	private static $debugging;
 
 	// pre request information
 	private static $uri_query_file = '_file';
@@ -19,14 +26,15 @@ class Fabrico {
 	private static $uri_query_env = '_env';
 	private static $uri_query_method = '_method';
 	private static $uri_query_action = '_action';
+	private static $uri_query_debug = '_debug';
 
 	// default controller information
 	private static $file_config = '../config/config.ini';
 	private static $file_debug = 'debug.log';
-
+	private static $file_project = 'config/config.ini';
+	private static $def_debugging = 'FabricoDebugging';
 	private static $def_controller = 'Fabrico.controller.php';
 	private static $def_controller_name = 'FabricoController';
-
 	public static $tpl_helper = 'Fabrico.template.php';
 
 	/**
@@ -55,15 +63,18 @@ class Fabrico {
 
 	/**
 	 * @name init
+	 * @param array request object
 	 * initializes project and requested file settings
 	 */
-	public static function init () {
+	public static function init (& $req) {
+		self::$req =& $req;
+
 		self::$config = new stdClass;
 		self::$redirect = new stdClass;
 		self::$redirect->_404_redirect = '';
 		self::$redirect->_404_header = 'HTTP/1.0 404 Not Found';
 
-		self::$file = $_REQUEST[ self::$uri_query_file ];
+		self::$file = self::$req[ self::$uri_query_file ];
 		$settings = (object) parse_ini_file(self::$file_config, true);
 
 		foreach ($settings as $section => $setting) {
@@ -73,10 +84,69 @@ class Fabrico {
 		self::$directory = $settings->directory;
 		self::$service = $settings->service;
 		self::$config->loading = $settings->loading;
-		self::$config->project = $settings->project;
 		self::$config->internal = $settings->internal;
+		
+		self::$config->project = (object) parse_ini_file(
+			$settings->loading->prefix .
+			$settings->loading->path .
+			self::$file_project, true
+		);
+
+		foreach (self::$config->project as $section => $setting) {
+			self::$config->project->{ $section } = (object) $setting;
+		}
 
 		return file_exists(self::get_requested_file());
+	}
+
+	/**
+	 * @name check_debugging
+	 * checks if requeste and project are in debug mode
+	 */
+	public static function check_debugging () {
+		self::$debugging = false;
+
+		if (isset(self::$req[ self::$uri_query_debug ])) {
+			setcookie(self::$def_debugging, self::$req[ self::$uri_query_debug ]);
+			$_COOKIE[ self::$def_debugging ] = self::$req[ self::$uri_query_debug ];
+		}
+
+		if (isset($_COOKIE[ self::$def_debugging ])) {
+			self::$debugging = $_COOKIE[ self::$def_debugging ] === '1';
+		}
+	}
+
+	/**
+	 * @name clean_file
+	 * @return string clean/valid file name
+	 */
+	public static function clean_file ($file) {
+		return preg_replace(
+			array('/\/$/', '/\s/', '/-/', '/\..+$/'), 
+			array('', '_', '_', ''), 
+			$file
+		);
+	}
+
+	/**
+	 * @name file_path
+	 * @param string file name
+	 * @param bool optional file path starts at root
+	 * @param bool optional file is a framework file
+	 * @return string path to project file
+	 */
+	public static function file_path ($file, $root = false, $int = false) {
+		$path = $root ? self::$config->loading->root : self::$config->loading->prefix;
+		$path = $int ? self::$config->loading->internal : $path;
+
+		if ($int) {
+			$file = preg_replace(self::PATH_INTERNAL, '', $file);
+		}
+		else {
+			$path .= self::$config->loading->path;
+		}
+
+		return $path . $file;
 	}
 
 	/**
@@ -92,7 +162,7 @@ class Fabrico {
 	 * @return string log file path
 	 */
 	public static function get_log_file () {
-		return self::get_file_path(
+		return self::file_path(
 			self::$directory->logs .
 			self::$file_debug
 		);
@@ -109,9 +179,9 @@ class Fabrico {
 			$file = self::$file;
 		}
 
-		$cfile = self::get_file_path(
+		$cfile = self::file_path(
 			self::$directory->controllers .
-			self::get_clean_file($file) .
+			self::clean_file($file) .
 			self::$config->loading->suffix
 		);
 
@@ -120,7 +190,7 @@ class Fabrico {
 			self::$controller = self::$def_controller_name;
 		}
 		else {
-			self::$controller = ucwords(self::get_clean_file($file));
+			self::$controller = ucwords(self::clean_file($file));
 		}
 
 		return $cfile;
@@ -131,42 +201,24 @@ class Fabrico {
 	 * @return string requested file path
 	 */
 	public static function get_requested_file () {
-		return self::get_file_path(
+		return self::file_path(
 		       self::$directory->views .
-			   self::get_clean_file(self::$file) . 
+			   self::clean_file(self::$file) . 
 			   self::$config->loading->suffix
 		);
 	}
 
+	/**
+	 * @name get_action_file
+	 * @param string action file name
+	 * @return string action file path
+	 */
 	public static function get_action_file ($file) {
-		return self::get_file_path(
+		return self::file_path(
 			self::$directory->actions .
-			self::get_clean_file($file) .
+			self::clean_file($file) .
 			self::$config->loading->suffix
 		);
-	}
-
-	/**
-	 * @name get_clean_file
-	 * @return string clean/valid file name
-	 */
-	public static function get_clean_file ($file) {
-		return preg_replace(
-			array('/\/$/', '/\s/', '/-/', '/\..+$/'), 
-			array('', '_', '_', ''), 
-			$file
-		);
-	}
-
-	/**
-	 * @name get_file_path
-	 * @param string file name
-	 * @return string path to project file
-	 */
-	public static function get_file_path ($file, $root = false) {
-		return ($root ? self::$config->loading->root : self::$config->loading->prefix) . 
-		       self::$config->project->path .
-			   $file;
 	}
 
 	/**
@@ -174,7 +226,7 @@ class Fabrico {
 	 * @return string view file loaded before pre
 	 */
 	public static function get_main_view_pre_file () {
-		return self::get_file_path(
+		return self::file_path(
 		       self::$directory->internals .
 		       self::$directory->views .
 			   self::$config->internal->seeing .
@@ -187,7 +239,7 @@ class Fabrico {
 	 * @return string view file loaded before pre
 	 */
 	public static function get_main_view_post_file () {
-		return self::get_file_path(
+		return self::file_path(
 		       self::$directory->internals .
 		       self::$directory->views .
 			   self::$config->internal->saw .
@@ -202,20 +254,17 @@ class Fabrico {
 	 * @return string file path
 	 */
 	public static function get_resource_file ($url, $extension) {
-		// internal resource directory
-		$dir;
-
 		// external resource check
-		if (preg_match('/http|^\//', $url)) {
+		if (preg_match(self::PATH_ABSOLUTE, $url)) {
 			return $url;
 		}
 
 		switch ($extension) {
-			case 'js':
+			case Resource::EXT_JS:
 				$dir = self::$directory->javascript;
 				break;
 
-			case 'css':
+			case Resource::EXT_CSS:
 				$dir = self::$directory->css;
 				break;
 
@@ -224,8 +273,8 @@ class Fabrico {
 				break;
 		}
 
-		return self::get_file_path(
-		       $dir . $url, true
+		return self::file_path(
+		       $dir . $url, true, preg_match(self::PATH_INTERNAL, $url)
 		);
 	}
 
@@ -252,13 +301,13 @@ class Fabrico {
 		$controller = new self::$controller;
 
 		// argument check
-		if (isset($_REQUEST[ self::$uri_query_arg ])) {
-			$arg = $_REQUEST[ self::$uri_query_arg ];
+		if (isset(self::$req[ self::$uri_query_arg ])) {
+			$arg = self::$req[ self::$uri_query_arg ];
 		}
 
 		// enriroment check
-		if (isset($_REQUEST[ self::$uri_query_env ])) {
-			$env = $_REQUEST[ self::$uri_query_env ];
+		if (isset(self::$req[ self::$uri_query_env ])) {
+			$env = self::$req[ self::$uri_query_env ];
 		}
 
 		return array(& $controller, & $arg, & $env);
@@ -304,7 +353,7 @@ class Fabrico {
 	 */
 	public static function init_method () {
 		$ret = new stdClass;
-		self::$method = $_REQUEST[ self::$uri_query_method ];
+		self::$method = self::$req[ self::$uri_query_method ];
 		list($controller, $arg, $env) = self::get_request_call_info();
 
 		// method check
@@ -333,7 +382,7 @@ class Fabrico {
 	 * checks if current page is allowed to take a certain action and runs it
 	 */
 	public static function init_action () {
-		self::$action = $_REQUEST[ self::$uri_query_action ];
+		self::$action = self::$req[ self::$uri_query_action ];
 
 		if (!file_exists(self::get_action_file(self::$action))) {
 			die;
@@ -368,7 +417,7 @@ class Fabrico {
 	 * @return bool true if requested file is an internal script
 	 */
 	public static function is_internal () {
-		return in_array(self::get_clean_file(self::$file), self::$config->internal->files);
+		return in_array(self::clean_file(self::$file), self::$config->internal->files);
 	}
 
 	/**
@@ -376,8 +425,8 @@ class Fabrico {
 	 * @return bool true if requested file is a view page
 	 */
 	public static function is_view_request () {
-		return isset($_REQUEST[ self::$uri_query_file ]) && 
-			   strlen($_REQUEST[ self::$uri_query_file ]) &&
+		return isset(self::$req[ self::$uri_query_file ]) && 
+			   strlen(self::$req[ self::$uri_query_file ]) &&
 		       !self::is_method_request() &&
 		       !self::is_action_request();
 	}
@@ -387,9 +436,9 @@ class Fabrico {
 	 * @return bool true if request is a method request
 	 */
 	public static function is_method_request () {
-		return isset($_REQUEST[ self::$uri_query_file ]) && 
-		       isset($_REQUEST[ self::$uri_query_method ]) &&
-			   strlen($_REQUEST[ self::$uri_query_method ]) &&
+		return isset(self::$req[ self::$uri_query_file ]) && 
+		       isset(self::$req[ self::$uri_query_method ]) &&
+			   strlen(self::$req[ self::$uri_query_method ]) &&
 			   !self::is_action_request();
 	}
 
@@ -398,9 +447,17 @@ class Fabrico {
 	 * @return bool true if request is an action request
 	 */
 	public static function is_action_request () {
-		return isset($_REQUEST[ self::$uri_query_file ]) && 
-		       isset($_REQUEST[ self::$uri_query_action ]) &&
-			   strlen($_REQUEST[ self::$uri_query_action ]) &&
+		return isset(self::$req[ self::$uri_query_file ]) && 
+		       isset(self::$req[ self::$uri_query_action ]) &&
+			   strlen(self::$req[ self::$uri_query_action ]) &&
 			   !self::is_method_request();
+	}
+
+	/**
+	 * @name is_debugging
+	 * @return bool debugging state
+	 */
+	public static function is_debugging () {
+		return self::$debugging;
 	}
 }
