@@ -1,5 +1,5 @@
 <?php
 
-function test () {
+function _test_ () {
 	return "S";
 }

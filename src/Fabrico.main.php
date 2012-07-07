@@ -4,12 +4,19 @@ class Fabrico {
 	// states
 	const ERROR = 'error';
 	const SUCCESS = 'success';
-	const UNKNOWN_FILE = 'unknown file';
+	const IN_PROCESS = 'in_process';
+	const UNKNOWN_FILE = 'unknown_file';
+	const UNKNOWN_ACTION = 'unknown_action';
+	const UNKNOWN_METHOD = 'unknown_method';
+	const NOT_ALLOWED = 'not_allowed';
 
 	// resource file checks
 	const PATH_ABSOLUTE = '/http|^\//';
 	const PATH_INTERNAL = '/\^\//';
 	const PATH_INTERNAL_STR = '^/';
+
+	// action names
+	const ACTION_FORMAT = '_%s_';
 
 	// project/page information
 	public static $file;
@@ -126,6 +133,15 @@ class Fabrico {
 	}
 
 	/**
+	 * @name clean_action_name
+	 * @param string action name
+	 * @return string fabrico action name
+	 */
+	public static function clean_action_name ($action) {
+		return sprintf(self::ACTION_FORMAT, $action);
+	}
+
+	/**
 	 * @name file_path
 	 * @param string file name
 	 * @param bool optional file path starts at root
@@ -218,6 +234,15 @@ class Fabrico {
 		);
 	}
 
+	public static function get_main_controller_file () {
+		return self::file_path(
+		       self::$directory->internals .
+		       self::$directory->controllers .
+		       self::$config->internal->controller .
+		       self::$config->loading->suffix
+		);
+	}
+
 	/**
 	 * @name get_main_view_pre_file
 	 * @return string view file loaded before pre
@@ -226,8 +251,8 @@ class Fabrico {
 		return self::file_path(
 		       self::$directory->internals .
 		       self::$directory->views .
-			   self::$config->internal->seeing .
-			   self::$config->loading->suffix
+		       self::$config->internal->seeing .
+		       self::$config->loading->suffix
 		);
 	}
 
@@ -294,6 +319,7 @@ class Fabrico {
 		$env = array();
 
 		// load controller
+		require_once self::get_main_controller_file();
 		require_once self::get_controller_file();
 		$controller = new self::$controller;
 
@@ -331,6 +357,7 @@ class Fabrico {
 	 */
 	public static function init_template () {
 		// load and initialize the controller
+		require_once self::get_main_controller_file();
 		require_once self::get_controller_file();
 		$controller = new Fabrico::$controller;
 
@@ -354,7 +381,7 @@ class Fabrico {
 	 * loads the current page's controller and calls it's requested method.
 	 */
 	public static function init_method () {
-		$ret = new stdClass;
+		$ret = new FabricoResponse(self::IN_PROCESS);
 		self::$method = self::$req[ self::$uri_query_method ];
 		list($controller, $arg, $env) = self::get_request_call_info();
 
@@ -368,15 +395,17 @@ class Fabrico {
 			}
 
 			// and call method
-			$ret->status = self::SUCCESS;
-			$ret->msg = call_user_func_array(array($controller, self::$method), $arg);
+			$ret = new FabricoResponse(
+				self::SUCCESS, 
+				call_user_func_array(array($controller, self::$method), $arg)
+			);
 		}
 		else {
-			$ret->status = self::ERROR;
-			$ret->msg = self::UNKNOWN_FILE;
+			$err = FabricoError(self::NOT_ALLOWED, self::$method, __FILE__, __LINE__);
+			$ret = new FabricoResponse(self::ERROR, $err);
 		}
 		
-		die(self::get_request_call_response($ret));
+		$ret->out();
 	}
 
 	/**
@@ -385,33 +414,45 @@ class Fabrico {
 	 */
 	public static function init_action () {
 		self::$action = self::$req[ self::$uri_query_action ];
+		$action = self::clean_action_name(self::$action);
+		$ret = new FabricoResponse(self::IN_PROCESS);
 
 		if (!file_exists(self::get_action_file(self::$action))) {
-			die;
-		}
-
-		list($controller, $arg, $env) = self::get_request_call_info();
-		
-		// check action
-		if ($controller->allows(self::$action)) {
-			// set up enviroment
-			foreach ($env as $key => $value) {
-				$$key = $value;
-			}
-
-			// load action
-			require_once self::get_action_file(self::$action);
-
-			// and call it
-			$ret->status = self::SUCCESS;
-			$ret->msg = call_user_func_array(self::$action, $arg);
+			$err = FabricoError(self::UNKNOWN_FILE, self::get_action_file(self::$action), __FILE__, __LINE__);
+			$ret = new FabricoResponse(self::ERROR, $err);
 		}
 		else {
-			$ret->status = self::ERROR;
-			$ret->msg = self::UNKNOWN_FILE;
+			list($controller, $arg, $env) = self::get_request_call_info();
+		
+			// check action
+			if ($controller->allows(self::$action)) {
+				// set up enviroment
+				foreach ($env as $key => $value) {
+					$$key = $value;
+				}
+
+				// load action
+				require_once self::get_action_file(self::$action);
+
+				// and call it
+				if (function_exists($action)) {
+					$ret = new FabricoResponse(
+						self::SUCCESS, 
+						call_user_func_array($action, $arg)
+					);
+				}
+				else {
+					$err = FabricoError(self::UNKNOWN_ACTION, $action, __FILE__, __LINE__);
+					$ret = new FabricoResponse(self::ERROR, $err);
+				}
+			}
+			else {
+				$err = FabricoError(self::NOT_ALLOWED, self::$action, __FILE__, __LINE__);
+				$ret = new FabricoResponse(self::ERROR, $err);
+			}
 		}
 
-		die(self::get_request_call_response($ret));
+		$ret->out();
 	}
 
 	/**

@@ -1,8 +1,9 @@
 <?php
 
-class Index extends FabricoController {
+class Index extends MainController {
 	public function __construct () {
-		$this->allow('test', 'check');
+		parent::__construct();
+		$this->allow('test', 'check', 'filelog');
 		$this->register('test', 'config');
 
 		$this->posts = range(1, 20);

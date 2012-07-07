@@ -6,11 +6,12 @@ require_once 'Fabrico.main.php';
 require_once 'Fabrico.html.php';
 require_once 'Fabrico.connection.php';
 require_once 'Fabrico.controller.php';
+require_once 'Fabrico.response.php';
+
+Fabrico::check_debugging();
 
 // valid view file
 if (Fabrico::init($_REQUEST) && !Fabrico::is_internal()) {
-	Fabrico::check_debugging();
-
 	// regular page request
 	if (Fabrico::is_view_request()) {
 		Fabrico::init_template();

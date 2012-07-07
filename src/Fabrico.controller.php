@@ -20,6 +20,13 @@ class FabricoController {
 	private $registered = array();
 
 	/**
+	 * @name FabricoController
+	 */
+	public function __construct () {
+		
+	}
+
+	/**
 	 * @name register
 	 * @param string* methods to register
 	 * @return int number of registered methods
@@ -106,7 +113,10 @@ class FabricoController {
 	protected function action ($action, $args = array()) {
 		if ($this->allows($action)) {
 			require_once Fabrico::get_action_file($action);
-			return call_user_func_array($action, $args);
+
+			return call_user_func_array(
+				Fabrico::clean_action_name($action), $args
+			);
 		}
 	}
 }

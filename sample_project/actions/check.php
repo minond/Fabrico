@@ -1,5 +1,5 @@
 <?php
 
-function check () {
+function _check_ () {
 	return "c";
 }
