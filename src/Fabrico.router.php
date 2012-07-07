@@ -1,14 +1,12 @@
 <?php
 
-require_once 'Fabrico.state.php';
-require_once 'Fabrico.util.php';
 require_once 'Fabrico.main.php';
+require_once 'Fabrico.util.php';
 require_once 'Fabrico.html.php';
-require_once 'Fabrico.connection.php';
+require_once 'Fabrico.state.php';
 require_once 'Fabrico.controller.php';
+require_once 'Fabrico.model.php';
 require_once 'Fabrico.response.php';
-
-Fabrico::check_debugging();
 
 // valid view file
 if (Fabrico::init($_REQUEST) && !Fabrico::is_internal()) {

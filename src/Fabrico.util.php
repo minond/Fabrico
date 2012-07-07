@@ -1,12 +1,14 @@
 <?php
 
+Fabrico::check_debugging();
+
 class util {
 	// output settings
 	public static $out_delim = "\n\n";
 	public static $out_wrap = '<pre>%s</pre>';
 
 	// log settings
-	public static $log_wrap = "%s %s project: %s\n";
+	public static $log_wrap = "%s %s project - %s\n";
 	public static $log_date = 'Y-m-d H:i:s';
 
 	/**
@@ -18,7 +20,17 @@ class util {
 		$out = array();
 
 		for ($i = 0, $max = func_num_args(); $i < $max; $i++) {
-			$out[] = print_r(func_get_arg($i), true);
+			$val = func_get_arg($i);
+
+			if (is_array($val) || is_object($val)) {
+				ob_start();
+				var_dump($val);
+				$out[] = ob_get_contents();
+				ob_end_clean();
+			}
+			else {
+				$out[] = print_r($val, true);
+			}
 		}
 
 		return $out;
