@@ -334,6 +334,12 @@ class Fabrico {
 		require_once self::get_controller_file();
 		$controller = new Fabrico::$controller;
 
+		// setup enviroment
+		foreach ($controller as $key => $value) {
+			global $$key;
+			$$key = $value;
+		}
+
 		// load the view
 		require self::$tpl_helper;
 		require self::get_main_view_pre_file();
@@ -391,7 +397,8 @@ class Fabrico {
 		if ($controller->allows(self::$action)) {
 			// set up enviroment
 			foreach ($env as $key => $value) {
-				$GLOBALS[ $key ] = $value;
+				global $$key;
+				$$key = $value;
 			}
 
 			// load action

@@ -1,4 +1,6 @@
 <?= Template::content() ?>
 <?= Resource::add('main.js') ?>
 
-<?= util::cout(Fabrico::get_config()) ?>
+<? foreach ($posts as $post): ?>
+	<div><?= $post ?></div>
+<? endforeach ?>

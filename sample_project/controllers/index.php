@@ -4,7 +4,11 @@ class Index extends FabricoController {
 	public function __construct () {
 		$this->allow('test', 'check');
 		$this->register('test', 'config');
+
+		$this->posts = range(1, 20);
 	}
+
+	public $posts;
 
 	public $name = 'aaaaaaaaaaaaaa';
 
