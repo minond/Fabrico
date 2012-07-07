@@ -216,8 +216,8 @@ class Fabrico {
 	public static function get_requested_file () {
 		return self::file_path(
 		       self::$directory->views .
-			   self::clean_file(self::$file) . 
-			   self::$config->loading->suffix
+		       self::clean_file(self::$file) . 
+		       self::$config->loading->suffix
 		);
 	}
 
@@ -264,8 +264,8 @@ class Fabrico {
 		return self::file_path(
 		       self::$directory->internals .
 		       self::$directory->views .
-			   self::$config->internal->saw .
-			   self::$config->loading->suffix
+		       self::$config->internal->saw .
+		       self::$config->loading->suffix
 		);
 	}
 
