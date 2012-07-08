@@ -1,14 +1,14 @@
 <?php
 
 class Fabrico {
-	// states
+	// statuses
 	const ERROR = 'error';
 	const SUCCESS = 'success';
 	const IN_PROCESS = 'in_process';
+	const NOT_ALLOWED = 'not_allowed';
 	const UNKNOWN_FILE = 'unknown_file';
 	const UNKNOWN_ACTION = 'unknown_action';
 	const UNKNOWN_METHOD = 'unknown_method';
-	const NOT_ALLOWED = 'not_allowed';
 
 	// resource file checks
 	const PATH_ABSOLUTE = '/http|^\//';
@@ -26,6 +26,9 @@ class Fabrico {
 	private static $action;
 	private static $config;
 	private static $debugging;
+	private static $time_start;
+	private static $time_end;
+	private static $time_total;
 
 	// pre request information
 	private static $uri_query_file = '_file';
@@ -234,6 +237,23 @@ class Fabrico {
 		);
 	}
 
+	/**
+	 * @name get_model_file
+	 * @param string medel name
+	 * @return string model file path
+	 */
+	public static function get_model_file ($model) {
+		return self::file_path(
+			self::$directory->models .
+			self::clean_file($model) .
+			self::$config->loading->suffix
+		);
+	}
+
+	/**
+	 * @name get_main_controller_file
+	 * @return string main controller file path
+	 */
 	public static function get_main_controller_file () {
 		return self::file_path(
 		       self::$directory->internals .
@@ -502,5 +522,39 @@ class Fabrico {
 	 */
 	public static function is_debugging () {
 		return self::$debugging;
+	}
+
+	/**
+	 * @name timer_start
+	 */
+	public static function timer_start () {
+		self::$time_start = microtime();
+	}
+
+	/**
+	 * @name timer_stop
+	 */
+	public static function timer_stop () {
+		self::$time_end = microtime();
+		self::$time_total = self::$time_end - self::$time_start;
+	}
+
+	/**
+	 * @name timer_log
+	 */
+	public static function timer_log () {
+		util::loglist('request', array(
+			'file' => self::get_requested_file(self::$file),
+			'time' => self::$time_total
+		));
+	}
+
+	/**
+	 * @name req
+	 * @param string query parameter
+	 * @return string parameter value
+	 */
+	public static function req ($key) {
+		return isset(self::$req[ $key ]) ? self::$req[ $key ] : '';
 	}
 }

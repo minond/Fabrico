@@ -22,16 +22,14 @@ class FabricoController {
 	/**
 	 * @name FabricoController
 	 */
-	public function __construct () {
-		
-	}
+	public function __construct () {}
 
 	/**
 	 * @name register
 	 * @param string* methods to register
 	 * @return int number of registered methods
 	 */
-	protected function register () {
+	final protected function register () {
 		for ($i = 0, $max = func_num_args(); $i < $max; $i++) {
 			$method = func_get_arg($i);
 
@@ -48,7 +46,7 @@ class FabricoController {
 	 * @param string method in question
 	 * @return bool true if method is registered
 	 */
-	public function registered ($method) {
+	final public function registered ($method) {
 		return in_array($method, $this->registered);
 	}
 
@@ -58,7 +56,7 @@ class FabricoController {
 	 * @param string* variables to whitelabel
 	 * @return int number of white labeled variables
 	 */
-	protected function whitelabel () {
+	final protected function whitelabel () {
 		for ($i = 0, $max = func_num_args(); $i < $max; $i++) {
 			$var = func_get_arg($i);
 
@@ -75,7 +73,7 @@ class FabricoController {
 	 * @param string parameter in question
 	 * @return bool true if variable is whitelabeled
 	 */
-	public function whitelabeled ($var) {
+	final public function whitelabeled ($var) {
 		return in_array($var, $this->whitelabeled);
 	}
 
@@ -84,7 +82,7 @@ class FabricoController {
 	 * @param string* actions to allows
 	 * @return int number of allowed actions
 	 */
-	protected function allow () {
+	final protected function allow () {
 		for ($i = 0, $max = func_num_args(); $i < $max; $i++) {
 			$action = func_get_arg($i);
 
@@ -101,8 +99,24 @@ class FabricoController {
 	 * @param string action in question
 	 * @return bool true if action is allowed
 	 */
-	public function allows ($action) {
+	final public function allows ($action) {
 		return in_array($action, $this->allows);
+	}
+
+	/**
+	 * @name uses
+	 * @param models* to include
+	 */
+	final public function uses () {
+		for ($i = 0, $max = func_num_args(); $i < $max; $i++) {
+			$model = func_get_arg($i);
+
+			require_once Fabrico::get_model_file(
+				strtolower($model)
+			);
+
+			$model::init();
+		}
 	}
 
 	/**
@@ -110,7 +124,7 @@ class FabricoController {
 	 * @param string action name
 	 * @param array optional arguments
 	 */
-	protected function action ($action, $args = array()) {
+	final protected function action ($action, $args = array()) {
 		if ($this->allows($action)) {
 			require_once Fabrico::get_action_file($action);
 
@@ -118,5 +132,14 @@ class FabricoController {
 				Fabrico::clean_action_name($action), $args
 			);
 		}
+	}
+
+	/**
+	 * @name req
+	 * @param string query parameter
+	 * @return string parameter value
+	 */
+	final public function req ($key) {
+		return Fabrico::req($key);
 	}
 }

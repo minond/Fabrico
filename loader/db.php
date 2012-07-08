@@ -51,17 +51,16 @@ class FabricoSingleDatabaseConnection {
 	}
 
 	public function query ($sql, $type = MYSQL_ASSOC) {
+		$start = microtime();
 		$results = mysql_query($sql, $this->connection);
+		$end = microtime();
 		$response = array();
 
 		while ($row = mysql_fetch_array($results, $type)) {
 			$response[] = $row;
 		}
 
-		$sep = "\n\t";
-		util::log("query{$sep}sql: {$sql} ${sep}valid: " . ($results !== false ? 'yes' : 'no') . "{$sep}count: " . 
-			($results === false ? 0 : count($results)));
-
+		util::logquery($sql, $results, $end - $start);
 		return $response;
 	}
 }

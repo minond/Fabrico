@@ -5,17 +5,21 @@ class Index extends MainController {
 		parent::__construct();
 		$this->allow('test', 'check', 'filelog');
 		$this->register('test', 'config', 'adduser');
+		$this->uses('User');
 
 		$this->posts = range(1, 20);
-
+		$this->id = $this->req('id');
 	}
 
+	public $id;
 	public $posts;
 	public $name = 'aaaaaaaaaaaaaa';
 
 	public function test ($a, $b) {
+		User::init();
 		global $name;
 		$name = 'dsssssssssssssssss';
+
 
 		$ret = new stdClass;
 		$ret->a = $a;
@@ -48,26 +52,3 @@ class Index extends MainController {
 		$a = new User;
 	}
 }
-
-
-
-class User extends FabricoModel {
-	protected $table = 'users';
-
-	public function __construct () {
-		parent::__construct();
-	}   
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
