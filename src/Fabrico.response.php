@@ -28,7 +28,7 @@ class FabricoResponse {
 	 * outputs a json encoded response and ends the program
 	 */
 	public function out () {
-		die(json_encode($this->return));
+		echo json_encode($this->return);
 	}
 
 	/**

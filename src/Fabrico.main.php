@@ -17,10 +17,12 @@ class Fabrico {
 
 	// action names
 	const ACTION_FORMAT = '_%s_';
+	const METHOD_GETTER = 'get_%s';
 
 	// project/page information
 	public static $file;
 	public static $controller;
+	public static $control;
 	private static $req;
 	private static $method;
 	private static $action;
@@ -46,6 +48,14 @@ class Fabrico {
 	private static $def_controller = 'Fabrico.controller.php';
 	private static $def_controller_name = 'FabricoController';
 	public static $tpl_helper = 'Fabrico.template.php';
+
+	// misc
+	const SEPARATOR = '++++++++++++++++++++++++++++++++++++++++++++++++';
+	const STR_VIEW = 'view';
+	const STR_METHOD = 'method';
+	const STR_ACTION = 'action';
+	const STR_UNKNOWN = 'unknown';
+	const STR_REQUEST = 'request';
 
 	/**
 	 * @name redirect
@@ -142,6 +152,15 @@ class Fabrico {
 	 */
 	public static function clean_action_name ($action) {
 		return sprintf(self::ACTION_FORMAT, $action);
+	}
+
+	/**
+	 * @name clean_getter_name
+	 * @param string method name
+	 * @return string gettter method name
+	 */
+	public static function clean_getter_name ($method) {
+		return sprintf(self::METHOD_GETTER, $method);
 	}
 
 	/**
@@ -290,6 +309,19 @@ class Fabrico {
 	}
 
 	/**
+	 * @name get_template_file
+	 * @param string template name
+	 * @return string template file path
+	 */
+	public static function get_template_file ($template) {
+		return self::file_path(
+			self::$directory->templates .
+			self::clean_file($template) .
+			self::$config->loading->suffix
+		);
+	}
+
+	/**
 	 * @name get_requested_file
 	 * @param string file url
 	 * @param string file extension
@@ -379,10 +411,11 @@ class Fabrico {
 		// load and initialize the controller
 		require_once self::get_main_controller_file();
 		require_once self::get_controller_file();
-		$controller = new Fabrico::$controller;
+		self::$control = new Fabrico::$controller;
+		$control =& self::$control;
 
 		// setup enviroment
-		foreach ($controller as $key => $value) {
+		foreach (self::$control as $key => $value) {
 			$$key = $value;
 		}
 
@@ -391,9 +424,6 @@ class Fabrico {
 		require self::get_main_view_pre_file();
 		require self::get_requested_file();
 		require self::get_main_view_post_file();
-
-		// and clear from memory
-		unset($controller);
 	}
 
 	/**
@@ -543,9 +573,31 @@ class Fabrico {
 	 * @name timer_log
 	 */
 	public static function timer_log () {
-		util::loglist('request', array(
+		$eol = PHP_EOL . self::SUCCESS . PHP_EOL . PHP_EOL . 
+		       PHP_EOL . PHP_EOL . PHP_EOL . self::SEPARATOR;
+
+		switch (true) {
+			case self::is_view_request():
+				$type = self::STR_VIEW;
+				break;
+
+			case self::is_method_request():
+				$type = self::STR_METHOD;
+				break;
+
+			case self::is_action_request():
+				$type = self::STR_ACTION;
+				break;
+
+			default:
+				$type = self::STR_UNKNOWN;
+				break;
+		}
+
+		util::loglist(self::STR_REQUEST, array(
+			'type' => $type,
 			'file' => self::get_requested_file(self::$file),
-			'time' => self::$time_total
+			'time' => self::$time_total . $eol
 		));
 	}
 

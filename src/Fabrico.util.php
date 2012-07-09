@@ -101,6 +101,7 @@ class util {
 		$project = Fabrico::get_config()->project->info->name;
 		$filename = Fabrico::get_log_file();
 		list(, $micro) = explode('.', microtime(true));
+		$micro = str_pad($micro, 4, '0');
 		$out = call_user_func_array(
 			array('self', 'prepare_output'),
 			func_get_args()

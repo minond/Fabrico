@@ -1,0 +1,29 @@
+* {
+	font: normal 12px Arial;
+	cursor: default;
+}
+
+.noselect {
+	user-select: none;
+	-moz-user-select: none;  
+	-webkit-user-select: none;  
+	-ms-user-select: none;
+}
+
+.toolbar {
+	background-color: #2d2d2d;
+	padding: 0px 9px;
+}
+
+.toolbar .toolbar_item {
+	color: #bbb;
+	cursor: pointer;
+	display: inline-block;
+	padding: 7px 8px 7px 7px;
+	font-weight: bold;
+}
+
+.toolbar .toolbar_item:hover,
+.toolbar .toolbar_item.active {
+	color: white;
+}

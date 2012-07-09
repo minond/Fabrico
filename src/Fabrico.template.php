@@ -78,10 +78,20 @@ class Template {
 	 * @return string script tags for requested javascript files
 	 */
 	public static function scripts () {
-		return PHP_EOL . implode(Resource::$scripts, PHP_EOL) . PHP_EOL;
+		$files = PHP_EOL . implode(Resource::$scripts, PHP_EOL) . PHP_EOL;
+		$code = PHP_EOL . implode(Resource::$onreadylist, PHP_EOL) . PHP_EOL;
+		$onready = HTML::el('script', array(
+			'type' => 'text/javascript',
+			'content' => <<<JS
+$(function () {
+{$code}
+});
+JS
+		));
+
+		return $files . $onready;
 	}
 }
-
 
 /**
  * @name Resource
@@ -112,6 +122,20 @@ class Resource {
 	 * javascript files requested
 	 */
 	public static $scripts = array();
+
+	/**
+	 * @name onreadylist
+	 * @var array of code
+	 */
+	public static $onreadylist = array();
+
+	/**
+	 * @name onready
+	 * @param string code
+	 */
+	public static function onready ($code) {
+		self::$onreadylist[] = $code;
+	}
 
 	/**
 	 * @name add
@@ -159,4 +183,38 @@ class Resource {
 	public static function internal ($file) {
 		return Fabrico::PATH_INTERNAL_STR . $file;
 	}
+}
+
+/**
+ * @name template
+ * @param string template name
+ * @return string template file path
+ */
+function template ($template) {
+	return Fabrico::get_template_file($template);
+}
+
+/**
+ * @name run
+ * @param string method name
+ */
+function run ($method, &$holder = false) {
+	$method = Fabrico::clean_getter_name($method);
+
+	if (method_exists(Fabrico::$control, $method)) {
+		if ($holder !== false) {
+			$holder = call_user_func(array(Fabrico::$control, $method));
+		}
+		else {
+			return call_user_func(array(Fabrico::$control, $method));
+		}
+	}
+}
+
+/**
+ * @name action
+ * @param string action name
+ */
+function action ($action) {
+	require_once Fabrico::get_action_file($action);
 }

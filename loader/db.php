@@ -50,17 +50,23 @@ class FabricoSingleDatabaseConnection {
 		mysql_select_db($database, $this->connection);
 	}
 
-	public function query ($sql, $type = MYSQL_ASSOC) {
+	public function query ($sql, $noret = false, $type = MYSQL_ASSOC) {
 		$start = microtime();
 		$results = mysql_query($sql, $this->connection);
 		$end = microtime();
 		$response = array();
 
-		while ($row = mysql_fetch_array($results, $type)) {
-			$response[] = $row;
+		if (!$noret && $response !== false) {
+			while ($row = mysql_fetch_array($results, $type)) {
+				$response[] = $row;
+			}
 		}
 
 		util::logquery($sql, $results, $end - $start);
 		return $response;
+	}
+
+	public function last_id () {
+		return mysql_insert_id($this->connection);
 	}
 }

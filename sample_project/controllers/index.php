@@ -1,54 +1,40 @@
 <?php
 
 class Index extends MainController {
+	public $user;
+	public $user_id;
+	public $user_set = false;
+	public $logged_in = false;
+
 	public function __construct () {
 		parent::__construct();
-		$this->allow('test', 'check', 'filelog');
-		$this->register('test', 'config', 'adduser');
 		$this->uses('User');
+		$this->register('get_user_info');
+		$this->user_id = self::req('id');
 
-		$this->posts = range(1, 20);
-		$this->id = $this->req('id');
+		if (Fabrico::is_view_request()) {
+			$this->get_user_info();
+		}
 	}
 
-	public $id;
-	public $posts;
-	public $name = 'aaaaaaaaaaaaaa';
+	private function check_login () {
+		$this->logged_in = false === false;
 
-	public function test ($a, $b) {
-		User::init();
-		global $name;
-		$name = 'dsssssssssssssssss';
-
-
-		$ret = new stdClass;
-		$ret->a = $a;
-		$ret->b = $b;
-		$ret->n = $this->name;
-		$ret->c = true;
-		$ret->x = $this->action('test', array('d','s'));
-		$ret->y = $this->action('check');
-
-		return $ret;
-		return array(
-			'a' => $a,
-			'b' => $b,
-			'n' => $this->name
-		);
+		return $this->logged_in;
 	}
 
-	public function config () {
-		$ret = new stdClass;
+	public function get_user_info ($id = false) {
+		$id = $id ? $id : $this->user_id;
 
-		$ret->config = Fabrico::get_config();
-		$ret->directories = Fabrico::$directory;
-		$ret->file = Fabrico::$file;
-		$ret->controller = Fabrico::$controller;
+		if (!$this->logged_in) {
+			$this->check_login();
+		}
 
-		return $ret;
-	}
+		if ($this->logged_in && !isset($this->user) && $id) {
+			$this->user = User::get($id);
+			$this->user_set = isset($this->user);
+		}
 
-	public function adduser () {
-		$a = new User;
+		return $this->user;
 	}
 }
