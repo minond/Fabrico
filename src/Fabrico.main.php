@@ -23,7 +23,7 @@ class Fabrico {
 	public static $file;
 	public static $controller;
 	public static $control;
-	private static $req;
+	public static $req;
 	private static $method;
 	private static $action;
 	private static $config;
@@ -33,12 +33,12 @@ class Fabrico {
 	private static $time_total;
 
 	// pre request information
-	private static $uri_query_file = '_file';
-	private static $uri_query_arg = '_arg';
-	private static $uri_query_env = '_env';
-	private static $uri_query_method = '_method';
-	private static $uri_query_action = '_action';
-	private static $uri_query_debug = '_debug';
+	public static $uri_query_file = '_file';
+	public static $uri_query_arg = '_arg';
+	public static $uri_query_env = '_env';
+	public static $uri_query_method = '_method';
+	public static $uri_query_action = '_action';
+	public static $uri_query_debug = '_debug';
 
 	// default controller information
 	private static $file_config = '../config/config.ini';
@@ -46,8 +46,8 @@ class Fabrico {
 	private static $file_project = 'config/config.ini';
 	private static $def_debugging = 'FabricoDebugging';
 	private static $def_controller = 'Fabrico.controller.php';
-	private static $def_controller_name = 'FabricoController';
-	public static $tpl_helper = 'Fabrico.template.php';
+	private static $def_controller_name = 'MainController';
+	public static $tpl_helper = 'Fabrico.template_helpers.php';
 
 	// misc
 	const SEPARATOR = '++++++++++++++++++++++++++++++++++++++++++++++++';

@@ -1,0 +1,1 @@
+<? Resource::add('main.js') ?>

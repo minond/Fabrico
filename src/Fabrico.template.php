@@ -1,220 +1,120 @@
 <?php
 
-/**
- * @name Template
- * page template helpder functions
- */
-class Template {
+class FabricoTemplate {
+	// standard classes
+	const ACTIVE = 'active';
+	const HIDDEN = 'hidden';
+	const NOSELECT = 'noselect';
+
 	/**
-	 * @name os
+	 * @name tag
+	 * @var string
+	 */
+	protected static $tag = 'div';
+
+	/**
+	 * @name elem
+	 * @var stdClass element
+	 */
+	protected static $elem;
+
+	/**
+	 * @name id_delim
+	 * @var string
+	 */
+	public static $id_delim = '_';
+
+	/**
+	 * @name salt
+	 * @var string
+	 */
+	protected static $salt;
+	
+	/**
+	 * @name pepper
+	 * @var string
+	 */
+	protected static $pepper;
+	
+	/**
+	 * @name class
 	 * @var array
-	 * used for detecting the operating system
 	 */
-	private static $os = array('android', 'blackberry', 'iphone', 'palm', 'linux', 'macintosh', 'windows');
+	protected static $class = array();
 
 	/**
-	 * @name browser
-	 * @var array
-	 * used for detecting the browser
+	 * @name pregen
+	 * @virtual
 	 */
-	private static $browser = array('chrome', 'firefox', 'msie', 'msie7', 'msie8', 'msie9', 'opera', 'safari', 'webkit');
+	protected static function pregen () {}
 
 	/**
-	 * @name body_tab
-	 * @return array os, browser, agent
+	 * @name is_active
+	 * @param boolean
+	 * @return boolean
 	 */
-	private static function body_tab () {
-		$os = '';
-		$browser = array();
-		$agent = str_replace(' ', '', strtolower($_SERVER['HTTP_USER_AGENT']));
-
-		foreach (self::$os as $system) {
-			if (strpos($agent, $system) !== false) {
-				$os = $system;
-				break;
-			}
+	protected static function is_active ($active) {
+		if ($active) {
+			static::$elem->class[] = self::ACTIVE;
 		}
+	}
 
-		foreach (self::$browser as $system) {
-			if (strpos($agent, $system) !== false) {
-				$browser[] = $system;
-			}
-		}
-
-		return array(
-			$os,
-			implode($browser, ' '),
-			$agent
+	/**
+	 * @name gen_id
+	 * @param string middle
+	 * @return string id
+	 */
+	public static function gen_id ($id) {
+		return implode(
+			static::$id_delim,
+			array(static::$salt, self::gen_name($id), static::$pepper)
 		);
 	}
 
 	/**
-	 * @name start
-	 * @return string start of view page html
+	 * @name gen_name
+	 * @param string name
+	 * @return string clean name
 	 */
-	public static function start () {
-		return "<!doctype html>\n<html>\n\t<head>\n\n";
+	public static function gen_name ($name) {
+		return preg_replace('/\W/', '', strtolower($name));
 	}
 
-	/**
-	 * @name content
-	 * @return string start of view page content html
-	 */
-	public static function content () {
-		list($os, $browser, ) = self::body_tab();
-		return "\n\n\t</head>\n\t<body class='{$os} {$browser}'>\n";
-	}
+	public static function salt_n_pepper () {
+		$name = get_called_class();
+		$parts = preg_split('/_/', $name);
 
-	/**
-	 * @name done
-	 * @return string end of view page content and html
-	 */
-	public static function done () {
-		return "\n\t</body>\n</html>";
-	}
-
-	/**
-	 * @name scripts
-	 * @return string script tags for requested javascript files
-	 */
-	public static function scripts () {
-		$files = PHP_EOL . implode(Resource::$scripts, PHP_EOL) . PHP_EOL;
-		$code = PHP_EOL . implode(Resource::$onreadylist, PHP_EOL) . PHP_EOL;
-		$onready = HTML::el('script', array(
-			'type' => 'text/javascript',
-			'content' => <<<JS
-$(function () {
-{$code}
-});
-JS
-		));
-
-		return $files . $onready;
-	}
-}
-
-/**
- * @name Resource
- * resource file helper class
- */
-class Resource {
-	/**
-	 * @name EXT_JS
-	 * @constant string
-	 */
-	const EXT_JS = 'js';
-
-	/**
-	 * @name EXT_CSS
-	 * @constant string
-	 */
-	const EXT_CSS = 'css';
-
-	/**
-	 * @name extension
-	 * @var regex string used to get a file's extension
-	 */
-	private static $extension = '/^.+\.(.+)$/';
-
-	/**
-	 * @name scripts
-	 * @var array
-	 * javascript files requested
-	 */
-	public static $scripts = array();
-
-	/**
-	 * @name onreadylist
-	 * @var array of code
-	 */
-	public static $onreadylist = array();
-
-	/**
-	 * @name onready
-	 * @param string code
-	 */
-	public static function onready ($code) {
-		self::$onreadylist[] = $code;
-	}
-
-	/**
-	 * @name add
-	 * @param files* to load/include
-	 */
-	public static function add () {
-		for ($i = 0, $max = func_num_args(); $i < $max; $i++) {
-			$url = func_get_arg($i);
-			preg_match(self::$extension, $url, $extension);
-			$extension = $extension[ 1 ];
-			$url = Fabrico::get_resource_file($url, $extension);
-
-			switch ($extension) {
-				case self::EXT_JS:
-					self::$scripts[] = HTML::el('script', array(
-						'type' => 'text/javascript',
-						'src' => $url
-					));
-					break;
-
-				case self::EXT_CSS:
-					echo HTML::el('link', array(
-						'rel' => 'stylesheet',
-						'type' => 'text/css',
-						'href' => $url
-					));
-					break;
-
-				default:
-					echo HTML::el('link', array(
-						'rel' => 'alternative',
-						'type' => 'text',
-						'href' => $url
-					));
-					break;
-			}
-		}
-	}
-
-	/**
-	 * @name internal
-	 * @param string file name
-	 * @return string internal file name
-	 */
-	public static function internal ($file) {
-		return Fabrico::PATH_INTERNAL_STR . $file;
-	}
-}
-
-/**
- * @name template
- * @param string template name
- * @return string template file path
- */
-function template ($template) {
-	return Fabrico::get_template_file($template);
-}
-
-/**
- * @name run
- * @param string method name
- */
-function run ($method, &$holder = false) {
-	$method = Fabrico::clean_getter_name($method);
-
-	if (method_exists(Fabrico::$control, $method)) {
-		if ($holder !== false) {
-			$holder = call_user_func(array(Fabrico::$control, $method));
+		if (count($parts) >= 2) {
+			static::$salt = $parts[0];
+			unset($parts[ 0 ]);
+			static::$pepper = implode('_', $parts);
 		}
 		else {
-			return call_user_func(array(Fabrico::$control, $method));
+			static::$salt = $name;
 		}
 	}
-}
 
-/**
- * @name action
- * @param string action name
- */
-function action ($action) {
-	require_once Fabrico::get_action_file($action);
+	/**
+	 * @name gen
+	 * @return string html
+	 */
+	public static function gen () {
+		static::$elem = new stdClass;
+		static::$elem->class = array();
+
+		if (!static::$salt) {
+			static::salt_n_pepper();
+		}
+
+		call_user_func_array(
+			array('static', 'pregen'),
+			func_get_args()
+		);
+		
+		static::$elem->class = implode(' ', 
+			array_merge(static::$class, static::$elem->class)
+		);
+
+		return HTML::el(static::$tag, static::$elem);
+	}
 }

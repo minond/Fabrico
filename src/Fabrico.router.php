@@ -6,6 +6,7 @@ require_once 'Fabrico.html.php';
 require_once 'Fabrico.state.php';
 require_once 'Fabrico.controller.php';
 require_once 'Fabrico.model.php';
+require_once 'Fabrico.template.php';
 require_once 'Fabrico.response.php';
 
 Fabrico::timer_start();

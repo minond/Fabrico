@@ -3,16 +3,16 @@
 <!-- toolbar start -->
 <div class="toolbar noselect">
 	<? if ($logged_in && $user_set): ?>
-	<?= toolbar_item("+{$user->first_name}") ?>
+	<?= toolbar_item::gen("+{$user->first_name}") ?>
 	<? endif ?>
-	<?= toolbar_item('Search') ?>
-	<?= toolbar_item('Maps') ?>
-	<?= toolbar_item('Play') ?>
-	<?= toolbar_item('YouTube') ?>
-	<?= toolbar_item('News') ?>
-	<?= toolbar_item('Gmail') ?>
-	<?= toolbar_item('Drive') ?>
-	<?= toolbar_item('Calendar') ?>
-	<?= toolbar_item('More +') ?>
+	<?= toolbar_item::gen('Search') ?>
+	<?= toolbar_item::gen('Maps') ?>
+	<?= toolbar_item::gen('Play') ?>
+	<?= toolbar_item::gen('YouTube') ?>
+	<?= toolbar_item::gen('News') ?>
+	<?= toolbar_item::gen('Gmail') ?>
+	<?= toolbar_item::gen('Drive') ?>
+	<?= toolbar_item::gen('Calendar') ?>
+	<?= toolbar_item::gen('More +') ?>
 </div>
 <!-- toolbar end -->
