@@ -10,6 +10,10 @@
 	-ms-user-select: none;
 }
 
+
+/**
+ * toolbar
+ */
 .toolbar {
 	background-color: #2d2d2d;
 	padding: 0px 9px;
@@ -26,4 +30,89 @@
 .toolbar .toolbar_item:hover,
 .toolbar .toolbar_item.active {
 	color: white;
+}
+
+/**
+ * loginform
+ */
+.loginform_holder {
+	display: inline-block;
+	border: 1px solid #c0c0c0;
+	background-color: #f1f1f1;
+	padding: 20px;
+	width: auto;
+	position: absolute;
+	right: 100px;
+	top: 70px;
+}
+
+.loginform_header_title {
+	color: #333;
+	font-weight: bold;
+	font-size: 14px;
+	display: inline-block;
+}
+
+.loginform_header_img {
+	float: right;
+}
+
+.loginform_item_section {
+	margin-top: 20px;
+}
+
+.loginform_item_holder div {
+	font-weight: bold;
+	margin-top: 10px;
+	margin-bottom: 7px;
+}
+
+.loginform_item_holder input {
+	width: 250px;
+	border: 1px solid #c0c0c0;
+	height: 25px;
+	padding-left: 7px;
+	cursor: text;
+}
+
+.loginform_item_offset_left {
+	margin-left: 20px;
+}
+
+/**
+ * fancy_button
+ */
+.fancy_button {
+	font: bold 12px Arial;
+	border: 1px solid gray;
+	padding: 7px 10px;
+	border-radius: 2px;
+}
+
+.fancy_button_action {
+	color: white;
+	background-color: #498bf4;
+	border-color: #3079ed;
+}
+
+/**
+ * fancy_checkbox
+ */
+.fancy_checkbox_label {
+	padding-left: 4px;
+	position: relative;
+	top: -2px;
+}
+
+/**
+ * fancy_link
+ */
+.fancy_link {
+	cursor: pointer;
+	color: blue;
+	text-decoration: none;
+}
+
+.fancy_link:hover {
+	text-decoration: underline;
 }

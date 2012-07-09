@@ -7,10 +7,40 @@ class FabricoTemplate {
 	const NOSELECT = 'noselect';
 
 	/**
+	 * @name prehtml
+	 * @var string
+	 */
+	protected static $prehtml = '';
+
+	/**
+	 * @name posthtml
+	 * @var string
+	 */
+	protected static $posthtml = '';
+
+	/**
+	 * @name onready
+	 * @var string
+	 */
+	public static $onready;
+
+	/**
+	 * @name onready_vars
+	 * @var array
+	 */
+	protected static $onready_vars = array();
+
+	/**
 	 * @name tag
 	 * @var string
 	 */
 	protected static $tag = 'div';
+
+	/**
+	 * @name type
+	 * @var string
+	 */
+	protected static $type;
 
 	/**
 	 * @name elem
@@ -46,7 +76,9 @@ class FabricoTemplate {
 	 * @name pregen
 	 * @virtual
 	 */
-	protected static function pregen () {}
+	protected static function pregen ($content) {
+		static::$elem->content = $content;
+	}
 
 	/**
 	 * @name is_active
@@ -80,6 +112,25 @@ class FabricoTemplate {
 		return preg_replace('/\W/', '', strtolower($name));
 	}
 
+	/**
+	 * @name handle_code
+	 */
+	protected static function handle_code () {
+		$onready_copy = static::$onready;
+
+		foreach (static::$onready_vars as $key => $value) {
+			$onready_copy = preg_replace(
+				"/%{$key}/", $value,
+				$onready_copy
+			);
+		}
+
+		Resource::onready($onready_copy);
+	}
+
+	/**
+	 * @name salt_n_pepper
+	 */
 	public static function salt_n_pepper () {
 		$name = get_called_class();
 		$parts = preg_split('/_/', $name);
@@ -101,6 +152,9 @@ class FabricoTemplate {
 	public static function gen () {
 		static::$elem = new stdClass;
 		static::$elem->class = array();
+		static::$onready_vars = array();
+		static::$prehtml = '';
+		static::$posthtml = '';
 
 		if (!static::$salt) {
 			static::salt_n_pepper();
@@ -110,11 +164,16 @@ class FabricoTemplate {
 			array('static', 'pregen'),
 			func_get_args()
 		);
-		
+
 		static::$elem->class = implode(' ', 
 			array_merge(static::$class, static::$elem->class)
 		);
 
-		return HTML::el(static::$tag, static::$elem);
+		if (static::$type) {
+			static::$elem->type = static::$type;
+		}
+
+		static::handle_code();
+		return static::$prehtml . HTML::el(static::$tag, static::$elem) . static::$posthtml;
 	}
 }

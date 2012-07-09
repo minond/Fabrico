@@ -83,9 +83,11 @@ class Template {
 		$onready = HTML::el('script', array(
 			'type' => 'text/javascript',
 			'content' => <<<JS
+
 $(function () {
 {$code}
 });
+
 JS
 		));
 

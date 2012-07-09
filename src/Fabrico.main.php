@@ -573,7 +573,7 @@ class Fabrico {
 	 * @name timer_log
 	 */
 	public static function timer_log () {
-		$eol = PHP_EOL . self::SUCCESS . PHP_EOL . PHP_EOL . 
+		$eol = PHP_EOL . self::SEPARATOR . PHP_EOL . PHP_EOL .
 		       PHP_EOL . PHP_EOL . PHP_EOL . self::SEPARATOR;
 
 		switch (true) {
