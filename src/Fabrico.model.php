@@ -32,6 +32,45 @@ class FabricoModel extends FabricoQuery {
 	private $primary_key;
 
 	/**
+	 * @name primary_key
+	 * @return string model primary key
+	 */
+	public static function primary_key ($forquery = true) {
+		return !$forquery ? self::$instance->primary_key : 
+		       sprintf(self::FIELD, self::$instance->primary_key);
+	}
+
+	/**
+	 * @name sel_fields
+	 * @param fields*
+	 * @return string field selector
+	 */
+	public static function sel_fields () {
+		$list = array();
+		$first = func_num_args() !== 0 ? func_get_arg(0) : null;
+		$fields = is_array($first) ? $first : func_get_args();
+		array_unshift($fields, self::primary_key(false));
+
+		foreach ($fields as $field) {
+			$list[] = sprintf(self::FIELD, $field);
+		}
+
+		return implode(', ', $list);
+	}
+
+	/**
+	 * @name get_columns
+	 * @return array
+	 */
+	public function get_columns () {
+		if (!isset($this->fields)) {
+			$this->loadinfo();
+		}
+
+		return array_keys($this->column_names);
+	}
+
+	/**
 	 * @name FabricoModel
 	 * creates a new connection if needed and selects
 	 * the project database
@@ -86,6 +125,24 @@ class FabricoModel extends FabricoQuery {
 		}
 	}
 
+	/**
+	 * @name obj2str
+	 * @param stdClass model object
+	 * @return string filter query
+	 */
+	public static function obj2str (& $obj) {
+		$str = array();
+
+		foreach ($obj as $key => $value) {
+			if (!is_null($value)) {
+				$clean = mysql_escape_string($value);
+				$str[] = "`{$key}` = '{$clean}'";
+			}
+		}
+
+		return implode(self::ANDS, $str);
+	}
+
 	/** 
 	 * @name get
 	 * @param int primary key id
@@ -101,7 +158,46 @@ class FabricoModel extends FabricoQuery {
 		self::$instance->where(self::$instance->primary_key . self::EQ . $id);
 
 		$return = self::$instance->run_query();
-		return count($return) ? (object) $return[0] : new stdClass;
+		return count($return) ? (object) $return[ 0 ] : new stdClass;
+	}
+
+	/**
+	 * @name create
+	 * @return stdClass blank model object
+	 */
+	public static function create () {
+		$item = new stdClass;
+		$values = array();
+		$fields = self::$instance->get_columns();
+		$first = func_num_args() !== 0 ? func_get_arg(0) : null;
+		$tofill = is_array($first) ? $first : func_get_args();
+
+		foreach ($tofill as $fill) {
+			$values[ $fill ] = Fabrico::req($fill);
+		}
+
+		foreach ($fields as $field) {
+			$item->{ $field } = array_key_exists($field, $values) ? $values[ $field ] : null;
+		}
+
+		return $item;
+	}
+
+	/**
+	 * @name search
+	 * @param string filters
+	 * @return stdClass retults
+	 */
+	public static function search ($filters, $select = false) {
+		$filter = is_object($filters) ? self::obj2str($filters) : $filters;
+		$select = $select !== false ? $select : self::ALL;
+
+		self::$instance->select($select);
+		self::$instance->from(self::$instance->table);
+		self::$instance->where($filter);
+
+		$return = self::$instance->run_query();
+		return count($return) ? (object) $return[ 0 ] : new stdClass;
 	}
 
 	/**
@@ -114,7 +210,11 @@ class FabricoModel extends FabricoQuery {
 			self::$instance->loadinfo();
 		}
 
-		self::$instance->insert(self::$instance->table, $data, self::$instance->column_names);
+		self::$instance->insert(
+			self::$instance->table, $data, 
+			self::$instance->column_names
+		);
+
 		self::$instance->run_query();
 		return self::$instance->last_id();
 	}
@@ -152,6 +252,7 @@ class FabricoQuery {
 
 	// filters
 	const EQ = ' = ';
+	const ANDS = ' and ';
 
 	// delimeter
 	const COMMA = ', ';

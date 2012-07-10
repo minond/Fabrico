@@ -39,6 +39,8 @@ class Fabrico {
 	public static $uri_query_method = '_method';
 	public static $uri_query_action = '_action';
 	public static $uri_query_debug = '_debug';
+	public static $uri_query_success = '_success';
+	public static $uri_query_fail = '_fail';
 
 	// default controller information
 	private static $file_config = '../config/config.ini';
@@ -252,6 +254,19 @@ class Fabrico {
 		return self::file_path(
 			self::$directory->actions .
 			self::clean_file($file) .
+			self::$config->loading->suffix
+		);
+	}
+
+	/**
+	 * @name get_element_file
+	 * @param string element file name
+	 * @return string element file path
+	 */
+	public static function get_element_file ($elem) {
+		return self::file_path(
+			self::$directory->elements .
+			self::clean_file($elem) .
 			self::$config->loading->suffix
 		);
 	}
@@ -608,5 +623,81 @@ class Fabrico {
 	 */
 	public static function req ($key) {
 		return isset(self::$req[ $key ]) ? self::$req[ $key ] : '';
+	}
+
+	/**
+	 * @name set_cookie
+	 * @param string cookie name
+	 * @param string cookie value
+	 */
+	public static function set_cookie ($name, $value) {
+		setcookie($name, $value);
+		$_COOKIE[ $name ] = $value;
+	}
+
+	/**
+	 * @name static get_cookie
+	 * @param string cookie name
+	 * @return string cookie value
+	 */
+	public static function get_cookie ($name) {
+		return $_COOKIE[ $name ];
+	}
+
+	/**
+	 * @name array2query
+	 * @param array of key value pairs
+	 * @param boolean include question mark
+	 * @return string query string
+	 */
+	public static function array2query (& $list, $noq = false) {
+		$items = array();
+
+		foreach ($list as $key => $value)
+			$items[] = $key . '=' . $value;
+
+		$items = implode('&', $items);
+		return $items ? (
+			$noq ? $items : '?' . $items
+		) : '';
+	}
+
+	/**
+	 * @name handle_success
+	 * @param array redirect arguments
+	 */
+	public static function handle_success ($args = array()) {
+		if (self::is_view_request()) {
+			return false;
+		}
+
+		$redirect = isset(Fabrico::$req[ self::$uri_query_fail ]) ? 
+		            Fabrico::$req[ self::$uri_query_fail ] : self::$file;
+
+		header('Location: ' . $redirect . self::array2query($args));
+	}
+
+	/**
+	 * @name handle_failure
+	 * @param array redirect arguments
+	 */
+	public static function handle_failure ($args = array()) {
+		if (self::is_view_request()) {
+			return false;
+		}
+
+		$redirect = isset(Fabrico::$req[ self::$uri_query_fail ]) ? 
+		            Fabrico::$req[ self::$uri_query_fail ] : self::$file;
+
+		header('Location: ' . $redirect . self::array2query($args));
+	}
+
+	/**
+	 * @name is_invalid
+	 * @param string action
+	 * @return boolean invalid action
+	 */
+	public static function is_invalid ($action) {
+		return self::req('invalid') === $action;
 	}
 }

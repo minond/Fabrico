@@ -37,6 +37,12 @@ class FabricoTemplate {
 	protected static $tag = 'div';
 
 	/**
+	 * @name noclose
+	 * @var boolean
+	 */
+	protected static $noclose = false;
+
+	/**
 	 * @name type
 	 * @var string
 	 */
@@ -174,6 +180,6 @@ class FabricoTemplate {
 		}
 
 		static::handle_code();
-		return static::$prehtml . HTML::el(static::$tag, static::$elem) . static::$posthtml;
+		return static::$prehtml . HTML::el(static::$tag, static::$elem, static::$noclose) . static::$posthtml;
 	}
 }

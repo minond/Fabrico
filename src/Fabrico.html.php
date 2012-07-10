@@ -6,11 +6,13 @@ class HTML {
 	 * @param string element type
 	 * @param string element content
 	 * @param array element properties
+	 * @param boolean no close tag flag
 	 * @return string HTML element string
 	 */
-	public static function el ($type, $props = array()) {
+	public static function el ($type, $props = array(), $noclose = false) {
 		$content = '';
 		$wrap = '<%s %s>%s</%s>';
+		$wrap_open = '<%s %s>%s';
 		$prop = '%s="%s"';
 		$proplist = array();
 
@@ -24,7 +26,10 @@ class HTML {
 		}
 
 		$proplist = implode($proplist, ' ');
-		return sprintf($wrap, $type, $proplist, $content, $type);
+
+		return $noclose ? 
+		       sprintf($wrap_open, $type, $proplist, $content) : 
+		       sprintf($wrap, $type, $proplist, $content, $type);
 	}
 
 	/**

@@ -214,11 +214,11 @@ function run ($method, &$holder = false) {
 }
 
 /**
- * @name action
- * @param string action name
+ * @name element
+ * @param string element name
  */
-function action ($action) {
-	require_once Fabrico::get_action_file($action);
+function element ($elem) {
+	require_once Fabrico::get_element_file($elem);
 }
 
 /**
