@@ -47,7 +47,7 @@ class FabricoResponse {
 		$error->filename = $filename;
 		$error->line = $line;
 
-		util::log(Fabrico::ERROR, $error);
+		util::loglist(Fabrico::ERROR, $error);
 		return $error;
 	}
 }

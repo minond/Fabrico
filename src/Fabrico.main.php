@@ -41,15 +41,15 @@ class Fabrico {
 	public static $uri_query_debug = '_debug';
 	public static $uri_query_success = '_success';
 	public static $uri_query_fail = '_fail';
+	public static $uri_query_invalid = '_ivd';
 
 	// default controller information
 	private static $file_config = '../config/config.ini';
 	private static $file_debug = 'debug.log';
 	private static $file_project = 'config/config.ini';
-	private static $def_debugging = 'FabricoDebugging';
 	private static $def_controller = 'Fabrico.controller.php';
 	private static $def_controller_name = 'MainController';
-	public static $tpl_helper = 'Fabrico.template_helpers.php';
+	private static $def_debugging = 'FabricoDebugging';
 
 	// misc
 	const SEPARATOR = '++++++++++++++++++++++++++++++++++++++++++++++++';
@@ -435,7 +435,6 @@ class Fabrico {
 		}
 
 		// load the view
-		require self::$tpl_helper;
 		require self::get_main_view_pre_file();
 		require self::get_requested_file();
 		require self::get_main_view_post_file();
@@ -573,7 +572,9 @@ class Fabrico {
 	 * @name timer_start
 	 */
 	public static function timer_start () {
-		self::$time_start = microtime();
+		if (!isset(self::$time_start)) {
+			self::$time_start = microtime();
+		}
 	}
 
 	/**
@@ -694,10 +695,10 @@ class Fabrico {
 
 	/**
 	 * @name is_invalid
-	 * @param string action
-	 * @return boolean invalid action
+	 * @param string thing
+	 * @return boolean invalid thing
 	 */
-	public static function is_invalid ($action) {
-		return self::req('invalid') === $action;
+	public static function is_invalid ($thing) {
+		return self::req( self::$uri_query_invalid ) === $thing;
 	}
 }

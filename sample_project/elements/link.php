@@ -1,8 +1,6 @@
 <?php
 
-class link_to extends FabricoTemplate {
-	protected static $salt = 'link';
-	protected static $pepper = 'to';
+class link_to extends FabricoElement {
 	protected static $tag = 'a';
 	protected static $class = array('fancy_link');
 
@@ -17,6 +15,7 @@ class link_method extends link_to {
 	public static $onready = '$("#%id").click(function () { Fabrico.controller.method_redirect("%method", "%redirect"); });';
 	
 	protected static function pregen ($label, $method, $redirect) {
+		self::$pepper = 'to';
 		parent::pregen($label);
 
 		self::$onready_vars = array(

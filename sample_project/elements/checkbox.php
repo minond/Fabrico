@@ -1,6 +1,6 @@
 <?php
 
-class checkbox extends FabricoTemplate {
+class checkbox extends FabricoElement {
 	protected static $tag = 'input';
 	protected static $type = 'checkbox';
 	protected static $class = array('fancy_checkbox');

@@ -1,6 +1,6 @@
 <?php
 
-class toolbar_item extends FabricoTemplate {
+class toolbar_item extends FabricoElement {
 	protected static $class = array('toolbar_item');
 	public static $onready = '$("#%id").click(function () { location.href = "/%url"; });';
 

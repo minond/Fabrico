@@ -6,5 +6,7 @@
 	Resource::internal('underscore-min.js'),
 	Resource::internal('fabrico.js'),
 	Resource::internal('fabrico.controller.js'),
-	'main.css'
+	Resource::internal('fabrico.ui.js'),
+	'main.css',
+	'main.js'
 ); ?>

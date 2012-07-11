@@ -1,185 +1,249 @@
 <?php
 
-class FabricoTemplate {
-	// standard classes
-	const ACTIVE = 'active';
-	const HIDDEN = 'hidden';
-	const NOSELECT = 'noselect';
+/**
+ * @name Template
+ * page template helpder functions
+ */
+class Template {
+	/**
+	 * @name os
+	 * @var array
+	 * used for detecting the operating system
+	 */
+	private static $os = array('android', 'blackberry', 'iphone', 'palm', 'linux', 'macintosh', 'windows');
 
 	/**
-	 * @name prehtml
-	 * @var string
+	 * @name browser
+	 * @var array
+	 * used for detecting the browser
 	 */
-	protected static $prehtml = '';
+	private static $browser = array('chrome', 'firefox', 'msie', 'msie7', 'msie8', 'msie9', 'opera', 'safari', 'webkit');
 
 	/**
-	 * @name posthtml
-	 * @var string
+	 * @name body_tab
+	 * @return array os, browser, agent
 	 */
-	protected static $posthtml = '';
+	private static function body_tab () {
+		$os = '';
+		$browser = array();
+		$agent = str_replace(' ', '', strtolower($_SERVER['HTTP_USER_AGENT']));
+
+		foreach (self::$os as $system) {
+			if (strpos($agent, $system) !== false) {
+				$os = $system;
+				break;
+			}
+		}
+
+		foreach (self::$browser as $system) {
+			if (strpos($agent, $system) !== false) {
+				$browser[] = $system;
+			}
+		}
+
+		return array(
+			$os,
+			implode($browser, ' '),
+			$agent
+		);
+	}
+
+	/**
+	 * @name start
+	 * @return string start of view page html
+	 */
+	public static function start () {
+		return "<!doctype html>\n<html>\n\t<head>\n\n";
+	}
+
+	/**
+	 * @name content
+	 * @return string start of view page content html
+	 */
+	public static function content () {
+		list($os, $browser, ) = self::body_tab();
+		return "\n\n\t</head>\n\t<body class='{$os} {$browser}'>\n";
+	}
+
+	/**
+	 * @name done
+	 * @return string end of view page content and html
+	 */
+	public static function done () {
+		return "\n\t</body>\n</html>";
+	}
+
+	/**
+	 * @name scripts
+	 * @return string script tags for requested javascript files
+	 */
+	public static function scripts () {
+		$files = PHP_EOL . implode(Resource::$scripts, PHP_EOL) . PHP_EOL;
+		$code = PHP_EOL . implode(Resource::$onreadylist, PHP_EOL) . PHP_EOL;
+		$onready = HTML::el('script', array(
+			'type' => 'text/javascript',
+			'content' => <<<JS
+
+$(function () {
+{$code}
+});
+
+JS
+		));
+
+		return $files . $onready;
+	}
+}
+
+/**
+ * @name Resource
+ * resource file helper class
+ */
+class Resource {
+	/**
+	 * @name EXT_JS
+	 * @constant string
+	 */
+	const EXT_JS = 'js';
+
+	/**
+	 * @name EXT_CSS
+	 * @constant string
+	 */
+	const EXT_CSS = 'css';
+
+	/**
+	 * @name extension
+	 * @var regex string used to get a file's extension
+	 */
+	private static $extension = '/^.+\.(.+)$/';
+
+	/**
+	 * @name scripts
+	 * @var array
+	 * javascript files requested
+	 */
+	public static $scripts = array();
+
+	/**
+	 * @name onreadylist
+	 * @var array of code
+	 */
+	public static $onreadylist = array();
 
 	/**
 	 * @name onready
-	 * @var string
+	 * @param string code
 	 */
-	public static $onready;
-
-	/**
-	 * @name onready_vars
-	 * @var array
-	 */
-	protected static $onready_vars = array();
-
-	/**
-	 * @name tag
-	 * @var string
-	 */
-	protected static $tag = 'div';
-
-	/**
-	 * @name noclose
-	 * @var boolean
-	 */
-	protected static $noclose = false;
-
-	/**
-	 * @name type
-	 * @var string
-	 */
-	protected static $type;
-
-	/**
-	 * @name elem
-	 * @var stdClass element
-	 */
-	protected static $elem;
-
-	/**
-	 * @name id_delim
-	 * @var string
-	 */
-	public static $id_delim = '_';
-
-	/**
-	 * @name salt
-	 * @var string
-	 */
-	protected static $salt;
-	
-	/**
-	 * @name pepper
-	 * @var string
-	 */
-	protected static $pepper;
-	
-	/**
-	 * @name class
-	 * @var array
-	 */
-	protected static $class = array();
-
-	/**
-	 * @name pregen
-	 * @virtual
-	 */
-	protected static function pregen ($content) {
-		static::$elem->content = $content;
+	public static function onready ($code) {
+		self::$onreadylist[] = $code;
 	}
 
 	/**
-	 * @name is_active
-	 * @param boolean
-	 * @return boolean
+	 * @name add
+	 * @param files* to load/include
 	 */
-	protected static function is_active ($active) {
-		if ($active) {
-			static::$elem->class[] = self::ACTIVE;
+	public static function add () {
+		for ($i = 0, $max = func_num_args(); $i < $max; $i++) {
+			$url = func_get_arg($i);
+			preg_match(self::$extension, $url, $extension);
+			$extension = $extension[ 1 ];
+			$url = Fabrico::get_resource_file($url, $extension);
+
+			switch ($extension) {
+				case self::EXT_JS:
+					self::$scripts[] = HTML::el('script', array(
+						'type' => 'text/javascript',
+						'src' => $url
+					));
+					break;
+
+				case self::EXT_CSS:
+					echo HTML::el('link', array(
+						'rel' => 'stylesheet',
+						'type' => 'text/css',
+						'href' => $url
+					));
+					break;
+
+				default:
+					echo HTML::el('link', array(
+						'rel' => 'alternative',
+						'type' => 'text',
+						'href' => $url
+					));
+					break;
+			}
 		}
 	}
 
 	/**
-	 * @name gen_id
-	 * @param string middle
-	 * @return string id
+	 * @name internal
+	 * @param string file name
+	 * @return string internal file name
 	 */
-	public static function gen_id ($id) {
-		return implode(
-			static::$id_delim,
-			array(static::$salt, self::gen_name($id), static::$pepper)
-		);
+	public static function internal ($file) {
+		return Fabrico::PATH_INTERNAL_STR . $file;
 	}
+}
 
-	/**
-	 * @name gen_name
-	 * @param string name
-	 * @return string clean name
-	 */
-	public static function gen_name ($name) {
-		return preg_replace('/\W/', '', strtolower($name));
-	}
+/**
+ * @name template
+ * @param string template name
+ * @return string template file path
+ */
+function template ($template) {
+	return Fabrico::get_template_file($template);
+}
 
-	/**
-	 * @name handle_code
-	 */
-	protected static function handle_code () {
-		$onready_copy = static::$onready;
+/**
+ * @name run
+ * @param string method name
+ */
+function run ($method, &$holder = false) {
+	$method = Fabrico::clean_getter_name($method);
 
-		foreach (static::$onready_vars as $key => $value) {
-			$onready_copy = preg_replace(
-				"/%{$key}/", $value,
-				$onready_copy
-			);
-		}
-
-		Resource::onready($onready_copy);
-	}
-
-	/**
-	 * @name salt_n_pepper
-	 */
-	public static function salt_n_pepper () {
-		$name = get_called_class();
-		$parts = preg_split('/_/', $name);
-
-		if (count($parts) >= 2) {
-			static::$salt = $parts[0];
-			unset($parts[ 0 ]);
-			static::$pepper = implode('_', $parts);
+	if (method_exists(Fabrico::$control, $method)) {
+		if ($holder !== false) {
+			$holder = call_user_func(array(Fabrico::$control, $method));
 		}
 		else {
-			static::$salt = $name;
+			return call_user_func(array(Fabrico::$control, $method));
+		}
+	}
+}
+
+/**
+ * @name element
+ * @param string element name
+ */
+function element () {
+	for ($i = 0, $max = func_num_args(); $i < $max; $i++) {
+		require_once Fabrico::get_element_file( func_get_arg($i) );
+	}
+}
+
+/**
+ * @name redirect
+ * @param string view file path
+ * @param boolean include query in redirect
+ */
+function redirect ($file, $include_query = false) {
+	$query = array();
+
+	if ($include_query) {
+		foreach (Fabrico::$req as $key => $value) {
+			if (in_array($key, array(Fabrico::$uri_query_file))) {
+				continue;
+			}
+
+			$query[] = $key . '=' . $value;
 		}
 	}
 
-	/**
-	 * @name gen
-	 * @return string html
-	 */
-	public static function gen () {
-		static::$elem = new stdClass;
-		static::$elem->class = array();
-		static::$onready_vars = array();
-		static::$prehtml = '';
-		static::$posthtml = '';
-
-		if (!static::$salt) {
-			static::salt_n_pepper();
-		}
-
-		call_user_func_array(
-			array('static', 'pregen'),
-			func_get_args()
-		);
-
-		static::$elem->class = implode(' ', 
-			array_merge(static::$class, static::$elem->class)
-		);
-
-		if (static::$type) {
-			static::$elem->type = static::$type;
-		}
-
-		static::handle_code();
-		return static::$prehtml . HTML::el(static::$tag, static::$elem, static::$noclose) . static::$posthtml;
+	if (count($query)) {
+		$file .= '?' . implode('&', $query);
 	}
+
+	header("Location: {$file}");
 }

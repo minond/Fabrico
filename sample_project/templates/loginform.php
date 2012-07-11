@@ -1,24 +1,22 @@
-<? element('button') ?>
-<? element('checkbox') ?>
-<? element('link') ?>
-<? element('form_action') ?>
+<? element('button', 'checkbox', 'link', 'form_action', 'input_field') ?>
 
-<?= form_action::gen('login', 'homepage', 'login') ?>
+<?= form_action::open() ?>
 	<div class="loginform_holder noselect">
 		<div class="loginform_header_title">Sign in</div>
 		<img class="loginform_header_img" src="https://ssl.gstatic.com/accounts/ui/google-signin-flat.png" />
 
 		<div class="loginform_item_holder">
 			<div>Email</div>
-			<input name="email" autocomplete="off" value="<?= Fabrico::req('email') ?>" />
+			<?= input_field::gen('email') ?>
 		</div>
 
 		<div class="loginform_item_holder">
 			<div>Password</div>
-			<input name="password" autocomplete="off" type="password" />
+			<?= password_field::gen('password') ?>
 		</div>
 
-		<? if (Fabrico::is_invalid('login')): ?>
+		<? if ($login_invalid): ?>
+			<br />
 			<div class="error_string">The username or password you entered is<br />incorrect.</div> 
 		<? endif ?>
 
@@ -33,4 +31,4 @@
 			<?= link_to::gen('Can\'t access your accout?', '/'); ?>
 		</div>
 	</div>
-</form>
+<?= form_action::close('login', 'homepage', 'login', __HTML__) ?>

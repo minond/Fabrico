@@ -1,6 +1,6 @@
 <?php
 
-class button extends FabricoTemplate {
+class button extends FabricoElement {
 	const ACTION = 'fancy_button_action';
 	const CREATE = 'fancy_button_create';
 	const NORMAL = 'fancy_button_normal';

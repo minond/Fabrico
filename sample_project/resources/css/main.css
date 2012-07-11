@@ -124,6 +124,30 @@ body {
 	text-decoration: underline;
 }
 
+/**
+ * input_field
+ */
+.input_field {
+	border: 1px solid #c0c0c0;
+	height: 18px;
+	padding-left: 7px;
+	cursor: text;
+}
+
+.input_field:active,
+.input_field:focus {
+	border-color: #3079ed !important;
+	background-image: none !important;
+	-moz-box-shadow: 1px 1px 14px -3px #3079ED;
+	-webkit-box-shadow: 1px 1px 14px -3px #3079ED;
+	box-shadow: 1px 1px 14px -3px #3079ED;
+	outline: 0px;
+}
+
+.input_field.invalid {
+	border-color: red;
+	background: url(/Fabrico/sample_project/resources/images/warning_16.png) no-repeat white 97% center;
+}
 
 /**
  * page specific code

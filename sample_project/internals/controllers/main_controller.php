@@ -12,13 +12,14 @@ class MainController extends FabricoController {
 
 	// login information
 	public $logged_in;
+	public $login_invalid = false;
 	private $login_fields = array('email', 'password');
 	private $login_getter = array('email', 'first_name', 'last_name', 'permission_groups');
 
 	public function __construct () {
 		parent::__construct();
 		$this->uses('User');
-		$this->allows('log');
+		$this->allow('filelog');
 		$this->register('login', 'logout');
 
 		$this->check_login();
@@ -26,6 +27,7 @@ class MainController extends FabricoController {
 
 		if (Fabrico::is_view_request()) {
 			$this->get_user_info();
+			$this->login_invalid = Fabrico::is_invalid('password');
 		}
 	}
 
@@ -69,7 +71,7 @@ class MainController extends FabricoController {
 		}
 		else {
 			Fabrico::handle_failure(array(
-				'invalid' => 'login',
+				Fabrico::$uri_query_invalid => 'password',
 				'email' => Fabrico::req('email')
 			));
 		}
