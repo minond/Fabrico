@@ -672,8 +672,8 @@ class Fabrico {
 			return false;
 		}
 
-		$redirect = isset(Fabrico::$req[ self::$uri_query_fail ]) ? 
-		            Fabrico::$req[ self::$uri_query_fail ] : self::$file;
+		$redirect = isset(Fabrico::$req[ self::$uri_query_success ]) ? 
+		            Fabrico::$req[ self::$uri_query_success ] : self::$file;
 
 		header('Location: ' . $redirect . self::array2query($args));
 	}

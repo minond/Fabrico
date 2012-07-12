@@ -22,9 +22,3 @@ class input_field extends FabricoElement {
 class password_field extends input_field {
 	protected static $type = 'password';
 }
-
-class testing extends FabricoElement {
-	protected static function pregen ($b, $a, $c) {
-		self::$elem->content = "$b - $a (>',')> $c";
-	}
-}

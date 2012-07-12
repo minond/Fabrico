@@ -219,7 +219,9 @@ function run ($method, &$holder = false) {
  */
 function element () {
 	for ($i = 0, $max = func_num_args(); $i < $max; $i++) {
-		require_once Fabrico::get_element_file( func_get_arg($i) );
+		require_once Fabrico::get_element_file(
+			str_replace('\\', DIRECTORY_SEPARATOR, func_get_arg($i))
+		);
 	}
 }
 
