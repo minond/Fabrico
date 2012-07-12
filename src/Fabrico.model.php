@@ -1,6 +1,34 @@
 <?php
 
+/**
+ * @name FabricoModel
+ * @var FabricoModel
+ */
 class FabricoModel extends FabricoQuery {
+	/**
+	 * @name just_checking
+	 * @var array
+	 */
+	protected static $just_checking;
+
+	/**
+	 * @name and_must_be
+	 * @var array
+	 */
+	protected static $and_must_be;
+
+	/**
+	 * @name and_must_not_be
+	 * @var array
+	 */
+	protected static $and_must_not_be;
+
+	/**
+	 * @name send_back
+	 * @var array
+	 */
+	protected static $send_back;
+
 	/**
 	 * @name instance
 	 * @var FabricoModel
@@ -135,8 +163,16 @@ class FabricoModel extends FabricoQuery {
 
 		foreach ($obj as $key => $value) {
 			if (!is_null($value)) {
-				$clean = mysql_escape_string($value);
-				$str[] = "`{$key}` = '{$clean}'";
+				if ($value === true) {
+					$str[] = "`{$key}`";
+				}
+				else if ($value === false) {
+					$str[] = "!`{$key}`";
+				}
+				else {
+					$clean = mysql_escape_string($value);
+					$str[] = "`{$key}` = '{$clean}'";
+				}
 			}
 		}
 
@@ -169,11 +205,18 @@ class FabricoModel extends FabricoQuery {
 		$item = new stdClass;
 		$values = array();
 		$fields = self::$instance->get_columns();
+
+		// query checks
 		$first = func_num_args() !== 0 ? func_get_arg(0) : null;
 		$tofill = is_array($first) ? $first : func_get_args();
 
-		foreach ($tofill as $fill) {
-			$values[ $fill ] = Fabrico::req($fill);
+		if (util::is_hash($tofill)) {
+			$values =& $tofill;
+		}
+		else {
+			foreach ($tofill as $fill) {
+				$values[ $fill ] = Fabrico::req($fill);
+			}
 		}
 
 		foreach ($fields as $field) {
@@ -188,16 +231,33 @@ class FabricoModel extends FabricoQuery {
 	 * @param string filters
 	 * @return stdClass retults
 	 */
-	public static function search ($filters, $select = false) {
-		$filter = is_object($filters) ? self::obj2str($filters) : $filters;
-		$select = $select !== false ? $select : self::ALL;
+	public static function search ($filters, $select = self::ALL, $just_one = false) {
+		$filter = is_object($filters) || is_array($filters) ? self::obj2str($filters) : $filters;
 
 		self::$instance->select($select);
 		self::$instance->from(self::$instance->table);
 		self::$instance->where($filter);
 
+		if ($just_one) {
+			self::$instance->limit(1);
+		}
+
 		$return = self::$instance->run_query();
-		return count($return) ? (object) $return[ 0 ] : new stdClass;
+
+		if (count($return)) {
+			if ($just_one)
+				$return = (object) $return[ 0 ];
+			else {
+				foreach ($return as $index => $data) {
+					$return[ $index ] = (object) $data;
+				}
+			}
+		}
+		else {
+			$return = new stdClass;
+		}
+
+		return $return;
 	}
 
 	/**
@@ -218,9 +278,36 @@ class FabricoModel extends FabricoQuery {
 		self::$instance->run_query();
 		return self::$instance->last_id();
 	}
+
+	/**
+	 * @name check
+	 * @param array defaults to just_checking
+	 * @return stdClass results
+	 * @see just_checking
+	 */
+	public static function check ($data = null) {
+		return static::search(
+			// filter
+			static::create(
+				util::is_hash($data) ? $data : static::$just_checking
+			),
+
+			// selects
+			is_array(static::$send_back) ?
+				static::sel_fields(static::$send_back) :
+				self::ALL,
+
+			// limit
+			true
+		);
+	}
 }
 
 
+/**
+ * @name FabricoQuery
+ * var FabricoQuery
+ */
 class FabricoQuery {
 	// errors
 	const UNKNOW_COLUMN = 'unknown column';
@@ -239,6 +326,7 @@ class FabricoQuery {
 	protected $group;
 	protected $having;
 	protected $order;
+	protected $limit;
 
 	// show list
 	const COLUMNS = 'columns';
@@ -342,6 +430,11 @@ class FabricoQuery {
 		$this->order = 'order by ' . (is_array($by) ? implode($by, ',') : $by);
 	}
 
+	// limit
+	protected function limit ($num) {
+		$this->limit = "limit {$num}";
+	}
+
 	// run_query
 	protected function run_query () {
 		if (isset(self::$connection)) {
@@ -375,7 +468,8 @@ class FabricoQuery {
 			$this->where,
 			$this->group,
 			$this->having,
-			$this->order
+			$this->order,
+			$this->limit,
 		);
 
 		foreach ($list as $index => $item)
@@ -397,5 +491,6 @@ class FabricoQuery {
 		$this->group  = '';
 		$this->having = '';
 		$this->order  = '';
+		$this->limit  = '';
 	}
 }

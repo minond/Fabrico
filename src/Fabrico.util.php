@@ -153,4 +153,21 @@ class util {
 			'time' => $time
 		));
 	}
+
+	/**
+	 * @name is_hash
+	 * @param array reference
+	 * @return boolean
+	 */
+	public static function is_hash (& $arr) {
+		if (is_array($arr) || is_object($arr)) {
+			foreach ($arr as $key => $value) {
+				if (!is_int($key)) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
 }

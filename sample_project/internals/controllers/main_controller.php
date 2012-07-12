@@ -13,8 +13,6 @@ class MainController extends FabricoController {
 	// login information
 	public $logged_in;
 	public $login_invalid = false;
-	private $login_fields = array('email', 'password');
-	private $login_getter = array('email', 'first_name', 'last_name', 'permission_groups');
 
 	public function __construct () {
 		parent::__construct();
@@ -59,10 +57,7 @@ class MainController extends FabricoController {
 	}
 
 	public function login () {
-		$user = User::search(
-			User::create($this->login_fields),
-			User::sel_fields($this->login_getter)
-		);
+		$user = User::check();
 
 		if ($user->id) {
 			Fabrico::set_cookie(self::LOGGED_IN, true);

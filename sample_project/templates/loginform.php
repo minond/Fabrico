@@ -31,4 +31,4 @@
 			<?= link_to::gen('Can\'t access your accout?', '/'); ?>
 		</div>
 	</div>
-<?= form_action::close('login', 'homepage', 'login', __HTML__) ?>
+<?= form_action::close('login', '/search', '/login', __HTML__) ?>

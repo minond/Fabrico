@@ -115,7 +115,9 @@ class FabricoController {
 				strtolower($model)
 			);
 
-			$model::init();
+			if (is_callable(array($model, 'init'))) {
+				$model::init();
+			}
 		}
 	}
 
