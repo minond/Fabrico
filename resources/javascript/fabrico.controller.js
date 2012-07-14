@@ -73,7 +73,7 @@ Fabrico.controller.request = function (req, args, env, callback, errback) {
 Fabrico.controller.method_redirect = function (method, redirect, args, env, preback) {
 	return this.redirect({
 		_method: method,
-		_redirect: redirect
+		_success: redirect
 	}, args, env, preback);
 };
 
@@ -90,7 +90,7 @@ Fabrico.controller.method_redirect = function (method, redirect, args, env, preb
 Fabrico.controller.action_redirect = function (action, redirect, args, env, preback) {
 	return this.redirect({
 		_action: action,
-		_redirect: redirect
+		_success: redirect
 	}, args, env, preback);
 };
 
@@ -109,7 +109,7 @@ Fabrico.controller.redirect = function (req, args, env, preback) {
 
 	req._args = args || [];
 	req._env = env || {};
-	req._redirect = req._redirect || location.href;
+	req._success = req._success || location.href;
 
 	$.each(req, function (key, value) {
 		if ($.isArray(value))

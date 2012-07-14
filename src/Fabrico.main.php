@@ -69,13 +69,6 @@ class Fabrico {
 	const STR_REQUEST = 'request';
 
 	/**
-	 * @name redirect
-	 * @var stdClass
-	 * bad request handers
-	 */
-	public static $redirect;
-
-	/**
 	 * @name directory
 	 * @var stdClass
 	 * standard project directory structure
@@ -96,12 +89,7 @@ class Fabrico {
 	 */
 	public static function init () {
 		self::$id = substr((string) rand(), 0, 5);
-
 		self::$config = new stdClass;
-		self::$redirect = new stdClass;
-		self::$redirect->_404_redirect = '';
-		self::$redirect->_404_header = 'HTTP/1.0 404 Not Found';
-
 		$settings = (object) parse_ini_file(self::$file_config, true);
 
 		foreach ($settings as $section => $setting) {
@@ -124,11 +112,16 @@ class Fabrico {
 		}
 
 		// load the routing
-		require_once self::file_path(
+		FabricoURL::project($settings);
+		$rules = self::file_path(
 			self::$directory->routing .
 			self::$config->internal->router .
 			self::$config->loading->suffix
 		);
+
+		if (file_exists($rules)) {
+			require_once $rules;
+		}
 
 		FabricoURL::run();
 		self::$file = self::$req[ self::$uri_query_file ];
@@ -380,6 +373,10 @@ class Fabrico {
 				$dir = self::$directory->css;
 				break;
 
+			case Resource::EXT_IMG:
+				$dir = self::$directory->image;
+				break;
+
 			default:
 				$dir = self::$directory->resource;
 				break;
@@ -395,9 +392,16 @@ class Fabrico {
 	 * @return redirects user after bad request
 	 */
 	public static function redirect () {
-		strlen(self::$redirect->_404_redirect) ? 
-			require self::$redirect->_404_redirect :
-			header(self::$redirect->_404_header);
+		header('HTTP/1.0 404 Not Found');
+		$file = self::file_path(
+			self::$directory->redirect .
+			self::$config->internal->redirect_404 .
+			self::$config->loading->suffix
+		);
+
+		if (file_exists($file)) {
+			include $file;
+		}
 	}
 
 	/**
@@ -695,10 +699,23 @@ class Fabrico {
 			return false;
 		}
 
+		$query = false;
 		$redirect = isset(Fabrico::$req[ self::$uri_query_success ]) ? 
 		            Fabrico::$req[ self::$uri_query_success ] : self::$file;
 
-		header('Location: ' . $redirect . self::array2query($args));
+		if (count($args) === 1) {
+			foreach ($args as $arg => $value) {
+				if ($arg === self::$uri_query_id) {
+					$query = "/{$value}";
+				}
+			}
+		}
+
+		if (!$query) {
+			$query = self::array2query($args);
+		}
+
+		header('Location: ' . $redirect . $query);
 	}
 
 	/**

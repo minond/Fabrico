@@ -12,7 +12,7 @@ class PostsController extends MainController {
 		);
 
 		Fabrico::handle_success(array(
-			'post_id' => $post_id
+			Fabrico::$uri_query_id => $post_id
 		));
 	}
 

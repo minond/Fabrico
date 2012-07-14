@@ -11,4 +11,4 @@
 	'main.js'
 ); ?>
 
-<link rel="shortcut icon" href="/Fabrico/sample_project/resources/images/favicon.ico" />
+<link rel="shortcut icon" href="<?= imgsrc('favicon.ico') ?>" />

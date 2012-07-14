@@ -2,6 +2,7 @@
 <?= content() ?>
 
 checking post id: <?= req('id') ?>
+<?= imgsrc('favicon.ico') ?>
 
 <div>Add a post:</div>
 
@@ -17,6 +18,11 @@ checking post id: <?= req('id') ?>
 		<td>Body:</td>
 		<td>
 			<textarea name="body"></textarea>
+		</td>
+	</tr>
+	<tr>
+		<td>
+			<input type="submit" value="Submit" />
 		</td>
 	</tr>
 </table>

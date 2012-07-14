@@ -113,6 +113,12 @@ class Resource {
 	const EXT_CSS = 'css';
 
 	/**
+	 * @name EXT_IMG
+	 * @constant string
+	 */
+	const EXT_IMG = 'img';
+
+	/**
 	 * @name extension
 	 * @var regex string used to get a file's extension
 	 */
@@ -266,4 +272,13 @@ function content () {
  */
 function req ($key) {
 	return Fabrico::req($key);
+}
+
+/**
+ * @name imgsrc
+ * @param string image name
+ * @return string image URL
+ */
+function imgsrc ($loc) {
+	return Fabrico::get_resource_file($loc, Resource::EXT_IMG);
 }
