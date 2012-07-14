@@ -1,6 +1,8 @@
 <? element('form_action', 'link') ?>
 <?= content() ?>
 
+checking post id: <?= req('id') ?>
+
 <div>Add a post:</div>
 
 <?= form_action::open() ?>

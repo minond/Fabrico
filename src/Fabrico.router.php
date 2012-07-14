@@ -2,6 +2,7 @@
 
 require_once 'Fabrico.main.php';
 require_once 'Fabrico.util.php';
+require_once 'Fabrico.url.php';
 
 Fabrico::$req =& $_REQUEST;
 Fabrico::check_debugging();

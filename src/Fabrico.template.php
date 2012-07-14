@@ -257,3 +257,13 @@ function redirect ($file, $include_query = false) {
 function content () {
 	return Template::content();
 }
+
+/**
+ * @name req
+ * @param string query key
+ * @return string query value
+ * @see Fabrico::req
+ */
+function req ($key) {
+	return Fabrico::req($key);
+}

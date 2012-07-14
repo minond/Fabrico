@@ -50,6 +50,7 @@ class Fabrico {
 	public static $uri_query_success = '_success';
 	public static $uri_query_fail = '_fail';
 	public static $uri_query_invalid = '_ivd';
+	public static $uri_query_id = 'id';
 
 	// default controller information
 	private static $file_config = '../config/config.ini';
@@ -101,7 +102,6 @@ class Fabrico {
 		self::$redirect->_404_redirect = '';
 		self::$redirect->_404_header = 'HTTP/1.0 404 Not Found';
 
-		self::$file = self::$req[ self::$uri_query_file ];
 		$settings = (object) parse_ini_file(self::$file_config, true);
 
 		foreach ($settings as $section => $setting) {
@@ -122,6 +122,16 @@ class Fabrico {
 		foreach (self::$config->project as $section => $setting) {
 			self::$config->project->{ $section } = (object) $setting;
 		}
+
+		// load the routing
+		require_once self::file_path(
+			self::$directory->routing .
+			self::$config->internal->router .
+			self::$config->loading->suffix
+		);
+
+		FabricoURL::run();
+		self::$file = self::$req[ self::$uri_query_file ];
 
 		return file_exists(self::get_requested_file());
 	}
