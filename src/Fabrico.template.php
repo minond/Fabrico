@@ -249,3 +249,11 @@ function redirect ($file, $include_query = false) {
 
 	header("Location: {$file}");
 }
+
+/**
+ * @name content
+ * @return string
+ */
+function content () {
+	return Template::content();
+}

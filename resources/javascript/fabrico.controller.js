@@ -113,7 +113,7 @@ Fabrico.controller.redirect = function (req, args, env, preback) {
 
 	$.each(req, function (key, value) {
 		if ($.isArray(value))
-			$.each(value, function (val, i) {
+			$.each(value, function (i, val) {
 				$(sprintf(fieldstr, sprintf("%s[]", key), val)).appendTo(form);
 			});
 		

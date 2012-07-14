@@ -1,12 +1,10 @@
 <?php
 
-Fabrico::check_debugging();
-
 class util {
 	// output and log settings
 	public static $out_delm = "\n\n";
 	public static $out_wrap = '<pre>%s</pre>';
-	public static $log_wrap = "[%s.%s] %s project - %s\n";
+	public static $log_wrap = "%s ~ [%s.%s] %s project - %s\n";
 	public static $log_date = 'Y-m-d H:i:s';
 
 	private static function can_log () {
@@ -89,31 +87,40 @@ class util {
 	}
 
 	/**
-	 * @name log
-	 * @param mixed* log output
-	 * outputs items to a log file
+	 * @name append
+	 * @param filename
+	 * @param output text
 	 */
-	public static function log () {
+	private static function append ($filename, $output) {
 		if (!self::can_log()) {
 			return false;
 		}
 
 		$project = Fabrico::get_config()->project->info->name;
-		$filename = Fabrico::get_log_file();
+		$output = call_user_func_array(array('self', 'prepare_output'), $output);
+
 		list(, $micro) = explode('.', microtime(true));
 		$micro = str_pad($micro, 4, '0');
-		$out = call_user_func_array(
-			array('self', 'prepare_output'),
-			func_get_args()
-		);
 
 		if (file_exists($filename)) {
 			$file = fopen($filename, 'a');
-			$text = implode($out, self::$out_delm);
-			$logtext = sprintf(self::$log_wrap, date(self::$log_date), $micro, $project, $text);
+			$text = implode($output, self::$out_delm);
+			$logtext = sprintf(self::$log_wrap, Fabrico::get_id(), date(self::$log_date), $micro, $project, $text);
+
 			fwrite($file, $logtext);
 			fclose($file);
 		}
+	}
+
+	/**
+	 * @name log
+	 * @param mixed* log output
+	 * outputs items to a log file
+	 */
+	public static function log () {
+		self::append(
+			Fabrico::get_log_file(Fabrico::FILE_LOG),
+		func_get_args());
 	}
 
 	/**
@@ -122,14 +129,16 @@ class util {
 	 * @param array list items
 	 * @see log
 	 */
-	public static function loglist ($title, $items) {
+	public static function loglist ($title, $items, $file = false) {
 		$str = $title;
 
 		foreach ($items as $key => $value) {
 			$str .= "\n\t{$key}:\t{$value}";
 		}
 
-		self::log($str);
+		self::append(Fabrico::get_log_file(
+			$file ? $file : Fabrico::FILE_LOG
+		), array($str));
 	}
 
 	/**
@@ -151,7 +160,7 @@ class util {
 			'valid' => $valid,
 			'rows' => $count,
 			'time' => $time
-		));
+		), Fabrico::FILE_QUERY);
 	}
 
 	/**

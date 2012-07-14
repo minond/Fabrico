@@ -3,10 +3,12 @@
 require_once 'Fabrico.main.php';
 require_once 'Fabrico.util.php';
 
+Fabrico::$req =& $_REQUEST;
+Fabrico::check_debugging();
 Fabrico::timer_start();
 
 // valid view file
-if (Fabrico::init($_REQUEST) && !Fabrico::is_internal()) {
+if (Fabrico::init() && !Fabrico::is_internal()) {
 	require_once 'Fabrico.controller.php';
 	require_once 'Fabrico.response.php';
 	require_once 'Fabrico.model.php';

@@ -12,16 +12,17 @@ class link_to extends FabricoElement {
 }
 
 class link_method extends link_to {
-	public static $onready = '$("#%id").click(function () { Fabrico.controller.method_redirect("%method", "%redirect"); });';
+	public static $onready = '$("#%id").click(function () { Fabrico.controller.method_redirect("%method", "%redirect", %args); });';
 	
-	protected static function pregen ($label, $method, $redirect) {
+	protected static function pregen ($label, $method, $redirect, $args = array()) {
 		self::$pepper = 'to';
 		parent::pregen($label);
 
 		self::$onready_vars = array(
 			'id' => self::$elem->id,
 			'method' => $method,
-			'redirect' => $redirect
+			'redirect' => $redirect,
+			'args' => json_encode($args)
 		);
 	}
 }

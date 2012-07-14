@@ -16,7 +16,7 @@ class MainController extends FabricoController {
 
 	public function __construct () {
 		parent::__construct();
-		$this->uses('User');
+		$this->uses('User', 'Post', 'Comment');
 		$this->allow('filelog');
 		$this->register('login', 'logout');
 

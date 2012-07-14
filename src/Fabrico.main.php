@@ -10,6 +10,12 @@ class Fabrico {
 	const UNKNOWN_ACTION = 'unknown_action';
 	const UNKNOWN_METHOD = 'unknown_method';
 
+	// log file types
+	const FILE_LOG = 'debug.log';
+	const FILE_QUERY = 'query.log';
+	const FILE_REQUEST = 'request.log';
+
+
 	// resource file checks
 	const PATH_ABSOLUTE = '/http|^\//';
 	const PATH_INTERNAL = '/\^\//';
@@ -24,6 +30,7 @@ class Fabrico {
 	public static $controller;
 	public static $control;
 	public static $req;
+	private static $id;
 	private static $method;
 	private static $action;
 	private static $config;
@@ -31,10 +38,11 @@ class Fabrico {
 	private static $time_start;
 	private static $time_end;
 	private static $time_total;
+	private static $start_mem;
 
 	// pre request information
 	public static $uri_query_file = '_file';
-	public static $uri_query_arg = '_arg';
+	public static $uri_query_arg = '_args';
 	public static $uri_query_env = '_env';
 	public static $uri_query_method = '_method';
 	public static $uri_query_action = '_action';
@@ -49,10 +57,10 @@ class Fabrico {
 	private static $file_project = 'config/config.ini';
 	private static $def_controller = 'Fabrico.controller.php';
 	private static $def_controller_name = 'MainController';
+	private static $def_controller_suffix = 'Controller';
 	private static $def_debugging = 'FabricoDebugging';
 
 	// misc
-	const SEPARATOR = '++++++++++++++++++++++++++++++++++++++++++++++++';
 	const STR_VIEW = 'view';
 	const STR_METHOD = 'method';
 	const STR_ACTION = 'action';
@@ -85,8 +93,8 @@ class Fabrico {
 	 * @param array request object
 	 * initializes project and requested file settings
 	 */
-	public static function init (& $req) {
-		self::$req =& $req;
+	public static function init () {
+		self::$id = substr((string) rand(), 0, 5);
 
 		self::$config = new stdClass;
 		self::$redirect = new stdClass;
@@ -128,9 +136,9 @@ class Fabrico {
 		if (isset(self::$req[ self::$uri_query_debug ])) {
 			setcookie(self::$def_debugging, self::$req[ self::$uri_query_debug ]);
 			$_COOKIE[ self::$def_debugging ] = self::$req[ self::$uri_query_debug ];
+			self::$debugging = $_COOKIE[ self::$def_debugging ] === '1';
 		}
-
-		if (isset($_COOKIE[ self::$def_debugging ])) {
+		else if (isset($_COOKIE[ self::$def_debugging ])) {
 			self::$debugging = $_COOKIE[ self::$def_debugging ] === '1';
 		}
 	}
@@ -198,11 +206,16 @@ class Fabrico {
 	 * @name get_log_file
 	 * @return string log file path
 	 */
-	public static function get_log_file () {
-		return self::file_path(
-			self::$directory->logs .
-			self::$file_debug
-		);
+	public static function get_log_file ($type = self::FILE_LOG) {
+		return self::file_path(self::$directory->logs . $type);
+	}
+
+	/**
+	 * @name get_id
+	 * @return int guid
+	 */
+	public static function get_id () {
+		return self::$id;
 	}
 
 	/**
@@ -227,7 +240,7 @@ class Fabrico {
 			self::$controller = self::$def_controller_name;
 		}
 		else {
-			self::$controller = ucwords(self::clean_file($file));
+			self::$controller = ucwords(self::clean_file($file)) . self::$def_controller_suffix;
 		}
 
 		return $cfile;
@@ -573,6 +586,7 @@ class Fabrico {
 	 */
 	public static function timer_start () {
 		if (!isset(self::$time_start)) {
+			self::$start_mem = memory_get_usage();
 			self::$time_start = microtime();
 		}
 	}
@@ -589,9 +603,6 @@ class Fabrico {
 	 * @name timer_log
 	 */
 	public static function timer_log () {
-		$eol = PHP_EOL . self::SEPARATOR . PHP_EOL . PHP_EOL .
-		       PHP_EOL . PHP_EOL . PHP_EOL . self::SEPARATOR;
-
 		switch (true) {
 			case self::is_view_request():
 				$type = self::STR_VIEW;
@@ -613,8 +624,10 @@ class Fabrico {
 		util::loglist(self::STR_REQUEST, array(
 			'type' => $type,
 			'file' => self::get_requested_file(self::$file),
-			'time' => self::$time_total . $eol
-		));
+			'time' => self::$time_total,
+			'start' => self::$start_mem . ' bytes',
+			'end' => memory_get_usage() . ' bytes'
+		), self::FILE_REQUEST);
 	}
 
 	/**

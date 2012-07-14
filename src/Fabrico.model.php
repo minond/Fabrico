@@ -6,6 +6,12 @@
  */
 class FabricoModel extends FabricoQuery {
 	/**
+	 * @name has_many
+	 * @var string
+	 */
+	public static $has_many;
+
+	/**
 	 * @name just_checking
 	 * @var array
 	 */
@@ -33,39 +39,22 @@ class FabricoModel extends FabricoQuery {
 	 * @name instance
 	 * @var FabricoModel
 	 */
-	private static $instance;
+	public static $instance;
 
 	/**
-	 * @name table
-	 * @var string module table
+	 * @name data
+	 * @var array
 	 */
-	private $table;
-
-	/**
-	 * @name columns
-	 * @var stdClass of table columns
-	 */
-	private $columns;
-
-	/**
-	 * @name column_names
-	 * @var array of table columns
-	 */
-	private $column_names = array();
-
-	/**
-	 * @name primary_key
-	 * @var string columns name
-	 */
-	private $primary_key;
+	private $data = array();
 
 	/**
 	 * @name primary_key
 	 * @return string model primary key
 	 */
 	public static function primary_key ($forquery = true) {
-		return !$forquery ? self::$instance->primary_key : 
-		       sprintf(self::FIELD, self::$instance->primary_key);
+		$class = get_called_class();
+		return !$forquery ? static::$instance->data[ $class ]->primary_key :
+		       sprintf(self::FIELD, static::$instance->data[ $class ]->primary_key);
 	}
 
 	/**
@@ -90,12 +79,9 @@ class FabricoModel extends FabricoQuery {
 	 * @name get_columns
 	 * @return array
 	 */
-	public function get_columns () {
-		if (!isset($this->fields)) {
-			$this->loadinfo();
-		}
-
-		return array_keys($this->column_names);
+	public function get_columns ($class) {
+		$this->loadinfo($class);
+		return array_keys($this->data[ $class ]->column_names);
 	}
 
 	/**
@@ -105,7 +91,6 @@ class FabricoModel extends FabricoQuery {
 	 */
 	private function __construct () {
 		$info = Fabrico::get_config()->project;
-		$this->table = strtolower(get_called_class());
 
 		if (!isset(self::$connection)) {
 			require_once Fabrico::$service->database;
@@ -129,26 +114,36 @@ class FabricoModel extends FabricoQuery {
 	 */
 	public static function init () {
 		if (!isset(self::$instance)) {
-			$class = get_called_class();
-			self::$instance = new $class;
+			self::$instance = new self;
 		}
+
+		$class = get_called_class();
+		self::$instance->data[ $class ] = new stdClass;
+		self::$instance->data[ $class ]->table = strtolower(get_called_class());
+		self::$instance->data[ $class ]->primary_key = null;
+		self::$instance->data[ $class ]->columns = array();
+		self::$instance->data[ $class ]->column_names = array();
+		define($class, $class);
 	}
 
 	/** 
 	 * @name loadinfo
 	 * loads the model's table/field inforamation
 	 */
-	public function loadinfo () {
+	public function loadinfo ($class) {
+		$this->clear_query();
 		$this->show(self::COLUMNS);
-		$this->from($this->table);
-		$this->columns = $this->run_query();
+		$this->from(self::$instance->data[ $class ]->table);
+		self::$instance->data[ $class ]->columns = $this->run_query();
+		$columns =& self::$instance->data[ $class ]->columns;
+		$column_names =& self::$instance->data[ $class ]->column_names;
 
-		foreach ($this->columns as $index => $field) {
-			$this->columns[ $index ] = $field = (object) $field;
-			$this->column_names[ $field->Field ] = $field;
+		foreach ($columns as $index => $field) {
+			$columns[ $index ] = $field = (object) $field;
+			$column_names[ $field->Field ] = $field;
 
 			if (strpos($field->Key, self::PRIMARY_KEY) !== false) {
-				$this->primary_key = $field->Field;
+				self::$instance->data[ $class ]->primary_key = $field->Field;
 			}
 		}
 	}
@@ -185,13 +180,12 @@ class FabricoModel extends FabricoQuery {
 	 * @return table row
 	 */
 	public static function get ($id) {
-		if (!isset(self::$instance->fields)) {
-			self::$instance->loadinfo();
-		}
+		$class = get_called_class();
+		self::$instance->loadinfo($class);
 
 		self::$instance->select(self::ALL);
-		self::$instance->from(self::$instance->table);
-		self::$instance->where(self::$instance->primary_key . self::EQ . $id);
+		self::$instance->from(self::$instance->data[ $class ]->table);
+		self::$instance->where(self::$instance->data[ $class ]->primary_key . self::EQ . $id);
 
 		$return = self::$instance->run_query();
 		return count($return) ? (object) $return[ 0 ] : new stdClass;
@@ -202,9 +196,10 @@ class FabricoModel extends FabricoQuery {
 	 * @return stdClass blank model object
 	 */
 	public static function create () {
+		$class = get_called_class();
 		$item = new stdClass;
 		$values = array();
-		$fields = self::$instance->get_columns();
+		$fields = self::$instance->get_columns($class);
 
 		// query checks
 		$first = func_num_args() !== 0 ? func_get_arg(0) : null;
@@ -231,12 +226,17 @@ class FabricoModel extends FabricoQuery {
 	 * @param string filters
 	 * @return stdClass retults
 	 */
-	public static function search ($filters, $select = self::ALL, $just_one = false) {
+	public static function search ($filters = '', $select = self::ALL, $just_one = false) {
+		$class = get_called_class();
+		self::$instance->loadinfo($class);
 		$filter = is_object($filters) || is_array($filters) ? self::obj2str($filters) : $filters;
 
 		self::$instance->select($select);
-		self::$instance->from(self::$instance->table);
-		self::$instance->where($filter);
+		self::$instance->from(self::$instance->data[ $class ]->table);
+
+		if ($filters) {
+			self::$instance->where($filter);
+		}
 
 		if ($just_one) {
 			self::$instance->limit(1);
@@ -261,18 +261,33 @@ class FabricoModel extends FabricoQuery {
 	}
 
 	/**
+	 * @name del
+	 * @param int record id
+	 */
+	public static function del ($id) {
+		$class = get_called_class();
+		self::$instance->loadinfo($class);
+
+		self::$instance->remove(
+			self::$instance->data[ $class ]->table, $id
+		);
+
+		self::$instance->run_query();
+	}
+
+	/**
 	 * @name add
 	 * @param array of data
 	 * @return int last insert id
 	 */
 	public static function add ($data) {
-		if (!isset(self::$instance->fields)) {
-			self::$instance->loadinfo();
-		}
+		$class = get_called_class();
+		self::$instance->loadinfo($class);
+		$data = (array) $data;
 
 		self::$instance->insert(
-			self::$instance->table, $data, 
-			self::$instance->column_names
+			self::$instance->data[ $class ]->table, $data,
+			self::$instance->data[ $class ]->column_names
 		);
 
 		self::$instance->run_query();
@@ -301,6 +316,41 @@ class FabricoModel extends FabricoQuery {
 			true
 		);
 	}
+
+	/**
+	 * @name get_foreign_key
+	 * @param string parent table name
+	 * @return string child's table parent id
+	 */
+	private static function get_foreign_key ($table) {
+		return "{$table}_id";
+	}
+
+	/**
+	 * @name children
+	 * @param int parent id
+	 * @return array of children
+	 */
+	public static function children ($id = false) {
+		$class = get_called_class();
+		$table = self::$instance->data[ $class ]->table;
+		$parent_table = self::$instance->data[ static::$has_many ]->table;
+		$parent_id = self::get_foreign_key($table);
+
+		self::$instance->select(self::ALL);
+		self::$instance->from($parent_table);
+
+		if ($id) {
+			self::$instance->where("{$parent_id} = {$id}");
+		}
+
+		$return = self::$instance->run_query();
+
+		foreach ($return as $key => $value)
+			$return[ $key ] = (object) $value;
+
+		return $return;
+	}
 }
 
 
@@ -316,6 +366,7 @@ class FabricoQuery {
 	protected static $connection;
 
 	// query structure
+	protected $remove;
 	protected $select;
 	protected $insert;
 	protected $update;
@@ -365,29 +416,15 @@ class FabricoQuery {
 		$fields = array_keys($data);
 		$values = array_values($data);
 
-		array_walk($values, function ($value, $index) use (& $values, & $fields, & $columns, & $table) {
-			if (array_key_exists($fields[ $index ], $columns)) {
-				if (FabricoQuery::is_string_field($columns[ $fields[ $index ] ])) {
-					$values[ $index ] = sprintf(FabricoQuery::VALUE_STR, $value);
-				}
-				else {
-					$values[ $index ] = $value;
-				}
+		foreach ($values as $key => $value) {
+			if (is_null($value)) {
+				unset($values[ $key ]);
+				unset($fields[ $key ]);
 			}
-			else {
-				util::loglist(FabricoQuery::UNKNOW_COLUMN, array(
-					'table' => $table,
-					'field' => $fields[ $index ]
-				));
-
-				unset($values[ $index ]);
-				unset($fields[ $index ]);
+			else if (FabricoQuery::is_string_field($columns[ $fields[ $key ] ])) {
+				$values[ $key ] = sprintf(FabricoQuery::VALUE_STR, $value);
 			}
-		});
-
-		array_walk($fields, function ($value, $index) use (& $fields) {
-			$fields[ $index ] = sprintf(FabricoQuery::FIELD, $value);
-		});
+		}
 
 		$fields = implode(self::COMMA, $fields);
 		$values = implode(self::COMMA, $values);
@@ -425,6 +462,11 @@ class FabricoQuery {
 		$this->having = "having {$having}";
 	}
 
+	// remove
+	protected function remove ($table, $id) {
+		$this->remove = "delete from {$table} where id = {$id}";
+	}
+
 	// order
 	protected function order ($by) {
 		$this->order = 'order by ' . (is_array($by) ? implode($by, ',') : $by);
@@ -439,7 +481,7 @@ class FabricoQuery {
 	protected function run_query () {
 		if (isset(self::$connection)) {
 			$sql = $this->get_query();
-			$noret = $this->insert;
+			$noret = $this->insert || $this->remove;
 			$this->clear_query();
 
 			return self::$connection->query($sql, $noret);
@@ -459,6 +501,7 @@ class FabricoQuery {
 	// get query
 	public function get_query () {
 		$list = array(
+			$this->remove,
 			$this->select,
 			$this->insert,
 			$this->update,
@@ -481,6 +524,7 @@ class FabricoQuery {
 
 	// clear_query
 	public function clear_query () {
+		$this->remove = '';
 		$this->select = '';
 		$this->show   = '';
 		$this->insert = '';
