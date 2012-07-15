@@ -1,29 +1,28 @@
 #!/bin/bash
 
+eval set -- $(getopt -s bash \
+	--options "c:" \
+	--longoptions "create:" \
+	--name "fabrico" -- "$@")
+
+
+# create <project name>
 function create {
 	project=$1
+	fabricoroot=$(dirname $0)
 
-	# check
 	if [ -d "$project" ]; then
+		# check if we're overwriting anything
 		echo "project $project already exists!"
 		exit 0
+	else
+		# create project directory and copy template
+		echo "creating new fabrico project: $project"
+		cp -r "./$fabricoroot/template/" "$project/"
+		echo "template files copies successfully"
 	fi
-
-	echo "creating new project: $1"
-
-	# project directory
-	mkdir $project
-
-	# copy template
-	cp -r template/* "$project/"
 }
 
-NAME="fabrico"
-SHORTOPTS="c:"
-LONGOPTS="create:"
-
-ARGS=$(getopt -s bash --options $SHORTOPTS --longoptions $LONGOPTS --name $NAME -- "$@")
-eval set -- "$ARGS"
 
 while true; do
 	case $1 in
