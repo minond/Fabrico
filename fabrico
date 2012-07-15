@@ -1,0 +1,46 @@
+#!/bin/bash
+
+function create {
+	project=$1
+
+	# check
+	if [ -d "$project" ]; then
+		echo "project $project already exists!"
+		exit 0
+	fi
+
+	echo "creating new project: $1"
+
+	# project directory
+	mkdir $project
+
+	# copy template
+	cp -r template/* "$project/"
+}
+
+NAME="fabrico"
+SHORTOPTS="c:"
+LONGOPTS="create:"
+
+ARGS=$(getopt -s bash --options $SHORTOPTS --longoptions $LONGOPTS --name $NAME -- "$@")
+eval set -- "$ARGS"
+
+while true; do
+	case $1 in
+		-c|--create)
+			shift
+			create $1
+			;;
+
+		--)
+			shift
+			break
+			;;
+		
+		*)
+			shift
+			break
+			;;
+	esac
+	shift
+done

@@ -1,0 +1,2 @@
+<?= Template::scripts() ?>
+<?= Template::done() ?>
