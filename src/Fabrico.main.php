@@ -54,8 +54,7 @@ class Fabrico {
 
 	// default controller information
 	private static $file_config = '../config/config.ini';
-	private static $file_debug = 'debug.log';
-	private static $file_project = 'config/config.ini';
+	private static $file_project = '/config/config.ini';
 	private static $def_controller = 'Fabrico.controller.php';
 	private static $def_controller_name = 'MainController';
 	private static $def_controller_suffix = 'Controller';
@@ -121,11 +120,10 @@ class Fabrico {
 
 		if (file_exists($rules)) {
 			require_once $rules;
+			FabricoURL::run();
 		}
 
-		FabricoURL::run();
 		self::$file = self::$req[ self::$uri_query_file ];
-
 		return file_exists(self::get_requested_file());
 	}
 

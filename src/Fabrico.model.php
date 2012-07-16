@@ -9,7 +9,7 @@ class FabricoModel extends FabricoQuery {
 	 * @name has_many
 	 * @var string
 	 */
-	public static $has_many;
+	protected static $has_many;
 
 	/**
 	 * @name just_checking
