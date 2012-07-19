@@ -47,7 +47,7 @@ Fabrico.controller.action = function (action, args, env, callback, errback) {
  * @see redirect
  */
 Fabrico.controller.request = function (req, args, env, callback, errback) {
-	req._arg = args || [];
+	req._args = args || [];
 	req._env = env || {};
 
 	return $.ajax({

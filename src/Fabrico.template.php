@@ -91,7 +91,7 @@ $(function () {
 JS
 		));
 
-		return $files . $onready;
+		return $files . (trim($code) ? $onready : '');
 	}
 }
 
@@ -216,6 +216,16 @@ function run ($method, &$holder = false) {
 		else {
 			return call_user_func(array(Fabrico::$control, $method));
 		}
+	}
+}
+
+/**
+ * @name action
+ * @param string action name
+ */
+function action () {
+	for ($i = 0, $max = func_num_args(); $i < $max; $i++) {
+		require_once Fabrico::get_action_file(func_get_arg($i));
 	}
 }
 

@@ -113,7 +113,11 @@ class FabricoElement {
 	public static function gen_id ($id) {
 		return implode(
 			static::$id_delim,
-			array(static::$salt, static::gen_name($id), static::$pepper)
+			array(
+				static::gen_name(static::$salt),
+				static::gen_name($id),
+				static::gen_name(static::$pepper)
+			)
 		);
 	}
 
@@ -139,7 +143,9 @@ class FabricoElement {
 			);
 		}
 
-		Resource::onready($onready_copy);
+		if ($onready_copy) {
+			Resource::onready($onready_copy);
+		}
 	}
 
 	/**
@@ -210,11 +216,9 @@ class FabricoElement {
 	 * @param arguments* for pregen method
 	 */
 	public static function close () {
-		$html = ob_get_contents();
+		$html = ob_get_clean();
 		$args = func_num_args();
 		$argv = array();
-
-		ob_clean();
 
 		if ($args > 0) {
 			for ($i = 0; $i < $args; $i++) {

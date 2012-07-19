@@ -254,7 +254,7 @@ class FabricoModel extends FabricoQuery {
 			}
 		}
 		else {
-			$return = new stdClass;
+			$return = false;
 		}
 
 		return $return;
@@ -301,7 +301,7 @@ class FabricoModel extends FabricoQuery {
 	 * @see just_checking
 	 */
 	public static function check ($data = null) {
-		return static::search(
+		$result = static::search(
 			// filter
 			static::create(
 				util::is_hash($data) ? $data : static::$just_checking
@@ -315,6 +315,12 @@ class FabricoModel extends FabricoQuery {
 			// limit
 			true
 		);
+
+		if ($result === false) {
+			$result = static::create();
+		}
+
+		return $result;
 	}
 
 	/**

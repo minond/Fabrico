@@ -398,7 +398,9 @@ class Fabrico {
 		);
 
 		if (file_exists($file)) {
+			require self::get_main_view_pre_file();
 			include $file;
+			require self::get_main_view_post_file();
 		}
 	}
 

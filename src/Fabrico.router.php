@@ -3,6 +3,9 @@
 require_once 'Fabrico.main.php';
 require_once 'Fabrico.util.php';
 require_once 'Fabrico.url.php';
+require_once 'Fabrico.html.php';
+require_once 'Fabrico.element.php';
+require_once 'Fabrico.template.php';
 
 Fabrico::$req =& $_REQUEST;
 Fabrico::check_debugging();
@@ -16,10 +19,6 @@ if (Fabrico::init() && !Fabrico::is_internal()) {
 
 	// regular page request
 	if (Fabrico::is_view_request()) {
-		require_once 'Fabrico.html.php';
-		require_once 'Fabrico.element.php';
-		require_once 'Fabrico.template.php';
-
 		Fabrico::init_template();
 	}
 	// controller method call request
