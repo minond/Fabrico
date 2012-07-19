@@ -398,6 +398,20 @@ class Fabrico {
 		);
 
 		if (file_exists($file)) {
+			// load and initialize the controller
+			require_once self::get_main_controller_file();
+			require_once self::get_controller_file();
+			self::$control = new Fabrico::$controller;
+			$control =& self::$control;
+
+			// call onview method
+			$control->onview();
+
+			// setup enviroment
+			foreach (self::$control as $key => $value) {
+				$$key = $value;
+			}
+
 			require self::get_main_view_pre_file();
 			include $file;
 			require self::get_main_view_post_file();
@@ -456,6 +470,9 @@ class Fabrico {
 		self::$control = new Fabrico::$controller;
 		$control =& self::$control;
 
+		// call onview method
+		$control->onview();
+
 		// setup enviroment
 		foreach (self::$control as $key => $value) {
 			$$key = $value;
@@ -484,6 +501,9 @@ class Fabrico {
 					$controller->{ $key } = $value;
 				}
 			}
+			
+			// call onmethod
+			$controller->onmethod();
 
 			// and call method
 			$ret = new FabricoResponse(
@@ -521,6 +541,9 @@ class Fabrico {
 				foreach ($env as $key => $value) {
 					$$key = $value;
 				}
+
+				// call onaction method
+				$controller->onaction();
 
 				// load action
 				require_once self::get_action_file(self::$action);

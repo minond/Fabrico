@@ -144,4 +144,25 @@ class FabricoController {
 	final public function req ($key) {
 		return Fabrico::req($key);
 	}
+
+	/**
+	 * called when a view request is made
+	 *
+	 * @name onview
+	 */
+	public function onview () {}
+
+	/**
+	 * called when an action request is made
+	 *
+	 * @name onaction
+	 */
+	public function onaction () {}
+
+	/**
+	 * called when a method request is made
+	 *
+	 * @name onmethod
+	 */
+	public function onmethod () {}
 }

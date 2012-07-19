@@ -292,3 +292,18 @@ function req ($key) {
 function imgsrc ($loc) {
 	return Fabrico::get_resource_file($loc, Resource::EXT_IMG);
 }
+
+/**
+ * create a sequence of br tags
+ *
+ * @name br
+ * @param int numer of br tags to create
+ */
+function br ($num = 1) {
+	$str = '';
+
+	for ($i = 0; $i < $num; $i++)
+			$str .= '<br />';
+
+	return $str;
+}
