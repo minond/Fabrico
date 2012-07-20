@@ -127,10 +127,17 @@ class FabricoModel extends FabricoQuery {
 	}
 
 	/** 
-	 * @name loadinfo
 	 * loads the model's table/field inforamation
+	 *
+	 * @name loadinfo
+	 * @param string model name
+	 * @param boolean force info check even if already done
 	 */
-	public function loadinfo ($class) {
+	public function loadinfo ($class, $force = false) {
+		if (!$force && isset(self::$instance->data[ $class ]->columns) &&
+		    isset(self::$instance->data[ $class ]->column_names) &&
+		    isset(self::$instance->data[ $class ]->primary_key)) return;
+
 		$this->clear_query();
 		$this->show(self::COLUMNS);
 		$this->from(self::$instance->data[ $class ]->table);
@@ -145,6 +152,10 @@ class FabricoModel extends FabricoQuery {
 			if (strpos($field->Key, self::PRIMARY_KEY) !== false) {
 				self::$instance->data[ $class ]->primary_key = $field->Field;
 			}
+		}
+		
+		if (!isset(self::$instance->data[ $class ]->primary_key)) {
+			self::$instance->data[ $class ]->primary_key = self::DEF_PRIMARY_KEY;
 		}
 	}
 
@@ -204,6 +215,10 @@ class FabricoModel extends FabricoQuery {
 		// query checks
 		$first = func_num_args() !== 0 ? func_get_arg(0) : null;
 		$tofill = is_array($first) ? $first : func_get_args();
+
+		if ($first === false) {
+			$tofill = array();
+		}
 
 		if (util::is_hash($tofill)) {
 			$values =& $tofill;
@@ -317,7 +332,7 @@ class FabricoModel extends FabricoQuery {
 		);
 
 		if ($result === false) {
-			$result = static::create();
+			$result = static::create(false);
 		}
 
 		return $result;
@@ -391,6 +406,7 @@ class FabricoQuery {
 	
 	// keys
 	const PRIMARY_KEY = 'PRI';
+	const DEF_PRIMARY_KEY = 'id';
 
 	// selects
 	const ALL = '*';

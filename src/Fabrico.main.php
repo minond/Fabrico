@@ -677,6 +677,15 @@ class Fabrico {
 	}
 
 	/**
+	 * @name ses
+	 * @param string session parameter
+	 * @param mixed session value
+	 */
+	public static function ses ($name) {
+		return isset($_SESSION[ $name ]) ? $_SESSION[ $name ] : '';
+	}
+
+	/**
 	 * @name set_cookie
 	 * @param string cookie name
 	 * @param string cookie value
