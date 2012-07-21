@@ -15,7 +15,7 @@ Fabrico::check_debugging();
 Fabrico::timer_start();
 
 // valid view file
-if (Fabrico::init() && !Fabrico::is_internal()) {
+if (Fabrico::init()) {
 	// regular page request
 	if (Fabrico::is_view_request()) {
 		Fabrico::init_template();

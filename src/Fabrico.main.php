@@ -606,14 +606,6 @@ class Fabrico {
 	}
 
 	/**
-	 * @name is_internal
-	 * @return bool true if requested file is an internal script
-	 */
-	public static function is_internal () {
-		return in_array(self::clean_file(self::$file), self::$config->internal->files);
-	}
-
-	/**
 	 * @name is_view_request
 	 * @return bool true if requested file is a view page
 	 */
