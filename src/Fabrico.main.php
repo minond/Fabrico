@@ -14,7 +14,7 @@ class Fabrico {
 	const FILE_LOG = 'debug.log';
 	const FILE_QUERY = 'query.log';
 	const FILE_REQUEST = 'request.log';
-	const FILE_ERROR = 'error.log'
+	const FILE_ERROR = 'error.log';
 
 
 	// resource file checks
