@@ -180,3 +180,23 @@ class util {
 		return false;
 	}
 }
+
+class session {
+	public static function __callStatic ($name, $args) {
+		if (count($args)) {
+			$_SESSION[ $name ] = $args[ 0 ];
+		}
+
+		return Fabrico::ses($name);
+	}
+}
+
+class param {
+	public static function __callStatic ($name, $args) {
+		if (count($args)) {
+			Fabrico::$req[ $name ] = $args[ 0 ];
+		}
+
+		return Fabrico::req($name);
+	}
+}

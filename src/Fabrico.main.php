@@ -220,6 +220,33 @@ class Fabrico {
 	}
 
 	/**
+	 * parses a view file request and returns a list of possible
+	 * locations and file names for the controller file, in order
+	 * of most relevance.
+	 *
+	 * @name get_possible_controller_files
+	 * @param string requested file path
+	 * @return array of possible controller names and paths
+	 */
+	public static function get_possible_controller_files ($filepath) {
+		$possible = array();
+		$paths = explode('/', $filepath);
+
+		for ($i = 0, $max = count($paths); $i < $max; $i++) {
+			for ($j = $i; $j < $max; $j++) {
+				if (!isset($possible[ $j ])) {
+					$possible[ $j ] = '';
+				}
+
+				$possible[ $j ] .= $paths[ $i ];
+			}
+		}
+
+		array_push($possible, $filepath);
+		return array_reverse($possible);
+	}
+
+	/**
 	 * @name get_controller_file
 	 * @param string optional standard controller name
 	 * @param bool optional no file checks
@@ -230,11 +257,20 @@ class Fabrico {
 			$file = self::$file;
 		}
 
-		$cfile = self::file_path(
-			self::$directory->controllers .
-			self::clean_file($file) .
-			self::$config->loading->suffix
-		);
+		$possible = self::get_possible_controller_files($file);
+
+		foreach ($possible as $possibility) {
+			$cfile = self::file_path(
+				self::$directory->controllers .
+				self::clean_file($possibility) .
+				self::$config->loading->suffix
+			);
+
+			if (file_exists($cfile)) {
+				$file = $possibility;
+				break;
+			}
+		}
 
 		if (!$def && !file_exists($cfile)) {
 			$cfile = self::$def_controller;
@@ -661,9 +697,10 @@ class Fabrico {
 		util::loglist(self::STR_REQUEST, array(
 			'type' => $type,
 			'file' => self::get_requested_file(self::$file),
+			'cont' => self::$controller,
 			'time' => self::$time_total,
-			'start' => self::$start_mem . ' bytes',
-			'end' => memory_get_usage() . ' bytes'
+			'end' => memory_get_usage() . ' bytes',
+			'start' => self::$start_mem . ' bytes'
 		), self::FILE_REQUEST);
 	}
 
