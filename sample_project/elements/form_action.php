@@ -8,21 +8,21 @@ class form_action extends FabricoElement {
 		self::$elem->method = 'post';
 
 		// method
-		$data_fields .= HTML::el('input', array(
+		$data_fields .= html::el('input', array(
 			'type' => 'hidden',
 			'name' => Fabrico::$uri_query_method,
 			'value' => $action
 		));
 
 		// success url
-		$data_fields .= HTML::el('input', array(
+		$data_fields .= html::el('input', array(
 			'type' => 'hidden',
 			'name' => Fabrico::$uri_query_success,
 			'value' => $success
 		));
 
 		// failure url
-		$data_fields .= HTML::el('input', array(
+		$data_fields .= html::el('input', array(
 			'type' => 'hidden',
 			'name' => Fabrico::$uri_query_fail,
 			'value' => $fail

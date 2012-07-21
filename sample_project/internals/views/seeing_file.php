@@ -1,12 +1,12 @@
-<?= Template::start() ?>
-<?= Resource::add(
-	Resource::internal('normalize.css'),
-	Resource::internal('jquery.min.js'),
-	Resource::internal('jquery-ui.min.js'),
-	Resource::internal('underscore-min.js'),
-	Resource::internal('fabrico.js'),
-	Resource::internal('fabrico.controller.js'),
-	Resource::internal('fabrico.ui.js'),
+<?= FabricoPage::start() ?>
+<?= FabricoPageResource::add(
+	FabricoPageResource::internal('normalize.css'),
+	FabricoPageResource::internal('jquery.min.js'),
+	FabricoPageResource::internal('jquery-ui.min.js'),
+	FabricoPageResource::internal('underscore-min.js'),
+	FabricoPageResource::internal('fabrico.js'),
+	FabricoPageResource::internal('fabrico.controller.js'),
+	FabricoPageResource::internal('fabrico.ui.js'),
 	'main.css',
 	'main.js'
 ); ?>

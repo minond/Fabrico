@@ -12,7 +12,7 @@ class checkbox extends FabricoElement {
 		self::$elem->id = $id;
 
 		if ($label) {
-			self::$posthtml = HTML::el('label', array(
+			self::$posthtml = html::el('label', array(
 				'for' => $id,
 				'content' => $label,
 				'class' => 'fancy_checkbox_label'

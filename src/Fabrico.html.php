@@ -1,6 +1,6 @@
 <?php
 
-class HTML {
+class html {
 	/**
 	 * @name el
 	 * @param string element type

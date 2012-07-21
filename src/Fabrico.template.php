@@ -1,10 +1,10 @@
 <?php
 
 /**
- * @name Template
+ * @name FabricoPage
  * page template helpder functions
  */
-class Template {
+class FabricoPage {
 	/**
 	 * @name os
 	 * @var array
@@ -78,8 +78,8 @@ class Template {
 	 * @return string script tags for requested javascript files
 	 */
 	public static function scripts () {
-		$files = PHP_EOL . implode(Resource::$scripts, PHP_EOL) . PHP_EOL;
-		$code = PHP_EOL . implode(Resource::$onreadylist, PHP_EOL) . PHP_EOL;
+		$files = PHP_EOL . implode(FabricoPageResource::$scripts, PHP_EOL) . PHP_EOL;
+		$code = PHP_EOL . implode(FabricoPageResource::$onreadylist, PHP_EOL) . PHP_EOL;
 		$onready = HTML::el('script', array(
 			'type' => 'text/javascript',
 			'content' => <<<JS
@@ -96,10 +96,10 @@ JS
 }
 
 /**
- * @name Resource
+ * @name FabricoPageResource
  * resource file helper class
  */
-class Resource {
+class FabricoPageResource {
 	/**
 	 * @name EXT_JS
 	 * @constant string
@@ -271,7 +271,7 @@ function redirect ($file, $include_query = false) {
  * @return string
  */
 function content () {
-	return Template::content();
+	return FabricoPage::content();
 }
 
 /**
@@ -290,7 +290,7 @@ function req ($key) {
  * @return string image URL
  */
 function imgsrc ($loc) {
-	return Fabrico::get_resource_file($loc, Resource::EXT_IMG);
+	return Fabrico::get_resource_file($loc, FabricoPageResource::EXT_IMG);
 }
 
 /**

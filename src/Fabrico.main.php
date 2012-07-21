@@ -399,15 +399,15 @@ class Fabrico {
 		}
 
 		switch ($extension) {
-			case Resource::EXT_JS:
+			case FabricoPageResource::EXT_JS:
 				$dir = self::$directory->javascript;
 				break;
 
-			case Resource::EXT_CSS:
+			case FabricoPageResource::EXT_CSS:
 				$dir = self::$directory->css;
 				break;
 
-			case Resource::EXT_IMG:
+			case FabricoPageResource::EXT_IMG:
 				$dir = self::$directory->image;
 				break;
 
@@ -688,6 +688,7 @@ class Fabrico {
 
 		util::loglist(self::STR_REQUEST, array(
 			'type' => $type,
+			'uri'=> $_SERVER['REQUEST_URI'],
 			'file' => self::get_requested_file(self::$file),
 			'cont' => self::$controller,
 			'time' => self::$time_total,

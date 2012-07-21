@@ -220,7 +220,7 @@ class FabricoModel extends FabricoQuery {
 			$tofill = array();
 		}
 
-		if (util::is_hash($tofill)) {
+		if (is_object($tofill) || util::is_hash($tofill)) {
 			$values =& $tofill;
 		}
 		else {
