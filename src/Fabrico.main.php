@@ -235,21 +235,30 @@ class Fabrico {
 	 * @return array of possible controller names and paths
 	 */
 	public static function get_possible_controller_files ($filepath) {
-		$possible = array();
 		$paths = explode('/', $filepath);
+		$possible = array();
+		$files = array();
+		$dirs = array();
 
 		for ($i = 0, $max = count($paths); $i < $max; $i++) {
 			for ($j = $i; $j < $max; $j++) {
-				if (!isset($possible[ $j ])) {
-					$possible[ $j ] = '';
+				if (!isset($files[ $j ])) {
+					$files[ $j ] = '';
+					$dirs[ $j ] = '';
 				}
 
-				$possible[ $j ] .= $paths[ $i ];
+				$files[ $j ] .= $paths[ $i ];
+				$dirs[ $j ] .= $paths[ $i ] . '/';
 			}
 		}
 
-		array_push($possible, $filepath);
-		return array_reverse($possible);
+		foreach ($files as $index => $file) {
+			$possible[] = $file;
+			$possible[] = rtrim($dirs[ $index ], '/');
+		}
+
+		array_shift($possible);
+		return array_reverse(array_unique($possible));
 	}
 
 	/**
