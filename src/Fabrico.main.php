@@ -36,12 +36,14 @@ class Fabrico {
 	private static $action;
 	private static $config;
 	private static $debugging;
+	private static $validview;
 	private static $time_start;
 	private static $time_end;
 	private static $time_total;
 	private static $start_mem;
 
 	// pre request information
+	public static $uri_query_error = '_error';
 	public static $uri_query_file = '_file';
 	public static $uri_query_arg = '_args';
 	public static $uri_query_env = '_env';
@@ -67,6 +69,7 @@ class Fabrico {
 	const STR_ACTION = 'action';
 	const STR_UNKNOWN = 'unknown';
 	const STR_REQUEST = 'request';
+	const STR_ERROR = 'error';
 
 	/**
 	 * @name directory
@@ -83,11 +86,12 @@ class Fabrico {
 	public static $service;
 
 	/**
-	 * @name init
+	 * @name initialize
 	 * @param array request object
 	 * initializes project and requested file settings
 	 */
-	public static function init () {
+	public static function initialize (& $req) {
+		self::$req =& $req;
 		self::$id = substr((string) rand(), 0, 5);
 		self::$config = new stdClass;
 		$settings = (object) parse_ini_file(self::$file_config, true);
@@ -125,7 +129,8 @@ class Fabrico {
 		}
 
 		self::$file = self::$req[ self::$uri_query_file ];
-		return file_exists(self::get_requested_file());
+		self::$validview = file_exists(self::get_requested_file());
+		self::check_debugging();
 	}
 
 	/**
@@ -426,11 +431,11 @@ class Fabrico {
 	 * @name redirect
 	 * @return redirects user after bad request
 	 */
-	public static function redirect () {
+	public static function redirect ($type = 404) {
 		header('HTTP/1.0 404 Not Found');
 		$file = self::file_path(
 			self::$directory->redirect .
-			self::$config->internal->redirect_404 .
+			$type .
 			self::$config->loading->suffix
 		);
 
@@ -438,7 +443,7 @@ class Fabrico {
 			// load and initialize the controller
 			require_once self::get_main_controller_file();
 			require_once self::get_controller_file();
-			self::$control = new Fabrico::$controller;
+			self::$control = new self::$controller;
 			$control =& self::$control;
 
 			// call onview method
@@ -504,7 +509,7 @@ class Fabrico {
 		// load and initialize the controller
 		require_once self::get_main_controller_file();
 		require_once self::get_controller_file();
-		self::$control = new Fabrico::$controller;
+		self::$control = new self::$controller;
 		$control =& self::$control;
 
 		// call onview method
@@ -607,12 +612,38 @@ class Fabrico {
 	}
 
 	/**
+	 * @name is_error_request
+	 * @return bool true if request of to an error page
+	 */
+	public static function is_error_request () {
+		return isset(self::$req[ self::$uri_query_error ]);
+	}
+
+	/**
+	 * @name is_post
+	 * @return boolean true if current request is using the POST method
+	 */
+	public static function is_post () {
+		return $_SERVER['REQUEST_METHOD'] === 'POST';
+	}
+
+	/**
+	 * @name is_valid_view
+	 * @return bool true if requested file an a view file
+	 */
+	public static function is_valid_view () {
+		return self::$validview;
+	}
+
+	/**
 	 * @name is_view_request
 	 * @return bool true if requested file is a view page
 	 */
 	public static function is_view_request () {
 		return isset(self::$req[ self::$uri_query_file ]) && 
 		       strlen(self::$req[ self::$uri_query_file ]) &&
+		       self::is_valid_view() &&
+		       !self::is_error_request() &&
 		       !self::is_method_request() &&
 		       !self::is_action_request();
 	}
@@ -625,6 +656,7 @@ class Fabrico {
 		return isset(self::$req[ self::$uri_query_file ]) && 
 		       isset(self::$req[ self::$uri_query_method ]) &&
 		       strlen(self::$req[ self::$uri_query_method ]) &&
+		       self::is_post() &&
 		       !self::is_action_request();
 	}
 
@@ -636,6 +668,7 @@ class Fabrico {
 		return isset(self::$req[ self::$uri_query_file ]) && 
 		       isset(self::$req[ self::$uri_query_action ]) &&
 		       strlen(self::$req[ self::$uri_query_action ]) &&
+		       self::is_post() &&
 		       !self::is_method_request();
 	}
 
@@ -669,6 +702,8 @@ class Fabrico {
 	 * @name timer_log
 	 */
 	public static function timer_log () {
+		$uri = $_SERVER['REQUEST_URI'];
+
 		switch (true) {
 			case self::is_view_request():
 				$type = self::STR_VIEW;
@@ -682,6 +717,11 @@ class Fabrico {
 				$type = self::STR_ACTION;
 				break;
 
+			case self::is_error_request():
+				$type = self::STR_ERROR;
+				$uri = substr($uri, strpos($uri, '=') + 1);
+				break;
+
 			default:
 				$type = self::STR_UNKNOWN;
 				break;
@@ -689,7 +729,7 @@ class Fabrico {
 
 		util::loglist(self::STR_REQUEST, array(
 			'type' => $type,
-			'uri'=> $_SERVER['REQUEST_URI'],
+			'uri'=> $uri,
 			'file' => self::get_requested_file(self::$file),
 			'cont' => self::$controller,
 			'time' => self::$time_total,
@@ -754,6 +794,42 @@ class Fabrico {
 	}
 
 	/**
+	 * @name handle_request
+	 * @param boolean profile request time
+	 */
+	public static function handle_request ($profile = false) {
+		if ($profile) {
+			self::timer_start();
+		}
+
+		// regular page request
+		if (self::is_view_request()) {
+			self::init_template();
+		}
+		// controller method call request
+		else if (self::is_method_request()) {
+			self::init_method();
+		}
+		// action method call request
+		else if (self::is_action_request()) {
+			self::init_action();
+		}
+		// error redirect request
+		else if (self::is_error_request()) {
+			self::redirect(500);
+		}
+		// unknown
+		else {
+			self::redirect();
+		}
+
+		if ($profile) {
+			self::timer_stop();
+			self::timer_log();
+		}
+	}
+
+	/**
 	 * @name handle_success
 	 * @param array redirect arguments
 	 */
@@ -763,8 +839,8 @@ class Fabrico {
 		}
 
 		$query = false;
-		$redirect = isset(Fabrico::$req[ self::$uri_query_success ]) ? 
-		            Fabrico::$req[ self::$uri_query_success ] : self::$file;
+		$redirect = isset(self::$req[ self::$uri_query_success ]) ?
+		            self::$req[ self::$uri_query_success ] : self::$file;
 
 		if (count($args) === 1) {
 			foreach ($args as $arg => $value) {
@@ -790,8 +866,8 @@ class Fabrico {
 			return false;
 		}
 
-		$redirect = isset(Fabrico::$req[ self::$uri_query_fail ]) ? 
-		            Fabrico::$req[ self::$uri_query_fail ] : self::$file;
+		$redirect = isset(self::$req[ self::$uri_query_fail ]) ?
+		            self::$req[ self::$uri_query_fail ] : self::$file;
 
 		header('Location: ' . $redirect . self::array2query($args));
 	}

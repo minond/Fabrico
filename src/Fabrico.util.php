@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * generatal function helpers and shortcuts
+ *
+ * @name util
+ */
 class util {
 	// output and log settings
 	public static $out_delm = "\n\n";
@@ -164,6 +169,26 @@ class util {
 	}
 
 	/**
+	 * @name logfatalerror
+	 * @see log
+	 */
+	public static function logfatalerror () {
+		$error = FabricoError::error_decode(Fabrico::req(
+			Fabrico::$uri_query_error
+		));
+
+		if (is_array($error)) {
+			$log = array(
+				'error' => $error[2],
+				'file' => $error[1],
+				'line' => $error[0]
+			);
+
+			self::loglist('fatal error', $log, Fabrico::FILE_ERROR);
+		}
+	}
+
+	/**
 	 * @name is_hash
 	 * @param array reference
 	 * @return boolean
@@ -181,6 +206,11 @@ class util {
 	}
 }
 
+/**
+ * session getter and setter using static methods
+ *
+ * @name session
+ */
 class session {
 	public static function __callStatic ($name, $args) {
 		if (count($args)) {
@@ -191,6 +221,11 @@ class session {
 	}
 }
 
+/**
+ * request parameter getter and setter using static methods
+ *
+ * @name param
+ */
 class param {
 	public static function __callStatic ($name, $args) {
 		if (count($args)) {
@@ -198,5 +233,28 @@ class param {
 		}
 
 		return Fabrico::req($name);
+	}
+}
+
+/**
+ * encryption and decryption helper
+ *
+ * @name scrypt
+ */
+class scrypt {
+	public static function en ($str, $key) {
+		return base64_encode(
+			mcrypt_encrypt(
+				MCRYPT_RIJNDAEL_256, md5($key), $str, MCRYPT_MODE_CBC, md5(md5($key))
+			)
+		);
+	}
+
+	public static function de ($str, $key) {
+		return rtrim(
+			mcrypt_decrypt(
+				MCRYPT_RIJNDAEL_256, md5($key), base64_decode($str), MCRYPT_MODE_CBC, md5(md5($key))
+			), "\0"
+		);
 	}
 }

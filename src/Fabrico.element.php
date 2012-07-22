@@ -76,14 +76,6 @@ class FabricoElement {
 	protected static $class = array();
 
 	/**
-	 * @name pregen
-	 * @virtual
-	 */
-	protected static function pregen ($content) {
-		static::$elem->content = $content;
-	}
-
-	/**
 	 * @name is_invalid
 	 * @param boolean
 	 * @return boolean
@@ -164,6 +156,14 @@ class FabricoElement {
 			static::$salt = $name;
 		}
 	}
+
+	/**
+	 * @name pregen
+	 * @virtual
+	 * protected static function pregen ($content) {
+	 * static::$elem->content = $content;
+	 * }
+	 */
 
 	/**
 	 * @name gen

@@ -1,13 +1,22 @@
 <?php
 
 set_error_handler('FabricoError::output_error');
+register_shutdown_function('FabricoError::output_shutdown');
 set_exception_handler('FabricoError::output_exception');
 
 class FabricoError {
+	const DELIM = '|';
+
 	private static $list = array();
 
 	public static function getall () {
-		return implode('', self::$list);
+		$errors = '';
+
+		if (count(self::$list)) {
+			$errors = br(7) . implode('', self::$list);
+		}
+
+		return $errors;
 	}
 
 	private static function output_to_logs ($type, $message, $file, $line, $trace = array()) {
@@ -32,6 +41,38 @@ class FabricoError {
 			));
 
 			self::$list[] = ob_get_clean();
+		}
+	}
+
+	private static function fatal_error_redirect ($error) {
+		$error = self::error_encode($error);
+		header('Location: /errorcaptured?' . Fabrico::$uri_query_error . "={$error}");
+	}
+
+	private static function error_encode ($error) {
+		$error = (object) $error;
+		$error = base64_encode(implode(self::DELIM, array(
+			$error->line,
+			$error->file,
+			$error->message
+		)));
+
+		return $error;
+	}
+
+	public static function error_decode ($str) {
+		$error = base64_decode($str);
+		$error = explode(self::DELIM, $error);
+
+		return $error;
+	}
+
+	public static function output_shutdown () {
+		$error = error_get_last();
+
+		if (count($error)) {
+			@ob_get_clean();
+			self::fatal_error_redirect($error);
 		}
 	}
 
