@@ -307,3 +307,46 @@ function br ($num = 1) {
 
 	return $str;
 }
+
+/**
+ * create a sequence of spaces
+ *
+ * @name space
+ * @param int numer of spaces to create
+ */
+function space ($num = 1) {
+	$str = '';
+
+	for ($i = 0; $i < $num; $i++)
+			$str .= '&nbsp;';
+
+	return $str;
+}
+
+/**
+ * @name jsfile
+ * @param string* file source
+ * @see FabricoPageResource::add
+ */
+function jsfile ($src) {
+	call_user_func_array(array('FabricoPageResource', 'add'), func_get_args());
+}
+
+/**
+ * @name cssfile
+ * @param string* file href
+ * @see FabricoPageResource::add
+ */
+function cssfile ($href) {
+	call_user_func_array(array('FabricoPageResource', 'add'), func_get_args());
+}
+
+/**
+ * @name corefile
+ * @param string file name
+ * @return string internal file identifier
+ * @see FabricoPageResource::internal
+ */
+function corefile ($name) {
+	return FabricoPageResource::internal($name);
+}

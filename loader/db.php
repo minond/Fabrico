@@ -104,9 +104,10 @@ class FabricoSingleDatabaseConnection {
 			while ($row = mysql_fetch_array($results, $type)) {
 				$response[] = $row;
 			}
+			
+			mysql_free_result($results);
 		}
 
-		mysql_free_result($results);
 		util::logquery($sql, $results, $end - $start);
 		return $response;
 	}

@@ -181,6 +181,15 @@ class Fabrico {
 	}
 
 	/**
+	 * @name core_file_path
+	 * @param string file name
+	 * @return string path to internal fabrico file
+	 */
+	public static function core_file_path ($file) {
+		return self::$config->loading->core . $file;
+	}
+
+	/**
 	 * @name file_path
 	 * @param string file name
 	 * @param bool optional file path starts at root
@@ -329,11 +338,19 @@ class Fabrico {
 	 * @return string element file path
 	 */
 	public static function get_element_file ($elem) {
-		return self::file_path(
+		$custom = self::file_path(
 			self::$directory->elements .
 			self::clean_file($elem) .
 			self::$config->loading->suffix
 		);
+
+		$internal = self::core_file_path(
+			self::$directory->elements .
+			self::clean_file($elem) .
+			self::$config->loading->suffix
+		);
+
+		return file_exists($custom) ? $custom : $internal;
 	}
 
 	/**
@@ -394,11 +411,19 @@ class Fabrico {
 	 * @return string template file path
 	 */
 	public static function get_template_file ($template) {
-		return self::file_path(
+		$custom = self::file_path(
 			self::$directory->templates .
 			self::clean_file($template) .
 			self::$config->loading->suffix
 		);
+
+		$internal = self::core_file_path(
+			self::$directory->templates .
+			self::clean_file($template) .
+			self::$config->loading->suffix
+		);
+
+		return file_exists($custom) ? $custom : $internal;
 	}
 
 	/**
@@ -887,6 +912,8 @@ class Fabrico {
 	 * @return boolean invalid thing
 	 */
 	public static function is_invalid ($thing) {
-		return self::req( self::$uri_query_invalid ) === $thing;
+		$list = self::req( self::$uri_query_invalid );
+
+		return $list ? in_array($thing, $list) : false;
 	}
 }

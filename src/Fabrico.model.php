@@ -199,7 +199,16 @@ class FabricoModel extends FabricoQuery {
 		self::$instance->where(self::$instance->data[ $class ]->primary_key . self::EQ . $id);
 
 		$return = self::$instance->run_query();
-		return count($return) ? (object) $return[ 0 ] : new stdClass;
+
+		if (count($return)) {
+			$data = (object) $return[ 0 ];
+			$return = new FabricoModelInstance($data, $class);
+		}
+		else {
+			$return = static::create(false);
+		}
+
+		return $return;
 	}
 
 	/**
@@ -233,7 +242,7 @@ class FabricoModel extends FabricoQuery {
 			$item->{ $field } = array_key_exists($field, $values) ? $values[ $field ] : null;
 		}
 
-		return $item;
+		return new FabricoModelInstance($item, $class);
 	}
 
 	/**
@@ -244,6 +253,11 @@ class FabricoModel extends FabricoQuery {
 	public static function search ($filters = '', $select = self::ALL, $just_one = false) {
 		$class = get_called_class();
 		self::$instance->loadinfo($class);
+
+		if ($filters instanceof FabricoModelInstance) {
+			$filters = $filters->getdata();
+		}
+
 		$filter = is_object($filters) || is_array($filters) ? self::obj2str($filters) : $filters;
 
 		self::$instance->select($select);
@@ -260,11 +274,14 @@ class FabricoModel extends FabricoQuery {
 		$return = self::$instance->run_query();
 
 		if (count($return)) {
-			if ($just_one)
-				$return = (object) $return[ 0 ];
+			if ($just_one) {
+				$data = (object) $return[ 0 ];
+				$return = new FabricoModelInstance($data, $class);
+			}
 			else {
 				foreach ($return as $index => $data) {
-					$return[ $index ] = (object) $data;
+					$retdata = (object) $data;
+					$return[ $index ] = new FabricoModelInstance($retdata, $class);
 				}
 			}
 		}
@@ -299,14 +316,39 @@ class FabricoModel extends FabricoQuery {
 		$class = get_called_class();
 		self::$instance->loadinfo($class);
 		$data = (array) $data;
+		$prikey = self::$instance->data[ $class ]->primary_key;
 
-		self::$instance->insert(
-			self::$instance->data[ $class ]->table, $data,
-			self::$instance->data[ $class ]->column_names
-		);
+		// save or update check
+		if ($data[ $prikey ]) {
+			$id = $data[ $prikey ];
+			unset($data[ $prikey ]);
+
+			self::$instance->update(
+				self::$instance->data[ $class ]->table, $data,
+				self::$instance->data[ $class ]->column_names
+			);
+
+			self::$instance->where(sprintf(self::FIELD, $prikey) . self::EQ . $id);
+		}
+		else {
+			self::$instance->insert(
+				self::$instance->data[ $class ]->table, $data,
+				self::$instance->data[ $class ]->column_names
+			);
+		}
 
 		self::$instance->run_query();
 		return self::$instance->last_id();
+	}
+
+	/**
+	 * @name save
+	 * @param array of data
+	 * @return int last insert id
+	 * @see add
+	 */
+	public static function save ($data) {
+		return static::add($data);
 	}
 
 	/**
@@ -399,6 +441,7 @@ class FabricoQuery {
 	protected $having;
 	protected $order;
 	protected $limit;
+	protected $set;
 
 	// show list
 	const COLUMNS = 'columns';
@@ -420,6 +463,22 @@ class FabricoQuery {
 	const FIELD = '`%s`';
 	const VALUE_STR = '"%s"';
 
+	// cleanupdata
+	public function cleanupdata (& $values, & $fields, & $columns) {
+		foreach ($values as $key => $value) {
+			if (is_null($value)) {
+				unset($values[ $key ]);
+				unset($fields[ $key ]);
+			}
+			else if (FabricoQuery::is_string_field($columns[ $fields[ $key ] ])) {
+				$values[ $key ] = sprintf(FabricoQuery::VALUE_STR, $value);
+			}
+		}
+
+		foreach ($fields as $index => $field)
+			$fields[ $index ] = sprintf(self::FIELD, $field);
+	}
+
 	// is_string_field
 	public static function is_string_field ($field_data) {
 		return preg_match(
@@ -433,21 +492,29 @@ class FabricoQuery {
 		$this->show = "show {$what}";
 	}
 
+	// update
+	protected function update ($table, & $data, & $columns) {
+		$fields = array_keys($data);
+		$values = array_values($data);
+		$updates = array();
+
+		$this->cleanupdata($values, $fields, $columns);
+
+		foreach ($fields as $index => $field) {
+			$value = $values[ $index ];
+			$updates[] = "{$field} = {$value}";
+		}
+
+		$this->update = "update {$table}";
+		$this->set = 'set ' . implode(self::COMMA, $updates);
+	}
+
 	// insert
 	protected function insert ($table, & $data, & $columns) {
 		$fields = array_keys($data);
 		$values = array_values($data);
 
-		foreach ($values as $key => $value) {
-			if (is_null($value)) {
-				unset($values[ $key ]);
-				unset($fields[ $key ]);
-			}
-			else if (FabricoQuery::is_string_field($columns[ $fields[ $key ] ])) {
-				$values[ $key ] = sprintf(FabricoQuery::VALUE_STR, $value);
-			}
-		}
-
+		$this->cleanupdata($values, $fields, $columns);
 		$fields = implode(self::COMMA, $fields);
 		$values = implode(self::COMMA, $values);
 
@@ -503,7 +570,7 @@ class FabricoQuery {
 	protected function run_query () {
 		if (isset(self::$connection)) {
 			$sql = $this->get_query();
-			$noret = $this->insert || $this->remove;
+			$noret = $this->insert || $this->remove || $this->update;
 			$this->clear_query();
 
 			return self::$connection->query($sql, $noret);
@@ -530,11 +597,12 @@ class FabricoQuery {
 			$this->show,
 			$this->from,
 			$this->join,
+			$this->set,
 			$this->where,
 			$this->group,
 			$this->having,
 			$this->order,
-			$this->limit,
+			$this->limit
 		);
 
 		foreach ($list as $index => $item)
@@ -558,5 +626,47 @@ class FabricoQuery {
 		$this->having = '';
 		$this->order  = '';
 		$this->limit  = '';
+		$this->set    = '';
+	}
+}
+
+class FabricoModelInstance {
+	private $data;
+	private $name;
+
+	public function __construct (stdClass $data, $name) {
+		$this->data =& $data;
+		$this->name = $name;
+	}
+
+	public function __get ($prop) {
+		if (property_exists($this->data, $prop)) {
+			return $this->data->{ $prop };
+		}
+	}
+
+	public function __set ($prop, $val) {
+		if (property_exists($this->data, $prop)) {
+			return $this->data->{ $prop } = $val;
+		}
+		else {
+			throw new Exception("invalid property {$prop} for model of instance {$this->name}");
+		}
+	}
+
+	public function __call ($method, $args) {
+		if (method_exists($this, $method)) {
+			return call_user_func_array(array($this, $method), $args);
+		}
+		else if (method_exists($this->name, $method)) {
+			return call_user_func(array($this->name, $method), $this->data);
+		}
+		else {
+			throw new Exception("invalid method {$method} for model of instance {$this->name}");
+		}
+	}
+
+	public function getdata () {
+		return $this->data;
 	}
 }

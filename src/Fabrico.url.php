@@ -5,7 +5,7 @@ class FabricoURL {
 	 * @name MATCH_ID
 	 * @constant string
 	 */
-	const MATCH_ID = '/(.*)\/(\d+?)$/';
+	const MATCH_ID = '/(.*)\/(\d+?)\/?$/';
 
 	/**
 	 * @name MATCH_PROJECT

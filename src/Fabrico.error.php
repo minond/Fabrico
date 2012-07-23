@@ -70,9 +70,11 @@ class FabricoError {
 	public static function output_shutdown () {
 		$error = error_get_last();
 
-		if (count($error)) {
-			@ob_get_clean();
-			self::fatal_error_redirect($error);
+		if (!Fabrico::is_debugging()) {
+			if (count($error)) {
+				// @ob_get_clean();
+				// self::fatal_error_redirect($error);
+			}
 		}
 	}
 

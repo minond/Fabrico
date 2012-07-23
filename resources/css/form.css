@@ -1,0 +1,28 @@
+.formbasic {
+	display: inline-block;
+	padding: 20px 30px;
+	border: 1px solid silver;
+	background-color: #F1F1F1;
+	text-align: left;
+	margin: 40px;
+}
+
+.formbasic label {
+	display: block;
+	font: bold 13px Arial;
+	margin-bottom: 4px;
+	margin-top: 10px;
+}
+
+.formbasic .basictextfield {
+	border: 1px solid #aaaaaa;
+	height: 19px;
+	width: 310px;
+	padding-left: 5px;
+}
+
+.formbasic .basicbutton {
+	padding: 2px 10px;
+	font: bold 12px Arial;
+	color: #444444;
+}
