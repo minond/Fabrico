@@ -56,7 +56,7 @@ class Fabrico {
 	public static $uri_query_id = 'id';
 
 	// default controller information
-	private static $file_config = '../config/config.ini';
+	public static $file_config = '../config/config.ini';
 	private static $file_project = '/config/config.ini';
 	private static $def_controller = 'Fabrico.controller.php';
 	private static $def_controller_name = 'MainController';

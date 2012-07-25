@@ -2,13 +2,20 @@
 
 <?php
 
+define('EOL', PHP_EOL);
+define('EOS', ';');
 define('EXITCOMMAND', 'exit');
-define('GOODBYE', PHP_EOL . 'goodbye' . PHP_EOL . PHP_EOL);
-define('PROMPT', PHP_EOL . 'fabrico> ');
+define('QUITCOMMAND', 'quit');
+define('GOODBYE', EOL . 'goodbye' . EOL . EOL);
+define('PROMPT', EOL . 'fabrico> ');
+define('PROMPTCONT', '       > ');
 define('CLEAR', 'clear');
 
+$textbuffer = '';
+$runsbuffer = false;
+
 while (true) {
-	echo PROMPT;
+	echo $runsbuffer ? PROMPTCONT : PROMPT;
 	$input = trim(fread(STDIN, 80));
 	$parts = explode(' ', $input);
 	$command = $parts[ 0 ];
@@ -18,13 +25,20 @@ while (true) {
 		list(, $args) = explode(' ', $input, 2);
 	}
 
-	action_command($command, $args) or standard_command($command);
+	$args = $textbuffer . $args;
+
+	handlecommand($command, $args);
 }
 
 function loadproject ($argv) {
 	$project = $argv[ 0 ];
 
-	echo 'loading core files...' . PHP_EOL;
+	if (!$project) {
+		echo 'please enter a valid project name' . EOL;
+		return;
+	}
+
+	echo 'loading core files...' . EOL;
 	require_once 'Fabrico.main.php';
 	require_once 'Fabrico.error.php';
 	require_once 'Fabrico.util.php';
@@ -36,55 +50,49 @@ function loadproject ($argv) {
 	require_once 'Fabrico.controller.php';
 	require_once 'Fabrico.response.php';
 	require_once 'Fabrico.model.php';
-	echo 'core files loaded' . PHP_EOL;
+	echo 'core files loaded' . EOL;
 
+	echo 'initializing Fabrico...' . EOL;
 	$req = array(
 		Fabrico::$uri_query_file => 'cli'
 	);
 
+	Fabrico::$file_config = 'config/cli_config.ini';
 	Fabrico::initialize($req);
-
-	if ($project) {
-		echo "loading $project..." . PHP_EOL;
-		echo 'load complete' . PHP_EOL;
-	}
-	else {
-		echo 'please enter a valid project name' . PHP_EOL;
-	}
+	echo "$project project loaded" . EOL;
 }
 
-function action_command ($command, $args) {
-	$args = explode(' ', $args);
+function handlecommand ($command, $args) {
+	$argv = explode(' ', $args);
 
-	switch ($command) {
-		case 'load':
-			loadproject($args);
-			return true;
-
-		default:
-			return false;
-	}
-}
-
-function standard_command ($command) {
 	switch ($command) {
 		case EXITCOMMAND:
+		case QUITCOMMAND:
 			echo GOODBYE;
 			exit(0);
 
 		case CLEAR:
 			for ($i = 0; $i < 100; $i++)
-				echo PHP_EOL;
+				echo EOL;
+			break;
+
+		case 'load':
+			loadproject($args);
 			break;
 
 		default:
-			try {
-				eval($input);
-			}
-			catch (Exception $error) {
-				print_r($error);
-			}
+			$statement = strlen($args) ? $args[ strlen($args) - 1 ] === EOS : false;
 
+			if ($statement) {
+				global $textbuffer;
+				$textbuffer = '';
+				eval($args);
+			}
+			else {
+				global $textbuffer, $runsbuffer;
+				$runsbuffer = true;
+				$textbuffer .= $args;
+			}
 			break;
 	}
 }
