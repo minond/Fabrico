@@ -1,1 +1,1 @@
-<? Resource::add('main.js') ?>
+<? FabricoPageResource::add('main.js') ?>

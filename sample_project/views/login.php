@@ -1,4 +1,4 @@
-<?= Template::content() ?>
+<?= content() ?>
 
 <? if ($logged_in): ?>
 	<? redirect('search', true) ?>

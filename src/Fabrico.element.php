@@ -10,6 +10,12 @@ class FabricoElement {
 	const NOSELECT = 'noselect';
 
 	/**
+	 * @name parsejs
+	 * @var boolean
+	 */
+	protected static $parsejs;
+
+	/**
 	 * @name prehtml
 	 * @var string
 	 */
@@ -177,6 +183,7 @@ class FabricoElement {
 		static::$onready_vars = array();
 		static::$prehtml = '';
 		static::$posthtml = '';
+		static::$parsejs = true;
 		$noclose = false;
 
 		static::salt_n_pepper();
@@ -199,7 +206,10 @@ class FabricoElement {
 			unset(static::$elem->noclose);
 		}
 
-		static::handle_code();
+		if (static::$parsejs) {
+			static::handle_code();
+		}
+
 		return static::$prehtml . 
 		       HTML::el(static::$tag, static::$elem, $noclose) . 
 			   static::$posthtml;

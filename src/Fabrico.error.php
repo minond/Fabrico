@@ -13,7 +13,7 @@ class FabricoError {
 		$errors = '';
 
 		if (count(self::$list)) {
-			$errors = br(7) . implode('', self::$list);
+			$errors = implode('', self::$list);
 		}
 
 		return $errors;

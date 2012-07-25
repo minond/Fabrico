@@ -1,2 +1,2 @@
-<?= Template::scripts() ?>
-<?= Template::done() ?>
+<?= FabricoPage::scripts() ?>
+<?= FabricoPage::done() ?>

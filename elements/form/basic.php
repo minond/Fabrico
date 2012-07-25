@@ -2,15 +2,38 @@
 
 namespace form;
 
+class blocklink extends \FabricoElement {
+	protected static $tag = 'div';
+	protected static $class = array('blocklinkholder');
+	public static $onready = '$("#%id").click(function () {
+		window.location.href = "%url";
+	});';
+
+	public static function pregen ($content, $linkto = false, $width = 400) {
+		self::$elem->content = $content;
+		self::$elem->style = "width: {$width}px;";
+		self::$elem->id = self::gen_id(rand());
+
+		if ($linkto) {
+			self::$elem->style .= 'cursor: pointer;';
+			self::$onready_vars = array(
+				'id' => self::$elem->id,
+				'url' => $linkto
+			);
+		}
+		else {
+			self::$parsejs = false;
+		}
+	}
+}
+
 class method extends \FabricoElement {
 	protected static $tag = 'form';
 	protected static $class = array('formbasic');
-	public static $onready = '$("#%id").submit(function (e) {
-		e.preventDefault();
-		Fabrico.controller.method("%method", [Fabrico.helper.form2args("#%id")]);
-	});';
+	public static $onready = 'Fabrico.ui.listen_submit_form("#%id", "%method");';
 
-	protected static function pregen ($method, $onpass, $onfail, $content) {
+	protected static function pregen ($method, $content, $onpass = false, $onfail = false, $ajax = true) {
+		self::$parsejs = $ajax;
 		self::$elem->method = 'POST';
 		self::$elem->id = self::gen_id(rand());
 		self::$elem->content .= $content;
@@ -59,6 +82,17 @@ class textfield extends \FabricoElement {
 			'content' => $label,
 			'for' => self::$elem->id
 		));
+	}
+}
+
+class hiddenfield extends \FabricoElement {
+	protected static $tag = 'input';
+	protected static $type = 'hidden';
+
+	public static function pregen ($name, $value = '') {
+		self::$elem->value = $value;
+		self::$elem->name = $name;
+		self::$elem->id = self::gen_id($name);
 	}
 }
 
@@ -115,5 +149,3 @@ class methodbutton extends \FabricoElement {
 		);
 	}
 }
-
-

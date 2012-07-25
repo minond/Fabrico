@@ -1,1 +1,1 @@
-<b>Error:</b> <i><?= $error->getMessage() ?></i>
+<b>Error:</b> <i><?= $error ?></i>

@@ -14,15 +14,31 @@
 	margin-top: 10px;
 }
 
-.formbasic .basictextfield {
+.basictextfield {
 	border: 1px solid #aaaaaa;
 	height: 19px;
 	width: 310px;
 	padding-left: 5px;
 }
 
-.formbasic .basicbutton {
+.basictextfield.invalid {
+	border-color: red;
+	background: url(/Fabrico/resources/images/warning_16.png) no-repeat white 97% center;
+}
+
+.basicbutton {
 	padding: 2px 10px;
 	font: bold 12px Arial;
 	color: #444444;
+}
+
+.blocklinkholder {
+	border: 1px solid #CCC;
+	background-color: #EEE;
+	margin-bottom: 10px;
+	padding: 20px;
+}
+
+.blocklinkholder:hover {
+	box-shadow: 0 0 19px -2px #888;
 }

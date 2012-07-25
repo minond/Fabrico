@@ -24,6 +24,12 @@ class FabricoModel extends FabricoQuery {
 	protected static $and_must_be;
 
 	/**
+	 * @name requires
+	 * @var array
+	 */
+	protected static $requires;
+
+	/**
 	 * @name and_must_not_be
 	 * @var array
 	 */
@@ -160,6 +166,29 @@ class FabricoModel extends FabricoQuery {
 	}
 
 	/**
+	 * @name q
+	 * @param string function name
+	 * @param string|array of args
+	 */
+	public static function q ($type, $arg) {
+		$class = get_called_class();
+		self::$instance->loadinfo($class);
+
+		if (is_array($arg)) {
+			call_user_func_array(array(
+				self::$instance, $type
+			), $arg);
+		}
+		else {
+			call_user_func(array(
+				self::$instance, $type
+			), $arg);
+		}
+
+		return $class;
+	}
+
+	/**
 	 * @name obj2str
 	 * @param stdClass model object
 	 * @return string filter query
@@ -190,9 +219,16 @@ class FabricoModel extends FabricoQuery {
 	 * @param int primary key id
 	 * @return table row
 	 */
-	public static function get ($id) {
+	public static function get ($id = false) {
 		$class = get_called_class();
 		self::$instance->loadinfo($class);
+
+		if (!$id) {
+			if (param::id())
+				$id = param::id();
+			else
+				return $class::create();
+		}
 
 		self::$instance->select(self::ALL);
 		self::$instance->from(self::$instance->data[ $class ]->table);
@@ -317,6 +353,7 @@ class FabricoModel extends FabricoQuery {
 		self::$instance->loadinfo($class);
 		$data = (array) $data;
 		$prikey = self::$instance->data[ $class ]->primary_key;
+		$id = false;
 
 		// save or update check
 		if ($data[ $prikey ]) {
@@ -338,17 +375,18 @@ class FabricoModel extends FabricoQuery {
 		}
 
 		self::$instance->run_query();
-		return self::$instance->last_id();
+		return $id === false ? self::$instance->last_id() : $id;
 	}
 
 	/**
 	 * @name save
 	 * @param array of data
-	 * @return int last insert id
+	 * @return int|array last insert id or array of errors
 	 * @see add
 	 */
 	public static function save ($data) {
-		return static::add($data);
+		$valid = static::valid($data);
+		return $valid === true ? static::add($data) : $valid;
 	}
 
 	/**
@@ -413,6 +451,24 @@ class FabricoModel extends FabricoQuery {
 			$return[ $key ] = (object) $value;
 
 		return $return;
+	}
+
+	/**
+	 * @name valid
+	 * @param FabricoModelInstance data
+	 * @return bool|array true if valid, or array of errors
+	 */
+	public static function valid ($data) {
+		$errors = array();
+
+		// check we have everything required
+		foreach (static::$requires as $field) {
+			if (!$data->{ $field }) {
+				$errors[] = $field;
+			}
+		}
+
+		return count($errors) ? $errors : true;
 	}
 }
 

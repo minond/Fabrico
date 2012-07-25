@@ -2,7 +2,18 @@
  * @name controller
  * @var object
  */
-Fabrico.controller = {};
+Fabrico.controller = {
+	response: {
+		SUCCESS: "success",
+		ERROR: "error",
+		SUCCESS: "success",
+		IN_PROCESS: "in_process",
+		NOT_ALLOWED: "not_allowed",
+		UNKNOWN_FILE: "unknown_file",
+		UNKNOWN_ACTION: "unknown_action",
+		UNKNOWN_METHOD: "unknown_method"
+	}
+};
 
 /**
  * @name method
@@ -51,7 +62,7 @@ Fabrico.controller.request = function (req, args, env, callback, errback) {
 	req._env = env || {};
 
 	return $.ajax({
-		type: 'POST', 
+		type: "POST", 
 		async: true, 
 		url: location.href,
 		success: callback || function () {},
