@@ -162,7 +162,7 @@ Fabrico.ui = {
 					selection.removeClass(Fabrico.ui.classes.ACTIVE);
 
 					if (newselection.length) {
-						newselection[ 0 ].scrollIntoView();
+						newselection[ 0 ].scrollIntoViewIfNeeded();
 					}
 
 					e.preventDefault();
@@ -176,7 +176,7 @@ Fabrico.ui = {
 					selection.removeClass(Fabrico.ui.classes.ACTIVE);
 
 					if (newselection.length) {
-						newselection[ 0 ].scrollIntoView();
+						newselection[ 0 ].scrollIntoViewIfNeeded();
 					}
 
 					e.preventDefault();

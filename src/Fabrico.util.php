@@ -12,14 +12,33 @@ class util {
 	public static $log_wrap = "%s ~ [%s.%s] %s project - %s\n";
 	public static $log_date = 'Y-m-d H:i:s';
 
+	/**
+	 * @name can_log
+	 * @return true if request can log data
+	 */
 	private static function can_log () {
 		return Fabrico::is_debugging();
 	}
 
+	/**
+	 * @name can_output
+	 * @return bool true is request is able to output text
+	 */
 	private static function can_output () {
 		return self::can_log() &&
 		       !Fabrico::is_method_request() &&
 		       !Fabrico::is_action_request();
+	}
+
+	/**
+	 * returns a boolean in string form
+	 *
+	 * @name bool2string
+	 * @param boolean value check
+	 * @return string
+	 */
+	public static function bool2string ($val = false) {
+		return isset($val) && $val === true ? 'true' : 'false';
 	}
 
 	/**
@@ -63,9 +82,9 @@ class util {
 		);
 
 		$out = implode($out, self::$out_delm);
-		echo HTML::el('pre', array(
+		echo html::el('pre', array(
 			'content' => $out, 
-			'style' => HTML::style(array(
+			'style' => html::style(array(
 				'cursor' => 'default',
 				'white-space' => 'pre-wrap',
 				'font-size' => '11px'

@@ -43,8 +43,8 @@ class FabricoResponse {
 		$error = new stdClass;
 
 		$error->title = $title;
-		$error->message = $message;
-		$error->filename = $filename;
+		$error->msg = $message;
+		$error->file = $filename;
 		$error->line = $line;
 
 		util::loglist(Fabrico::ERROR, $error);
