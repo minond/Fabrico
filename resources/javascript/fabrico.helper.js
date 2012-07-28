@@ -40,9 +40,13 @@ Fabrico.helper.form_error_display = function (formid, errors) {
 	Fabrico.helper.form_reset_display(formid);
 	
 	$.each(errors, function (i, error) {
-		$(Fabrico.helper.sprintf("[name='$0']", error), formid).addClass(
+		var field = $(Fabrico.helper.sprintf("[name='$0']", error), formid).addClass(
 			Fabrico.ui.classes.INVALID
 		)
+
+		if (!i) {
+			field.focus();
+		}
 	});
 };
 

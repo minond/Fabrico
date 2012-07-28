@@ -14,6 +14,7 @@ require_once 'Fabrico.template.php';
 require_once 'Fabrico.page.php';
 require_once 'Fabrico.controller.php';
 require_once 'Fabrico.response.php';
+require_once 'Fabrico.database.php';
 require_once 'Fabrico.model.php';
 
 Fabrico::initialize($_REQUEST);

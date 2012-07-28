@@ -99,7 +99,6 @@ class FabricoModel extends FabricoQuery {
 		$info = Fabrico::get_config()->project;
 
 		if (!isset(self::$connection)) {
-			require_once Fabrico::$service->database;
 			self::$connection = FabricoSingleDatabaseConnection::request(
 				$info->database->server,
 				$info->database->username,

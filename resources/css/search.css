@@ -1,0 +1,46 @@
+.autocompleteinput {
+	border: 1px solid #AAA;
+	height: 19px;
+	width: 200px;
+	padding-left: 5px;
+}
+
+.autocompleteinput:active,
+.autocompleteinput:focus {
+	outline: 0px;
+}
+
+.autocompleteresults {
+	border: 1px solid #AAA;
+	border-top-width: 0px;
+	width: 205px;
+	position: absolute;
+	display: none;
+	box-shadow: 0 6px 19px -6px #888;
+}
+
+.autocompleteresults .resultitemmain {
+	cursor: pointer;
+	padding-left: 5px;
+	background-color: white;
+	padding-top: 1px;
+	padding-bottom: 2px;
+}
+
+.autocompleteresults .resultitemmain.active {
+	background-color: #EFEFEF;
+}
+
+.autocompleteresults .resultitemdesc {
+	font: italic 11px Arial;
+	color: gray;
+}
+
+.autocompleterunsearch {
+	display: inline-block;
+	height: 23px;
+	width: 23px;
+	background-image: url(/Fabrico/resources/images/search.png);
+	cursor: pointer;
+	margin: -7px -3px;
+}

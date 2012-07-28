@@ -79,13 +79,6 @@ class Fabrico {
 	public static $directory;
 	
 	/**
-	 * @name service
-	 * @var stdClass
-	 * service loader/manager scripts
-	 */
-	public static $service;
-
-	/**
 	 * @name initialize
 	 * @param array request object
 	 * initializes project and requested file settings
@@ -101,7 +94,6 @@ class Fabrico {
 		}
 
 		self::$directory = $settings->directory;
-		self::$service = $settings->service;
 		self::$config->loading = $settings->loading;
 		self::$config->internal = $settings->internal;
 		
