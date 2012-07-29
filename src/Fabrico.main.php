@@ -23,8 +23,7 @@ class Fabrico {
 	const PATH_INTERNAL_STR = '^/';
 
 	// action names
-	const ACTION_FORMAT = '_%s_';
-	const METHOD_GETTER = 'get_%s';
+	const ACTION_FORMAT = '%s';
 
 	// project/page information
 	public static $file;
@@ -161,15 +160,6 @@ class Fabrico {
 	 */
 	public static function clean_action_name ($action) {
 		return sprintf(self::ACTION_FORMAT, $action);
-	}
-
-	/**
-	 * @name clean_getter_name
-	 * @param string method name
-	 * @return string gettter method name
-	 */
-	public static function clean_getter_name ($method) {
-		return sprintf(self::METHOD_GETTER, $method);
 	}
 
 	/**

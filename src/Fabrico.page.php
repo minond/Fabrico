@@ -203,23 +203,6 @@ function template ($template) {
 }
 
 /**
- * @name run
- * @param string method name
- */
-function run ($method, &$holder = false) {
-	$method = Fabrico::clean_getter_name($method);
-
-	if (method_exists(Fabrico::$control, $method)) {
-		if ($holder !== false) {
-			$holder = call_user_func(array(Fabrico::$control, $method));
-		}
-		else {
-			return call_user_func(array(Fabrico::$control, $method));
-		}
-	}
-}
-
-/**
  * @name action
  * @param string action name
  */
