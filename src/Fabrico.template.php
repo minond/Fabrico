@@ -3,6 +3,7 @@
 class FabricoTemplateElement {
 	protected static $template;
 	protected static $templates;
+	protected static $expecting = array();
 
 	public static function __callStatic ($template, $data) {
 		if (array_key_exists($template, static::$templates)) {
@@ -14,10 +15,24 @@ class FabricoTemplateElement {
 		}
 	}
 
-	public static function merge ($data) {
-		if (is_array($data)) {
-			foreach ($data as $var => $value) {
-				$$var = $value;
+	public static function merge ($_data = array()) {
+		if (is_array($_data)) {
+			foreach ($_data as $_var => $_value) {
+				$$_var = $_value;
+			}
+		}
+
+		if (count(static::$expecting)) {
+			foreach (static::$expecting as $_var) {
+				if (!array_key_exists(is_array($_var) ? $_var[ 0 ] : $_var, $_data)) {
+					if (is_array($_var)) {
+						list($_variable, $_value) = $_var;
+						$$_variable = $_value;
+					}
+					else {
+						$$_var = '';
+					}
+				}
 			}
 		}
 
