@@ -11,7 +11,7 @@ class FabricoTemplateElement {
 			call_user_func_array(array('static', 'merge'), $data);
 		}
 		else {
-			throw new Exception("invalid template name");
+			throw new Exception("invalid template name \"{$template}\"");
 		}
 	}
 

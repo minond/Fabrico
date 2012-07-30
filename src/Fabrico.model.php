@@ -6,6 +6,22 @@
  */
 class FabricoModel extends FabricoQuery {
 	/**
+	 * field fieldorder
+	 *
+	 * @name order
+	 * @var array
+	 */
+	protected static $fieldorder = array();
+
+	/**
+	 * field information for editing models
+	 *
+	 * @name fieldediting
+	 * @var array
+	 */
+	protected static $fieldediting = array();
+
+	/**
 	 * @name has_many
 	 * @var string
 	 */
@@ -427,6 +443,28 @@ class FabricoModel extends FabricoQuery {
 	}
 
 	/**
+	 * @name getfielddata
+	 * @param string model class name
+	 * @return object of model field information
+	 */
+	public static function getfielddata ($class) {
+		return (object) array(
+			'editing' => $class::$fieldediting,
+			'order' => $class::$fieldorder
+		);
+	}
+
+	/**
+	 * @name getinfo
+	 * @var string model class name
+	 * @return object of model information
+	 */
+	public static function getinfo ($class) {
+		return array_key_exists($class, self::$instance->data) ?
+		       self::$instance->data[ $class ] : false;
+	}
+
+	/**
 	 * @name children
 	 * @param int parent id
 	 * @return array of children
@@ -687,11 +725,11 @@ class FabricoQuery {
 
 class FabricoModelInstance {
 	private $data;
-	private $name;
+	private $type;
 
-	public function __construct (stdClass $data, $name) {
+	public function __construct (stdClass $data, $type) {
 		$this->data =& $data;
-		$this->name = $name;
+		$this->type = $type;
 	}
 
 	public function __get ($prop) {
@@ -705,7 +743,7 @@ class FabricoModelInstance {
 			return $this->data->{ $prop } = $val;
 		}
 		else {
-			throw new Exception("invalid property {$prop} for model of instance {$this->name}");
+			throw new Exception("invalid property {$prop} for model of instance {$this->type}");
 		}
 	}
 
@@ -713,15 +751,19 @@ class FabricoModelInstance {
 		if (method_exists($this, $method)) {
 			return call_user_func_array(array($this, $method), $args);
 		}
-		else if (method_exists($this->name, $method)) {
-			return call_user_func(array($this->name, $method), $this->data);
+		else if (method_exists($this->type, $method)) {
+			return call_user_func(array($this->type, $method), $this->data);
 		}
 		else {
-			throw new Exception("invalid method {$method} for model of instance {$this->name}");
+			throw new Exception("invalid method {$method} for model of instance {$this->type}");
 		}
 	}
 
 	public function getdata () {
 		return $this->data;
+	}
+
+	public function gettype () {
+		return $this->type;
 	}
 }

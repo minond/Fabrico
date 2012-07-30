@@ -6,6 +6,7 @@ class field extends \FabricoTemplateElement {
 	protected static $templates = array(
 		'password' => 'fields/password.php',
 		'text' => 'fields/text.php',
+		'hidden' => 'fields/hidden.php',
 		'select' => 'fields/select.php',
 		'multiselect' => 'fields/multiselect.php',
 		'checkbox' => 'fields/checkbox.php',

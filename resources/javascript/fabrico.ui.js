@@ -149,7 +149,9 @@ Fabrico.ui = {
 
 			// arrows of enter checks
 			switch (e.keyCode) {
-				// left and right
+				// tab, space, left and right
+				case 9:
+				case 32:
 				case 37:
 				case 39:
 					return true;
