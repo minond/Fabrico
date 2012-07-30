@@ -1,5 +1,9 @@
 <?php
 
+define('__HTML__', Fabrico::get_id());
+define('__CSS__', '<link rel="other" />');
+define('__ERROR__', '<span class="errorlist"></span>');
+
 /**
  * @name FabricoPage
  * page template helpder functions
@@ -53,7 +57,8 @@ class FabricoPage {
 	 * @return string start of view page html
 	 */
 	public static function start () {
-		return "<!doctype html>\n<html>\n\t<head>\n\n";
+		ob_start();
+		echo "<!doctype html>\n<html>\n\t<head>\n\n" . __CSS__;
 	}
 
 	/**
@@ -62,7 +67,7 @@ class FabricoPage {
 	 */
 	public static function content () {
 		list($os, $browser, ) = self::body_tab();
-		return "\n\n\t</head>\n\t<body class='{$os} {$browser}'>\n";
+		echo "\n\n\t</head>\n\t<body class='{$os} {$browser}'>\n" . __ERROR__;
 	}
 
 	/**
@@ -70,7 +75,23 @@ class FabricoPage {
 	 * @return string end of view page content and html
 	 */
 	public static function done () {
-		return "\n\t</body>\n</html>";
+		$errors = FabricoError::getall();
+		$scripts = self::scripts();
+		$styles = self::links();
+
+		echo "{$scripts}\n\t</body>\n</html>";
+		$body = ob_get_clean();
+		$body = str_replace(__CSS__, self::links(), $body);
+		$body = str_replace(__ERROR__, $errors, $body);
+		echo $body;
+	}
+
+	/**
+	 * @name links
+	 * @return string of link elements to include in page's head
+	 */
+	public static function links () {
+		return PHP_EOL . implode(FabricoPageResource::$styles, PHP_EOL) . PHP_EOL;
 	}
 
 	/**
@@ -80,7 +101,7 @@ class FabricoPage {
 	public static function scripts () {
 		$files = PHP_EOL . implode(FabricoPageResource::$scripts, PHP_EOL) . PHP_EOL;
 		$code = PHP_EOL . implode(FabricoPageResource::$onreadylist, PHP_EOL) . PHP_EOL;
-		$onready = HTML::el('script', array(
+		$onready = html::el('script', array(
 			'type' => 'text/javascript',
 			'content' => <<<JS
 
@@ -125,6 +146,13 @@ class FabricoPageResource {
 	private static $extension = '/^.+\.(.+)$/';
 
 	/**
+	 * @name styles
+	 * @var array
+	 * css files requested
+	 */
+	public static $styles = array();
+
+	/**
 	 * @name scripts
 	 * @var array
 	 * javascript files requested
@@ -158,14 +186,14 @@ class FabricoPageResource {
 
 			switch ($extension) {
 				case self::EXT_JS:
-					self::$scripts[] = HTML::el('script', array(
+					self::$scripts[] = html::el('script', array(
 						'type' => 'text/javascript',
 						'src' => $url
 					));
 					break;
 
 				case self::EXT_CSS:
-					echo HTML::el('link', array(
+					self::$styles[] = html::el('link', array(
 						'rel' => 'stylesheet',
 						'type' => 'text/css',
 						'href' => $url
@@ -173,7 +201,7 @@ class FabricoPageResource {
 					break;
 
 				default:
-					echo HTML::el('link', array(
+					self::$styles[] = html::el('link', array(
 						'rel' => 'alternative',
 						'type' => 'text',
 						'href' => $url
@@ -307,12 +335,40 @@ function space ($num = 1) {
 }
 
 /**
+ * @name corejsfile
+ * @param string* file source
+ * @see FabricoPageResource::add
+ */
+function corejsfile ($src) {
+	$files = func_get_args();
+
+	foreach ($files as $index => $file)
+		$files[ $index ] = corefile($file);
+
+	call_user_func_array(array('FabricoPageResource', 'add'), $files);
+}
+
+/**
  * @name jsfile
  * @param string* file source
  * @see FabricoPageResource::add
  */
 function jsfile ($src) {
 	call_user_func_array(array('FabricoPageResource', 'add'), func_get_args());
+}
+
+/**
+ * @name corecssfile
+ * @param string* file href
+ * @see FabricoPageResource::add
+ */
+function corecssfile ($href) {
+	$files = func_get_args();
+
+	foreach ($files as $index => $file)
+		$files[ $index ] = corefile($file);
+
+	call_user_func_array(array('FabricoPageResource', 'add'), $files);
 }
 
 /**
@@ -332,4 +388,20 @@ function cssfile ($href) {
  */
 function corefile ($name) {
 	return FabricoPageResource::internal($name);
+}
+
+/**
+ * @name startpage
+ * @see FabricoPage::start
+ */
+function startpage () {
+	FabricoPage::start();
+}
+
+/**
+ * @name endpage
+ * @see FabricoPage::done
+ */
+function endpage () {
+	FabricoPage::done();
 }

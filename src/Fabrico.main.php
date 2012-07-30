@@ -19,8 +19,8 @@ class Fabrico {
 
 	// resource file checks
 	const PATH_ABSOLUTE = '/http|^\//';
-	const PATH_INTERNAL = '/\^\//';
-	const PATH_INTERNAL_STR = '^/';
+	const PATH_INTERNAL = '/\~\//';
+	const PATH_INTERNAL_STR = '~/';
 
 	// action names
 	const ACTION_FORMAT = '%s';
@@ -131,13 +131,15 @@ class Fabrico {
 	public static function check_debugging () {
 		self::$debugging = false;
 
-		if (isset(self::$req[ self::$uri_query_debug ])) {
-			setcookie(self::$def_debugging, self::$req[ self::$uri_query_debug ]);
-			$_COOKIE[ self::$def_debugging ] = self::$req[ self::$uri_query_debug ];
-			self::$debugging = $_COOKIE[ self::$def_debugging ] === '1';
-		}
-		else if (isset($_COOKIE[ self::$def_debugging ])) {
-			self::$debugging = $_COOKIE[ self::$def_debugging ] === '1';
+		if (self::$config->project->info->debuggingallowed) {
+			if (isset(self::$req[ self::$uri_query_debug ])) {
+				setcookie(self::$def_debugging, self::$req[ self::$uri_query_debug ]);
+				$_COOKIE[ self::$def_debugging ] = self::$req[ self::$uri_query_debug ];
+				self::$debugging = $_COOKIE[ self::$def_debugging ] === '1';
+			}
+			else if (isset($_COOKIE[ self::$def_debugging ])) {
+				self::$debugging = $_COOKIE[ self::$def_debugging ] === '1';
+			}
 		}
 	}
 

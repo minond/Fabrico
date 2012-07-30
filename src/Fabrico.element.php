@@ -1,7 +1,5 @@
 <?php
 
-define('__HTML__', rand());
-
 class FabricoElement {
 	// standard classes
 	const ACTIVE = 'active';

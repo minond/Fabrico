@@ -16,7 +16,7 @@ class util {
 	 * @name can_log
 	 * @return true if request can log data
 	 */
-	private static function can_log () {
+	public static function can_log () {
 		return Fabrico::is_debugging();
 	}
 
@@ -24,7 +24,7 @@ class util {
 	 * @name can_output
 	 * @return bool true is request is able to output text
 	 */
-	private static function can_output () {
+	public static function can_output () {
 		return self::can_log() &&
 		       !Fabrico::is_method_request() &&
 		       !Fabrico::is_action_request();

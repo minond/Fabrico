@@ -625,7 +625,7 @@ class FabricoQuery {
 	protected function run_query () {
 		if (isset(self::$connection)) {
 			$sql = $this->get_query();
-			$noret = $this->insert || $this->remove || $this->update;
+			$noret = !$this->show && !$this->select;
 			$this->clear_query();
 
 			return self::$connection->query($sql, $noret);

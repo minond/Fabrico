@@ -29,7 +29,7 @@ class FabricoError {
 	}
 
 	private static function output_to_view ($type, $message, $file, $line) {
-		if (Fabrico::is_view_request()) {
+		if (Fabrico::is_view_request() && util::can_output()) {
 			element('error/error');
 			ob_start();
 
