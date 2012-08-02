@@ -1,10 +1,32 @@
 .formbasic {
 	display: inline-block;
-	padding: 20px 30px;
+	padding: 20px 35px 20px 30px;
 	border: 1px solid silver;
 	background-color: #F1F1F1;
 	text-align: left;
 	margin: 40px;
+}
+
+.formbasic.active .formmessage div {
+	display: inline-block;
+}
+
+.formbasic .formmessageimg {
+	display: inline-block;
+	height: 20px;
+	width: 20px;
+}
+
+.formbasic.active .formmessageimg {
+	background: url(/Fabrico/resources/images/loader.gif) no-repeat center #F1F1F1;
+}
+
+.formbasic.valid .formmessageimg {
+	background: url(/Fabrico/resources/images/checkmark.png) no-repeat center #F1F1F1;
+}
+
+.formbasic.invalid .formmessageimg {
+	background: url(/Fabrico/resources/images/warning_16.png) no-repeat center #F1F1F1;
 }
 
 .formbasic label {
@@ -17,8 +39,19 @@
 .basictextfield {
 	border: 1px solid #aaaaaa;
 	height: 19px;
-	width: 310px;
+	width: 250px;
 	padding-left: 5px;
+}
+
+.formbasic .basictextfield {
+	min-width: 250px;
+	width: 100%;
+}
+
+.formbasic .formmessage {
+	height: 40px;
+	font: bold 12px Arial;
+	margin-top: 10px;
 }
 
 .basictextfield.invalid {
@@ -37,6 +70,11 @@
 	height: 23px;
 	width: 317px;
 	padding-left: 3px;
+	cursor: default;
+}
+
+.basicselectfield option {
+	cursor: default;
 }
 
 .basicmultiselectfield {

@@ -8,7 +8,8 @@ $defs = (object) array(
 	'id' => rand(),
 	'hidden' => 'hidden',
 	'type' => 'text',
-	'value' => ''
+	'value' => '',
+	'savelabel' => 'Save'
 );
 
 // field properties
@@ -30,6 +31,8 @@ $type = $data->gettype();
 $schema = FabricoModel::getinfo($type);
 $fielddata = FabricoModel::getfielddata($type);
 $primarykey = $schema->primary_key;
+$actions = array_merge($fielddata->actions, $actions);
+$object_id = 0;
 
 // field order information
 // priority follows: parameter, model, table schema
@@ -55,14 +58,17 @@ foreach ($order as $field) {
 	$userdef = array_key_exists($field, $fielddata->editing) ?
 	           $fielddata->editing[ $field ] : array();
 
+	$info->name = $field;
+	$info->value = property_exists($values, $field) ? $values->{ $field } : $defs->value;
+
 	if ($field === $primarykey) {
 		$info->type = $defs->hidden;
+		$object_id = $info->value;
 	}
 	else {
 		$info->type = isset($userdef[ $prop->type ]) ? $userdef[ $prop->type ] : $defs->type;
 	}
-	$info->name = $field;
-	$info->value = property_exists($values, $field) ? $values->{ $field } : $defs->value;
+
 	$info->label = isset($userdef[ $prop->label ]) ? $userdef[ $prop->label ] : genname($field);
 	$info->id = isset($userdef[ $prop->id ]) ? $userdef[ $prop->id ] : $info->name . $defs->id;
 	$info->hidden = $info->type === $defs->hidden;
@@ -71,20 +77,52 @@ foreach ($order as $field) {
 	$fieldlist[] = $info;
 }
 
+// save action label
+if (isset($actions['save'])) {
+	$defs->savelabel = $actions['save'];
+	unset($actions['save']);
+}
+
 ?>
 
+<? if ($center): ?>
+<center>
+<? endif ?>
 <? form\method::open() ?>
 	<? foreach ($fieldlist as $index => $field): ?>
 		<? if (!$field->hidden): ?>
 			<label for="<?=$field->id?>"><?=$field->label?></label>
-			<? call_user_func(array('form\field', $field->type), array(
-				'id' => $field->id,
-				'checked' => $field->value,
-				'value' => $field->value,
-				'name' => $field->name
-			)) ?>
 		<? endif ?>
+		<? call_user_func(array('form\field', $field->type), array(
+			'id' => $field->id,
+			'checked' => $field->value,
+			'value' => $field->value,
+			'name' => $field->name
+		)) ?>
 	<? endforeach ?>
-	<?= br(3) ?>
-	<?= form\submitbutton::gen('Save') ?>
+
+	<center>
+		<div class="formmessage">
+			<center>
+				<table>
+					<tr>
+						<td>
+							<div class="formmessageimg"></div>
+						</td>
+						<td>
+							<div class="formmessagetext">&nbsp;</div>
+						</td>
+					</tr>
+				</table>
+			</center>
+		</div>
+		<?= form\submitbutton::gen($defs->savelabel) ?>
+		<? foreach ($actions as $action): ?>
+			<?= space(2) ?>
+			<?= form\methodbutton::gen($action[0], $action[1], array($object_id)) ?>
+		<? endforeach ?>
+	</center>
 <?= form\method::close($method, __HTML__) ?>
+<? if ($center): ?>
+</center>
+<? endif ?>

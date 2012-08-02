@@ -8,6 +8,6 @@ class model extends \FabricoTemplateElement {
 	);
 
 	protected static $expecting = array(
-		array('order', array())
+		array('order', array()), array('actions', array()), array('center', false)
 	);
 }

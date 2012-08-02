@@ -6,6 +6,14 @@
  */
 class FabricoModel extends FabricoQuery {
 	/**
+	 * form actions (buttons)
+	 *
+	 * @name formactions
+	 * @var array
+	 */
+	protected static $formactions = array();
+
+	/**
 	 * field fieldorder
 	 *
 	 * @name order
@@ -449,6 +457,7 @@ class FabricoModel extends FabricoQuery {
 	 */
 	public static function getfielddata ($class) {
 		return (object) array(
+			'actions' => $class::$formactions,
 			'editing' => $class::$fieldediting,
 			'order' => $class::$fieldorder
 		);

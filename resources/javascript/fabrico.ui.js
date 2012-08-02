@@ -5,6 +5,7 @@
 Fabrico.ui = {
 	classes: {
 		INVALID: "invalid",
+		VALID: "valid",
 		ACTIVE: "active"
 	},
 
@@ -30,6 +31,42 @@ Fabrico.ui = {
 	},
 
 	/**
+	 * handles actions taken right before submiting a form
+	 *
+	 * @param string form id
+	 */
+	form_pre_submit: function (formid) {
+		$("*:input", formid).attr("readonly", true);
+		$("input[type='submit']", formid).attr("disabled", true);
+	},
+
+	/**
+	 * handles actions taken right after submiting a form
+	 *
+	 * @param string form id
+	 */
+	form_post_submit: function (formid) {
+		$("*:input", formid).attr("readonly", false);
+		$("input[type='submit']", formid).attr("disabled", false);
+	},
+
+	/**
+	 * set a standard class on a form element
+	 *
+	 * @param string form id
+	 * @param string class name
+	 */
+	form_set_class: function (formid, classname) {
+		var form = $(formid);
+
+		for (var klass in this.classes) {
+			form.removeClass(this.classes[ klass ]);
+		}
+
+		form.addClass(classname || "");
+	},
+
+	/**
 	 * submits a form to a controller method and handles the response 
 	 *
 	 * @name submit_form
@@ -39,10 +76,14 @@ Fabrico.ui = {
 	listen_submit_form: function (formid, methodname) {
 		$(formid).submit(function (e) {
 			e.preventDefault();
+			Fabrico.ui.form_pre_submit(formid);
+			Fabrico.ui.form_message(formid, "Sending request...");
+			Fabrico.ui.form_set_class(formid, Fabrico.ui.classes.ACTIVE);
 
 			Fabrico.controller.method(methodname, [Fabrico.helper.form2args(formid)], {}, function (data) {
 				var error = false;
 				Fabrico.helper.form_reset_display(formid);
+				Fabrico.ui.form_post_submit(formid);
 
 				try {
 					data = JSON.parse(data);
@@ -54,14 +95,19 @@ Fabrico.ui = {
 
 				if ($.isNumeric(data.response)) {
 					// object id, valid request
-					alert("Success");
+					Fabrico.ui.form_set_class(formid, Fabrico.ui.classes.VALID);
+					Fabrico.ui.form_message(formid, "Success!", true);
 				}
 				else if ($.isArray(data.response)) {
 					//  array of errors, invalid request
 					Fabrico.helper.form_error_display(formid, data.response);
+					Fabrico.ui.form_set_class(formid, Fabrico.ui.classes.INVALID);
+					Fabrico.ui.form_message(formid, "Missing fields.");
 				}
 				else {
 					Fabrico.ui.handle_submit_form_error(formid);
+					Fabrico.ui.form_set_class(formid, Fabrico.ui.classes.INVALID);
+					Fabrico.ui.form_message(formid, "There was an error while saving.");
 				}
 			});
 		});
@@ -86,6 +132,44 @@ Fabrico.ui = {
 	 */
 	active_child: function (father) {
 		return $(this.active_children(father).get(0));
+	},
+
+	/**
+	 * handles message displays for form elements
+	 *
+	 * @param string form id
+	 * @param string message
+	 * @param bool clearable message
+	 */
+	form_message: function (formid, msg, clearable) {
+		$(".formmessage .formmessagetext", formid).html(msg || "");
+		this.form_message_clear_able[ formid ] = clearable || false;
+		this.form_message_queue_clear(formid);
+	},
+
+	/**
+	 * used to track if messages have been set in a form
+	 *
+	 * @var object
+	 */
+	form_message_clear_able: {},
+
+	/**
+	 * clears the form element's message section if no other messages
+	 * have been set.
+	 *
+	 * @param string form id
+	 * @param int delay
+	 */
+	form_message_queue_clear: function (formid, delay) {
+		if (Fabrico.ui.form_message_clear_able[ formid ]) {
+			setTimeout(function () {
+				if (Fabrico.ui.form_message_clear_able[ formid ]) {
+					Fabrico.ui.form_message(formid);
+					Fabrico.ui.form_set_class(formid);
+				}
+			}, delay || 10000);
+		}
 	},
 
 	/**
