@@ -98,7 +98,7 @@ Fabrico.ui = {
 					Fabrico.ui.form_set_class(formid, Fabrico.ui.classes.VALID);
 					Fabrico.ui.form_message(formid, "Success!", true);
 				}
-				else if ($.isArray(data.response)) {
+				else if ($.isPlainObject(data.response)) {
 					//  array of errors, invalid request
 					Fabrico.helper.form_error_display(formid, data.response);
 					Fabrico.ui.form_set_class(formid, Fabrico.ui.classes.INVALID);
@@ -239,6 +239,11 @@ Fabrico.ui = {
 				case 37:
 				case 39:
 					return true;
+
+				// escape
+				case 27:
+					results.hide();
+					break;
 
 				// up
 				case 38:

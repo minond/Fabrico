@@ -510,7 +510,7 @@ class FabricoModel extends FabricoQuery {
 		// check we have everything required
 		foreach (static::$requires as $field) {
 			if (!$data->{ $field }) {
-				$errors[] = $field;
+				$errors[ $field ] = 'blank';
 			}
 		}
 

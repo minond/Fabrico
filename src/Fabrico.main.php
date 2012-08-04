@@ -446,6 +446,52 @@ class Fabrico {
 	}
 
 	/**
+	 * @name get_build_file
+	 * @param string file name
+	 * @return string build file path
+	 */
+	public static function get_build_file ($filename) {
+		return self::file_path(
+			self::$directory->build .
+			$filename .
+			self::$config->loading->suffix
+		);
+	}
+
+	/**
+	 * @name save_build_file
+	 * @param string build file path
+	 * @param string build file contents
+	 */
+	public static function save_build_file ($filepath, $filecontents) {
+		$dir = explode(DIRECTORY_SEPARATOR, $filepath);
+		array_pop($dir);
+		$dir = implode(DIRECTORY_SEPARATOR, $dir);
+
+		if (!is_dir($dir)) {
+			mkdir($dir, 0777, true);
+		}
+
+		$file = fopen($filepath, 'w+');
+
+		if (is_resource($file)) {
+			fwrite($file, $filecontents);
+			fclose($file);
+		}
+		else {
+			throw new Exception("build file \"{$filepath}\" could not be opened");
+		}
+	}
+
+	/**
+	 * @name save_build
+	 * @param string build file contents
+	 */
+	public static function save_build ($filecontents) {
+		self::save_build_file(self::get_build_file(self::$file), $filecontents);
+	}
+
+	/**
 	 * @name redirect
 	 * @return redirects user after bad request
 	 */

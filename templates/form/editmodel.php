@@ -45,7 +45,7 @@ if (!count($order)) {
 	}
 }
 
-function genname ($name) {
+$genname = function ($name) {
 	return ucwords(preg_replace('/_/', ' ', $name));
 };
 
@@ -69,7 +69,7 @@ foreach ($order as $field) {
 		$info->type = isset($userdef[ $prop->type ]) ? $userdef[ $prop->type ] : $defs->type;
 	}
 
-	$info->label = isset($userdef[ $prop->label ]) ? $userdef[ $prop->label ] : genname($field);
+	$info->label = isset($userdef[ $prop->label ]) ? $userdef[ $prop->label ] : $genname($field);
 	$info->id = isset($userdef[ $prop->id ]) ? $userdef[ $prop->id ] : $info->name . $defs->id;
 	$info->hidden = $info->type === $defs->hidden;
 	
