@@ -228,7 +228,7 @@ class FabricoModel extends FabricoQuery {
 					$str[] = "!`{$key}`";
 				}
 				else {
-					$clean = mysql_escape_string($value);
+					$clean = mysql_real_escape_string($value);
 					$str[] = "`{$key}` = '{$clean}'";
 				}
 			}
@@ -305,6 +305,37 @@ class FabricoModel extends FabricoQuery {
 	}
 
 	/**
+	 * builds and runs a query
+	 *
+	 * @param array of clauses
+	 * @return mixed FabricoModelInstance|array of FabricoModelInstances
+	 */
+	public static function query ($info = array()) {
+		$class = get_called_class();
+		self::$instance->loadinfo($class);
+		$justone = isset($info['limit']) && $info['limit'] === 1;
+		unset($info['justone']);
+
+		if (isset($info['model'])) {
+			$info['where'] = $info['model']->getdata();
+			unset($info['model']);
+		}
+
+		if (isset($info['where']) && (is_array($info['where']) || is_object($info['where']))) {
+			$info['where'] = self::obj2str($info['where']);
+		}
+
+		self::$instance->select(isset($info['select']) ? $info['select'] : self::ALL);
+		self::$instance->from(self::$instance->data[ $class ]->table);
+
+		foreach ($info as $clause => $value) {
+			$class::q($clause, $value);
+		}
+
+		return self::standard_query_format($class, $justone);
+	}
+
+	/**
 	 * @name search
 	 * @param string filters
 	 * @return stdClass retults
@@ -330,10 +361,14 @@ class FabricoModel extends FabricoQuery {
 			self::$instance->limit(1);
 		}
 
+		return self::standard_query_format($class, $just_one);
+	}
+
+	private static function standard_query_format ($class, $justone = false) {
 		$return = self::$instance->run_query();
 
 		if (count($return)) {
-			if ($just_one) {
+			if ($justone) {
 				$data = (object) $return[ 0 ];
 				$return = new FabricoModelInstance($data, $class);
 			}
@@ -419,20 +454,20 @@ class FabricoModel extends FabricoQuery {
 	 * @see just_checking
 	 */
 	public static function check ($data = null) {
-		$result = static::search(
+		$result = static::query(array(
 			// filter
-			static::create(
+			'model' => static::create(
 				util::is_hash($data) ? $data : static::$just_checking
 			),
 
 			// selects
-			is_array(static::$send_back) ?
+			'select' => is_array(static::$send_back) ?
 				static::sel_fields(static::$send_back) :
 				self::ALL,
 
 			// limit
-			true
-		);
+			'limit' => 1
+		));
 
 		if ($result === false) {
 			$result = static::create(false);

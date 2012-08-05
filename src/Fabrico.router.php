@@ -16,6 +16,8 @@ require_once 'Fabrico.controller.php';
 require_once 'Fabrico.response.php';
 require_once 'Fabrico.database.php';
 require_once 'Fabrico.model.php';
+require_once 'Fabrico.parser.php';
+require_once 'Fabrico.tag.php';
 
 Fabrico::initialize($_REQUEST);
 Fabrico::handle_request(true);

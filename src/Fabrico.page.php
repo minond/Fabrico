@@ -52,6 +52,25 @@ class FabricoPage {
 		);
 	}
 
+	public static function autocompletedata ($data, $id, $text, $description = '') {
+		$options = array();
+
+		if (is_array($data) && count($data)) {
+			foreach ($data as $temp) {
+				$result = new stdClass;
+				$item = $temp instanceof FabricoModelInstance ? $temp->getdata() : $temp;
+
+				$result->text = FabricoParser::merge($text, $item);
+				$result->desc = FabricoParser::merge($description, $item);
+				$result->id = FabricoParser::merge($id, $item);
+
+				$options[] = $result;
+			}
+		}
+
+		return $options;
+	}
+
 	/**
 	 * @name start
 	 * @return string start of view page html

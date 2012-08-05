@@ -9,7 +9,7 @@ $defs = (object) array(
 	'hidden' => 'hidden',
 	'type' => 'text',
 	'value' => '',
-	'savelabel' => 'Save'
+	'submitlabel' => 'Save'
 );
 
 // field properties
@@ -77,10 +77,10 @@ foreach ($order as $field) {
 	$fieldlist[] = $info;
 }
 
-// save action label
-if (isset($actions['save'])) {
-	$defs->savelabel = $actions['save'];
-	unset($actions['save']);
+// submit action label
+if (isset($actions['submit'])) {
+	$defs->submitlabel = $actions['submit'];
+	unset($actions['submit']);
 }
 
 ?>
@@ -116,7 +116,7 @@ if (isset($actions['save'])) {
 				</table>
 			</center>
 		</div>
-		<?= form\submitbutton::gen($defs->savelabel) ?>
+		<?= form\submitbutton::gen($defs->submitlabel) ?>
 		<? foreach ($actions as $action): ?>
 			<?= space(2) ?>
 			<?= form\methodbutton::gen($action[0], $action[1], array($object_id)) ?>

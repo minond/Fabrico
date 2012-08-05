@@ -14,9 +14,17 @@ class field extends \FabricoTemplateElement {
 		'file' => 'fields/file.php',
 		'button' => 'fields/button.php',
 		'label' => 'fields/label.php',
-		'formitem' => 'fields/formitem.php',
+		'formitem' => 'fields/formitem.php'
 	);
 
-	protected static $expecting = array('name', 'id', 'value', 'class',
-		'placeholder', array('autocomplete', 'off'), array('checked', false), array('values', array()));
+	protected static $expecting = array(
+		'name',
+		'id',
+		'value',
+		'class',
+		'placeholder',
+		array('autocomplete', 'off'),
+		array('checked', false),
+		array('values', array())
+	);
 }

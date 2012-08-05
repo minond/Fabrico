@@ -225,7 +225,7 @@ Fabrico.ui = {
 			}
 		};
 
-		elem.keydown(function (e) {
+		elem.keyup(function (e) {
 			var search = this.value;
 			var hash = Fabrico.helper.sprintf(tpl.hash, methodname, search);
 			var selection = Fabrico.ui.active_child(results);

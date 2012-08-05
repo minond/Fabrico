@@ -1,6 +1,6 @@
 <?php
 
-class FabricoSingleDatabaseConnection {
+trait FabricoSingleDatabaseConnectionBase {
 	/**
 	 * @name connection
 	 * @var database connection
@@ -119,4 +119,12 @@ class FabricoSingleDatabaseConnection {
 	public function last_id () {
 		return mysql_insert_id($this->connection);
 	}
+}
+
+class FabricoSingleDatabaseConnection {
+	use FabricoSingleDatabaseConnectionBase;
+}
+
+class FabricoAdminDatabaseConnection {
+	use FabricoSingleDatabaseConnectionBase;
 }
