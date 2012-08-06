@@ -1,1 +1,0 @@
-<? FabricoPageResource::add('main.js') ?>

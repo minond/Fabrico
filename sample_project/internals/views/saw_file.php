@@ -1,2 +1,0 @@
-<?= FabricoPage::scripts() ?>
-<?= FabricoPage::done() ?>
