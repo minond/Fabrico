@@ -1,0 +1,23 @@
+project: shopping2
+
+loading:
+  root: /
+  core: ..
+  prefix: ../../../
+  suffix: .php
+  internal: /Fabrico
+
+directory:
+  templates: /templates/
+  controllers: /controllers/
+  models: /models/
+  views: /views/
+  elements: /elements/
+  resource: /resources/resource/
+  javascript: /resources/javascript/
+  css: /resources/css/
+  image: /resources/image/
+  routing: /routing/
+  include: /include/
+  logs: /internals/logs/
+  build: /internals/build/
