@@ -51,10 +51,21 @@ class Router {
 	/**
 	 * returns the requested file name
 	 *
+	 * @param clean name
 	 * @return string
 	 */
-	public static function get_file_requested () {
-		return self::req(self::$uri->file);
+	public static function get_file_requested ($clean = true) {
+		$file = self::req(self::$uri->file);
+
+		if ($clean) {
+			$parts = array_filter(explode('/', $file), function ($part) {
+				return $part !== '';
+			});
+
+			$file = implode('/', $parts);
+		}
+
+		return $file;
 	}
 
 	/**
@@ -90,17 +101,6 @@ class Router {
 		}
 
 		return $type;
-	}
-
-	/**
-	 * setter for controller and view files
-	 *
-	 * @param string view file path
-	 * @param string controller file path
-	 */
-	public static function set_files ($view, $controller) {
-		Core::$configuration->loading->view = $view;
-		Core::$configuration->loading->controller = $controller;
 	}
 
 	/**

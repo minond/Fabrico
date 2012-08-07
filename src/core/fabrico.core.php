@@ -29,15 +29,17 @@ class Core {
 	 */
 	public static function load_core_configuration () {
 		self::$configuration = (object) \sfYaml::load(self::$configuration_path);
+		self::$configuration->state = new \stdClass();
 		self::$configuration->loading = (object) self::$configuration->loading;
 		self::$configuration->directory = (object) self::$configuration->directory;
+		self::$configuration->convention = (object) self::$configuration->convention;
 	}
 
 	/**
 	 * initializes needed variables and modules
 	 */
 	public static function load_core_setup () {
-		FFile::$file = Router::get_file_requested();
+		Project::set_files();
 	}
 
 	/**

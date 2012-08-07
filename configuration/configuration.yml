@@ -3,8 +3,9 @@ project: shopping2
 loading:
   root: /
   core: ..
-  prefix: ../../../
+  conf: .yml
   suffix: .php
+  prefix: ../../../
   internal: /Fabrico
 
 directory:
@@ -13,6 +14,7 @@ directory:
   models: /models/
   views: /views/
   elements: /elements/
+  configuration: /configuration/
   resource: /resources/resource/
   javascript: /resources/javascript/
   css: /resources/css/
@@ -21,3 +23,8 @@ directory:
   include: /include/
   logs: /internals/logs/
   build: /internals/build/
+
+convention:
+  controller_suffix: Controller
+  controller_default: FabricoController
+  configuration_default: configuration
