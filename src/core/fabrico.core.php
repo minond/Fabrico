@@ -37,8 +37,11 @@ class Core {
 
 	/**
 	 * initializes needed variables and modules
+	 *
+	 * @param array request object
 	 */
-	public static function load_core_setup () {
+	public static function load_core_setup (& $req) {
+		Router::set_request($req);
 		Project::set_files();
 	}
 
@@ -48,6 +51,73 @@ class Core {
 	public static function load_core_dependancies () {
 		foreach (self::$deps as $dep) {
 			require_once $dep;
+		}
+	}
+
+	/**
+	 * handles current request loading views and controllers
+	 */
+	public static function handle_request () {
+		$controller_info = self::$configuration->state->controller;
+
+		// load controller
+		if ($controller_info->file_path) {
+			require_once $controller_info->file_path;
+		}
+
+		// and instanciate it
+		$controller = "\\{$controller_info->controller_name}";
+		$controller = new $controller;
+
+		switch (Router::request_method()) {
+			case Router::VIEW:
+				// on view
+				$controller->onview();
+
+				// make controller data global
+				foreach ($controller as $_var => $_val) {
+					$$_var = $_val;
+				}
+
+				unset($_var);
+				unset($_val);
+
+				// and load view file
+				require template('seeing');
+				require self::$configuration->state->view;
+				require template('saw');
+				break;
+
+			case Router::METHOD:
+				// on method
+				$controller->onmethod();
+				$response = new Response(Response::IN_PROCESS);
+				$method = Router::req(Router::$uri->method);
+				$arguments = Router::req(Router::$uri->args);
+
+				if (!$arguments) {
+					$arguments = array();
+				}
+
+				// check if method exits
+				if (!method_exists($controller, $method)) {
+					$response->status = Response::METHOD_UNKNOWN_METHOD;
+					die($response);
+				}
+
+				// check if method is public
+				if (!in_array($method, $controller->public_methods)) {
+					$response->status = Response::METHOD_PRIVATE_METHOD;
+					die($response);
+				}
+
+				// call the method
+				$response->response = call_user_func_array(
+					array($controller, $method),
+					$arguments
+				);
+
+				die($response);
 		}
 	}
 }

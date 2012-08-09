@@ -213,4 +213,37 @@ class Project {
 			Core::$configuration->directory->include . $file
 		);
 	}
+
+	/**
+	 * looks in the current project and core directories for a given file.
+	 * project directories are preferred over core files
+	 *
+	 * @param string file name
+	 * @return string file path
+	 */
+	public static function find_file ($file) {
+		$file .= Core::$configuration->loading->suffix;
+		$project = self::get_project_file($file);
+
+		if (!file_exists($project)) {
+			$core = self::get_core_file($file);
+
+			if (file_exists($core)) {
+				$project = $core;
+			}
+		}
+
+		return $project;
+	}
+
+	/**
+	 * returns the path to a core file
+	 *
+	 * @param string file name
+	 * @return string file path
+	 */
+	public static function get_core_file ($file) {
+		return Core::$configuration->loading->core . $file .
+		       Core::$configuration->loading->suffix;
+	}
 }

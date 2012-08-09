@@ -2,7 +2,7 @@ project: shopping2
 
 loading:
   root: /
-  core: ..
+  core: ../..
   conf: .yml
   suffix: .php
   prefix: ../../../
@@ -26,5 +26,5 @@ directory:
 
 convention:
   controller_suffix: Controller
-  controller_default: FabricoController
+  controller_default: Fabrico\Controller
   configuration_default: configuration
