@@ -4,11 +4,11 @@ namespace Fabrico;
 
 class Tag {
 	/**
-	 * tag types
+	 * tag format
 	 */
-	const TAG_SINGLE = 1;
-	const TAG_OPEN = 2;
-	const TAG_CLOSE = 3;
+	const ROOT = 'f';
+	const SEPARATOR = ':';
+	const MAX_ITERATIONS = 1000;
 
 	/**
 	 * tag to method conversion
@@ -18,24 +18,23 @@ class Tag {
 	const METHOD_CLOSE_SUFFIX = '::close';
 
 	/**
+	 * tag types
+	 */
+	const TAG_SINGLE = 1;
+	const TAG_OPEN = 2;
+	const TAG_CLOSE = 3;
+
+	/**
 	 * tag matching regular expressions
 	 */
-	const TAG_MATCH_CLOSE = '/\<\/f:(.+?):(.+?)\>/';
-	const TAG_MATCH_OPEN = '';
-	const TAG_MATCH_SINGLE = '/\<f:(.+?):(.+?)\s\/\>/';
-	// const TAG_SINGLE_ATTR = '/\<f:(.+?):(.+?)\s(.+?)\s\/\>/';
+	const TAG_MATCH_CLOSE = '/\<\/%s:(.+?):(.+?)\>/';
+	const TAG_MATCH_OPEN = '/\<%s:(.+?):(.+?[^\/]?)\>/';
+	const TAG_MATCH_SINGLE = '/\<%s:(.+?):(.+?)\s\/\>/';
 
 	/**
 	 * expected match count
 	 */
-	const EXPECT_SINGLE = 3;
-
-	/**
-	 * tag format
-	 */
-	const ROOT = 'f';
-	const SEPARATOR = ':';
-	const MAX_ITERATIONS = 1000;
+	const EXPECTED_MATCHES = 3;
 
 	/**
 	 * tracks declared tags and their settings
@@ -68,7 +67,7 @@ class Tag {
 	/**
 	 * builds tag string
 	 */
-	public function build () {
+	private function build () {
 		if (!$this->name) {
 			$this->name = explode('\\', get_class($this));
 			$this->name = $this->name[ count($this->name) - 1 ];
@@ -92,7 +91,7 @@ class Tag {
 	 *
 	 * @param string array of properties
 	 */
-	public static function create ($props) {
+	public static function register ($props) {
 		$tag = new self;
 		
 		foreach ($props as $prop => $value) {
@@ -128,7 +127,9 @@ class Tag {
 		$taginfo = array();
 
 		// parse for custom tags
-		self::scan_string($html, self::TAG_MATCH_SINGLE, self::EXPECT_SINGLE, self::TAG_SINGLE, $taginfo);
+		self::scan_string($html, sprintf(self::TAG_MATCH_SINGLE, self::ROOT), self::TAG_SINGLE, $taginfo);
+		self::scan_string($html, sprintf(self::TAG_MATCH_OPEN, self::ROOT), self::TAG_OPEN, $taginfo);
+		self::scan_string($html, sprintf(self::TAG_MATCH_CLOSE, self::ROOT), self::TAG_CLOSE, $taginfo);
 
 		// merge tags into the html code
 		return self::clean_string($html, $taginfo, $start_time);
@@ -156,16 +157,21 @@ class Tag {
 	 */
 	private static function merge_string ($html, $taginfo) {
 		$invalidtags = 0;
+		$mergedlist = array();
 
 		foreach ($taginfo as $info) {
-			$html = str_replace(
-				$info->match_string,
-				$info->valid ? $info->replacement_string :
-				$info->replacement_comment, $html
-			);
-
 			if (!$info->valid) {
 				$invalidtags++;
+			}
+
+			if (!in_array($info->match_string, $mergedlist)) {
+				$html = str_replace(
+					$info->match_string,
+					$info->valid ? $info->replacement_string :
+					$info->replacement_comment, $html
+				);
+
+				$mergedlist[] = $info->match_string;
 			}
 		}
 	
@@ -183,19 +189,24 @@ class Tag {
 	 * @param int tag type search
 	 * @param array storage reference
 	 */
-	private static function scan_string ($html, $match_regex, $match_expects, $tag_type, & $tag_storage) {
+	private static function scan_string ($html, $match_regex, $tag_type, & $tag_storage) {
 		$lastoffset = 0;
 
 		for ($i = 0; $i < self::MAX_ITERATIONS; $i++) {
 			preg_match($match_regex, $html, $matches, PREG_OFFSET_CAPTURE, $lastoffset);
 
-			if (count($matches) === $match_expects) {
+			if (count($matches) === self::EXPECTED_MATCHES) {
 				$lastoffset = strlen($matches[ 0 ][ 0 ]) + $matches[ 0 ][ 1 ];
 				$tag_storage[] = self::build_tag($matches, $tag_type);
 			}
 			else if (!count($matches)) {
 				break;
 			}
+		}
+
+		if ($tag_type === self::TAG_OPEN) {
+			// print_r($tag_storage);
+			// die;
 		}
 	}
 
@@ -209,7 +220,7 @@ class Tag {
 	 */
 	private static function build_tag ($matchinfo, $type) {
 		$tag = new \stdClass;
-		$attrs = explode(' ', $matchinfo[ 2 ][ 0 ]);
+		$attrs = explode(' ', trim($matchinfo[ 2 ][ 0 ]));
 		$rawtag = $matchinfo[ 0 ][ 0 ];
 		$tagname = self::ROOT . self::SEPARATOR .
 		           $matchinfo[ 1 ][ 0 ] . self::SEPARATOR .
@@ -222,7 +233,7 @@ class Tag {
 		$tag->replacement_comment = self::tag2comment($rawtag);
 		$tag->replacement_string = self::method2code(
 			self::tag2method($tagname, $type) .
-			self::args2string($tag->attrs)
+			self::args2string($tag->attrs, $type)
 		);
 
 		return $tag;
@@ -243,15 +254,41 @@ class Tag {
 			$attribute = new \stdClass;
 
 			if (count($attrinfo) == 1) {
-				$attrinfo[ 1 ] = true;
+				$attrinfo[ 1 ] = 'true';
 			}
 
 			$attribute->label = $attrinfo[ 0 ];
-			$attribute->value = $attrinfo[ 1 ];
+			$attribute->value = self::parse_value($attrinfo[ 1 ]);
 			$list[] = $attribute;
 		}
 
 		return $list;
+	}
+
+	/**
+	 * parses a string value and returns a value that can
+	 * be more easily used in php
+	 *
+	 * @param string val
+	 * @return midex
+	 */
+	private static function parse_value ($val) {
+		preg_match('/^"#{.+}"$/', $val, $matches);
+
+		if (count($matches)) {
+			$val = preg_replace(array('/^"#{/', '/}"$/'), '', $val);
+		}
+
+		switch ($val) {
+			case '\'true\'':
+			case '"true"':
+				return 'true';
+			case '\'false\'':
+			case '"false"':
+				return 'false';
+			default:
+				return $val;
+		}
 	}
 
 	/**
@@ -264,7 +301,7 @@ class Tag {
 	private static function build_signature ($start, $invalid) {
 		$date = date('Y-m-d H:i:s');
 		$time = time() - $start;
-		return "\n<!-- build date: {$date} -->" .
+		return "\n\n<!-- build date: {$date} -->" .
 		       "\n<!-- build time: {$time} sec -->" .
 		       "\n<!-- invalid tags: {$invalid} -->";
 	}
@@ -286,7 +323,7 @@ class Tag {
 	 * @return string code
 	 */
 	private static function method2code ($method) {
-		return "<? /* build parser */ {$method} ?>";
+		return "<? {$method} ?>";
 	}
 
 	/**
@@ -294,10 +331,15 @@ class Tag {
 	 * representing the same array
 	 *
 	 * @param array of arguments
+	 * @param int tag type
 	 * @return string valid php array representation
 	 */
-	private static function args2string ($args) {
+	private static function args2string ($args, $tagtype) {
 		$props = array();
+
+		if ($tagtype === self::TAG_CLOSE) {
+			return '()';
+		}
 
 		foreach ($args as $arg) {
 			$props[] = "'{$arg->label}' => {$arg->value}";
@@ -341,52 +383,49 @@ class Tag {
 
 
 
+Tag::register(array(
+	'name' => 'script',
+	'namespace' => 'resource'
+));
 
+Tag::register(array(
+	'name' => 'style',
+	'namespace' => 'resource'
+));
 
-
-
-
-
-class script extends Tag {
-	public $namespace = 'resource';
-}
-
-class toolbar extends Tag {
-	public $namespace = 'std';
-}
-
-class style extends Tag {
-	public $namespace = 'resource';
-}
-
-
-Tag::create(array(
+Tag::register(array(
 	'name' => 'sidebar',
 	'namespace' => 'std'
 ));
 
+Tag::register(array(
+	'namespace' => 'page',
+	'name' => 'content'
+));
 
-(new script)->build();
-(new toolbar)->build();
-(new style)->build();
+Tag::register(array(
+	'namespace' => 'document',
+	'name' => 'page'
+));
+
+Tag::register(array(
+	'namespace' => 'content',
+	'name' => 'merge'
+));
+
 
 $html = <<<'HTML'
-<body>
-	<input type='text' />
-	<f:ns:tag attr1='v1' attr2='v2'></f:ns:tag>
-	<f:resource:script src="~fabrico.ui.js" core />
-	<f:resource:script />
-	<f:resource:script src="~fabrico.ui.js" />
-	<f:resource:style src=$a />
-	<f:ns:tag attr1='v1' attr2='v2' />
-	<input type='text' />
-	<f:ns:tag />
-	<f:ns:tag/>
-	<input type='text' />
-	<input type='text' />
-</body>
+<f:document:page>
+	<f:resource:script src="fabrico.helper.js" core />
+	<f:resource:script src="fabrico.controller.js" core />
+	<f:resource:script src="fabrico.ui.js" core />
+	<f:resource:style href="fabrico.core.js" core />
+	<f:resource:style href="fabrico.basic.js" core />
+
+	<f:content:merge file="viewuser" data="#{User::get(param::id)}" tile="#{$title}" />
+</f:document:page>
 HTML;
 
 
+//print_r(Tag::$tags);
 die(Tag::parse($html));
-print_r(Tag::$tags);
