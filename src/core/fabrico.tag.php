@@ -29,7 +29,7 @@ class Tag {
 	 */
 	const TAG_MATCH_CLOSE = '/\<\/%s:(.+?):(.+?)\>/';
 	const TAG_MATCH_OPEN = '/\<%s:(.+?):(.+?[^\/]?)\>/';
-	const TAG_MATCH_SINGLE = '/\<%s:(.+?):(.+?)\s\/\>/';
+	const TAG_MATCH_SINGLE = '/\<%s:(.+?):(.+?)\/\>/';
 
 	/**
 	 * expected match count
@@ -119,11 +119,8 @@ class Tag {
 	 * @param string clean html
 	 */
 	public static function parse ($html) {
-		// signature trackers
+		// signature trackers and clean tag data
 		$start_time = time();
-		$invalidtags = 0;
-
-		// clean tag data
 		$taginfo = array();
 
 		// parse for custom tags
@@ -203,11 +200,45 @@ class Tag {
 				break;
 			}
 		}
+	}
 
-		if ($tag_type === self::TAG_OPEN) {
-			// print_r($tag_storage);
-			// die;
+	/**
+	 * parses a string of attributes and separates
+	 * them into attribute value pais
+	 *
+	 * @param string
+	 * @return string
+	 */
+	private static function separate_attributes ($attr_str) {
+		$attr_str = trim($attr_str);
+		$parts = explode('=', $attr_str);
+		$attrs = array();
+		$max = count($parts) - 1;
+		$attrsep = '=';
+
+		foreach ($parts as $index => $part) {
+			// first attribute check
+			if (!$index) {
+				$attrs[ $index ] = trim($part);
+			}
+
+			// last value check
+			else if ($index === $max) {
+				$attrs[ $index - 1 ] .= trim($attrsep . $part);
+			}
+
+			// in between
+			else {
+				$sepspace = strrpos($part, ' ');
+				$last_value = substr($part, 0, $sepspace);
+				$next_attr = substr($part, $sepspace, strlen($part));
+
+				$attrs[ $index - 1 ] .= trim($attrsep . $last_value);
+				$attrs[ $index ] = trim($next_attr);
+			}
 		}
+
+		return $attrs;
 	}
 
 	/**
@@ -220,11 +251,15 @@ class Tag {
 	 */
 	private static function build_tag ($matchinfo, $type) {
 		$tag = new \stdClass;
-		$attrs = explode(' ', trim($matchinfo[ 2 ][ 0 ]));
 		$rawtag = $matchinfo[ 0 ][ 0 ];
+		$attrstring = explode(' ', $matchinfo[ 2 ][ 0 ], 2);
+		$attrs = self::separate_attributes(
+			count($attrstring) === 2 ?
+			$attrstring[ 1 ]: ''
+		);
 		$tagname = self::ROOT . self::SEPARATOR .
 		           $matchinfo[ 1 ][ 0 ] . self::SEPARATOR .
-				   array_shift($attrs);
+				   $attrstring[ 0 ];
 
 		$tag->tag = $tagname;
 		$tag->valid = self::valid($tagname);
@@ -273,10 +308,15 @@ class Tag {
 	 * @return midex
 	 */
 	private static function parse_value ($val) {
-		preg_match('/^"#{.+}"$/', $val, $matches);
+		preg_match('/^"#{.+}"$/', $val, $matches_variable);
+		preg_match('/^"%{.+}"$/', $val, $matches_method);
 
-		if (count($matches)) {
-			$val = preg_replace(array('/^"#{/', '/}"$/'), '', $val);
+		if (count($matches_variable)) {
+			$val = '$' . preg_replace(array('/^"#{/', '/}"$/'), '', $val);
+		}
+
+		if (count($matches_method)) {
+			$val = preg_replace(array('/^"%{/', '/}"$/'), '', $val);
 		}
 
 		switch ($val) {
@@ -380,52 +420,3 @@ class Tag {
 		return $tagname;
 	}
 }
-
-
-
-Tag::register(array(
-	'name' => 'script',
-	'namespace' => 'resource'
-));
-
-Tag::register(array(
-	'name' => 'style',
-	'namespace' => 'resource'
-));
-
-Tag::register(array(
-	'name' => 'sidebar',
-	'namespace' => 'std'
-));
-
-Tag::register(array(
-	'namespace' => 'page',
-	'name' => 'content'
-));
-
-Tag::register(array(
-	'namespace' => 'document',
-	'name' => 'page'
-));
-
-Tag::register(array(
-	'namespace' => 'content',
-	'name' => 'merge'
-));
-
-
-$html = <<<'HTML'
-<f:document:page>
-	<f:resource:script src="fabrico.helper.js" core />
-	<f:resource:script src="fabrico.controller.js" core />
-	<f:resource:script src="fabrico.ui.js" core />
-	<f:resource:style href="fabrico.core.js" core />
-	<f:resource:style href="fabrico.basic.js" core />
-
-	<f:content:merge file="viewuser" data="#{User::get(param::id)}" tile="#{$title}" />
-</f:document:page>
-HTML;
-
-
-//print_r(Tag::$tags);
-die(Tag::parse($html));
