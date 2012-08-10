@@ -8,6 +8,7 @@ require_once 'fabrico.views.php';
 require_once 'fabrico.page.php';
 require_once 'fabrico.tag.php';
 require_once 'fabrico.response.php';
+require_once 'fabrico.build.php';
 
 Fabrico\Core::load_core_dependancies();
 Fabrico\Core::load_core_configuration();
