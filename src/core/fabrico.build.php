@@ -4,12 +4,60 @@ namespace Fabrico;
 
 class Build {
 	/**
-	 * returns true if the view file needs to be parsed
+	 * creates a directory (and child directories) in the build directory
 	 *
-	 * @param string view file path
+	 * @param string file path
+	 */
+	private static function makedir ($filepath) {
+		$parts = explode('/', $filepath);
+		array_pop($parts);
+		$path = implode(DIRECTORY_SEPARATOR, $parts);
+
+		if (!is_dir($path)) {
+			mkdir($path, 0777, true);
+		}
+	}
+
+	/**
+	 * parses a file's raw content and saves it in a build file
+	 *
+	 * @param string file path
+	 * @param string raw content
+	 */
+	private static function writeclean ($filepath, $content) {
+		$file = fopen($filepath, 'w+');
+		$clean = Tag::parse($content);
+
+		if (is_resource($file)) {
+			fwrite($file, $clean);
+			fclose($file);
+		}
+	}
+
+	/**
+	 * returns true if the project file needs to be re-parsed
+	 *
+	 * @param string user file path
+	 * @param string build file path
 	 * @return boolean
 	 */
-	public static function view_build_needed ($file) {
+	private static function build_needed ($userf, $buildf) {
+		return file_exists($buildf) ? filemtime($userf) > filemtime($buildf) : true;
+	}
+
+	/**
+	 * builds a new view file is it is needed
+	 *
+	 * @param string file name
+	 * @param string raw file content
+	 */
+	public static function view ($file, $rawcontent) {
+		$viewf = Project::get_view_file($file);
+		$buildf = Project::get_view_build_file($file);
 		
+		if (self::build_needed($viewf, $buildf)) {
+			self::makedir($buildf);
+			self::writeclean($buildf, $rawcontent);
+		}
 	}
 }

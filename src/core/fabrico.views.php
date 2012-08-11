@@ -1,7 +1,5 @@
 <?php
 
-namespace Fabrico;
-
 /**
  * returns the path to a template file
  *
@@ -9,15 +7,21 @@ namespace Fabrico;
  * @return string template path
  */
 function template ($name) {
-	return Project::find_file(Core::$configuration->directory->templates . $name);
+	return Fabrico\Project::find_file(
+		Fabrico\Core::$configuration->directory->templates . $name
+	);
 }
 
 /**
- * returns the path to an element file
+ * includes an element file
  *
- * @param string element name
- * @return string element path
+ * @param string element name*
  */
 function element ($name) {
-	return Project::find_file(Core::$configuration->directory->elements . $name);
+	for ($i = 0, $max = func_num_args(); $i < $max; $i++) {
+		include Fabrico\Project::find_file(
+			Fabrico\Core::$configuration->directory->elements .
+			func_get_arg($i)
+		);
+	}
 }

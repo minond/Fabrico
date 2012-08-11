@@ -83,9 +83,18 @@ class Core {
 				unset($_val);
 
 				// and load view file
+				Page::open();
 				require template('seeing');
-				require self::$configuration->state->view;
+
+				// load the raw view file
+				echo file_get_contents(self::$configuration->state->view);
+
+				// check build
 				require template('saw');
+				Page::close();
+
+				// load the parsed build file
+				require self::$configuration->state->build;
 				break;
 
 			case Router::METHOD:

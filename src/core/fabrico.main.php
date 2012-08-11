@@ -1,5 +1,6 @@
 <?php
 
+require_once 'fabrico.utils.php';
 require_once 'fabrico.core.php';
 require_once 'fabrico.router.php';
 require_once 'fabrico.project.php';
@@ -9,6 +10,7 @@ require_once 'fabrico.page.php';
 require_once 'fabrico.tag.php';
 require_once 'fabrico.response.php';
 require_once 'fabrico.build.php';
+require_once 'fabrico.element.php';
 
 Fabrico\Core::load_core_dependancies();
 Fabrico\Core::load_core_configuration();

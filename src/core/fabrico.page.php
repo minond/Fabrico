@@ -4,14 +4,6 @@ namespace Fabrico;
 
 class Page {
 	/**
-	 * end tags used for merging link and script tags
-	 */
-	const END_HEAD = '</head>';
-	const END_BODY = '</body>';
-	const START_BODY = '<body>';
-	const NL = "\n";
-
-	/**
 	 * resource tags
 	 *
 	 * @var object
@@ -33,13 +25,20 @@ class Page {
 	private static $css = array();
 
 	/**
+	 * list of errors to display
+	 *
+	 * @var array
+	 */
+	private static $errors = array();
+
+	/**
 	 * include a javascript file
 	 *
 	 * @param string file source
 	 */
 	public static function include_javascript ($src) {
 		if (!in_array($src, self::$javascript)) {
-			self::$javascript[] = $src;
+			self::$javascript[] = sprintf(self::$tag->script, $src);
 		}
 	}
 
@@ -50,8 +49,17 @@ class Page {
 	 */
 	public static function include_css ($href) {
 		if (!in_array($href, self::$css)) {
-			self::$css[] = $href;
+			self::$css[] = sprintf(self::$tag->css, $href);
 		}
+	}
+
+	/**
+	 * add an error to display
+	 *
+	 * @param string error message
+	 */
+	public static function include_error_message ($err) {
+		self::$errors[] = $err;
 	}
 
 	/**
@@ -63,9 +71,13 @@ class Page {
 
 	/**
 	 * outputs raw buffer
+	 * checks builds as well
 	 */
 	public static function close () {
-		echo self::put_together(ob_get_clean());
+		Build::view(
+			Core::$configuration->state->uri,
+			self::put_together(ob_get_clean())
+		);
 	}
 
 	/**
@@ -75,30 +87,30 @@ class Page {
 	 * @param string html with resources
 	 */
 	private static function put_together ($content) {
-		$html = self::$tag->top . $content . self::$tag->bottom;
-		$jslist = array();
-		$csslist = array();
+		$n = "\n";
+		$jsstr = implode($n, self::$javascript);
+		$cssstr = implode($n, self::$css);
+		$errorstr = implode($n, self::$errors);
 
-		foreach (self::$javascript as $file) {
-			$jslist[] = sprintf(self::$tag->script, $file);
-		}
+		$cssstr = $cssstr ? $n . $cssstr : $cssstr;
+		$jsstr = $jsstr ? $n . $jsstr : $jsstr;
+		$errorstr = $errorstr ? $errorstr . $n : $errorstr;
 
-		foreach (self::$css as $file) {
-			$csslist[] = sprintf(self::$tag->css, $file);
-		}
+		return self::$tag->start_html . $cssstr .
+		       self::get_body_tag() . $errorstr . $content .
+		       self::$tag->end_body . $jsstr . self::$tag->end_html;
+	}
 
-		$jsstr = implode(self::NL, $jslist);
-		$cssstr = implode(self::NL, $csslist);
-
-		$html = str_replace(self::END_HEAD, $cssstr . "\n\t" . self::END_HEAD, $html);
-		$html = str_replace(self::END_BODY, self::END_BODY . self::NL . $jsstr, $html);
-		return $html;
+	private static function get_body_tag () {
+		return sprintf(self::$tag->start_body, '');
 	}
 }
 
 Page::$tag = (object) array(
 	'script' => '<script type="text/javascript" src="%s"></script>',
 	'css' => '<link type="text/css" rel="stylesheet" href="%s" />',
-	'top' => "<!doctype html>\n<html>\n\t<head>\n</head>\n\t<body class='%s'>\n",
-	'bottom' => "\t</body>\n</html>"
+	'start_html' => "<!doctype html>\n<html>\n\t<head>",
+	'start_body' => "\n\t</head>\n\t<body class='%s'>\n\n",
+	'end_body' => "\n\t</body>",
+	'end_html' => "\n</html>"
 );

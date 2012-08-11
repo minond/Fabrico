@@ -19,6 +19,7 @@ class Project {
 		Core::$configuration->state->uri = self::$file;
 		Core::$configuration->state->view = self::get_view_file();
 		Core::$configuration->state->controller = self::get_controller_file();
+		Core::$configuration->state->build = self::get_view_build_file(self::$file);
 	}
 
 	/**
@@ -211,6 +212,20 @@ class Project {
 	public static function get_include_file ($file) {
 		return self::get_project_file(
 			Core::$configuration->directory->include . $file
+		);
+	}
+
+	/**
+	 * returns the paths to a view's build file
+	 *
+	 * @param string file name
+	 * @return string build file path
+	 */
+	public static function get_view_build_file ($file) {
+		return self::get_project_file(
+			Core::$configuration->directory->build . 
+			Core::$configuration->directory->views . $file .
+			Core::$configuration->loading->suffix
 		);
 	}
 

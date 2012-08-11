@@ -22,7 +22,7 @@ directory:
   routing: /routing/
   include: /include/
   logs: /internals/logs/
-  build: /internals/build/
+  build: /internals/build
 
 convention:
   controller_suffix: Controller

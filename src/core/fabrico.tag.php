@@ -4,6 +4,11 @@ namespace Fabrico;
 
 class Tag {
 	/**
+	 * parse errors
+	 */
+	const ERROR_UNKNOWN_TAG = 'unknown tag';
+
+	/**
 	 * tag format
 	 */
 	const ROOT = 'f';
@@ -30,6 +35,7 @@ class Tag {
 	const TAG_MATCH_CLOSE = '/\<\/%s:(.+?):(.+?)\>/';
 	const TAG_MATCH_OPEN = '/\<%s:(.+?):(.+?[^\/]?)\>/';
 	const TAG_MATCH_SINGLE = '/\<%s:(.+?):(.+?)\/\>/';
+	// const TAG_MATCH_OPEN = '/\<%s:(.+?):(.+?[^\/]?)[^\/]\>/';
 
 	/**
 	 * expected match count
@@ -164,8 +170,8 @@ class Tag {
 			if (!in_array($info->match_string, $mergedlist)) {
 				$html = str_replace(
 					$info->match_string,
-					$info->valid ? $info->replacement_string :
-					$info->replacement_comment, $html
+					$info->replacement_string,
+					$html
 				);
 
 				$mergedlist[] = $info->match_string;
@@ -253,10 +259,12 @@ class Tag {
 		$tag = new \stdClass;
 		$rawtag = $matchinfo[ 0 ][ 0 ];
 		$attrstring = explode(' ', $matchinfo[ 2 ][ 0 ], 2);
+		
 		$attrs = self::separate_attributes(
 			count($attrstring) === 2 ?
-			$attrstring[ 1 ]: ''
+			$attrstring[ 1 ] : ''
 		);
+
 		$tagname = self::ROOT . self::SEPARATOR .
 		           $matchinfo[ 1 ][ 0 ] . self::SEPARATOR .
 				   $attrstring[ 0 ];
@@ -265,7 +273,12 @@ class Tag {
 		$tag->valid = self::valid($tagname);
 		$tag->attrs = self::build_attributes($attrs);
 		$tag->match_string = $rawtag;
-		$tag->replacement_comment = self::tag2comment($rawtag);
+
+		$tag->replacement_comment = self::tag2comment(
+			$rawtag, $type,
+			self::ERROR_UNKNOWN_TAG
+		);
+
 		$tag->replacement_string = self::method2code(
 			self::tag2method($tagname, $type) .
 			self::args2string($tag->attrs, $type)
@@ -285,6 +298,10 @@ class Tag {
 		$list = array();
 
 		foreach ($attrs as $attr) {
+			if (!$attr) {
+				continue;
+			}
+
 			$attrinfo = explode('=', $attr);
 			$attribute = new \stdClass;
 
@@ -350,10 +367,19 @@ class Tag {
 	 * wraps an html line in html comment tags
 	 *
 	 * @param string tag
+	 * @param int tag type
+	 * @param string parse error message
 	 * @return string comment
 	 */
-	private static function tag2comment ($tag) {
-		return "<!-- (build comment) {$tag} -->";
+	private static function tag2comment ($tag, $type, $message) {
+		$msg = "parse error: {$message}";
+
+		switch ($type) {
+			case self::TAG_CLOSE:
+			case self::TAG_SINGLE:
+			case self::TAG_OPEN:
+				return "<!-- ({$msg}) {$tag} -->";
+		}
 	}
 
 	/**
@@ -363,7 +389,7 @@ class Tag {
 	 * @return string code
 	 */
 	private static function method2code ($method) {
-		return "<? {$method} ?>";
+		return "<?= {$method} ?>";
 	}
 
 	/**
