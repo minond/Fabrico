@@ -35,8 +35,8 @@ class Element {
 			$props['type'] = static::$type;
 		}
 
-		static::pregen($props);
-		return html::generate(static::$tag, $props);
+		return static::pregen($props) !== false ?
+		       html::generate(static::$tag, $props) : '';
 	}
 
 	/**

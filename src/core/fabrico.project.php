@@ -237,8 +237,7 @@ class Project {
 	 * @return string file path
 	 */
 	public static function find_file ($file) {
-		$file .= Core::$configuration->loading->suffix;
-		$project = self::get_project_file($file);
+		$project = self::get_project_file($file . Core::$configuration->loading->suffix);
 
 		if (!file_exists($project)) {
 			$core = self::get_core_file($file);

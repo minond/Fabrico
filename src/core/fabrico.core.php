@@ -82,19 +82,25 @@ class Core {
 				unset($_var);
 				unset($_val);
 
+				// NOTE: the build process/order needs to be redone
 				// and load view file
 				Page::open();
-				require template('seeing');
+				//require template('seeing');
 
 				// load the raw view file
 				echo file_get_contents(self::$configuration->state->view);
 
 				// check build
-				require template('saw');
-				Page::close();
+				//require template('saw');
+				Page::close(true);
 
 				// load the parsed build file
+				Page::open();
+				require template('seeing');
 				require self::$configuration->state->build;
+				require template('saw');
+				echo Page::close();
+
 				break;
 
 			case Router::METHOD:

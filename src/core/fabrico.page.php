@@ -4,6 +4,13 @@ namespace Fabrico;
 
 class Page {
 	/**
+	 * css and javascript place holders
+	 */
+	const ERRORS = '<ERRORS />';
+	const JAVASCRIPT = '<JAVASCRIPT />';
+	const CSS = '<CSS />';
+
+	/**
 	 * resource tags
 	 *
 	 * @var object
@@ -72,33 +79,45 @@ class Page {
 	/**
 	 * outputs raw buffer
 	 * checks builds as well
+	 *
+	 * @param boolean soft build
 	 */
-	public static function close () {
+	public static function close ($soft = false) {
+		$html = self::put_together(ob_get_clean(), $soft);
+
 		Build::view(
-			Core::$configuration->state->uri,
-			self::put_together(ob_get_clean())
+			Core::$configuration->state->uri, $html
 		);
+
+		return $html;
 	}
 
 	/**
 	 * merges in link and script tags into the html string
 	 *
 	 * @param string html content
-	 * @param string html with resources
+	 * @param bolean soft build
 	 */
-	private static function put_together ($content) {
-		$n = "\n";
-		$jsstr = implode($n, self::$javascript);
-		$cssstr = implode($n, self::$css);
-		$errorstr = implode($n, self::$errors);
+	private static function put_together ($content, $soft = false) {
+		if (!$soft) {
+			$jsstr = implode("\n", self::$javascript);
+			$cssstr = implode("\n", self::$css);
+			$errorstr = implode("\n", self::$errors);
+			$cssstr = $cssstr ? "\n" . $cssstr : $cssstr;
+			$jsstr = $jsstr ? "\n" . $jsstr : $jsstr;
+			$errorstr = $errorstr ? $errorstr . "\n" : $errorstr;
 
-		$cssstr = $cssstr ? $n . $cssstr : $cssstr;
-		$jsstr = $jsstr ? $n . $jsstr : $jsstr;
-		$errorstr = $errorstr ? $errorstr . $n : $errorstr;
-
-		return self::$tag->start_html . $cssstr .
-		       self::get_body_tag() . $errorstr . $content .
-		       self::$tag->end_body . $jsstr . self::$tag->end_html;
+			return str_replace(array(
+				self::JAVASCRIPT,
+				self::CSS,
+				self::ERRORS
+			), array($jsstr, $cssstr, $errorstr), $content);
+		}
+		else {
+			return self::$tag->start_html . self::CSS .
+			       self::get_body_tag() . self::ERRORS . $content .
+			       self::$tag->end_body . self::JAVASCRIPT . self::$tag->end_html;
+		}
 	}
 
 	private static function get_body_tag () {
