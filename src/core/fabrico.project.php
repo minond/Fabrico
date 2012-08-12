@@ -176,34 +176,61 @@ class Project {
 	/**
 	 * finds a javascript file
 	 *
+	 * @param string file name
+	 * @param boolean internal file flag
 	 * @return string
 	 */
-	public static function get_javascript_file ($file) {
-		return self::get_project_file(
-			Core::$configuration->directory->javascript . $file
-		);
+	public static function get_javascript_file ($file, $internal = false) {
+		if ($internal) {
+			return self::get_core_resource_file(
+				Core::$configuration->directory->javascript . $file
+			);
+		}
+		else {
+			return self::get_project_file(
+				Core::$configuration->directory->javascript . $file
+			);
+		}
 	}
 
 	/**
 	 * finds a css file
 	 *
+	 * @param string file name
+	 * @param boolean internal file flag
 	 * @return string
 	 */
-	public static function get_css_file ($file) {
-		return self::get_project_file(
-			Core::$configuration->directory->css . $file
-		);
+	public static function get_css_file ($file, $internal = false) {
+		if ($internal) {
+			return self::get_core_resource_file(
+				Core::$configuration->directory->css . $file
+			);
+		}
+		else {
+			return self::get_project_file(
+				Core::$configuration->directory->css . $file
+			);
+		}
 	}
 
 	/**
 	 * finds an image file
 	 *
+	 * @param string file name
+	 * @param boolean internal file flag
 	 * @return string
 	 */
-	public static function get_image_file ($file) {
-		return self::get_project_file(
-			Core::$configuration->directory->image . $file
-		);
+	public static function get_image_file ($file, $internal = false) {
+		if ($internal) {
+			return self::get_core_resource_file(
+				Core::$configuration->directory->image . $file
+			);
+		}
+		else {
+			return self::get_project_file(
+				Core::$configuration->directory->image . $file
+			);
+		}
 	}
 
 	/**
@@ -261,5 +288,15 @@ class Project {
 	public static function get_core_file ($file) {
 		return Core::$configuration->loading->core . $file .
 		       Core::$configuration->loading->suffix;
+	}
+
+	/**
+	 * returns the path to an internal core file
+	 *
+	 * @param string file name
+	 * @return string file path
+	 */
+	public static function get_core_resource_file ($file) {
+		return Core::$configuration->loading->internal . $file;
 	}
 }

@@ -120,6 +120,26 @@ class Page {
 		}
 	}
 
+	/**
+	 * builds a view file
+	 */
+	public static function build () {
+		// NOTE: the build process/order needs to be redone
+		self::open();
+		echo file_get_contents(template('seeing'));
+		echo file_get_contents(Core::$configuration->state->view);
+		echo file_get_contents(template('saw'));
+		self::close(true);
+
+		// stard the buffer for the build file
+		self::open();
+	}
+
+	/**
+	 * returns a body tag with merged css classes
+	 *
+	 * @param string
+	 */
 	private static function get_body_tag () {
 		return sprintf(self::$tag->start_body, '');
 	}

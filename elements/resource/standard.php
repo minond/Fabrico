@@ -8,18 +8,14 @@ class script extends \Fabrico\Element {
 
 	protected static function pregen (& $props) {
 		if (isset($props['src'])) {
-			if (isset($props['core'])) {
-				$src = '';
-			}
-			else {
-				$src = \Fabrico\Project::get_javascript_file($props['src']);
-			}
+			\Fabrico\Page::include_javascript(
+				\Fabrico\Project::get_javascript_file(
+					$props['src'],
+					isset($props['core'])
+				)
+			);
 
-			\Fabrico\Page::include_javascript($src);
 			return false;
-		}
-		else {
-
 		}
 	}
 }
@@ -30,7 +26,13 @@ class css extends \Fabrico\Element {
 
 	protected static function pregen (& $props) {
 		if (isset($props['href'])) {
-			\Fabrico\Page::include_css($props['href']);
+			\Fabrico\Page::include_css(
+				\Fabrico\Project::get_css_file(
+					$props['href'],
+					isset($props['core'])
+				)
+			);
+
 			return false;
 		}
 	}

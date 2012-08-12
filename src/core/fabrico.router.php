@@ -12,6 +12,7 @@ class Router {
 	/**
 	 * Fabrico methods
 	 */
+	const R404 = '404';
 	const VIEW = 'VIEW';
 	const METHOD = 'METHOD';
 	const ERROR = 'ERROR';
@@ -90,8 +91,11 @@ class Router {
 				if (isset(self::$req[ self::$uri->error ])) {
 					$type = self::ERROR;
 				}
-				else {
+				else if (file_exists(Core::$configuration->state->view)) {
 					$type = self::VIEW;
+				}
+				else {
+					$type = self::R404;
 				}
 			}
 			else if (isset(self::$req[ self::$uri->method ]) &&

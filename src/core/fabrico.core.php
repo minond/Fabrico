@@ -70,6 +70,11 @@ class Core {
 		$controller = new $controller;
 
 		switch (Router::request_method()) {
+			case Router::R404:
+				// TODO: this should redirect to a template or view
+				die('404');
+				break;
+
 			case Router::VIEW:
 				// on view
 				$controller->onview();
@@ -82,23 +87,9 @@ class Core {
 				unset($_var);
 				unset($_val);
 
-				// NOTE: the build process/order needs to be redone
-				// and load view file
-				Page::open();
-				//require template('seeing');
-
-				// load the raw view file
-				echo file_get_contents(self::$configuration->state->view);
-
-				// check build
-				//require template('saw');
-				Page::close(true);
-
-				// load the parsed build file
-				Page::open();
-				require template('seeing');
+				// load the raw view file and check build
+				Page::build();
 				require self::$configuration->state->build;
-				require template('saw');
 				echo Page::close();
 
 				break;
@@ -127,6 +118,7 @@ class Core {
 				}
 
 				// call the method
+				$response->status = Response::SUCCESS;
 				$response->response = call_user_func_array(
 					array($controller, $method),
 					$arguments

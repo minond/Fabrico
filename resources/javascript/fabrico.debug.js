@@ -50,9 +50,3 @@ Fabrico.debug.json.output = function (json) {
 
 	return str.replace(this.clean.typecheck, this.classes);
 };
-
-Fabrico.debug.log = function () {
-	if (console) {
-		console.log.apply(console, arguments);
-	}
-};

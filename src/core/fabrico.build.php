@@ -29,6 +29,7 @@ class Build {
 		$clean = Tag::parse($content);
 
 		if (is_resource($file)) {
+			Logger::build('savind build for ' . Core::$configuration->state->view);
 			fwrite($file, $clean);
 			fclose($file);
 		}
