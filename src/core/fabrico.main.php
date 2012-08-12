@@ -1,7 +1,9 @@
 <?php
 
 require_once 'fabrico.utils.php';
+require_once 'fabrico.log.php';
 require_once 'fabrico.core.php';
+require_once 'fabrico.merge.php';
 require_once 'fabrico.router.php';
 require_once 'fabrico.project.php';
 require_once 'fabrico.controller.php';

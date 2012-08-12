@@ -3,6 +3,7 @@ project: shopping2
 loading:
   root: /
   core: ../..
+  log: .log
   conf: .yml
   suffix: .php
   prefix: ../../../

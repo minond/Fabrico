@@ -16,6 +16,7 @@ class Project {
 	public static function set_files () {
 		self::$file = Router::get_file_requested(true);
 
+		Core::$configuration->state->guid = uniqid();
 		Core::$configuration->state->uri = self::$file;
 		Core::$configuration->state->view = self::get_view_file();
 		Core::$configuration->state->controller = self::get_controller_file();
@@ -133,7 +134,8 @@ class Project {
 	 */
 	public static function get_log_file ($file) {
 		return self::get_project_file(
-			Core::$configuration->directory->logs . $file
+			Core::$configuration->directory->logs . $file .
+			Core::$configuration->loading->log
 		);
 	}
 
