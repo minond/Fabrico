@@ -36,7 +36,7 @@ class Tag {
 	const TAG_MATCH_OPEN = '/\<%s:(.+?):(.+?[^\/]?)\>/';
 	const TAG_MATCH_SINGLE = '/\<%s:(.+?):(.+?)\/\>/';
 	const TAG_MATCH_METHOD = '/\<%s:(\w+?)\s(.+?)\/\>/';
-	// const TAG_MATCH_OPEN = '/\<%s:(.+?):(.+?[^\/]?)[^\/]\>/';
+	const TAG_MATCH_METHOD_EMPTY = '/\<%s:(\w+?)(\s{0,})\/\>/';
 
 	/**
 	 * expected match count
@@ -131,6 +131,7 @@ class Tag {
 		$taginfo = array();
 
 		// parse for custom tags
+		self::scan_string($html, sprintf(self::TAG_MATCH_METHOD_EMPTY, self::ROOT), self::TAG_SINGLE, $taginfo);
 		self::scan_string($html, sprintf(self::TAG_MATCH_METHOD, self::ROOT), self::TAG_SINGLE, $taginfo);
 		self::scan_string($html, sprintf(self::TAG_MATCH_SINGLE, self::ROOT), self::TAG_SINGLE, $taginfo);
 		self::scan_string($html, sprintf(self::TAG_MATCH_OPEN, self::ROOT), self::TAG_OPEN, $taginfo);
