@@ -13,6 +13,8 @@ require_once 'fabrico.tag.php';
 require_once 'fabrico.response.php';
 require_once 'fabrico.build.php';
 require_once 'fabrico.element.php';
+require_once 'fabrico.template.php';
+require_once 'fabrico.error.php';
 
 Fabrico\Core::load_core_dependancies();
 Fabrico\Core::load_core_configuration();

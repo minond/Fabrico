@@ -102,21 +102,25 @@ class Page {
 		if (!$soft) {
 			$jsstr = implode("\n", self::$javascript);
 			$cssstr = implode("\n", self::$css);
-			$errorstr = implode("\n", self::$errors);
 			$cssstr = $cssstr ? "\n" . $cssstr : $cssstr;
 			$jsstr = $jsstr ? "\n" . $jsstr : $jsstr;
-			$errorstr = $errorstr ? $errorstr . "\n" : $errorstr;
+
+			if (count(self::$errors)) {
+				$errorstr = implode("\n", self::$errors);
+				$errorstr = $errorstr ? $errorstr . "\n" : $errorstr;
+				
+				return $errorstr;
+			}
 
 			return str_replace(array(
 				self::JAVASCRIPT,
-				self::CSS,
-				self::ERRORS
-			), array($jsstr, $cssstr, $errorstr), $content);
+				self::CSS
+			), array($jsstr, $cssstr), $content);
 		}
 		else {
 			return self::$tag->start_html . self::CSS .
-			       self::get_body_tag() . self::ERRORS . $content .
-			       self::$tag->end_body . self::JAVASCRIPT . self::$tag->end_html;
+			       self::get_body_tag() . $content . self::$tag->end_body .
+				   self::JAVASCRIPT . self::$tag->end_html;
 		}
 	}
 

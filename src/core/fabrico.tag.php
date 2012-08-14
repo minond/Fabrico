@@ -35,6 +35,7 @@ class Tag {
 	const TAG_MATCH_CLOSE = '/\<\/%s:(.+?):(.+?)\>/';
 	const TAG_MATCH_OPEN = '/\<%s:(.+?):(.+?[^\/]?)\>/';
 	const TAG_MATCH_SINGLE = '/\<%s:(.+?):(.+?)\/\>/';
+	const TAG_MATCH_METHOD = '/\<%s:(\w+?)\s(.+?)\/\>/';
 	// const TAG_MATCH_OPEN = '/\<%s:(.+?):(.+?[^\/]?)[^\/]\>/';
 
 	/**
@@ -130,6 +131,7 @@ class Tag {
 		$taginfo = array();
 
 		// parse for custom tags
+		self::scan_string($html, sprintf(self::TAG_MATCH_METHOD, self::ROOT), self::TAG_SINGLE, $taginfo);
 		self::scan_string($html, sprintf(self::TAG_MATCH_SINGLE, self::ROOT), self::TAG_SINGLE, $taginfo);
 		self::scan_string($html, sprintf(self::TAG_MATCH_OPEN, self::ROOT), self::TAG_OPEN, $taginfo);
 		self::scan_string($html, sprintf(self::TAG_MATCH_CLOSE, self::ROOT), self::TAG_CLOSE, $taginfo);
@@ -256,18 +258,29 @@ class Tag {
 	 * @return object tag replacement information
 	 */
 	private static function build_tag ($matchinfo, $type) {
+		$is_method = count(explode(':', explode(' ', $matchinfo[ 0 ][ 0 ], 2)[ 0 ])) === 2;
 		$tag = new \stdClass;
 		$rawtag = $matchinfo[ 0 ][ 0 ];
 		$attrstring = explode(' ', $matchinfo[ 2 ][ 0 ], 2);
 		
-		$attrs = self::separate_attributes(
-			count($attrstring) === 2 ?
-			$attrstring[ 1 ] : ''
-		);
+		if ($is_method) {
+			$attrs = self::separate_attributes(
+				$matchinfo[ 2 ][ 0 ]
+			);
 
-		$tagname = self::ROOT . self::SEPARATOR .
-		           $matchinfo[ 1 ][ 0 ] . self::SEPARATOR .
-				   $attrstring[ 0 ];
+			$tagname = $matchinfo[ 1 ][ 0 ];
+		}
+		else {
+			$attrs = self::separate_attributes(
+				count($attrstring) === 2 ?
+				$attrstring[ 1 ] : ''
+			);
+		
+			$tagname = self::ROOT . self::SEPARATOR .
+			           $matchinfo[ 1 ][ 0 ] . self::SEPARATOR .
+					   $attrstring[ 0 ];
+		}
+
 
 		$tag->tag = $tagname;
 		$tag->valid = self::valid($tagname);
@@ -280,7 +293,7 @@ class Tag {
 		);
 
 		$tag->replacement_string = self::method2code(
-			self::tag2method($tagname, $type) .
+			self::tag2method($tagname, $type, $is_method) .
 			self::args2string($tag->attrs, $type)
 		);
 
@@ -421,26 +434,29 @@ class Tag {
 	 *
 	 * @param string tag name
 	 * @param integer tag type (open, close, single)
+	 * @param boolean method tag
 	 * @return string method name
 	 */
-	private static function tag2method ($tagname, $type) {
+	private static function tag2method ($tagname, $type, $is_method) {
 		$tagname = str_replace(
 			array(self::ROOT . self::SEPARATOR, self::SEPARATOR),
 			array('', '\\'), $tagname
 		);
 
-		switch ($type) {
-			case self::TAG_SINGLE:
-				$tagname .= self::METHOD_SINGLE_SUFFIX;
-				break;
+		if (!$is_method) {
+			switch ($type) {
+				case self::TAG_SINGLE:
+					$tagname .= self::METHOD_SINGLE_SUFFIX;
+					break;
 
-			case self::TAG_OPEN:
-				$tagname .= self::METHOD_OPEN_SUFFIX;
-				break;
+				case self::TAG_OPEN:
+					$tagname .= self::METHOD_OPEN_SUFFIX;
+					break;
 
-			case self::TAG_CLOSE:
-				$tagname .= self::METHOD_CLOSE_SUFFIX;
-				break;
+				case self::TAG_CLOSE:
+					$tagname .= self::METHOD_CLOSE_SUFFIX;
+					break;
+			}
 		}
 
 		return $tagname;

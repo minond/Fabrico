@@ -19,9 +19,18 @@ function template ($name) {
  */
 function element ($name) {
 	for ($i = 0, $max = func_num_args(); $i < $max; $i++) {
-		include Fabrico\Project::find_file(
-			Fabrico\Core::$configuration->directory->elements .
-			func_get_arg($i)
+		$file;
+		$arg = func_get_arg($i);
+
+		if (is_array($arg)) {
+			$file = $arg['file'];
+		}
+		else {
+			$file = $arg;
+		}
+
+		include_once Fabrico\Project::find_file(
+			Fabrico\Core::$configuration->directory->elements . $file
 		);
 	}
 }
