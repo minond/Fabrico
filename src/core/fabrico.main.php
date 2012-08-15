@@ -19,6 +19,8 @@ require_once 'fabrico.build.php';
 require_once 'fabrico.element.php';
 require_once 'fabrico.template.php';
 require_once 'fabrico.error.php';
+require_once 'fabrico.database.php';
+require_once 'fabrico.model.php';
 
 Fabrico\Core::load_core_dependancies();
 Fabrico\Core::load_core_configuration();

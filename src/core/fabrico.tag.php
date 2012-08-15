@@ -447,7 +447,6 @@ class Tag {
 		}
 
 		$props = implode(', ', $props);
-		$props = strlen($props) ? " {$props} " : '';
 		return $arg_list ? "({$props})" : "(array({$props}))";
 	}
 
