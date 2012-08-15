@@ -9,6 +9,13 @@ trait Database {
 	public static $COMMA = ',';
 
 	/**
+	 * table schema
+	 *
+	 * @var array
+	 */
+	public $table_schema;
+
+	/**
 	 * clause sections
 	 *
 	 * @var array
@@ -27,6 +34,26 @@ trait Database {
 		'group' => '',
 		'limit' => ''
 	);
+
+	/**
+	 * @var resource
+	 */
+	private $database_connection;
+
+	/**
+	 * @var string
+	 */
+	private $database_username;
+
+	/**
+	 * @var string
+	 */
+	private $database_password;
+
+	/**
+	 * @var string
+	 */
+	private $database_host;
 
 	/**
 	 * wraps a field name in quotes
@@ -82,9 +109,18 @@ trait Database {
 	/**
 	 * where clause setter
 	 *
-	 * @param array of filters
+	 * @param string of filters
 	 */
 	public function clause_where ($filters) {
+		$this->clause['where'] = "where {$filters}";
+	}
+
+	/**
+	 * where clause setter
+	 *
+	 * @param array of key/value pairs
+	 */
+	public function clause_where_equals ($filters) {
 		
 	}
 }
