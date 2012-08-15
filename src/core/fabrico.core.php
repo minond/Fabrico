@@ -9,7 +9,8 @@ class Core {
 	 * @var array
 	 */
 	public static $deps = array(
-		'../deps/sfYaml/sfYaml.php'
+		'../deps/sfYaml/sfYaml.php',
+		'../deps/ActiveRecord/ActiveRecord.php'
 	);
 
 	/**
@@ -132,5 +133,29 @@ class Core {
 
 				die($response);
 		}
+	}
+
+	/**
+	 * loads project specific configuration
+	 */
+	public static function load_project_configuration () {
+		self::$configuration->database = (object) \sfYaml::load(
+			Project::get_configuration_file('database')
+		);
+	}
+
+	/**
+	 * initializes Active Record
+	 */
+	public static function start_active_record () {
+		\ActiveRecord\Config::initialize(function ($cg) {
+			$db = Core::$configuration->database;
+
+			$cg->set_model_directory(Project::get_model_directory());
+			$cg->set_connections(array(
+				'development' => "{$db->type}://{$db->username}:{$db->password}@{$db->host}/" .
+				                 $db->databases[ $db->active ]
+			));
+		});
 	}
 }

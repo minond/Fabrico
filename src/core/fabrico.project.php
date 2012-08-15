@@ -140,13 +140,13 @@ class Project {
 	}
 
 	/**
-	 * finds a model file
+	 * finds the project model directory
 	 *
 	 * @return string
 	 */
-	public static function get_model_file ($file) {
+	public static function get_model_directory () {
 		return self::get_project_file(
-			Core::$configuration->directory->models . $file, true
+			Core::$configuration->directory->models
 		);
 	}
 
