@@ -45,6 +45,7 @@ class Error {
 		}
 
 		self::output_to_view($title, $message, $file, $line);
+		self::output_to_logs($title, $message, $file, $line);
 	}
 
 	/**
@@ -60,6 +61,22 @@ class Error {
 		$trace = $error->getTrace();
 
 		self::output_to_view($title, $message, $file, $line);
+		self::output_to_logs($title, $message, $file, $line);
+	}
+
+	/**
+	 * logs an error
+	 *
+	 * @param integer error type
+	 * @param string error message
+	 * @param string file name
+	 * @param integer file line number
+	 */
+	private static function output_to_logs ($title, $message, $file, $line) {
+		Logger::error("type: {$title}");
+		Logger::error("mssg: {$message}");
+		Logger::error("file: {$file}");
+		Logger::error("line: {$line}");
 	}
 
 	/**

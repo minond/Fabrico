@@ -1,5 +1,9 @@
 <?php
 
+if ($_SERVER['REQUEST_URI'] === '/favicon.ico') {
+	die;
+}
+
 require_once 'fabrico.utils.php';
 require_once 'fabrico.log.php';
 require_once 'fabrico.core.php';

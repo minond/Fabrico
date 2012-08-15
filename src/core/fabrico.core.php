@@ -68,8 +68,14 @@ class Core {
 		// and instanciate it
 		$controller = "\\{$controller_info->controller_name}";
 		$controller = new $controller;
+		$view_method = Router::request_method();
 
-		switch (Router::request_method()) {
+		Logger::request('uri: ' . self::$configuration->state->uri);
+		Logger::request('view: ' . self::$configuration->state->uri);
+		Logger::request('controller: ' . $controller_info->controller_name);
+		Logger::request('type: ' . $view_method);
+
+		switch ($view_method) {
 			case Router::R404:
 				// TODO: this should redirect to a template or view
 				die('404');

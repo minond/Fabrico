@@ -45,6 +45,7 @@ class Response {
 	 * overwrite to string
 	 */
 	public function __toString () {
+		Logger::request("response: {$this->status}");
 		return json_encode($this);
 	}
 }

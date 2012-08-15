@@ -295,7 +295,8 @@ class Tag {
 
 		$tag->replacement_string = self::method2code(
 			self::tag2method($tagname, $type, $is_method) .
-			self::args2string($tag->attrs, $type)
+			self::args2string($tag->attrs, $type, $is_method),
+			$is_method
 		);
 
 		return $tag;
@@ -339,17 +340,28 @@ class Tag {
 	 * @return midex
 	 */
 	private static function parse_value ($val) {
+		// merge fields
 		preg_match('/^"#{.+}"$/', $val, $matches_variable);
-		preg_match('/^"%{.+}"$/', $val, $matches_method);
-
 		if (count($matches_variable)) {
 			$val = '$' . preg_replace(array('/^"#{/', '/}"$/'), '', $val);
+			return $val;
 		}
 
+		// method calls
+		preg_match('/^"%{.+}"$/', $val, $matches_method);
 		if (count($matches_method)) {
 			$val = preg_replace(array('/^"%{/', '/}"$/'), '', $val);
+			return $val;
 		}
 
+		// number
+		$n_val = str_replace(array('"', '\''), '', $val);
+		if (is_numeric($n_val)) {
+			$val = $n_val;
+			return $val;
+		}
+
+		// boolean
 		switch ($val) {
 			case '\'true\'':
 			case '"true"':
@@ -400,10 +412,11 @@ class Tag {
 	 * returns a php line wrapped in php tags
 	 *
 	 * @param string method
+	 * @param is method tag
 	 * @return string code
 	 */
-	private static function method2code ($method) {
-		return "<?= {$method} ?>";
+	private static function method2code ($method, $is_method) {
+		return $is_method ? "<? {$method} ?>" : "<?= {$method} ?>";
 	}
 
 	/**
@@ -412,22 +425,30 @@ class Tag {
 	 *
 	 * @param array of arguments
 	 * @param int tag type
+	 * @param boolean is method tag flag
 	 * @return string valid php array representation
 	 */
-	private static function args2string ($args, $tagtype) {
+	private static function args2string ($args, $tagtype, $is_method) {
 		$props = array();
+		$arg_list = true;
 
 		if ($tagtype === self::TAG_CLOSE) {
 			return '()';
 		}
 
 		foreach ($args as $arg) {
-			$props[] = "'{$arg->label}' => {$arg->value}";
+			if ($is_method && $arg->label === '_') {
+				$props[] = "{$arg->value}";
+			}
+			else {
+				$props[] = "'{$arg->label}' => {$arg->value}";
+				$arg_list = false;
+			}
 		}
 
 		$props = implode(', ', $props);
 		$props = strlen($props) ? " {$props} " : '';
-		return "(array({$props}))";
+		return $arg_list ? "({$props})" : "(array({$props}))";
 	}
 
 	/**
