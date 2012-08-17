@@ -19,6 +19,7 @@ class Project {
 		Core::$configuration->state->guid = uniqid();
 		Core::$configuration->state->uri = self::$file;
 		Core::$configuration->state->view = self::get_view_file();
+		Core::$configuration->state->raw_view = self::get_view_file(true);
 		Core::$configuration->state->controller = self::get_controller_file();
 		Core::$configuration->state->build = self::get_view_build_file(self::$file);
 	}
@@ -48,12 +49,13 @@ class Project {
 	/**
 	 * finds the view file for the current request
 	 *
+	 * @param raw request
 	 * @return string
 	 */
-	public static function get_view_file () {
+	public static function get_view_file ($raw = false) {
 		return self::get_project_file(
 			Core::$configuration->directory->views .
-			self::$file, true
+			self::$file, !$raw
 		);
 	}
 
@@ -63,7 +65,7 @@ class Project {
 	 * @return object with controller path and name
 	 */
 	public static function get_controller_file () {
-		$parts = explode('/', self::$file);
+		$parts = explode('/', explode('.', self::$file)[ 0 ]);
 		$possibilities = array();
 
 		$controller = new \stdClass;

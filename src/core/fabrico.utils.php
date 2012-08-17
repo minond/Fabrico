@@ -2,6 +2,9 @@
 
 namespace Fabrico;
 
+/**
+ * html helpers
+ */
 class html {
 	/**
 	 * tag merge fields
@@ -51,5 +54,21 @@ class html {
 		if (!method_exists('self', $method)) {
 			return self::generate($method, count($args) ? $args[ 0 ] : array());
 		}
+	}
+}
+
+/**
+ * general helpers
+ */
+class util {
+	/**
+	 * matches a string ending
+	 *
+	 * @param string haystack
+	 * @param string needle
+	 * @return boolean
+	 */
+	public static function ends_with ($str, $end) {
+		return substr_compare($str, $end, -strlen($end), strlen($end)) === 0;
 	}
 }

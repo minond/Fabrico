@@ -10,7 +10,8 @@ class Core {
 	 */
 	public static $deps = array(
 		'../deps/sfYaml/sfYaml.php',
-		'../deps/ActiveRecord/ActiveRecord.php'
+		'../deps/ActiveRecord/ActiveRecord.php',
+		'../deps/Dom/Dom.php'
 	);
 
 	/**
@@ -78,14 +79,8 @@ class Core {
 
 		switch ($view_method) {
 			case Router::R404:
-				// TODO: this should redirect to a template or view
-				die('404');
-				break;
-
 			case Router::VIEW:
-				// on view
-				$controller->onview();
-
+			case Router::JSON:
 				// make controller data global
 				foreach ($controller as $_var => $_val) {
 					$$_var = $_val;
@@ -94,10 +89,53 @@ class Core {
 				unset($_var);
 				unset($_val);
 
-				// load the raw view file and check build
-				Page::build();
-				require self::$configuration->state->build;
-				echo Page::close();
+				switch ($view_method) {
+					// load the raw view file and check build
+					case Router::VIEW:
+						// on view
+						$controller->onview();
+
+						// build view
+						Page::build();
+						require self::$configuration->state->build;
+						echo Page::close();
+						break;
+
+					case Router::R404:
+						$is_404 = false;
+						$data_response = false;
+						
+						if (method_exists($controller, 'ondata')) {
+							// on data
+							$data_response = $controller->ondata();
+						}
+						else {
+							$is_404 = true;
+						}
+
+						if (is_array($data_response) || is_object($data_response)) {
+							switch (Router::data_method()) {
+								case Router::JSON:
+									Router::type_header(Router::JSON);
+									echo json_encode($data_response);
+									break;
+
+								case Router::XML:
+									echo \DOM::arrayToXMLString($data_response, 'root', true);
+									break;
+
+								default:
+									$is_404 = true;
+									break;
+							}
+						}
+						
+						if ($is_404) {
+							// display
+							Router::http_header(Router::R404);
+							require template('redirect/404');
+						}
+				}
 
 				break;
 

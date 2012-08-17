@@ -16,6 +16,19 @@ class Router {
 	const VIEW = 'VIEW';
 	const METHOD = 'METHOD';
 	const ERROR = 'ERROR';
+	const JSON = 'JSON';
+	const XML = 'xml';
+	const CSV = 'csv';
+
+	/**
+	 * type headers
+	 *
+	 * @var array
+	 */
+	private static $headers = array(
+		'json' => 'application/json',
+		'404' => '404 Not Found'
+	);
 
 	/**
 	 * request variable
@@ -79,6 +92,25 @@ class Router {
 	}
 
 	/**
+	 * returns the requested method type
+	 *
+	 * @return string data type
+	 */
+	public static function data_method () {
+		$req = $_SERVER['REQUEST_URI'];
+
+		if (util::ends_with($req, strtolower(self::JSON))) {
+			return self::JSON;
+		}
+		else if (util::ends_with($req, strtolower(self::XML))) {
+			return self::XML;
+		}
+		else if (util::ends_with($req, strtolower(self::CSV))) {
+			return self::CSV;
+		}
+	}
+
+	/**
 	 * returns current request method type
 	 *
 	 * @return string
@@ -105,6 +137,30 @@ class Router {
 		}
 
 		return $type;
+	}
+
+	/**
+	 * sends a type header
+	 *
+	 * @param string type
+	 */
+	public static function type_header ($type) {
+		$type = strtolower($type);
+
+		if (array_key_exists($type, self::$headers)) {
+			header('Content-Type: ' . self::$headers[ $type ]);
+		}
+	}
+
+	/**
+	 * sends a response header
+	 *
+	 * @param string type
+	 */
+	public static function http_header ($type) {
+		if (array_key_exists($type, self::$headers)) {
+			header('HTTP/1.0 ' . self::$headers[ $type ]);
+		}
 	}
 
 	/**

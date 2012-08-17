@@ -24,4 +24,9 @@ class Controller {
 	 * on method virtual method
 	 */
 	public function onmethod () {}
+
+	/**
+	 * on data virtual method
+	 */
+	public function ondata () {}
 }
