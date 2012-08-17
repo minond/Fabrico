@@ -19,6 +19,7 @@ class Router {
 	const JSON = 'JSON';
 	const XML = 'xml';
 	const CSV = 'csv';
+	const JS = 'js';
 
 	/**
 	 * type headers
@@ -27,6 +28,8 @@ class Router {
 	 */
 	private static $headers = array(
 		'json' => 'application/json',
+		'xml' => 'text/xml',
+		'csv' => 'text',
 		'404' => '404 Not Found'
 	);
 
@@ -97,7 +100,7 @@ class Router {
 	 * @return string data type
 	 */
 	public static function data_method () {
-		$req = $_SERVER['REQUEST_URI'];
+		$req = explode('?', $_SERVER['REQUEST_URI'])[ 0 ];
 
 		if (util::ends_with($req, strtolower(self::JSON))) {
 			return self::JSON;
@@ -107,6 +110,9 @@ class Router {
 		}
 		else if (util::ends_with($req, strtolower(self::CSV))) {
 			return self::CSV;
+		}
+		else if (util::ends_with($req, strtolower(self::JS))) {
+			return self::JS;
 		}
 	}
 

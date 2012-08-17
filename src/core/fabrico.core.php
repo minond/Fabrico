@@ -115,13 +115,27 @@ class Core {
 
 						if (is_array($data_response) || is_object($data_response)) {
 							switch (Router::data_method()) {
+								case Router::JS:
 								case Router::JSON:
 									Router::type_header(Router::JSON);
-									echo json_encode($data_response);
+									$data = json_encode($data_response);
+
+									if (Router::data_method() === Router::JS) {
+										$data = $_REQUEST['cb'] . "({$data})";
+									}
+
+									echo $data;
+
 									break;
 
 								case Router::XML:
+									Router::type_header(Router::XML);
 									echo \DOM::arrayToXMLString($data_response, 'root', true);
+									break;
+
+								case Router::CSV:
+									Router::type_header(Router::CSV);
+									echo \DOM::arrayToCSVString($data_response, ', ');
 									break;
 
 								default:
