@@ -3,9 +3,23 @@
 namespace Fabrico;
 
 class Merge {
+	/**
+	 * merge field selector
+	 */
 	const SELECTOR = '/\\#\{.+?\}/';
+
+	/**
+	 * iteration limit
+	 */
 	const MAX_ITERATIONS = 100;
 
+	/**
+	 * parses a string and merges in merge fields
+	 *
+	 * @param string raw string
+	 * @param array of merge fields
+	 * @return string merged string
+	 */
 	public static function parse ($string, $mergevalues) {
 		$lastpos = 0;
 		$mergefields = array();

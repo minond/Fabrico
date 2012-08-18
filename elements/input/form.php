@@ -11,7 +11,9 @@ class form extends \Fabrico\Element {
 
 
 			$schema = \ActiveRecord\Table::load(get_class($model));
-			print_r($schema); die;
+			echo '<pre>';
+			print_r($schema);
+			echo '</pre>';
 
 			$args['content'] = '<pre>' . print_r($model, true) . '</pre>';
 			unset($args['model']);

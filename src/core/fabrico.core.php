@@ -61,6 +61,7 @@ class Core {
 	 */
 	public static function handle_request () {
 		$controller_info = self::$configuration->state->controller;
+		$is_404 = false;
 
 		// load controller
 		if ($controller_info->file_path) {
@@ -79,6 +80,7 @@ class Core {
 
 		switch ($view_method) {
 			case Router::R404:
+				$is_404 = true;
 			case Router::VIEW:
 			case Router::JSON:
 				// make controller data global
@@ -102,12 +104,12 @@ class Core {
 						break;
 
 					case Router::R404:
-						$is_404 = false;
 						$data_response = false;
 						
 						if (method_exists($controller, 'ondata')) {
 							// on data
 							$data_response = $controller->ondata();
+							$is_404 = false;
 						}
 						else {
 							$is_404 = true;
@@ -144,18 +146,11 @@ class Core {
 							}
 						}
 						
-						if ($is_404) {
-							// display
-							Router::http_header(Router::R404);
-							require template('redirect/404');
-						}
 				}
 
 				break;
 
 			case Router::METHOD:
-				// on method
-				$controller->onmethod();
 				$response = new Response(Response::IN_PROCESS);
 				$method = Router::req(Router::$uri->method);
 				$arguments = Router::req(Router::$uri->args);
@@ -171,10 +166,13 @@ class Core {
 				}
 
 				// check if method is public
-				if (!in_array($method, $controller->public_methods)) {
+				if (!in_array($method, $controller->public)) {
 					$response->status = Response::METHOD_PRIVATE_METHOD;
 					die($response);
 				}
+
+				// on method
+				$controller->onmethod();
 
 				// call the method
 				$response->status = Response::SUCCESS;
@@ -184,6 +182,17 @@ class Core {
 				);
 
 				die($response);
+				break;
+
+			default:
+				$is_404 = true;
+				break;
+		}
+
+		if ($is_404) {
+			// display
+			Router::http_header(Router::R404);
+			require template('redirect/404');
 		}
 	}
 

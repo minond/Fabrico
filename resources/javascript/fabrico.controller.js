@@ -4,15 +4,28 @@
  */
 Fabrico.controller = {
 	response: {
-		SUCCESS: "success",
 		ERROR: "error",
 		SUCCESS: "success",
 		IN_PROCESS: "in_process",
-		NOT_ALLOWED: "not_allowed",
-		UNKNOWN_FILE: "unknown_file",
-		UNKNOWN_ACTION: "unknown_action",
+		PRIVATE_METHOD: "private_method",
 		UNKNOWN_METHOD: "unknown_method"
 	}
+};
+
+/**
+ * defalt request destination
+ * @var string
+ */
+Fabrico.controller.DESTINATION = location.href;
+
+/**
+ * destination setter
+ * @param string url
+ * @return Fabrico controller object
+ */
+Fabrico.controller.receiver = function (src) {
+	this.DESTINATION = src || location.href;
+	return this;
 };
 
 /**
@@ -32,22 +45,6 @@ Fabrico.controller.method = function (method, args, env, callback, errback) {
 };
 
 /**
- * @name action
- * @param string action name
- * @param array optional arguments
- * @param object optional global variabled
- * @param function success handler
- * @param function error handler
- * @return Promise
- * @see request
- */
-Fabrico.controller.action = function (action, args, env, callback, errback) {
-	return this.request({
-		_action: action
-	}, args, env, callback, errback);
-};
-
-/**
  * @name request
  * @param object default request variables
  * @param array optional arguments
@@ -58,13 +55,17 @@ Fabrico.controller.action = function (action, args, env, callback, errback) {
  * @see redirect
  */
 Fabrico.controller.request = function (req, args, env, callback, errback) {
+	var dest = this.DESTINATION;
 	req._args = args || [];
 	req._env = env || {};
+
+	// reset
+	this.receiver();
 
 	return $.ajax({
 		type: "POST", 
 		async: true, 
-		url: location.href,
+		url: dest,
 		success: callback || function () {},
 		fail: errback || function () {},
 		data: req
@@ -84,23 +85,6 @@ Fabrico.controller.request = function (req, args, env, callback, errback) {
 Fabrico.controller.method_redirect = function (method, redirect, args, env, preback) {
 	return this.redirect({
 		_method: method,
-		_success: redirect
-	}, args, env, preback);
-};
-
-/**
- * @name action_redirect
- * @param string action name
- * @param string action redirect
- * @param array optional arguments
- * @param object optional global variables
- * @param function form pre-submission callback
- * @return node form element
- * @see redirect
- */
-Fabrico.controller.action_redirect = function (action, redirect, args, env, preback) {
-	return this.redirect({
-		_action: action,
 		_success: redirect
 	}, args, env, preback);
 };

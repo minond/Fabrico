@@ -53,7 +53,7 @@ class Build {
 	 * @param string raw file content
 	 */
 	public static function view ($file, $rawcontent) {
-		$viewf = Project::get_view_file($file);
+		$viewf = Project::get_view_file();
 		$buildf = Project::get_view_build_file($file);
 		
 		if (self::build_needed($viewf, $buildf)) {
