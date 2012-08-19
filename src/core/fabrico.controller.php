@@ -8,7 +8,7 @@ class Controller {
 	 *
 	 * @var array
 	 */
-	public $public = array();
+	public $public = [];
 
 	/**
 	 * constructor

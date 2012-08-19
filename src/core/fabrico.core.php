@@ -8,11 +8,11 @@ class Core {
 	 *
 	 * @var array
 	 */
-	public static $deps = array(
+	public static $deps = [
 		'../deps/sfYaml/sfYaml.php',
 		'../deps/ActiveRecord/ActiveRecord.php',
 		'../deps/Dom/Dom.php'
-	);
+	];
 
 	/**
 	 * path to framework configuration
@@ -166,7 +166,7 @@ class Core {
 				$arguments = Router::req(Router::$uri->args);
 
 				if (!$arguments) {
-					$arguments = array();
+					$arguments = [];
 				}
 
 				// check if method exits
@@ -187,7 +187,7 @@ class Core {
 				// call the method
 				$response->status = Response::SUCCESS;
 				$response->response = call_user_func_array(
-					array($controller, $method),
+					[ $controller, $method ],
 					$arguments
 				);
 
@@ -223,10 +223,10 @@ class Core {
 			$db = Core::$configuration->database;
 
 			$cg->set_model_directory(Project::get_model_directory());
-			$cg->set_connections(array(
+			$cg->set_connections([
 				'development' => "{$db->type}://{$db->username}:{$db->password}@{$db->host}/" .
 				                 $db->databases[ $db->active ]
-			));
+			]);
 		});
 	}
 }

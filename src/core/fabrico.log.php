@@ -41,11 +41,11 @@ class Logger {
 	 * @return string
 	 */
 	private static function signature ($type) {
-		return Merge::parse(self::$signature, array(
+		return Merge::parse(self::$signature, [
 			'guid' => Core::$configuration->state->guid,
 			'time' => date('Y-m-d H:m:s'),
 			'type' => str_pad(strtoupper($type), 7)
-		));
+		]);
 	}
 
 	/**

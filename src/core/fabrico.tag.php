@@ -49,7 +49,7 @@ class Tag {
 	 *
 	 * @var array
 	 */
-	public static $tags = array();
+	public static $tags = [];
 
 	/**
 	 * tag namespace <root:namespace:name />
@@ -129,7 +129,7 @@ class Tag {
 	public static function parse ($html) {
 		// signature trackers and clean tag data
 		$start_time = time();
-		$taginfo = array();
+		$taginfo = [];
 
 		// parse for custom tags
 		self::scan_string($html, sprintf(self::TAG_MATCH_METHOD_EMPTY, self::ROOT), self::TAG_SINGLE, $taginfo);
@@ -164,7 +164,7 @@ class Tag {
 	 */
 	private static function merge_string ($html, $taginfo) {
 		$invalidtags = 0;
-		$mergedlist = array();
+		$mergedlist = [];
 
 		foreach ($taginfo as $info) {
 			if (!$info->valid) {
@@ -182,7 +182,7 @@ class Tag {
 			}
 		}
 	
-		return array($html, $invalidtags);
+		return [ $html, $invalidtags ];
 	}
 
 	/**
@@ -222,7 +222,7 @@ class Tag {
 	private static function separate_attributes ($attr_str) {
 		$attr_str = trim($attr_str);
 		$parts = explode('=', $attr_str);
-		$attrs = array();
+		$attrs = [];
 		$max = count($parts) - 1;
 		$attrsep = '=';
 
@@ -311,7 +311,7 @@ class Tag {
 	 * @return array of clean attribute info
 	 */
 	private static function build_attributes ($attrs) {
-		$list = array();
+		$list = [];
 
 		foreach ($attrs as $attr) {
 			if (!$attr) {
@@ -344,19 +344,19 @@ class Tag {
 		// merge fields
 		preg_match('/^"#{.+}"$/', $val, $matches_variable);
 		if (count($matches_variable)) {
-			$val = '$' . preg_replace(array('/^"#{/', '/}"$/'), '', $val);
+			$val = '$' . preg_replace(['/^"#{/', '/}"$/' ], '', $val);
 			return $val;
 		}
 
 		// method calls
 		preg_match('/^"%{.+}"$/', $val, $matches_method);
 		if (count($matches_method)) {
-			$val = preg_replace(array('/^"%{/', '/}"$/'), '', $val);
+			$val = preg_replace([ '/^"%{/', '/}"$/' ], '', $val);
 			return $val;
 		}
 
 		// number
-		$n_val = str_replace(array('"', '\''), '', $val);
+		$n_val = str_replace([ '"', '\'' ], '', $val);
 		if (is_numeric($n_val)) {
 			$val = $n_val;
 			return $val;
@@ -430,7 +430,7 @@ class Tag {
 	 * @return string valid php array representation
 	 */
 	private static function args2string ($args, $tagtype, $is_method) {
-		$props = array();
+		$props = [];
 		$arg_list = true;
 
 		if ($tagtype === self::TAG_CLOSE) {
@@ -448,7 +448,7 @@ class Tag {
 		}
 
 		$props = implode(', ', $props);
-		return $arg_list ? "({$props})" : "(array({$props}))";
+		return $arg_list ? "({$props})" : "([ {$props} ])";
 	}
 
 	/**
@@ -461,8 +461,8 @@ class Tag {
 	 */
 	private static function tag2method ($tagname, $type, $is_method) {
 		$tagname = str_replace(
-			array(self::ROOT . self::SEPARATOR, self::SEPARATOR),
-			array('', '\\'), $tagname
+			[ self::ROOT . self::SEPARATOR, self::SEPARATOR ],
+			[ '', '\\' ], $tagname
 		);
 
 		if (!$is_method) {

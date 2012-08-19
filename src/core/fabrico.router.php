@@ -26,26 +26,26 @@ class Router {
 	 *
 	 * @var array
 	 */
-	private static $headers = array(
+	private static $headers = [
 		'json' => 'application/json',
 		'xml' => 'text/xml',
 		'csv' => 'text',
 		'404' => '404 Not Found'
-	);
+	];
 
 	/**
 	 * request variable
 	 *
 	 * @var array
 	 */
-	private static $req = array();
+	private static $req = [];
 
 	/**
 	 * standard uri variables
 	 *
 	 * @var object
 	 */
-	public static $uri = array(
+	public static $uri = [
 		'id' => 'id',
 		'file' => '_file',
 		'args' => '_args',
@@ -54,7 +54,7 @@ class Router {
 		'success' => '_success',
 		'failure' => '_failure',
 		'error' => '_error'
-	);
+	];
 
 	/**
 	 * setter for request variable

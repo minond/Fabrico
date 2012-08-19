@@ -19,7 +19,7 @@ class html {
 	 *
 	 * @var array
 	 */
-	public static $selfclosing = array('input', 'img', 'link');
+	public static $selfclosing = [ 'input', 'img', 'link' ];
 
 	/**
 	 * generates a new tag
@@ -28,8 +28,8 @@ class html {
 	 * @param string tag properties
 	 * @return string tag string
 	 */
-	public static function generate ($tagname, $props = array()) {
-		$proplist = array();
+	public static function generate ($tagname, $props = []) {
+		$proplist = [];
 		$content = '';
 
 		foreach ($props as $key => $value) {
@@ -52,7 +52,7 @@ class html {
 	 */
 	public static function __callStatic ($method, $args) {
 		if (!method_exists('self', $method)) {
-			return self::generate($method, count($args) ? $args[ 0 ] : array());
+			return self::generate($method, count($args) ? $args[ 0 ] : []);
 		}
 	}
 }

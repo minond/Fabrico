@@ -21,28 +21,28 @@ class Page {
 	 * list of javascript files to include
 	 * @var array
 	 */
-	private static $javascript = array();
+	private static $javascript = [];
 
 	/**
 	 * list of javascript code to merge
 	 * @var array
 	 */
-	private static $javascript_code = array(
-		'std' => array(),
-		'ready' => array()
-	);
+	private static $javascript_code = [
+		'std' => [],
+		'ready' => []
+	];
 
 	/**
 	 * list of css files to include
 	 * @var array
 	 */
-	private static $css = array();
+	private static $css = [];
 
 	/**
 	 * list of errors to display
 	 * @var array
 	 */
-	private static $errors = array();
+	private static $errors = [];
 
 	/**
 	 * include a javascript file
@@ -125,11 +125,11 @@ class Page {
 				return $errorstr;
 			}
 
-			return str_replace(array(
+			return str_replace([
 				self::JAVASCRIPT,
 				self::JAVASCRIPT_CODE,
 				self::CSS
-			), array($jsstr, $jscode, $cssstr), $content);
+			], [ $jsstr, $jscode, $cssstr ], $content);
 		}
 		else {
 			return self::$tag->start_html . "\n\t" . self::CSS .
@@ -163,7 +163,7 @@ class Page {
 	}
 }
 
-Page::$tag = (object) array(
+Page::$tag = (object) [
 	'script_code' => "\n<script type=\"text/javascript\">\n%s\njQuery(function () {\n%s\n});\n</script>",
 	'script' => '<script type="text/javascript" src="%s"></script>',
 	'css' => '<link type="text/css" rel="stylesheet" href="%s" />',
@@ -171,4 +171,4 @@ Page::$tag = (object) array(
 	'start_body' => "\n\t</head>\n\t<body class='%s'>\n\n",
 	'end_body' => "\n\t</body>",
 	'end_html' => "\n</html>"
-);
+];

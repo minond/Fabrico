@@ -21,7 +21,7 @@ class Merge {
 	 */
 	private static function get_merge_fields ($string) {
 		$lastpos = 0;
-		$mergefields = array();
+		$mergefields = [];
 
 		for ($i = 0; $i < self::MAX_ITERATIONS; $i++) {
 			preg_match(self::SELECTOR, $string, $matches, PREG_OFFSET_CAPTURE, $lastpos);
@@ -44,7 +44,7 @@ class Merge {
 	 * @return string merge field name
 	 */
 	private static function get_merge_field ($raw) {
-		return str_replace(array('#{', '}'), '', $raw);
+		return str_replace([ '#{', '}' ], '', $raw);
 	}
 
 	/**

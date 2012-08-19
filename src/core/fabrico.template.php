@@ -15,14 +15,14 @@ class Template {
 	 *
 	 * @var array
 	 */
-	protected static $expecting = array();
+	protected static $expecting = [];
 
 	/**
 	 * loads a template file
 	 *
 	 * @param array or template variables
 	 */
-	public static function generate ($_data = array()) {
+	public static function generate ($_data = []) {
 		if (is_array($_data)) {
 			foreach ($_data as $_var => $_value) {
 				$$_var = $_value;

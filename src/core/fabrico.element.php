@@ -15,13 +15,13 @@ class Element {
 	 * uses for open/close tag combinations
 	 * @var array
 	 */
-	private static $callstack = array();
+	private static $callstack = [];
 
 	/**
 	 * argument stack
 	 * @var array
 	 */
-	private static $argstack = array();
+	private static $argstack = [];
 
 	/**
 	 * tag name
@@ -41,7 +41,7 @@ class Element {
 	 * @param array or properties
 	 * @return string element html
 	 */
-	public static function generate ($props = array()) {
+	public static function generate ($props = []) {
 		if (static::$type) {
 			$props[ self::A_TYPE ] = static::$type;
 		}
@@ -55,14 +55,14 @@ class Element {
 	 *
 	 * @param array or properties
 	 */
-	public static function open ($props = array()) {
+	public static function open ($props = []) {
 		$klass = get_called_class();
 
 		// save properties in call stack
 		self::$callstack[] =& $props;
 
 		// create a new argument list
-		self::$argstack[] = array();
+		self::$argstack[] = [];
 
 		// save buffer
 		ob_start();
@@ -85,7 +85,7 @@ class Element {
 		$args[ self::A_CONTENT ] = ob_get_clean();
 
 		// generate element
-		return call_user_func(array('self', 'generate'), $args);
+		return call_user_func([ 'self', 'generate' ], $args);
 	}
 
 	/**

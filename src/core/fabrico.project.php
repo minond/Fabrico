@@ -76,7 +76,7 @@ class Project {
 		}
 
 		$parts = explode('/', explode('.', self::$file)[ 0 ]);
-		$possibilities = array();
+		$possibilities = [];
 
 		$controller = new \stdClass;
 		$controller->file_path = null;

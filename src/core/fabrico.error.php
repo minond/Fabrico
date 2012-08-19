@@ -97,12 +97,12 @@ class Error {
 		\view\element('error/error');
 		ob_start();
 
-		\error\error::generate(array(
+		\error\error::generate([
 			'title' => $title,
 			'message' => $message,
 			'file' => $file,
 			'line' => $line
-		));
+		]);
 
 		Page::include_error_message(ob_get_clean());
 	}
