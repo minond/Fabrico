@@ -4,22 +4,33 @@ namespace Fabrico;
 
 class Element {
 	/**
+	 * standard properties
+	 */
+	const A_PARAM = 'params';
+	const A_CONTENT = 'content';
+	const A_TYPE = 'type';
+	const A_NULL = 'null';
+
+	/**
 	 * uses for open/close tag combinations
-	 *
 	 * @var array
 	 */
 	private static $callstack = array();
 
 	/**
+	 * argument stack
+	 * @var array
+	 */
+	private static $argstack = array();
+
+	/**
 	 * tag name
-	 *
 	 * @var string
 	 */
 	protected static $tag;
 	
 	/**
 	 * tag type
-	 *
 	 * @var string
 	 */
 	protected static $type;
@@ -32,7 +43,7 @@ class Element {
 	 */
 	public static function generate ($props = array()) {
 		if (static::$type) {
-			$props['type'] = static::$type;
+			$props[ self::A_TYPE ] = static::$type;
 		}
 
 		return static::pregen($props) !== false ?
@@ -47,12 +58,11 @@ class Element {
 	public static function open ($props = array()) {
 		$klass = get_called_class();
 
-		if (!array_key_exists($klass, self::$callstack)) {
-			self::$callstack[ $klass ] = array();
-		}
-
 		// save properties in call stack
-		self::$callstack[ $klass ][] =& $props;
+		self::$callstack[] =& $props;
+
+		// create a new argument list
+		self::$argstack[] = array();
 
 		// save buffer
 		ob_start();
@@ -66,13 +76,25 @@ class Element {
 	 */
 	public static function close () {
 		// get arguments
-		$args = array_pop(self::$callstack)[0];
+		$args = array_pop(self::$callstack);
+
+		// parameters
+		$args[ self::A_PARAM ] = array_pop(self::$argstack);
 
 		// get content
-		$args['content'] = ob_get_clean();
+		$args[ self::A_CONTENT ] = ob_get_clean();
 
 		// generate element
 		return call_user_func(array('self', 'generate'), $args);
+	}
+
+	/**
+	 * saves a parameter in the argument stack
+	 *
+	 * @param mixed value
+	 */
+	public static function argument ($value) {
+		self::$argstack[ count(self::$argstack) - 1 ][] = $value;
 	}
 
 	/**

@@ -27,6 +27,7 @@ class Build {
 	private static function writeclean ($filepath, $content) {
 		$file = fopen($filepath, 'w+');
 		$clean = Tag::parse($content);
+		$clean = Merge::output_placeholder($clean);
 
 		if (is_resource($file)) {
 			Logger::build('savind build for ' . Core::$configuration->state->view);

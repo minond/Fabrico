@@ -1,6 +1,6 @@
 <?php
 
-namespace resource;
+namespace view\resource;
 
 class script extends \Fabrico\Element {
 	protected static $tag = 'script';
@@ -14,9 +14,15 @@ class script extends \Fabrico\Element {
 					isset($props['core'])
 				)
 			);
-
-			return false;
 		}
+		else {
+			\Fabrico\Page::include_javascript(
+				$props['content'],
+				true, isset($props['onready'])
+			);
+		}
+
+		return false;
 	}
 }
 

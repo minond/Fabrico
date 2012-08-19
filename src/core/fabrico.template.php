@@ -48,6 +48,6 @@ class Template {
 		unset($_value);
 		unset($_data);
 
-		include template(static::$template);
+		include \view\template(static::$template);
 	}
 }

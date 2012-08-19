@@ -6,7 +6,7 @@ class Merge {
 	/**
 	 * merge field selector
 	 */
-	const SELECTOR = '/\\#\{.+?\}/';
+	const SELECTOR = '/\\#\{\w+?\}/';
 
 	/**
 	 * iteration limit
@@ -14,13 +14,12 @@ class Merge {
 	const MAX_ITERATIONS = 100;
 
 	/**
-	 * parses a string and merges in merge fields
+	 * parses a string for merge fields
 	 *
-	 * @param string raw string
-	 * @param array of merge fields
-	 * @return string merged string
+	 * @param string raw
+	 * @return array of merge fields
 	 */
-	public static function parse ($string, $mergevalues) {
+	private static function get_merge_fields ($string) {
 		$lastpos = 0;
 		$mergefields = array();
 
@@ -35,8 +34,31 @@ class Merge {
 			$mergefields[] = $matches[0][0];
 		}
 
+		return $mergefields;
+	}
+
+	/**
+	 * cleans up a merge fields and returns its name
+	 *
+	 * @param string raw merge field
+	 * @return string merge field name
+	 */
+	private static function get_merge_field ($raw) {
+		return str_replace(array('#{', '}'), '', $raw);
+	}
+
+	/**
+	 * parses a string and merges in merge fields
+	 *
+	 * @param string raw string
+	 * @param array of merge fields
+	 * @return string merged string
+	 */
+	public static function parse ($string, $mergevalues) {
+		$mergefields = self::get_merge_fields($string);
+
 		foreach ($mergefields as $field) {
-			$cfield = str_replace(array('#{', '}'), '', $field);
+			$cfield = self::get_merge_field($field);
 			$value = array_key_exists($cfield, $mergevalues) ?
 			         $mergevalues[ $cfield ] : '';
 
@@ -44,5 +66,39 @@ class Merge {
 		}
 
 		return $string;
+	}
+
+	/**
+	 * replaces merge fields with place holder merge fields
+	 * useful for turning merge fields into php output tags
+	 *
+	 * @param string
+	 * @param callable merge field place holder generator
+	 * @return string
+	 */
+	public static function placeholder ($string, $maker) {
+		$mergefields = self::get_merge_fields($string);
+
+		foreach ($mergefields as $field) {
+			$string = str_replace(
+				$field,
+				$maker(self::get_merge_field($field)),
+				$string
+			);
+		}
+
+		return $string;
+	}
+
+	/**
+	 * helper for generating php output tags
+	 *
+	 * @param string with merge fields
+	 * @return string with php fields
+	 */
+	public static function output_placeholder ($string) {
+		return self::placeholder($string, function ($field) {
+			return "<?= $$field ?>";
+		});
 	}
 }

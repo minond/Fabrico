@@ -8,32 +8,38 @@ class Page {
 	 */
 	const ERRORS = '<ERRORS />';
 	const JAVASCRIPT = '<JAVASCRIPT />';
+	const JAVASCRIPT_CODE = '<JAVASCRIPTCODE />';
 	const CSS = '<CSS />';
 
 	/**
 	 * resource tags
-	 *
 	 * @var object
 	 */
 	public static $tag;
 
 	/**
 	 * list of javascript files to include
-	 *
 	 * @var array
 	 */
 	private static $javascript = array();
 
 	/**
+	 * list of javascript code to merge
+	 * @var array
+	 */
+	private static $javascript_code = array(
+		'std' => array(),
+		'ready' => array()
+	);
+
+	/**
 	 * list of css files to include
-	 *
 	 * @var array
 	 */
 	private static $css = array();
 
 	/**
 	 * list of errors to display
-	 *
 	 * @var array
 	 */
 	private static $errors = array();
@@ -43,8 +49,11 @@ class Page {
 	 *
 	 * @param string file source
 	 */
-	public static function include_javascript ($src) {
-		if (!in_array($src, self::$javascript)) {
+	public static function include_javascript ($src, $code = false, $onready = false) {
+		if ($code) {
+			self::$javascript_code[ $onready ? 'ready' : 'std' ][] = $src;
+		}
+		else if (!in_array($src, self::$javascript)) {
 			self::$javascript[] = sprintf(self::$tag->script, $src);
 		}
 	}
@@ -102,8 +111,12 @@ class Page {
 		if (!$soft) {
 			$jsstr = implode("\n", self::$javascript);
 			$cssstr = implode("\n", self::$css);
-			$cssstr = $cssstr ? "\n" . $cssstr : $cssstr;
 			$jsstr = $jsstr ? "\n" . $jsstr : $jsstr;
+			$cssstr = $cssstr ? "\n" . $cssstr : $cssstr;
+
+			$jscode_basic = implode("\n", self::$javascript_code['std']);
+			$jscode_ready = implode("\n", self::$javascript_code['ready']);
+			$jscode = $jscode_ready . $jscode_basic ? sprintf(self::$tag->script_code, $jscode_basic, $jscode_ready) : '';
 
 			if (count(self::$errors)) {
 				$errorstr = implode("\n", self::$errors);
@@ -114,13 +127,14 @@ class Page {
 
 			return str_replace(array(
 				self::JAVASCRIPT,
+				self::JAVASCRIPT_CODE,
 				self::CSS
-			), array($jsstr, $cssstr), $content);
+			), array($jsstr, $jscode, $cssstr), $content);
 		}
 		else {
-			return self::$tag->start_html . self::CSS .
-			       self::get_body_tag() . $content . self::$tag->end_body .
-				   self::JAVASCRIPT . self::$tag->end_html;
+			return self::$tag->start_html . "\n\t" . self::CSS .
+			       self::get_body_tag() . $content . self::$tag->end_body . "\n" .
+				   self::JAVASCRIPT . "\n" . self::JAVASCRIPT_CODE . self::$tag->end_html;
 		}
 	}
 
@@ -130,9 +144,9 @@ class Page {
 	public static function build () {
 		// NOTE: the build process/order needs to be redone
 		self::open();
-		echo file_get_contents(template('seeing'));
+		echo file_get_contents(\view\template('seeing'));
 		echo file_get_contents(Core::$configuration->state->view);
-		echo file_get_contents(template('saw'));
+		echo file_get_contents(\view\template('saw'));
 		self::close(true);
 
 		// stard the buffer for the build file
@@ -150,6 +164,7 @@ class Page {
 }
 
 Page::$tag = (object) array(
+	'script_code' => "\n<script type=\"text/javascript\">\n%s\njQuery(function () {\n%s\n});\n</script>",
 	'script' => '<script type="text/javascript" src="%s"></script>',
 	'css' => '<link type="text/css" rel="stylesheet" href="%s" />',
 	'start_html' => "<!doctype html>\n<html>\n\t<head>",

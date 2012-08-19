@@ -61,7 +61,10 @@ class Core {
 	 */
 	public static function handle_request () {
 		$controller_info = self::$configuration->state->controller;
-		$is_404 = false;
+
+		require_once Project::get_controller_file(
+			self::$configuration->convention->controller_default_file
+		);
 
 		// load controller
 		if ($controller_info->file_path) {
@@ -72,6 +75,7 @@ class Core {
 		$controller = "\\{$controller_info->controller_name}";
 		$controller = new $controller;
 		$view_method = Router::request_method();
+		$is_404 = false;
 
 		Logger::request('uri: ' . self::$configuration->state->uri);
 		Logger::request('view: ' . self::$configuration->state->uri);
@@ -109,7 +113,13 @@ class Core {
 						if (method_exists($controller, 'ondata')) {
 							// on data
 							$data_response = $controller->ondata();
-							$is_404 = false;
+
+							if (is_array($data_response) || is_object($data_response)) {
+								$is_404 = false;
+							}
+							else {
+								$is_404 = true;
+							}
 						}
 						else {
 							$is_404 = true;
@@ -192,7 +202,7 @@ class Core {
 		if ($is_404) {
 			// display
 			Router::http_header(Router::R404);
-			require template('redirect/404');
+			require \view\template('redirect/404');
 		}
 	}
 

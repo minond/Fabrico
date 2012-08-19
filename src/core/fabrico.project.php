@@ -16,6 +16,10 @@ class Project {
 	public static function set_files () {
 		self::$file = Router::get_file_requested(true);
 
+		if (is_dir(self::get_view_file(true))) {
+			self::$file .= '/' . Core::$configuration->convention->index_file;
+		}
+
 		Core::$configuration->state->guid = uniqid();
 		Core::$configuration->state->uri = self::$file;
 		Core::$configuration->state->view = self::get_view_file();
@@ -64,7 +68,13 @@ class Project {
 	 *
 	 * @return object with controller path and name
 	 */
-	public static function get_controller_file () {
+	public static function get_controller_file ($name = false) {
+		if ($name) {
+			return self::get_project_file(
+				Core::$configuration->directory->controllers . $name, true
+			);
+		}
+
 		$parts = explode('/', explode('.', self::$file)[ 0 ]);
 		$possibilities = array();
 

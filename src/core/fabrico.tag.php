@@ -18,6 +18,7 @@ class Tag {
 	/**
 	 * tag to method conversion
 	 */
+	const METHOD_PREFIX = 'view\\';
 	const METHOD_SINGLE_SUFFIX = '::generate';
 	const METHOD_OPEN_SUFFIX = '::open';
 	const METHOD_CLOSE_SUFFIX = '::close';
@@ -480,6 +481,6 @@ class Tag {
 			}
 		}
 
-		return $tagname;
+		return self::METHOD_PREFIX . $tagname;
 	}
 }

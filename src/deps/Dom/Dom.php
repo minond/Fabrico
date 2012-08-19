@@ -122,8 +122,7 @@ class DOM
     if (!is_array($source))
     {
       $element = $document->createElement($tagName);
-      //$element->appendChild($document->createCDATASection($source));
-      $element->appendChild($document->createTextNode($source));
+      $element->appendChild($document->createCDATASection($source));
 
       return $element;
     }

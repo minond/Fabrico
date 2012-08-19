@@ -10,6 +10,12 @@ class Error {
 	const TITLE_EXCEPTION = 'Uncaught Exception';
 	const TITLE_DEFAULT = 'Error Type: ';
 
+	public static function message ($msg) {
+		$db = debug_backtrace();
+		$info = array_shift($db);
+		self::output_error(E_WARNING, $msg, $info['file'], $info['line']);
+	}
+
 	/**
 	 * handles errors, warnings, and notices
 	 *
@@ -74,7 +80,7 @@ class Error {
 	 */
 	private static function output_to_logs ($title, $message, $file, $line) {
 		Logger::error("type: {$title}");
-		Logger::error("mssg: {$message}");
+		Logger::error("message: {$message}");
 		Logger::error("file: {$file}");
 		Logger::error("line: {$line}");
 	}
@@ -88,9 +94,9 @@ class Error {
 	* @param integer line number
 	*/
 	private static function output_to_view ($title, $message, $file, $line) {
-		element('error/error');
-
+		\view\element('error/error');
 		ob_start();
+
 		\error\error::generate(array(
 			'title' => $title,
 			'message' => $message,

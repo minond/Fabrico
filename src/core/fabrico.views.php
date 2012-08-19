@@ -1,5 +1,7 @@
 <?php
 
+namespace view;
+
 /**
  * returns the path to a template file
  *
@@ -7,8 +9,8 @@
  * @return string template path
  */
 function template ($name) {
-	return Fabrico\Project::find_file(
-		Fabrico\Core::$configuration->directory->templates . $name
+	return \Fabrico\Project::find_file(
+		\Fabrico\Core::$configuration->directory->templates . $name
 	);
 }
 
@@ -29,8 +31,17 @@ function element ($name) {
 			$file = $arg;
 		}
 
-		include_once Fabrico\Project::find_file(
-			Fabrico\Core::$configuration->directory->elements . $file
+		include_once \Fabrico\Project::find_file(
+			\Fabrico\Core::$configuration->directory->elements . $file
 		);
 	}
+}
+
+/**
+ * element parameter setter
+ *
+ * @param mixed value
+ */
+function param ($data) {
+	\Fabrico\Element::argument($data);
 }

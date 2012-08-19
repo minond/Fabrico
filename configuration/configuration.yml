@@ -27,5 +27,7 @@ directory:
 
 convention:
   controller_suffix: Controller
-  controller_default: Fabrico\Controller
+  controller_default: MasterController
+  controller_default_file: master
   configuration_default: configuration
+  index_file: index

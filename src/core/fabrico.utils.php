@@ -36,7 +36,7 @@ class html {
 			if ($key === self::CONTENT_KEY) {
 				$content = $value;
 			}
-			else {
+			else if (!is_array($value) && !is_object($value)) {
 				$proplist[] = sprintf(self::PROP, $key, $value);
 			}
 		}
