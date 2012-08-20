@@ -24,6 +24,18 @@ class Element {
 	private static $argstack = [];
 
 	/**
+	 * unique content check
+	 * @var array
+	 */
+	private static $unique_content = [];
+
+	/**
+	 * unique content check
+	 * @var boolean
+	 */
+	protected static $unique;
+
+	/**
 	 * tag name
 	 * @var string
 	 */
@@ -42,6 +54,23 @@ class Element {
 	 * @return string element html
 	 */
 	public static function generate ($props = []) {
+		if (static::$unique === true) {
+			$klass = get_called_class();
+
+			if (!array_key_exists($klass, self::$unique_content)) {
+				self::$unique_content[ $klass ] = [];
+			}
+
+			if (isset($props[ self::A_CONTENT ])) {
+				if (in_array($props[ self::A_CONTENT ], self::$unique_content[ $klass ])) {
+					return '';
+				}
+				else {
+					self::$unique_content[ $klass ][] = $props[ self::A_CONTENT ];
+				}
+			}
+		}
+
 		if (static::$type) {
 			$props[ self::A_TYPE ] = static::$type;
 		}

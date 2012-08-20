@@ -1,4 +1,4 @@
-<style type="text/css">
+<f:resource:css>
 	div.error_holder {
 		cursor: default;
 		margin: 20px 10px;
@@ -22,9 +22,9 @@
 		padding-left: 10px;
 		padding-right: 10px;
 	}
-</style>
+</f:resource:css>
 
 <div class="error_holder">
-	<div class="title"><?=$title?> - <?=$file?>, <?=$line?></div>
-	<div class="message"><?=$message?></div>
+	<div class="title">#{title} - #{file}, #{line}</div>
+	<div class="message">#{message}</div>
 </div>

@@ -29,6 +29,7 @@ class script extends \Fabrico\Element {
 class css extends \Fabrico\Element {
 	protected static $tag = 'style';
 	protected static $type = 'text/css';
+	protected static $unique = true;
 
 	protected static function pregen (& $props) {
 		if (isset($props['href'])) {
