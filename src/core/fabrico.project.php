@@ -271,6 +271,20 @@ class Project {
 	}
 
 	/**
+	 * returns the paths to a template's build file
+	 *
+	 * @param string file name
+	 * @return string build file path
+	 */
+	public static function get_template_build_file ($file) {
+		return self::get_project_file(
+			Core::$configuration->directory->build . 
+			Core::$configuration->directory->templates . $file .
+			Core::$configuration->loading->suffix
+		);
+	}
+
+	/**
 	 * looks in the current project and core directories for a given file.
 	 * project directories are preferred over core files
 	 *

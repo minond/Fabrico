@@ -53,7 +53,7 @@ class Page {
 		if ($code) {
 			self::$javascript_code[ $onready ? 'ready' : 'std' ][] = $src;
 		}
-		else if (!in_array($src, self::$javascript)) {
+		else if (!in_array(sprintf(self::$tag->script, $src), self::$javascript)) {
 			self::$javascript[] = sprintf(self::$tag->script, $src);
 		}
 	}
@@ -132,7 +132,7 @@ class Page {
 			], [ $jsstr, $jscode, $cssstr ], $content);
 		}
 		else {
-			return self::$tag->start_html . "\n\t" . self::CSS .
+			return self::$tag->start_html . self::CSS .
 			       self::get_body_tag() . $content . self::$tag->end_body . "\n" .
 				   self::JAVASCRIPT . "\n" . self::JAVASCRIPT_CODE . self::$tag->end_html;
 		}
@@ -144,9 +144,9 @@ class Page {
 	public static function build () {
 		// NOTE: the build process/order needs to be redone
 		self::open();
-		echo file_get_contents(\view\template('seeing'));
+		echo file_get_contents(\view\template('seeing', true));
 		echo file_get_contents(Core::$configuration->state->view);
-		echo file_get_contents(\view\template('saw'));
+		echo file_get_contents(\view\template('saw', true));
 		self::close(true);
 
 		// stard the buffer for the build file
@@ -161,6 +161,17 @@ class Page {
 	private static function get_body_tag () {
 		return sprintf(self::$tag->start_body, '');
 	}
+
+	/**
+	 * builds and returns the path the the template file
+	 *
+	 * @param string template file name
+	 * @return string template build file path
+	 */
+	public static function get_template ($name) {
+		Build::template($name);
+		return Project::get_template_build_file($name);
+	}
 }
 
 Page::$tag = (object) [
@@ -168,7 +179,7 @@ Page::$tag = (object) [
 	'script' => '<script type="text/javascript" src="%s"></script>',
 	'css' => '<link type="text/css" rel="stylesheet" href="%s" />',
 	'start_html' => "<!doctype html>\n<html>\n\t<head>",
-	'start_body' => "\n\t</head>\n\t<body class='%s'>\n\n",
+	'start_body' => "\n\t</head>\n\t<body class='%s'>",
 	'end_body' => "\n\t</body>",
 	'end_html' => "\n</html>"
 ];

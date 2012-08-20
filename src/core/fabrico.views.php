@@ -8,7 +8,15 @@ namespace view;
  * @param string template name
  * @return string template path
  */
-function template ($name) {
+function template ($name, $building = false) {
+	if (!$building) {
+		if (is_array($name)) {
+			$name = $name['file'];
+		}
+
+		return \Fabrico\Page::get_template($name);
+	}
+
 	return \Fabrico\Project::find_file(
 		\Fabrico\Core::$configuration->directory->templates . $name
 	);

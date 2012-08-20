@@ -45,6 +45,18 @@ class Tag {
 	const EXPECTED_MATCHES = 3;
 
 	/**
+	 * @see $includes
+	 */
+	const INCLUDE_FILE = 'include ';
+
+	/**
+	 * methods that return a file path to be included
+	 *
+	 * @var array
+	 */
+	public static $includes = [ 'template' ];
+
+	/**
 	 * tracks declared tags and their settings
 	 *
 	 * @var array
@@ -481,6 +493,6 @@ class Tag {
 			}
 		}
 
-		return self::METHOD_PREFIX . $tagname;
+		return (in_array($tagname, self::$includes) ? self::INCLUDE_FILE : '') . self::METHOD_PREFIX . $tagname;
 	}
 }

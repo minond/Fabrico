@@ -62,4 +62,23 @@ class Build {
 			self::writeclean($buildf, $rawcontent);
 		}
 	}
+
+	/**
+	 * builds a new template file is it is needed
+	 *
+	 * @param string file name
+	 */
+	public static function template ($file) {
+		$buildf = Project::get_template_build_file($file);
+		$templatef = Project::find_file(
+			Core::$configuration->directory->templates . $file
+		);
+
+		if (self::build_needed($templatef, $buildf)) {
+			$rawcontent = file_get_contents($templatef);
+
+			self::makedir($buildf);
+			self::writeclean($buildf, $rawcontent);
+		}
+	}
 }
