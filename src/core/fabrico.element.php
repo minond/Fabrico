@@ -10,6 +10,7 @@ class Element {
 	const A_CONTENT = 'content';
 	const A_TYPE = 'type';
 	const A_NULL = 'null';
+	const A_CLASS = 'class';
 
 	/**
 	 * uses for open/close tag combinations
@@ -48,6 +49,12 @@ class Element {
 	protected static $type;
 
 	/**
+	 * classes
+	 * @var array
+	 */
+	protected static $classes = [];
+
+	/**
 	 * generates a new element
 	 *
 	 * @param array or properties
@@ -75,8 +82,12 @@ class Element {
 			$props[ self::A_TYPE ] = static::$type;
 		}
 
-		return static::pregen($props) !== false ?
-		       html::generate(static::$tag, $props) : '';
+		$props[ self::A_CLASS ] = [];
+		$build = static::pregen($props);
+		$props[ self::A_CLASS ] += static::$classes;
+		$props[ self::A_CLASS ] = implode(' ', $props[ self::A_CLASS ]);
+
+		return $build !== false ? html::generate(static::$tag, $props) : '';
 	}
 
 	/**
