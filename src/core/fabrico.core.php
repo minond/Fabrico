@@ -5,13 +5,34 @@ namespace Fabrico;
 class Core {
 	/**
 	 * core dependancies
-	 *
 	 * @var array
 	 */
 	public static $deps = [
 		'../deps/sfYaml/sfYaml.php',
 		'../deps/ActiveRecord/ActiveRecord.php',
 		'../deps/Dom/Dom.php'
+	];
+
+	/**
+	 * core files
+	 * @var array
+	 */
+	public static $core = [
+		'fabrico.utils.php',
+		'fabrico.log.php',
+		'fabrico.merge.php',
+		'fabrico.router.php',
+		'fabrico.project.php',
+		'fabrico.controller.php',
+		'fabrico.views.php',
+		'fabrico.page.php',
+		'fabrico.tag.php',
+		'fabrico.response.php',
+		'fabrico.build.php',
+		'fabrico.element.php',
+		'fabrico.template.php',
+		'fabrico.error.php',
+		'fabrico.arbol.php'
 	];
 
 	/**
@@ -48,11 +69,15 @@ class Core {
 	}
 
 	/**
-	 * loads core dependancies
+	 * loads core dependancies and modules
 	 */
-	public static function load_core_dependancies () {
+	public static function load_core_files () {
 		foreach (self::$deps as $dep) {
 			require_once $dep;
+		}
+
+		foreach (self::$core as $core) {
+			require_once $core;
 		}
 	}
 
@@ -216,6 +241,13 @@ class Core {
 	}
 
 	/**
+	 * initializes the session
+	 */
+	public static function start_session () {
+		session_start();
+	}
+
+	/**
 	 * initializes Active Record
 	 */
 	public static function start_active_record () {
@@ -228,5 +260,14 @@ class Core {
 				                 $db->databases[ $db->active ]
 			]);
 		});
+	}
+
+	/**
+	 * kills process on non-page request
+	 */
+	public static function request_pre_check () {
+		if (in_array($_SERVER['REQUEST_URI'], [ '/favicon.ico' ])) {
+			die;
+		}
 	}
 }

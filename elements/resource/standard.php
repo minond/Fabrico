@@ -44,3 +44,11 @@ class css extends \Fabrico\Element {
 		}
 	}
 }
+
+class img extends \Fabrico\Element {
+	protected static $tag = 'img';
+
+	protected static function pregen (& $props) {
+		$props['src'] = \Fabrico\Project::get_image_file($props['src']);
+	}
+}

@@ -16,6 +16,7 @@
 		padding-bottom: 7px;
 		margin-bottom: 7px;
 		font-weight: bold;
+		word-wrap: break-word;
 	}
 
 	div.error_holder div {

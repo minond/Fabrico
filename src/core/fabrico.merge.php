@@ -96,9 +96,21 @@ class Merge {
 	 * @param string with merge fields
 	 * @return string with php fields
 	 */
+	public static function output_string_placeholder ($string) {
+		return self::placeholder($string, function ($field) {
+			return '{$' . $field . '}';
+		});
+	}
+
+	/**
+	 * helper for generating php output tags
+	 *
+	 * @param string with merge fields
+	 * @return string with php fields
+	 */
 	public static function output_placeholder ($string) {
 		return self::placeholder($string, function ($field) {
-			return "<?= $$field ?>";
+			return '<?= $' . $field . '?>';
 		});
 	}
 }

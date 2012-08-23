@@ -45,6 +45,15 @@ class Page {
 	private static $errors = [];
 
 	/**
+	 * errors getter
+	 *
+	 * @return array of error strings
+	 */
+	public static function get_errors () {
+		return self::$errors;
+	}
+
+	/**
 	 * include a javascript file
 	 *
 	 * @param string file source

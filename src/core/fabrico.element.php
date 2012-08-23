@@ -11,6 +11,7 @@ class Element {
 	const A_TYPE = 'type';
 	const A_NULL = 'null';
 	const A_CLASS = 'class';
+	const A_ID = 'id';
 
 	/**
 	 * uses for open/close tag combinations
@@ -29,6 +30,12 @@ class Element {
 	 * @var array
 	 */
 	private static $unique_content = [];
+
+	/**
+	 * for unique ids
+	 * @var array
+	 */
+	private static $class_counter = [];
 
 	/**
 	 * unique content check
@@ -58,11 +65,13 @@ class Element {
 	 * generates a new element
 	 *
 	 * @param array or properties
+	 * @param boolean open/close tags with possbile child elements
 	 * @return string element html
 	 */
-	public static function generate ($props = []) {
+	public static function generate ($props = [], $has_children = false) {
+		$klass = get_called_class();
+
 		if (static::$unique === true) {
-			$klass = get_called_class();
 
 			if (!array_key_exists($klass, self::$unique_content)) {
 				self::$unique_content[ $klass ] = [];
@@ -82,12 +91,31 @@ class Element {
 			$props[ self::A_TYPE ] = static::$type;
 		}
 
+		// standard properties
 		$props[ self::A_CLASS ] = [];
+
+		if (!isset($props[ self::A_ID ])) {
+			$props[ self::A_ID ] = self::gen_id();
+		}
+
 		$build = static::pregen($props);
 		$props[ self::A_CLASS ] += static::$classes;
 		$props[ self::A_CLASS ] = implode(' ', $props[ self::A_CLASS ]);
 
-		return $build !== false ? html::generate(static::$tag, $props) : '';
+		if ($build !== false) {
+			if ($has_children) {
+				Arbol::closing($klass, $props[ self::A_ID ], $props);
+			}
+			else {
+				Arbol::child($klass, $props[ self::A_ID ], $props);
+			}
+
+			$html = html::generate(static::$tag, $props);
+			return $html;
+		}
+		else {
+			return '';
+		}
 	}
 
 	/**
@@ -103,6 +131,9 @@ class Element {
 
 		// create a new argument list
 		self::$argstack[] = [];
+
+		// tree structure
+		Arbol::opening($klass);
 
 		// save buffer
 		ob_start();
@@ -125,7 +156,7 @@ class Element {
 		$args[ self::A_CONTENT ] = ob_get_clean();
 
 		// generate element
-		return call_user_func([ 'self', 'generate' ], $args);
+		return call_user_func_array([ 'self', 'generate' ], [ $args, true ]);
 	}
 
 	/**
@@ -135,6 +166,25 @@ class Element {
 	 */
 	public static function argument ($value) {
 		self::$argstack[ count(self::$argstack) - 1 ][] = $value;
+	}
+
+	/**
+	 * returns a unique id
+	 *
+	 * @return string unique element id
+	 */
+	private static function gen_id () {
+		$klass = get_called_class();
+
+		if (!isset(self::$class_counter[ $klass ])) {
+			self::$class_counter[ $klass ] = 0;
+		}
+
+		return Merge::parse('#{class}_#{count}_#{session}', [
+			'class' => preg_replace('/\W/', '_', $klass),
+			'count' => ++self::$class_counter[ $klass ],
+			'session' => session_id()
+		]);
 	}
 
 	/**

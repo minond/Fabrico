@@ -383,7 +383,7 @@ class Tag {
 			case '"false"':
 				return 'false';
 			default:
-				return $val;
+				return Merge::output_string_placeholder($val);
 		}
 	}
 

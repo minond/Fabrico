@@ -65,9 +65,15 @@ class Error {
 		$file = $error->getFile();
 		$line = $error->getLine();
 		$trace = $error->getTrace();
+		$oldcontent = ob_get_clean();
 
-		self::output_to_view($title, $message, $file, $line);
 		self::output_to_logs($title, $message, $file, $line);
+		self::output_to_view($title, $message, $file, $line);
+
+		echo implode('', Page::get_errors());
+		echo html::pre([
+			'content' => print_r(debug_backtrace(), true)
+		]);
 	}
 
 	/**
