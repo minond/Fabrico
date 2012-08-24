@@ -104,10 +104,10 @@ class Element {
 
 		if ($build !== false) {
 			if ($has_children) {
-				Arbol::closing($klass, $props[ self::A_ID ], $props);
+				Arbol::closing($klass, $props[ self::A_ID ], static::$tag, $props);
 			}
 			else {
-				Arbol::child($klass, $props[ self::A_ID ], $props);
+				Arbol::child($klass, $props[ self::A_ID ], static::$tag, $props);
 			}
 
 			$html = html::generate(static::$tag, $props);

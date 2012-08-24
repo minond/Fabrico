@@ -10,9 +10,11 @@ class html {
 	 * tag merge fields
 	 */
 	const CONTENT_KEY = 'content';
+	const STYLE_KEY = 'style';
 	const OPEN_CLOSE = '<%s %s>%s</%s>';
 	const SELF_CLOSE = '<%s %s />';
 	const PROP = '%s="%s"';
+	const STYLE = '%s: %s;';
 
 	/**
 	 * self closing tag elements
@@ -35,6 +37,15 @@ class html {
 		foreach ($props as $key => $value) {
 			if ($key === self::CONTENT_KEY) {
 				$content = $value;
+			}
+			else if ($key === self::STYLE_KEY && is_array($value)) {
+				$style = '';
+
+				foreach ($value as $prop => $val) {
+					$style .= sprintf(self::STYLE, $prop, $val);
+				}
+
+				$proplist[] = sprintf(self::PROP, $key, $style);
 			}
 			else if (!is_array($value) && !is_object($value)) {
 				$proplist[] = sprintf(self::PROP, $key, $value);

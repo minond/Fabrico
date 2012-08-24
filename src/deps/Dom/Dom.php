@@ -185,7 +185,7 @@ class DOM
    * Formats a line (passed as a fields  array) as CSV and returns the CSV as a string.
    * Adapted from http://us3.php.net/manual/en/function.fputcsv.php#87120
    */
-  function arrayToCSVString (array &$fields, $delimiter = ';', $enclosure = '"', $encloseAll = false, $nullToMysqlNull = false) {
+  public static function arrayToCSVString (array &$fields, $delimiter = ';', $enclosure = '"', $encloseAll = false, $nullToMysqlNull = false) {
 	  $delimiter_esc = preg_quote($delimiter, '/');
 	  $enclosure_esc = preg_quote($enclosure, '/');
 

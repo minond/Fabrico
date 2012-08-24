@@ -53,3 +53,18 @@ function element ($name) {
 function param ($data) {
 	\Fabrico\Element::argument($data);
 }
+
+/**
+ * generates a div with a specific size
+ *
+ * @param integer height
+ * @param integer width
+ */
+function space ($data) {
+	echo \Fabrico\html::div([
+		'style' => [
+			'height' => isset($data['height']) ? "{$data['height']}px" : '0px',
+			'width' => isset($data['width']) ? "{$data['width']}px" : '0px'
+		]
+	]);
+}

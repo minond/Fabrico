@@ -24,6 +24,7 @@ class Core {
 		'fabrico.router.php',
 		'fabrico.project.php',
 		'fabrico.controller.php',
+		'fabrico.controllers.php',
 		'fabrico.views.php',
 		'fabrico.page.php',
 		'fabrico.tag.php',
@@ -85,8 +86,16 @@ class Core {
 	 * handles current request loading views and controllers
 	 */
 	public static function handle_request () {
+		// get controller information
 		$controller_info = self::$configuration->state->controller;
+		$start = microtime();
 
+		Logger::request('uri: ' . self::$configuration->state->uri);
+		Logger::request('view: ' . self::$configuration->state->uri);
+		Logger::request('controller: ' . $controller_info->controller_name);
+		Logger::request('type: ' . Router::request_method());
+
+		// load standard controller
 		require_once Project::get_controller_file(
 			self::$configuration->convention->controller_default_file
 		);
@@ -97,138 +106,11 @@ class Core {
 		}
 
 		// and instanciate it
-		$controller = "\\{$controller_info->controller_name}";
-		$controller = new $controller;
-		$view_method = Router::request_method();
-		$is_404 = false;
+		$controller = new $controller_info->controller_real_name;
 
-		Logger::request('uri: ' . self::$configuration->state->uri);
-		Logger::request('view: ' . self::$configuration->state->uri);
-		Logger::request('controller: ' . $controller_info->controller_name);
-		Logger::request('type: ' . $view_method);
-
-		switch ($view_method) {
-			case Router::R404:
-				$is_404 = true;
-			case Router::VIEW:
-			case Router::JSON:
-				// make controller data global
-				foreach ($controller as $_var => $_val) {
-					$$_var = $_val;
-				}
-
-				unset($_var);
-				unset($_val);
-
-				switch ($view_method) {
-					// load the raw view file and check build
-					case Router::VIEW:
-						// on view
-						$controller->onview();
-
-						// build view
-						Page::build();
-						require self::$configuration->state->build;
-						echo Page::close();
-						break;
-
-					case Router::R404:
-						$data_response = false;
-						
-						if (method_exists($controller, 'ondata')) {
-							// on data
-							$data_response = $controller->ondata();
-
-							if (is_array($data_response) || is_object($data_response)) {
-								$is_404 = false;
-							}
-							else {
-								$is_404 = true;
-							}
-						}
-						else {
-							$is_404 = true;
-						}
-
-						if (is_array($data_response) || is_object($data_response)) {
-							switch (Router::data_method()) {
-								case Router::JS:
-								case Router::JSON:
-									Router::type_header(Router::JSON);
-									$data = json_encode($data_response);
-
-									if (Router::data_method() === Router::JS) {
-										$data = $_REQUEST['cb'] . "({$data})";
-									}
-
-									echo $data;
-
-									break;
-
-								case Router::XML:
-									Router::type_header(Router::XML);
-									echo \DOM::arrayToXMLString($data_response, 'root', true);
-									break;
-
-								case Router::CSV:
-									Router::type_header(Router::CSV);
-									echo \DOM::arrayToCSVString($data_response, ', ');
-									break;
-
-								default:
-									$is_404 = true;
-									break;
-							}
-						}
-						
-				}
-
-				break;
-
-			case Router::METHOD:
-				$response = new Response(Response::IN_PROCESS);
-				$method = Router::req(Router::$uri->method);
-				$arguments = Router::req(Router::$uri->args);
-
-				if (!$arguments) {
-					$arguments = [];
-				}
-
-				// check if method exits
-				if (!method_exists($controller, $method)) {
-					$response->status = Response::METHOD_UNKNOWN_METHOD;
-					die($response);
-				}
-
-				// check if method is public
-				if (!in_array($method, $controller->public)) {
-					$response->status = Response::METHOD_PRIVATE_METHOD;
-					die($response);
-				}
-
-				// on method
-				$controller->onmethod();
-
-				// call the method
-				$response->status = Response::SUCCESS;
-				$response->response = call_user_func_array(
-					[ $controller, $method ],
-					$arguments
-				);
-
-				die($response);
-				break;
-
-			default:
-				$is_404 = true;
-				break;
-		}
-
-		if ($is_404) {
-			// display
-			Router::http_header(Router::R404);
-			require \view\template('redirect/404');
-		}
+		// and send it to the router
+		Router::handle_request($controller, self::$configuration->state->build, true);
+		Logger::request('time: ' . (microtime() - $start));
 	}
 
 	/**

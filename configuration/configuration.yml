@@ -27,7 +27,7 @@ directory:
 
 convention:
   controller_suffix: Controller
-  controller_default: MasterController
-  controller_default_file: master
+  controller_default: StandardController
+  controller_default_file: standard
   configuration_default: configuration
   index_file: index

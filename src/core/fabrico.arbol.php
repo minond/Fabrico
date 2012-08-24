@@ -10,6 +10,12 @@ class Arbol {
 	public $id;
 
 	/**
+	 * element tag
+	 * @var string
+	 */
+	public $tag;
+
+	/**
 	 * element type
 	 * @var string
 	 */
@@ -19,13 +25,13 @@ class Arbol {
 	 * element properties
 	 * @var array
 	 */
-	private $props;
+	public $props;
 
 	/**
 	 * element child nodes
 	 * @var array
 	 */
-	private $childnodes;
+	public $childnodes;
 
 	/**
 	 * child stack
@@ -44,14 +50,15 @@ class Arbol {
 	 *
 	 * @param string element type
 	 * @param string element id
+	 * @param string element tag
 	 * @param string element properties
 	 */
-	public static function child ($type, $id, $props) {
+	public static function child ($type, $id, $tag, & $props = [], & $children = []) {
 		if (count(self::$parents)) {
-			self::$parents[ count(self::$parents) - 1 ][] = new self($type, $id/*, $props*/);
+			self::$parents[ count(self::$parents) - 1 ][] = new self($type, $id, $tag, $props, $children);
 		}
 		else {
-			self::$children[] = new self($type, $id, $props);
+			self::$children[] = new self($type, $id, $tag, $props, $children);
 		}
 	}
 
@@ -69,10 +76,45 @@ class Arbol {
 	 *
 	 * @param string element type
 	 * @param string element id
+	 * @param string element tag
 	 * @param string element properties
 	 */
-	public static function closing ($type, $id, $props) {
-		self::$children[] = new self($type, $id, $props, array_pop(self::$parents));
+	public static function closing ($type, $id, $tag, & $props) {
+		$children = array_pop(self::$parents);
+		self::child($type, $id, $tag, $props, $children);
+	}
+
+	/**
+	 * node getter
+	 *
+	 * @param string element id
+	 * @param array of elements to search
+	 * @return mixed elemen | array of elements
+	 */
+	public static function & get ($id = '', & $pool = []) {
+		if (!$id) {
+			return self::$children;
+		}
+		else {
+			if (!count($pool)) {
+				$pool = self::$children;
+			}
+
+			foreach ($pool as $child) {
+				if ($child->id === $id) {
+					return $child;
+				}
+				else if (count($child->childnodes)) {
+					$pchild = self::get($id, $child->childnodes);
+
+					if ($pchild !== false) {
+						return $pchild;
+					}
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -80,13 +122,15 @@ class Arbol {
 	 *
 	 * @param string element type
 	 * @param string element id
+	 * @param string element tag
 	 * @param string element properties
 	 * @param string element child nodes
 	 */
-	private function __construct ($type, $id = '', $props = [], $children = []) {
-		$this->type = $type;
-		$this->props = $props;
+	private function __construct ($type, $id = '', $tag = '', & $props = [], & $children = []) {
 		$this->id = $id;
-		$this->childnodes = $children;
+		$this->tag = $tag;
+		$this->type = $type;
+		$this->props = & $props;
+		$this->childnodes = & $children;
 	}
 }

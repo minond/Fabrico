@@ -111,6 +111,8 @@ class Project {
 				break;
 			}
 		}
+
+		$controller->controller_real_name = "\\{$controller->controller_name}";
 		
 		return $controller;
 	}
@@ -324,5 +326,15 @@ class Project {
 	 */
 	public static function get_core_resource_file ($file) {
 		return Core::$configuration->loading->internal . $file;
+	}
+
+	/**
+	 * returns the path to the build file
+	 * used for data requests
+	 *
+	 * @return string view build file path
+	 */
+	public static function get_build_file_from_data () {
+		return str_replace([ '.json', '.xml', '.js' ], '', Core::$configuration->state->build);
 	}
 }

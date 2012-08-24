@@ -1,3 +1,5 @@
+<f:element file="resource/standard" />
+
 <f:resource:css>
 	div.error_holder {
 		cursor: default;
