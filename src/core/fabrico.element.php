@@ -12,6 +12,10 @@ class Element {
 	const A_NULL = 'null';
 	const A_CLASS = 'class';
 	const A_ID = 'id';
+	const A_DATA = 'data';
+	const A_KEY = 'key';
+	const A_NAME = 'name';
+	const A_LABEL = 'label';
 
 	/**
 	 * uses for open/close tag combinations

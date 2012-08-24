@@ -268,8 +268,12 @@ class Router {
 					$arguments = [];
 				}
 			
+				// check if controller allows method requests
+				if (!($_controller instanceof \Fabrico\PublicMethodController)) {
+					$res->status = Response::METHOD_PRIVATE_CLASS;
+				}
 				// check if method exits
-				if (!method_exists($_controller, $method)) {
+				else if (!method_exists($_controller, $method)) {
 					$res->status = Response::METHOD_UNKNOWN_METHOD;
 				}
 				// check if method is public
@@ -278,7 +282,7 @@ class Router {
 				}
 				else {
 					// on method
-					$_controller->onmethod();
+					$_controller->onmethod($method, $arguments);
 
 					// call the method
 					$res->status = Response::SUCCESS;

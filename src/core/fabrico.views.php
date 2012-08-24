@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * Fabrico view helpers
+ */
+
 namespace view;
 
 /**
@@ -67,4 +71,15 @@ function space ($data) {
 			'width' => isset($data['width']) ? "{$data['width']}px" : '0px'
 		]
 	]);
+}
+
+/**
+ * prints out object and kill script
+ *
+ * @param mixed data
+ */
+function dpre ($data) {
+	die(\Fabrico\html::pre([
+		'content' => print_r($data, true)
+	]));
 }

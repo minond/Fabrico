@@ -17,6 +17,16 @@ interface DataRequestController {
 }
 
 /**
+ * javascript method api controller
+ */
+interface PublicMethodController {
+	/**
+	 * called before requested method
+	 */
+	public function onmethod ($method, & $arguments);
+}
+
+/**
  * page view trait
  */
 trait PageView {
@@ -25,7 +35,7 @@ trait PageView {
 	 *
 	 * @return string build file html
 	 */
-	private function load_data_build_file () {
+	private function load_view () {
 		ob_start();
 		require Project::get_build_file_from_data();
 		return ob_get_clean();

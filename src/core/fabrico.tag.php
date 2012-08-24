@@ -367,6 +367,13 @@ class Tag {
 			return $val;
 		}
 
+		// data provider calls
+		preg_match('/^"@{.+}"$/', $val, $matches_method);
+		if (count($matches_method)) {
+			$val = preg_replace([ '/^"@{/', '/}"$/' ], [ '$_controller->', '()' ], $val);
+			return $val;
+		}
+
 		// number
 		$n_val = str_replace([ '"', '\'' ], '', $val);
 		if (is_numeric($n_val)) {
@@ -419,17 +426,6 @@ class Tag {
 			case self::TAG_OPEN:
 				return "<!-- ({$msg}) {$tag} -->";
 		}
-	}
-
-	/**
-	 * returns a php line wrapped in php tags
-	 *
-	 * @param string method
-	 * @param is method tag
-	 * @return string code
-	 */
-	private static function method2code ($method, $is_method) {
-		return $is_method ? "<? {$method} ?>" : "<?= {$method} ?>";
 	}
 
 	/**
@@ -494,5 +490,16 @@ class Tag {
 		}
 
 		return (in_array($tagname, self::$includes) ? self::INCLUDE_FILE : '') . self::METHOD_PREFIX . $tagname;
+	}
+
+	/**
+	 * returns a php line wrapped in php tags
+	 *
+	 * @param string method
+	 * @param is method tag
+	 * @return string code
+	 */
+	private static function method2code ($method, $is_method) {
+		return $is_method ? "<? {$method} ?>" : "<?= {$method} ?>";
 	}
 }

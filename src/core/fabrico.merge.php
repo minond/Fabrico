@@ -110,7 +110,7 @@ class Merge {
 	 */
 	public static function output_placeholder ($string) {
 		return self::placeholder($string, function ($field) {
-			return '<?= $' . $field . '?>';
+			return '<?= $' . $field . ' ?>';
 		});
 	}
 }
