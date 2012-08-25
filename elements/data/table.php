@@ -29,8 +29,15 @@ class table extends \Fabrico\Element {
 		array_walk($props[ self::A_DATA ], function ($row, $index) use (& $rows, & $columns) {
 			$rows[ $index ] = [];
 
+			if (is_array($row)) {
+				$tmprow = & $row;
+			}
+			else if (is_object($row)) {
+				$tmprow = (array) $row;
+			}
+
 			foreach ($columns as $column) {
-				$rows[ $index ][] = isset($row[ $column[ self::A_KEY ] ]) ? $row[ $column[ self::A_KEY ] ] : '';
+				$rows[ $index ][] = isset($tmprow[ $column[ self::A_KEY ] ]) ? $tmprow[ $column[ self::A_KEY ] ] : '';
 			}
 		});
 

@@ -31,14 +31,34 @@ interface PublicMethodController {
  */
 trait PageView {
 	/**
+	 * page content
+	 * @var string
+	 */
+	private $__content = false;
+
+	/**
 	 * loads the build file and returns its content
 	 *
 	 * @return string build file html
 	 */
 	private function load_view () {
+		if ($this->__content !== false) {
+			return $this->__content;
+		}
+
+		foreach ($this as $_var => $_val) {
+			$$_var = $_val;
+		}
+
+		unset($_var);
+		unset($_val);
+		$_controller =& $this;
+
 		ob_start();
 		require Project::get_build_file_from_data();
-		return ob_get_clean();
+		$this->__content = ob_get_clean();
+
+		return $this->__content;
 	}
 
 	/**
