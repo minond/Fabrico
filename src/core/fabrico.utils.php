@@ -93,3 +93,26 @@ class util {
 		return count($arr) ? $arr[ count($arr) - 1 ] : null;
 	}
 }
+
+/**
+ * encryption and decryption helper
+ *
+ * @name scrypt
+ */
+class scrypt {
+	public static function en ($str, $key) {
+		return base64_encode(
+			mcrypt_encrypt(
+				MCRYPT_RIJNDAEL_256, md5($key), $str, MCRYPT_MODE_CBC, md5(md5($key))
+			)
+		);
+	}
+
+	public static function de ($str, $key) {
+		return rtrim(
+			mcrypt_decrypt(
+				MCRYPT_RIJNDAEL_256, md5($key), base64_decode($str), MCRYPT_MODE_CBC, md5(md5($key))
+			), "\0"
+		);
+	}
+}

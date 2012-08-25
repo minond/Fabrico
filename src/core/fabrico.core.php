@@ -19,6 +19,7 @@ class Core {
 	 */
 	public static $core = [
 		'fabrico.utils.php',
+		'fabrico.utilsg.php',
 		'fabrico.log.php',
 		'fabrico.merge.php',
 		'fabrico.router.php',
@@ -57,6 +58,7 @@ class Core {
 		self::$configuration->state = new \stdClass();
 		self::$configuration->loading = (object) self::$configuration->loading;
 		self::$configuration->directory = (object) self::$configuration->directory;
+		self::$configuration->configuration = (object) self::$configuration->configuration;
 		self::$configuration->convention = (object) self::$configuration->convention;
 	}
 
@@ -118,8 +120,11 @@ class Core {
 	 * loads project specific configuration
 	 */
 	public static function load_project_configuration () {
+		// database configuration
 		self::$configuration->database = (object) \sfYaml::load(
-			Project::get_configuration_file('database')
+			Project::get_configuration_file(
+				Core::$configuration->configuration->database
+			)
 		);
 	}
 

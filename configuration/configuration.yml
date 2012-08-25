@@ -25,6 +25,10 @@ directory:
   logs: /internals/logs/
   build: /internals/build
 
+configuration:
+  database: database/database
+  routing: routing/routing
+
 convention:
   controller_suffix: Controller
   controller_default: StandardController

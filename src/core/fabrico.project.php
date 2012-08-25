@@ -178,12 +178,13 @@ class Project {
 	/**
 	 * finds a project configuration file
 	 *
+	 * @param boolean Yaml file
 	 * @return string
 	 */
-	public static function get_configuration_file ($file) {
+	public static function get_configuration_file ($file, $yml = true) {
 		return self::get_project_file(
 			Core::$configuration->directory->configuration . $file .
-			Core::$configuration->loading->conf
+			($yml ? Core::$configuration->loading->conf : Core::$configuration->loading->suffix)
 		);
 	}
 
