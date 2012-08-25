@@ -82,4 +82,14 @@ class util {
 	public static function ends_with ($str, $end) {
 		return substr_compare($str, $end, -strlen($end), strlen($end)) === 0;
 	}
+
+	/**
+	 * returns the last element in an array
+	 *
+	 * @param array
+	 * @return mixed
+	 */
+	public static function last ($arr) {
+		return count($arr) ? $arr[ count($arr) - 1 ] : null;
+	}
 }

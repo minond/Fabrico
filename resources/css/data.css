@@ -1,0 +1,26 @@
+/**
+ * data table styles
+ */
+.data_table {
+	border-collapse: collapse;
+}
+
+.data_table thead th {
+	font: bold 13px Arial;
+	text-align: left;
+	padding: 2px 7px 2px 3px;
+	border: 1px solid #cecece;
+	cursor: default;
+	background-color: #EFF0E5;
+}
+
+.data_table tbody td {
+	font: normal 13px Arial;
+	padding: 2px 3px;
+	border: 1px solid #cecece;
+	cursor: default;
+}
+
+.data_table tbody tr:nth-child(even) td {
+	background-color: #F7F7F7;
+}

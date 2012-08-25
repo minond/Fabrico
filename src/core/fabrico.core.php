@@ -33,7 +33,8 @@ class Core {
 		'fabrico.element.php',
 		'fabrico.template.php',
 		'fabrico.error.php',
-		'fabrico.arbol.php'
+		'fabrico.arbol.php',
+		'fabrico.dataset.php'
 	];
 
 	/**
