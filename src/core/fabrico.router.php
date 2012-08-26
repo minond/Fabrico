@@ -267,14 +267,14 @@ class Router {
 				break;
 
 			case self::UPDATE:
-				self::$req[ self::$uri->method ] = Controller::GET_NODE_CONTENT;
-				self::$req[ self::$uri->args ] = [ self::$req[ self::$uri->update ] ];
-
 			case self::METHOD:
 				$res = new Response(Response::IN_PROCESS);
-				$method = self::req(self::$uri->method);
 				$arguments = self::req(self::$uri->args);
 				$envirment = self::req(self::$uri->env);
+
+				// request types
+				$method = self::req(self::$uri->method);
+				$update = self::req(self::$uri->update);
 
 				if (!$arguments) {
 					$arguments = [];
@@ -283,32 +283,51 @@ class Router {
 				if (!$envirment) {
 					$envirment = [];
 				}
-			
-				// check if controller allows method requests
-				if (!($_controller instanceof \Fabrico\PublicMethodController)) {
-					$res->status = Response::METHOD_PRIVATE_CLASS;
+
+				if ($method) {
+					// check if controller allows method requests
+					if (!($_controller instanceof \Fabrico\PublicMethodController)) {
+						$res->status = Response::METHOD_PRIVATE_CLASS;
+					}
+					// check if method exits
+					else if (!method_exists($_controller, $method)) {
+						$res->status = Response::METHOD_UNKNOWN_METHOD;
+					}
+					// check if method is public
+					else if (!in_array($method, $_controller->public)) {
+						$res->status = Response::METHOD_PRIVATE_METHOD;
+					}
+					else {
+						// env setter
+						foreach ($envirment as $field => $value) {
+							$_controller->{ $field } = $value;
+						}
+
+						// on method
+						$_controller->onmethod($method, $arguments);
+
+						// call the method
+						$res->status = Response::SUCCESS;
+						$res->response = call_user_func_array(
+							[ $_controller, $method ], $arguments
+						);
+					}
 				}
-				// check if method exits
-				else if (!method_exists($_controller, $method)) {
-					$res->status = Response::METHOD_UNKNOWN_METHOD;
-				}
-				// check if method is public
-				else if (!in_array($method, $_controller->public)) {
-					$res->status = Response::METHOD_PRIVATE_METHOD;
-				}
-				else {
-					// env setter
-					foreach ($envirment as $field => $value) {
-						$_controller->{ $field } = $value;
+
+				if ($update && is_array($update)) {
+					if (!$method) {
+						// env setter
+						foreach ($envirment as $field => $value) {
+							$_controller->{ $field } = $value;
+						}
+
+						// on method
+						$_controller->onmethod($method, $arguments);
+						$res->status = Response::SUCCESS;
 					}
 
-					// on method
-					$_controller->onmethod($method, $arguments);
-
-					// call the method
-					$res->status = Response::SUCCESS;
-					$res->response = call_user_func_array(
-						[ $_controller, $method ], $arguments
+					$res->response = call_user_func(
+						[ $_controller, Controller::GET_NODE_CONTENT ], $update
 					);
 				}
 

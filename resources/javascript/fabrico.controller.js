@@ -58,16 +58,33 @@ Fabrico.controller.update = function (ids, env, callback, errback) {
  * @name method
  * @param string method name
  * @param array optional arguments
+ * @param array of components to update
  * @param object optional controller properties
  * @param function success handler
  * @param function error handler
  * @return Promise
  * @see request
  */
-Fabrico.controller.method = function (method, args, env, callback, errback) {
+Fabrico.controller.method = function (method, args, updates, env, callback, errback) {
 	return this.request({
-		_method: method
-	}, args, env, callback, errback);
+		_method: method,
+		_update: updates
+	}, args, env, function (response, stat, promise) {
+		if (response.status === Fabrico.controller.response.SUCCESS) {
+			if (updates && updates.length)
+				for (var i = 0, max = updates.length; i < max; i++)
+					$(document.getElementById(updates[ i ])).html(response.response[ updates[ i ] ]);
+
+			if (callback && callback instanceof Function) {
+				callback(response, stat, promise);
+			}
+		}
+		else {
+			if (errback && errback instanceof Function) {
+				errback(response, stat, promise);
+			}
+		}
+	}, errback);
 };
 
 /**
