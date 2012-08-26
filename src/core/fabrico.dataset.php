@@ -211,4 +211,15 @@ class Dataset {
 
 		return self::find($filters, true);
 	}
+
+	/**
+	 * new Dataset short-cut
+	 *
+	 * @param dataset information
+	 * @return Dataset instance
+	 */
+	public static function create ($item) {
+		$klass = get_called_class();
+		return new $klass($item);
+	}
 }
