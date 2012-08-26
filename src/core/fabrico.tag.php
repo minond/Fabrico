@@ -12,6 +12,7 @@ class Tag {
 	 * tag format
 	 */
 	const ROOT = 'f';
+	const CUSTOM = 'c';
 	const SEPARATOR = ':';
 	const MAX_ITERATIONS = 1000;
 
@@ -50,36 +51,37 @@ class Tag {
 	const INCLUDE_FILE = 'include ';
 
 	/**
+	 * custom tags
+	 * @var array
+	 */
+	private static $custom_tags = [];
+
+	/**
 	 * methods that return a file path to be included
-	 *
 	 * @var array
 	 */
 	public static $includes = [ 'template' ];
 
 	/**
 	 * tracks declared tags and their settings
-	 *
 	 * @var array
 	 */
 	public static $tags = [];
 
 	/**
 	 * tag namespace <root:namespace:name />
-	 *
 	 * @var string
 	 */
 	public $namespace;
 
 	/**
 	 * tag name <root:namespace:name />
-	 *
 	 * @var string
 	 */
 	public $name;
 
 	/**
 	 * full tag name <root:namespace:name />
-	 *
 	 * @var string
 	 */
 	public $tag;
@@ -143,12 +145,17 @@ class Tag {
 		$start_time = time();
 		$taginfo = [];
 
-		// parse for custom tags
+		// parse for fabrico tags
 		self::scan_string($html, sprintf(self::TAG_MATCH_METHOD_EMPTY, self::ROOT), self::TAG_SINGLE, $taginfo);
 		self::scan_string($html, sprintf(self::TAG_MATCH_METHOD, self::ROOT), self::TAG_SINGLE, $taginfo);
 		self::scan_string($html, sprintf(self::TAG_MATCH_SINGLE, self::ROOT), self::TAG_SINGLE, $taginfo);
 		self::scan_string($html, sprintf(self::TAG_MATCH_OPEN, self::ROOT), self::TAG_OPEN, $taginfo);
 		self::scan_string($html, sprintf(self::TAG_MATCH_CLOSE, self::ROOT), self::TAG_CLOSE, $taginfo);
+
+		// parse for custom tags
+		self::scan_string($html, sprintf(self::TAG_MATCH_SINGLE, self::CUSTOM), self::TAG_SINGLE, $taginfo, true);
+		self::scan_string($html, sprintf(self::TAG_MATCH_OPEN, self::CUSTOM), self::TAG_OPEN, $taginfo, true);
+		self::scan_string($html, sprintf(self::TAG_MATCH_CLOSE, self::CUSTOM), self::TAG_CLOSE, $taginfo, true);
 
 		// merge tags into the html code
 		return self::clean_string($html, $taginfo, $start_time);
@@ -208,7 +215,7 @@ class Tag {
 	 * @param int tag type search
 	 * @param array storage reference
 	 */
-	private static function scan_string ($html, $match_regex, $tag_type, & $tag_storage) {
+	private static function scan_string ($html, $match_regex, $tag_type, & $tag_storage, $custom = false) {
 		$lastoffset = 0;
 
 		for ($i = 0; $i < self::MAX_ITERATIONS; $i++) {
@@ -216,7 +223,7 @@ class Tag {
 
 			if (count($matches) === self::EXPECTED_MATCHES) {
 				$lastoffset = strlen($matches[ 0 ][ 0 ]) + $matches[ 0 ][ 1 ];
-				$tag_storage[] = self::build_tag($matches, $tag_type);
+				$tag_storage[] = self::build_tag($matches, $tag_type, $custom);
 			}
 			else if (!count($matches)) {
 				break;
@@ -269,9 +276,10 @@ class Tag {
 	 *
 	 * @param array tag match information
 	 * @param integer tag type (open, close, single)
+	 * @param boolean custom string tag
 	 * @return object tag replacement information
 	 */
-	private static function build_tag ($matchinfo, $type) {
+	private static function build_tag ($matchinfo, $type, $custom = false) {
 		$is_method = count(explode(':', explode(' ', $matchinfo[ 0 ][ 0 ], 2)[ 0 ])) === 2;
 		$tag = new \stdClass;
 		$rawtag = $matchinfo[ 0 ][ 0 ];
@@ -289,10 +297,16 @@ class Tag {
 				count($attrstring) === 2 ?
 				$attrstring[ 1 ] : ''
 			);
-		
-			$tagname = self::ROOT . self::SEPARATOR .
-			           $matchinfo[ 1 ][ 0 ] . self::SEPARATOR .
-					   $attrstring[ 0 ];
+
+			if ($custom) {
+				$namespace = $matchinfo[ 1 ][ 0 ];
+				$tagname = $attrstring[ 0 ];
+			}
+			else {
+				$tagname = self::ROOT . self::SEPARATOR .
+				           $matchinfo[ 1 ][ 0 ] . self::SEPARATOR .
+						   $attrstring[ 0 ];
+			}
 		}
 
 
@@ -306,13 +320,81 @@ class Tag {
 			self::ERROR_UNKNOWN_TAG
 		);
 
-		$tag->replacement_string = self::method2code(
-			self::tag2method($tagname, $type, $is_method) .
-			self::args2string($tag->attrs, $type, $is_method),
-			$is_method
-		);
+		if (!$custom) {
+			$tag->replacement_string = self::method2code(
+				self::tag2method($tagname, $type, $is_method) .
+				self::args2string($tag->attrs, $type, $is_method),
+				$is_method
+			);
+		}
+		else {
+			$tag->replacement_string = self::build_custom_tag(
+				$namespace,
+				$tagname,
+				$type,
+				$tag->attrs
+			);
+		}
 
 		return $tag;
+	}
+
+	/**
+	 * builds a custom tag
+	 *
+	 * @param string tag namespace
+	 * @param string tag name
+	 * @param integer tag type
+	 * @param array of attributes
+	 * @return string tag string
+	 */
+	public static function build_custom_tag ($namespace, $tagname, $type, $attrs = []) {
+		if (!self::tag_exist($namespace, $tagname)) {
+			return self::invalid_tag_error($namespace, $tagname);
+		}
+
+		return call_user_func_array(
+			self::$custom_tags[ $namespace ][ $tagname ],
+			[ $type, $attrs ]
+		);
+	}
+
+	/**
+	 * generates an invalid tag error
+	 * 
+	 * @param string tag namespace
+	 * @param string tag name
+	 * @return string invalid tag error
+	 */
+	private static function invalid_tag_error ($namespace, $tagname) {
+		return "<? throw new Exception('Invalid tag {$namespace}:{$tagname}'); ?>";
+	}
+
+	/**
+	 * check if a custom tag has been registered
+	 *
+	 * @param string tag namespace
+	 * @param string tag name
+	 * @return boolean tag is registered
+	 */
+	private static function tag_exist ($namespace, $tagname) {
+		return isset(self::$custom_tags[ $namespace ]) &&
+		       isset(self::$custom_tags[ $namespace ][ $tagname ]);
+	}
+
+	/**
+	 * resisters a custom tag
+	 *
+	 * @param string tag namespace
+	 * @param string tag name
+	 * @param callable tag builder
+	 */
+	public static function register_tag ($namespace, $tagname, $builder) {
+		if (!isset(self::$custom_tags[ $namespace ])) {
+			self::$custom_tags[ $namespace ] = [];
+		}
+
+		self::$custom_tags[ $namespace ][ $tagname ] = $builder;
 	}
 
 	/**
@@ -493,6 +575,23 @@ class Tag {
 	}
 
 	/**
+	 * returns the value of an attribute
+	 *
+	 * @param array of attributes
+	 * @param string attribute label
+	 * @return string attribute value
+	 */
+	public static function attr_val (& $attrs, $label) {
+		foreach ($attrs as $index => $attr) {
+			if ($attr->label === $label) {
+				return $attr->value;
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * returns a php line wrapped in php tags
 	 *
 	 * @param string method
@@ -503,3 +602,16 @@ class Tag {
 		return $is_method ? "<? {$method} ?>" : "<?= {$method} ?>";
 	}
 }
+
+
+Tag::register_tag('fn', 'loop', function ($type, $attrs) {
+	switch ($type) {
+		case Tag::TAG_CLOSE:
+			return '<?php endforeach ?>';
+
+		case Tag::TAG_OPEN:
+			$over = Tag::attr_val($attrs, 'over');
+			$tag = Tag::attr_val($attrs, 'key');
+			return "<?php foreach ({$over} as \${$tag}): ?>";
+	}
+});

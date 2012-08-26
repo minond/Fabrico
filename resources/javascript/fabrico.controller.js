@@ -70,8 +70,8 @@ Fabrico.controller.update = function (ids, env, callback, errback) {
  * @see request
  */
 Fabrico.controller.method = function (method, args, updates, env, callback, errback) {
-	if (!$.isArray(ids)) {
-		ids = [ ids ];
+	if (!$.isArray(updates)) {
+		updates = [ updates ];
 	}
 
 	return this.request({
