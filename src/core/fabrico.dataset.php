@@ -88,13 +88,22 @@ class Dataset {
 	 * clears the session storage
 	 */
 	public static function clear () {
+		$klass = get_called_class();
+
 		switch (static::$__storage) {
 			case self::SESSION:
-				unset($_SESSION[ self::ROOT ]);
+				if ($klass === 'Fabrico\Dataset') {
+					unset($_SESSION[ self::ROOT ]);
+				}
+				else if (isset($_SESSION[ self::ROOT ][ $klass ])) {
+					unset($_SESSION[ self::ROOT ][ $klass ]);
+				}
+
 				break;
 		}
 
 		self::initialize();
+		return true;
 	}
 
 	/**

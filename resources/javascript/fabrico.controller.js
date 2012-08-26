@@ -40,6 +40,10 @@ Fabrico.controller.receiver = function (src) {
  * @param function error handler
  */
 Fabrico.controller.update = function (ids, env, callback, errback) {
+	if (!$.isArray(ids)) {
+		ids = [ ids ];
+	}
+
 	return this.request({
 		_update: ids
 	}, [], env, function (response, stat, promise) {
@@ -66,6 +70,10 @@ Fabrico.controller.update = function (ids, env, callback, errback) {
  * @see request
  */
 Fabrico.controller.method = function (method, args, updates, env, callback, errback) {
+	if (!$.isArray(ids)) {
+		ids = [ ids ];
+	}
+
 	return this.request({
 		_method: method,
 		_update: updates
