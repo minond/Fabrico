@@ -16,6 +16,7 @@ class Element {
 	const A_KEY = 'key';
 	const A_NAME = 'name';
 	const A_LABEL = 'label';
+	const A_FORMAT = 'format';
 
 	/**
 	 * uses for open/close tag combinations

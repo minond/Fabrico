@@ -68,6 +68,25 @@ trait PageView {
 	 * @return Arbol node
 	 */
 	private function get_node ($id = '') {
+		if ($this->__content === false) {
+			$this->load_view();
+		}
+
 		return Arbol::get($id);
+	}
+}
+
+/**
+ * page update trait
+ */
+trait PageUpdate {
+	public function get_node_content ($ids) {
+		$updates = [];
+
+		foreach ($ids as $id) {
+			$updates[ $id ] = $this->get_node($id)->props[ Element::A_CONTENT ];
+		}
+
+		return $updates;
 	}
 }

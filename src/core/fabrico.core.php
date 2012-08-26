@@ -14,19 +14,27 @@ class Core {
 	];
 
 	/**
+	 * helper files
+	 * @var array
+	 */
+	public static $help = [
+		'../help/fabrico.format.php',
+		'../help/fabrico.controllers.php',
+		'../help/fabrico.views.php',
+		'../help/fabrico.merge.php',
+		'../help/fabrico.utils.php'
+	];
+
+	/**
 	 * core files
 	 * @var array
 	 */
 	public static $core = [
 		'fabrico.utils.php',
-		'fabrico.utilsg.php',
 		'fabrico.log.php',
-		'fabrico.merge.php',
 		'fabrico.router.php',
 		'fabrico.project.php',
 		'fabrico.controller.php',
-		'fabrico.controllers.php',
-		'fabrico.views.php',
 		'fabrico.page.php',
 		'fabrico.tag.php',
 		'fabrico.response.php',
@@ -35,6 +43,7 @@ class Core {
 		'fabrico.template.php',
 		'fabrico.error.php',
 		'fabrico.arbol.php',
+		'fabrico.state.php',
 		'fabrico.dataset.php'
 	];
 
@@ -76,12 +85,10 @@ class Core {
 	 * loads core dependancies and modules
 	 */
 	public static function load_core_files () {
-		foreach (self::$deps as $dep) {
-			require_once $dep;
-		}
+		$files = array_merge([], self::$deps, self::$help, self::$core);
 
-		foreach (self::$core as $core) {
-			require_once $core;
+		foreach ($files as $file) {
+			require_once $file;
 		}
 	}
 
@@ -108,11 +115,15 @@ class Core {
 			require_once $controller_info->file_path;
 		}
 
-		// and instanciate it
+		// and instanciate it and load state
 		$controller = new $controller_info->controller_real_name;
+		State::load($controller);
 
 		// and send it to the router
 		Router::handle_request($controller, self::$configuration->state->build, true);
+
+		// clean up
+		State::save($controller);
 		Logger::request('time: ' . (microtime() - $start));
 	}
 

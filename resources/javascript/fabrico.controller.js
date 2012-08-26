@@ -9,6 +9,10 @@ Fabrico.controller = {
 		IN_PROCESS: "in_process",
 		PRIVATE_METHOD: "private_method",
 		UNKNOWN_METHOD: "unknown_method"
+	},
+
+	std: {
+		get_node_content: 'get_node_content'
 	}
 };
 
@@ -27,6 +31,28 @@ Fabrico.controller.receiver = function (src) {
 	this.DESTINATION = src || location.href;
 	return this;
 };
+
+/**
+ * element update helper
+ * @param array of element ids
+ * @param object optional controller properties
+ * @param function success handler
+ * @param function error handler
+ */
+Fabrico.controller.update = function (ids, env, callback, errback) {
+	return this.request({
+		_update: ids
+	}, [], env, function (response, stat, promise) {
+		if (response.status === Fabrico.controller.response.SUCCESS) {
+			for (var i = 0, max = ids.length; i < max; i++)
+				$(document.getElementById(ids[ i ])).html(response.response[ ids[ i ] ]);
+
+			if (callback && callback instanceof Function) {
+				callback(response, stat, promise);
+			}
+		}
+	}, errback);
+}
 
 /**
  * @name method

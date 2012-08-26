@@ -15,6 +15,7 @@ class Router {
 	const R404 = '404';
 	const VIEW = 'VIEW';
 	const METHOD = 'METHOD';
+	const UPDATE = 'UPDATE';
 	const ERROR = 'ERROR';
 	const JSON = 'JSON';
 	const JS = 'JS';
@@ -45,7 +46,9 @@ class Router {
 		'id' => 'id',
 		'file' => '_file',
 		'args' => '_args',
+		'env' => '_env',
 		'method' => '_method',
+		'update' => '_update',
 		'debug' => '_debug',
 		'success' => '_success',
 		'failure' => '_failure',
@@ -149,6 +152,10 @@ class Router {
 				else {
 					$type = self::R404;
 				}
+			}
+			else if (isset(self::$req[ self::$uri->update ]) &&
+				self::request_method_http() === self::POST) {
+					$type = self::UPDATE;
 			}
 			else if (isset(self::$req[ self::$uri->method ]) &&
 				self::request_method_http() === self::POST) {
@@ -259,13 +266,22 @@ class Router {
 
 				break;
 
+			case self::UPDATE:
+				self::$req[ self::$uri->method ] = Controller::GET_NODE_CONTENT;
+				self::$req[ self::$uri->args ] = [ self::$req[ self::$uri->update ] ];
+
 			case self::METHOD:
 				$res = new Response(Response::IN_PROCESS);
 				$method = self::req(self::$uri->method);
 				$arguments = self::req(self::$uri->args);
+				$envirment = self::req(self::$uri->env);
 
 				if (!$arguments) {
 					$arguments = [];
+				}
+
+				if (!$envirment) {
+					$envirment = [];
 				}
 			
 				// check if controller allows method requests
@@ -281,6 +297,11 @@ class Router {
 					$res->status = Response::METHOD_PRIVATE_METHOD;
 				}
 				else {
+					// env setter
+					foreach ($envirment as $field => $value) {
+						$_controller->{ $field } = $value;
+					}
+
 					// on method
 					$_controller->onmethod($method, $arguments);
 

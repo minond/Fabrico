@@ -205,6 +205,10 @@ class Dataset {
 	 * @return mixed Dataset instance
 	 */
 	public static function get ($filters) {
+		if (!is_array($filters)) {
+			$filters = [ '__id' => $filters ];
+		}
+
 		return self::find($filters, true);
 	}
 }

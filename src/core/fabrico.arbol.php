@@ -91,7 +91,7 @@ class Arbol {
 	 * @param array of elements to search
 	 * @return mixed elemen | array of elements
 	 */
-	public static function & get ($id = '', & $pool = []) {
+	public static function get ($id = '', & $pool = []) {
 		if (!$id) {
 			return self::$children;
 		}
