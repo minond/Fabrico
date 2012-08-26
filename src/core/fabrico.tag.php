@@ -355,7 +355,7 @@ class Tag {
 
 		return call_user_func_array(
 			self::$custom_tags[ $namespace ][ $tagname ],
-			[ $type, $attrs ]
+			[ $type, $attrs, function ($label) use (& $attrs) { return self::attr_val($attrs, $label); } ]
 		);
 	}
 
@@ -366,8 +366,18 @@ class Tag {
 	 * @param string tag name
 	 * @return string invalid tag error
 	 */
-	private static function invalid_tag_error ($namespace, $tagname) {
-		return "<? throw new Exception('Invalid tag {$namespace}:{$tagname}'); ?>";
+	public static function invalid_tag_error ($namespace, $tagname) {
+		return self::error("Invalid tag {$namespace}:{$tagname}");
+	}
+
+	/**
+	 * generates an error tag
+	 *
+	 * @param string message
+	 * @return string error tag
+	 */
+	public static function error ($msg) {
+		return "<? throw new Exception('Tag Error: {$msg}'); ?>";
 	}
 
 	/**
@@ -601,17 +611,40 @@ class Tag {
 	private static function method2code ($method, $is_method) {
 		return $is_method ? "<? {$method} ?>" : "<?= {$method} ?>";
 	}
+
+	/**
+	 * @see method2code
+	 *
+	 * @param string method
+	 * @return string code
+	 */
+	public static function code ($method) {
+		return self::method2code($method, true);
+	}
 }
 
 
-Tag::register_tag('fn', 'loop', function ($type, $attrs) {
+Tag::register_tag('fn', 'loop', function ($type, $attrs, $attr) {
 	switch ($type) {
+		case Tag::TAG_SINGLE:
+			return Tag::error('Loop tags cannot be self-closing');
+
 		case Tag::TAG_CLOSE:
-			return '<?php endforeach ?>';
+			return Tag::code('endforeach');
 
 		case Tag::TAG_OPEN:
-			$over = Tag::attr_val($attrs, 'over');
-			$tag = Tag::attr_val($attrs, 'key');
-			return "<?php foreach ({$over} as \${$tag}): ?>";
+			if ($attr('index')) {
+				return Tag::code(Merge::parse('foreach (#{data} as $#{index} => $#{key}):', [
+					'data' => $attr('over'),
+					'index' => $attr('index'),
+					'key' => $attr('key')
+				]));
+			}
+			else {
+				return Tag::code(Merge::parse('foreach (#{data} as $#{key}):', [
+					'data' => $attr('over'),
+					'key' => $attr('key')
+				]));
+			}
 	}
 });

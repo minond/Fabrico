@@ -6,7 +6,7 @@ class Merge {
 	/**
 	 * merge field selector
 	 */
-	const SELECTOR = '/\\#\{\w+?\}/';
+	const SELECTOR = '/\\#\{.+?\}/';
 
 	/**
 	 * iteration limit
@@ -44,7 +44,7 @@ class Merge {
 	 * @return string merge field name
 	 */
 	private static function get_merge_field ($raw) {
-		return str_replace([ '#{', '}' ], '', $raw);
+		return str_replace([ '#{', '}', '.' ], [ '', '', '->' ], $raw);
 	}
 
 	/**
@@ -55,9 +55,7 @@ class Merge {
 	 * @return string merged string
 	 */
 	public static function parse ($string, $mergevalues) {
-		$mergefields = self::get_merge_fields($string);
-
-		foreach ($mergefields as $field) {
+		foreach (self::get_merge_fields($string) as $field) {
 			$cfield = self::get_merge_field($field);
 			$value = array_key_exists($cfield, $mergevalues) ?
 			         $mergevalues[ $cfield ] : '';
