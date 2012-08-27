@@ -445,13 +445,6 @@ class Tag {
 	 * @return midex
 	 */
 	private static function parse_value ($val) {
-		// merge fields
-		preg_match('/^"#{.+}"$/', $val, $matches_variable);
-		if (count($matches_variable)) {
-			$val = '$' . preg_replace(['/^"#{/', '/}"$/' ], '', $val);
-			return $val;
-		}
-
 		// method calls
 		preg_match('/^"%{.+}"$/', $val, $matches_method);
 		if (count($matches_method)) {
@@ -621,6 +614,16 @@ class Tag {
 	public static function code ($method) {
 		return self::method2code($method, true);
 	}
+
+	/**
+	 * @see method2code
+	 *
+	 * @param string method
+	 * @return string code
+	 */
+	public static function output ($method) {
+		return self::method2code($method, false);
+	}
 }
 
 
@@ -646,5 +649,51 @@ Tag::register_tag('fn', 'loop', function ($type, $attrs, $attr) {
 					'key' => $attr('key')
 				]));
 			}
+	}
+});
+
+Tag::register_tag('fn', 'conditional', function ($type, $attrs, $attr) {
+	switch ($type) {
+		case Tag::TAG_CLOSE:
+			return Tag::code('endif');
+
+		case Tag::TAG_SINGLE:
+		case Tag::TAG_OPEN:
+			$tag = Tag::TAG_OPEN ? 'if' : 'elseif';
+
+			if ($attr('yes')) {
+				return Tag::code(Merge::parse('#{tag} (#{check}):', [
+					'check' => $attr('yes'),
+					'tag' => $tag
+				]));
+			}
+			else if ($attr('no')) {
+				return Tag::code(Merge::parse('#{tag} (!#{check}):', [
+					'check' => $attr('no'),
+					'tag' => $tag
+				]));
+			}
+			else if ($type === Tag::TAG_SINGLE) {
+				return Tag::code('else:');
+			}
+			else {
+				return Tag::error('Conditional tag (no self-closing) requires a check type');
+			}
+	}
+});
+
+Tag::register_tag('js', 'obj', function ($type, $attrs, $attr) {
+	if ($attr('_')) {
+		return Tag::output("json_encode({$attr('_')})");
+	}
+	else {
+		$obj = [];
+
+		foreach ($attrs as $index => $attr) {
+			$obj[ $attr->label ] = Tag::output($attr->value);
+		}
+
+		return json_encode($obj, JSON_UNESCAPED_SLASHES);
+		return Tag::output("json_encode({$obj})");
 	}
 });

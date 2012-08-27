@@ -168,6 +168,31 @@ class Dataset {
 	}
 
 	/**
+	 * deletes a data set
+	 *
+	 * @param integer dataset id
+	 * @return boolean true if deleted
+	 */
+	public static function remove ($id) {
+		self::initialize();
+		$name = get_called_class();
+		$id = (int) $id;
+
+		if (isset(self::$__memory[ $name ])) {
+			foreach (self::$__memory[ $name ] as $index => $set) {
+				$tmp = json_decode($set);
+
+				if ($tmp->__id === $id) {
+					unset(self::$__memory[ $name ][ $index ]);
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * finds a data set
 	 *
 	 * @param array of filters
