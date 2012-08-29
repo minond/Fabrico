@@ -60,7 +60,11 @@ class Page {
 	 */
 	public static function include_javascript ($src, $code = false, $onready = false) {
 		if ($code) {
-			self::$javascript_code[ $onready ? 'ready' : 'std' ][] = $src;
+			$loc = $onready ? 'ready' : 'std';
+
+			if (!in_array($src, self::$javascript_code[ $loc ])) {
+				self::$javascript_code[ $loc ][] = $src;
+			}
 		}
 		else if (!in_array(sprintf(self::$tag->script, $src), self::$javascript)) {
 			self::$javascript[] = sprintf(self::$tag->script, $src);

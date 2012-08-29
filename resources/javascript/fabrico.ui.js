@@ -10,6 +10,22 @@ Fabrico.ui = {
 	},
 
 	/**
+	 * prevent submit action with submit event lister
+	 * that triggers the submit button's click action
+	 */
+	no_submit_ajax_form: function () {
+		return $("form.ajax").live("submit", function (e) {
+			$sub = $("input.submit", this);
+
+			if ($sub.length) {
+				e.preventDefault();
+				$sub.trigger("click");
+				return false;
+			}
+		});
+	},
+
+	/**
 	 * method and action links always have an href of hash
 	 * disable them, as js runs when they're clicked.
 	 *
@@ -17,7 +33,7 @@ Fabrico.ui = {
 	 * @return array of action links
 	 */
 	no_action_links: function () {
-		return $("a[href='#']").click(function (e) {
+		return $("a[href='#']").live("click", function (e) {
 			e.preventDefault();
 		});
 	},

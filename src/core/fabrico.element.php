@@ -43,6 +43,18 @@ class Element {
 	private static $class_counter = [];
 
 	/**
+	 * standard arguments
+	 * @var array
+	 */
+	protected static $getopt = [];
+
+	/**
+	 * arguments to unset before generating element
+	 * @var array
+	 */
+	protected static $ignore = [];
+
+	/**
 	 * unique content check
 	 * @var boolean
 	 */
@@ -52,7 +64,7 @@ class Element {
 	 * tag name
 	 * @var string
 	 */
-	protected static $tag;
+	protected static $tag = 'span';
 	
 	/**
 	 * tag type
@@ -96,27 +108,59 @@ class Element {
 			$props[ self::A_TYPE ] = static::$type;
 		}
 
-		// standard properties
-		$props[ self::A_CLASS ] = [];
+		// passed classes
+		if (isset($props[ self::A_CLASS ]) && is_string($props[ self::A_CLASS ])) {
+			$props[ self::A_CLASS ] = explode(' ', $props[ self::A_CLASS ]);
+		}
+		else {
+			$props[ self::A_CLASS ] = [];
+		}
 
 		if (!isset($props[ self::A_ID ])) {
 			$props[ self::A_ID ] = self::gen_id();
 		}
 
-		$build = static::pregen($props);
+		// check for new-mode pregen function
+		if (count(static::$getopt)) {
+			$props = (object) $props;
+
+			foreach (static::$getopt as $opt) {
+				if (!property_exists($props, $opt)) {
+					$props->{ $opt } = null;
+				}
+			}
+
+			$build = static::pregen($props);
+			$props = (array) $props;
+
+			if (count(static::$ignore)) {
+				foreach (static::$ignore as $ignore) {
+					if (isset($props[ $ignore ])) {
+						unset($props[ $ignore ]);
+					}
+				}
+			}
+		}
+		else {
+			$build = static::pregen($props);
+		}
+
 		$props[ self::A_CLASS ] += static::$classes;
 		$props[ self::A_CLASS ] = implode(' ', $props[ self::A_CLASS ]);
 
-		if ($build !== false) {
-			if ($has_children) {
-				Arbol::closing($klass, $props[ self::A_ID ], static::$tag, $props);
-			}
-			else {
-				Arbol::child($klass, $props[ self::A_ID ], static::$tag, $props);
-			}
+		if (!$props[ self::A_CLASS ]) {
+			unset($props[ self::A_CLASS ]);
+		}
 
-			$html = html::generate(static::$tag, $props);
-			return $html;
+		if ($has_children) {
+			Arbol::closing($klass, $props[ self::A_ID ], static::$tag, $props);
+		}
+		else {
+			Arbol::child($klass, $props[ self::A_ID ], static::$tag, $props);
+		}
+
+		if ($build !== false && static::$tag !== false) {
+			return trim(html::generate(static::$tag, $props));
 		}
 		else {
 			return '';
@@ -158,7 +202,7 @@ class Element {
 		$args[ self::A_PARAM ] = array_pop(self::$argstack);
 
 		// get content
-		$args[ self::A_CONTENT ] = ob_get_clean();
+		$args[ self::A_CONTENT ] = trim(ob_get_clean());
 
 		// generate element
 		return call_user_func_array([ 'self', 'generate' ], [ $args, true ]);

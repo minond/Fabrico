@@ -21,6 +21,11 @@ class Controller {
 	public $track = [];
 
 	/**
+	 * called after setting state
+	 */
+	public function initialize () {}
+
+	/**
 	 * on view virtual method
 	 */
 	public function onview () {}

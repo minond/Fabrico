@@ -1,6 +1,6 @@
 <f:element file="resource/standard" />
 
-<f:resource:css>
+<f:resource:style>
 	div.error_holder {
 		cursor: default;
 		margin: 20px 10px;
@@ -25,7 +25,7 @@
 		padding-left: 10px;
 		padding-right: 10px;
 	}
-</f:resource:css>
+</f:resource:style>
 
 <div class="error_holder">
 	<div class="title">#{title} - #{file}, #{line}</div>

@@ -2,6 +2,44 @@
 
 namespace view\action;
 
+class linkto extends \Fabrico\Element {
+	protected static $tag = 'a';
+	protected static $getopt = [ 'href' ];
+
+	protected static function pregen (& $props) {
+		if (!$props->href) {
+			$props->href = '#';
+			\Fabrico\Page::include_javascript('Fabrico.ui.no_action_links();', true, true);
+		}
+	}
+}
+
+class event extends \Fabrico\Element {
+	const BIND = '$("#{selector}").#{on}(#{method});';
+	const LIVE = '$("#{selector}").live("#{on}", #{method});';
+
+	protected static $getopt = [
+		'selector',
+		'method',
+		'live',
+		'on'
+	];
+
+	protected static function pregen (& $props) {
+		\Fabrico\Page::include_javascript(
+			\Fabrico\Merge::parse(
+				$props->live ? self::LIVE : self::BIND, [
+					'selector' => $props->selector,
+					'method' => $props->method,
+					'on' => $props->on
+				]
+			), true, true
+		);
+
+		return false;
+	}
+}
+
 class method extends \Fabrico\Element {
 	/**
 	 * errors
@@ -19,12 +57,13 @@ class method extends \Fabrico\Element {
 	const ASSIGNTO = 'assignto';
 	const COMMA = ', ';
 	const QUOTE = '"';
-	const PROP = '": "';
+	const PROP = '": ';
 	const UPDATES = 'update';
 	const FORMDATA = 'formdata';
 	const SELECTOR = 'selector';
 	const ON = 'on';
 	const DATASET = 'dataset';
+	const BINDTO = 'bindto';
 
 	/**
 	 * controller method call code
@@ -87,8 +126,11 @@ JS;
 					}
 					else {
 						$uniqueenv[] = $param[ self::ASSIGNTO ];
-						$envargs[] = self::QUOTE . $param[ self::ASSIGNTO ] .
-						             self::PROP . $param[ self::VALUE ] . self::QUOTE;
+						$envargs[] = self::QUOTE . $param[ self::ASSIGNTO ] . self::PROP . 
+						             (isset($param[ self::BINDTO ]) ?
+									 	('$("' . $param[ self::BINDTO ] . '").val()') :
+						             	(self::QUOTE . $param[ self::VALUE ] . self::QUOTE)
+									 );
 					}
 				}
 			}

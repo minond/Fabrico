@@ -249,6 +249,18 @@ class Project {
 	}
 
 	/**
+	 * returns the path to a project resource file
+	 *
+	 * @param string file name
+	 * @return string full file path
+	 */
+	public static function get_resource_file ($file) {
+		return self::get_project_file(
+			Core::$configuration->directory->resource . $file
+		);
+	}
+
+	/**
 	 * finds an include file
 	 *
 	 * @return string

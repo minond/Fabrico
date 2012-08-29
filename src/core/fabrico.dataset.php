@@ -168,6 +168,15 @@ class Dataset {
 	}
 
 	/**
+	 * returns the number of element in a dataset
+	 * @return integer dataset count
+	 */
+	public static function len () {
+		self::initialize();
+		return count(self::$__memory[ get_called_class() ]);
+	}
+
+	/**
 	 * deletes a data set
 	 *
 	 * @param integer dataset id
@@ -254,6 +263,9 @@ class Dataset {
 	 */
 	public static function create ($item) {
 		$klass = get_called_class();
-		return new $klass($item);
+		$ds = new $klass($item);
+		$ds->save();
+
+		return $ds;
 	}
 }

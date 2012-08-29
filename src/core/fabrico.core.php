@@ -22,6 +22,9 @@ class Core {
 		'../help/fabrico.controllers.php',
 		'../help/fabrico.views.php',
 		'../help/fabrico.merge.php',
+		'../help/fabrico.test.php',
+		'../help/fabrico.page.php',
+		'../help/fabrico.pagination.php',
 		'../help/fabrico.utils.php'
 	];
 

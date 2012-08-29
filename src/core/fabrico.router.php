@@ -211,6 +211,7 @@ class Router {
 	public static function handle_request (& $_controller, $_view, $_build = false) {
 		switch (self::request_method()) {
 			case self::VIEW:
+				$_controller->initialize();
 				$_controller->onview();
 
 				// make the controller data global in this scope
@@ -241,6 +242,7 @@ class Router {
 						case self::JS:
 						case self::JSON:
 							self::type_header(Router::JSON);
+							$_controller->initialize();
 							$data = json_encode(
 								$_controller->ondata(self::request_method())
 							);
@@ -304,6 +306,7 @@ class Router {
 						}
 
 						// on method
+						$_controller->initialize();
 						$_controller->onmethod($method, $arguments);
 
 						// call the method

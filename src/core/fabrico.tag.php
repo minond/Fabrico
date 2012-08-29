@@ -490,8 +490,10 @@ class Tag {
 		$date = date('Y-m-d H:i:s');
 		$time = time() - $start;
 		return "\n\n<!-- build date: {$date} -->" .
-		       "\n<!-- build time: {$time} sec -->" .
-		       "\n<!-- invalid tags: {$invalid} -->";
+		       "\n<!-- build time: {$time} sec -->";
+			   // ignore invalid tags since nothing has loaded and
+			   // they're all tags as invalid anyway.
+		       // "\n<!-- invalid tags: {$invalid} -->";
 	}
 
 	/**

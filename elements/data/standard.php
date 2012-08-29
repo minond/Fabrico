@@ -11,5 +11,12 @@ class block extends \Fabrico\Element {
 }
 
 class form extends \Fabrico\Element {
-	protected static $tag ='form';
+	protected static $tag = 'form';
+	protected static $getopt = [ 'class' ];
+
+	protected static function pregen (& $props) {
+		if (in_array('ajax', $props->class)) {
+			\Fabrico\Page::include_javascript('Fabrico.ui.no_submit_ajax_form();', true, true);
+		}
+	}
 }
