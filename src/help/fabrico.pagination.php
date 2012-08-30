@@ -27,6 +27,10 @@ class PaginationPager {
 		return $results;
 	}
 
+	public function get_total () {
+		return count($this->data);
+	}
+
 	public function set_page ($page) {
 		$this->page = $page;
 	}
@@ -45,6 +49,16 @@ class PaginationPager {
 }
 
 trait Pagination {
+	private function init_pager () {
+		if (!$this->pager_page) {
+			$this->pager_page = 1;
+		}
+
+		if (!$this->pager_rpp) {
+			$this->pager_rpp = 10;
+		}
+	}
+
 	private function create_pager ($info) {
 		return new PaginationPager(
 			$info['data'],

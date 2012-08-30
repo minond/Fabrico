@@ -286,6 +286,23 @@ class Router {
 					$envirment = [];
 				}
 
+				// env setter
+				foreach ($envirment as $field => $value) {
+					if (!property_exists($_controller, $field)) {
+						$res->status = Response::METHOD_UNKNOWN_VARIABLE;
+						die($res);
+					}
+					else if (!in_array($field, $_controller->public)) {
+						$res->status = Response::METHOD_PRIVATE_VARIABLE;
+						die($res);
+					}
+					else {
+						$_controller->{ $field } = $value;
+					}
+				}
+
+				$_controller->initialize();
+
 				if ($method) {
 					// check if controller allows method requests
 					if (!($_controller instanceof \Fabrico\PublicMethodController)) {
@@ -300,13 +317,7 @@ class Router {
 						$res->status = Response::METHOD_PRIVATE_METHOD;
 					}
 					else {
-						// env setter
-						foreach ($envirment as $field => $value) {
-							$_controller->{ $field } = $value;
-						}
-
 						// on method
-						$_controller->initialize();
 						$_controller->onmethod($method, $arguments);
 
 						// call the method
@@ -319,11 +330,6 @@ class Router {
 
 				if ($update && is_array($update)) {
 					if (!$method) {
-						// env setter
-						foreach ($envirment as $field => $value) {
-							$_controller->{ $field } = $value;
-						}
-
 						// on method
 						$_controller->onmethod($method, $arguments);
 						$res->status = Response::SUCCESS;

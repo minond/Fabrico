@@ -455,7 +455,12 @@ class Tag {
 		// data provider calls
 		preg_match('/^"@{.+}"$/', $val, $matches_method);
 		if (count($matches_method)) {
-			$val = preg_replace([ '/^"@{/', '/}"$/' ], [ '$_controller->', '()' ], $val);
+			$val = preg_replace(
+				[ '/^"@{/', '/}"$/' ],
+				[ '$_controller->', '' ],
+				preg_replace([ '/!(\w)/', '/!/', '/\./' ], [ '()->$1', '()', '->' ], $val)
+			);
+
 			return $val;
 		}
 

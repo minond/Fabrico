@@ -52,7 +52,27 @@ class Controller {
 	 */
 	public function __load_state ($state) {
 		foreach ($state as $field => $value) {
-			$this->{ $field } = $value;
+			if (property_exists($this, $field)) {
+				$this->{ $field } = $value;
+			}
 		}
 	}
+
+	/**
+	 * pagination variables
+	 * @var PaginationPager
+	 */
+	public $pager;
+
+	/**
+	 * pager page number
+	 * @var integer
+	 */
+	public $pager_page;
+	
+	/**
+	 * pager results per page
+	 * @var integer
+	 */
+	public $pager_rpp;
 }

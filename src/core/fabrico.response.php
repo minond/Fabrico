@@ -16,6 +16,8 @@ class Response {
 	const METHOD_PRIVATE_CLASS = 'private_class';
 	const METHOD_UNKNOWN_METHOD = 'unknown_method';
 	const METHOD_PRIVATE_METHOD = 'private_method';
+	const METHOD_UNKNOWN_VARIABLE = 'unknown_variable';
+	const METHOD_PRIVATE_VARIABLE = 'private_variable';
 
 	/**
 	 * response status
