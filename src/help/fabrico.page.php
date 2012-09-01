@@ -64,7 +64,7 @@ trait Update {
 		$updates = [];
 
 		foreach ($ids as $id) {
-			$updates[ $id ] = $this->get_node($id)->props[ \Fabrico\Element::A_CONTENT ];
+			$updates[ $id ] = $this->get_node($id)->props->content;
 		}
 
 		return $updates;

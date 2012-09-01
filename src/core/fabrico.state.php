@@ -19,9 +19,16 @@ class State {
 
 	/**
 	 * clears session storage
+	 *
+	 * @param string optional class name
 	 */
-	private static function clear () {
-		$_SESSION[ self::ROOT ] = [];
+	private static function clear ($klass = '') {
+		if ($klass) {
+			$_SESSION[ self::ROOT ][ $klass ] = [];
+		}
+		else {
+			$_SESSION[ self::ROOT ] = [];
+		}
 	}
 
 	/**

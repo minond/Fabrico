@@ -458,7 +458,11 @@ class Tag {
 			$val = preg_replace(
 				[ '/^"@{/', '/}"$/' ],
 				[ '$_controller->', '' ],
-				preg_replace([ '/!(\w)/', '/!/', '/\./' ], [ '()->$1', '()', '->' ], $val)
+				preg_replace(
+					[ '/!(\w)/', '/!/', '/\./' ],
+					[ '()->$1', '()', '->' ], 
+					$val
+				)
 			);
 
 			return $val;
@@ -548,7 +552,7 @@ class Tag {
 		}
 
 		$props = implode(', ', $props);
-		return $arg_list ? "({$props})" : "([ {$props} ])";
+		return $arg_list ? "({$props})" : "((object) [ {$props} ])";
 	}
 
 	/**
@@ -703,4 +707,18 @@ Tag::register_tag('js', 'obj', function ($type, $attrs, $attr) {
 		return json_encode($obj, JSON_UNESCAPED_SLASHES);
 		return Tag::output("json_encode({$obj})");
 	}
+});
+
+Tag::register_tag('page', 'controller', function ($type, $attrs, $attr) {
+	$name = $attr('use');
+	$file = Project::get_controller_file($name);
+	return Tag::code(Merge::parse('
+require "#{file}";
+$_controller = new #{controller}Controller;
+\Fabrico\State::load($_controller);
+$_controller->initialize();
+$_controller->onview();', [
+		'controller' => $name,
+		'file' => strtolower($file)
+	]));
 });

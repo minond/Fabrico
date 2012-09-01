@@ -107,69 +107,69 @@ JS;
 		$parameters = [];
 		$updates = [];
 
-		if (isset($args[ self::A_PARAM ])) {
-			foreach ($args[ self::A_PARAM ] as $param) {
-				if (isset($param[ self::DATASET ])) {
+		if (isset($args->param)) {
+			foreach ($args->param as $param) {
+				if (isset($param->dataset)) {
 					$parameters[] = '$(' . 
-						(isset($param[ self::SELECTOR ]) ? self::QUOTE . $param[ self::SELECTOR ] . self::QUOTE : 'this') .
-						').data("' . $param[ self::DATASET ] . '")';
+						(isset($param->selector) ? self::QUOTE . $param->selector . self::QUOTE : 'this') .
+						').data("' . $param->dataset . '")';
 				}
-				else if (isset($param[ self::FORMDATA ])) {
-					$parameters[] = 'Fabrico.helper.form2args("#' . $param[ self::FORMDATA ] . '")';
+				else if (isset($param->formdata)) {
+					$parameters[] = 'Fabrico.helper.form2args("#' . $param->formdata . '")';
 				}
-				else if (!isset($param[ self::ASSIGNTO ])) {
-					$parameters[] = self::QUOTE . $param[ self::VALUE ] . self::QUOTE;
+				else if (!isset($param->assignto)) {
+					$parameters[] = self::QUOTE . $param->value . self::QUOTE;
 				}
 				else {
-					if (in_array($param[ self::ASSIGNTO ], $uniqueenv)) {
+					if (in_array($param->assignto, $uniqueenv)) {
 						\Fabrico\Error::message( self::ERROR_DUPLICATE_ENV );
 					}
 					else {
-						$uniqueenv[] = $param[ self::ASSIGNTO ];
-						$envargs[] = self::QUOTE . $param[ self::ASSIGNTO ] . self::PROP . 
-						             (isset($param[ self::BINDTO ]) ?
-									 	('$("' . $param[ self::BINDTO ] . '").val()') :
-						             	(self::QUOTE . $param[ self::VALUE ] . self::QUOTE)
+						$uniqueenv[] = $param->assignto;
+						$envargs[] = self::QUOTE . $param->assignto . self::PROP . 
+						             (isset($param->bindto) ?
+									 	('$("' . $param->bindto . '").val()') :
+						             	(self::QUOTE . $param->value . self::QUOTE)
 									 );
 					}
 				}
 			}
 		}
 
-		if (isset($args[ self::UPDATES ])) {
-			$updates = explode(',', $args[ self::UPDATES ]);
+		if (isset($args->update)) {
+			$updates = explode(',', $args->update);
 
 			array_walk($updates, function ($id, $index) use (& $updates) {
 				$updates[ $index ] = self::QUOTE . trim($id) . self::QUOTE;
 			});
 		}
 
-		if (isset($args[ self::A_CONTENT ]) && trim($args[ self::A_CONTENT ])) {
-			$parameters[] = trim($args[ self::A_CONTENT ]);
+		if (isset($args->content) && trim($args->content)) {
+			$parameters[] = trim($args->content);
 		}
 
 		$fn = \Fabrico\Merge::parse(self::METHOD_CALL, [
-			'method' => $args[ self::ACTION ],
+			'method' => $args->action,
 			'parameters' => implode(self::COMMA, $parameters),
 			'updates' => implode(self::COMMA, $updates),
 			'envargs' => implode(self::COMMA, $envargs),
-			'callback' => isset($args[ self::CALLBACK ]) ? 
-			              $args[ self::CALLBACK ] : self::A_NULL,
-			'errback' => isset($args[ self::ERRBACK ]) ? 
-			              $args[ self::ERRBACK ] : self::A_NULL
+			'callback' => isset($args->callback) ? 
+			              $args->callback : 'null',
+			'errback' => isset($args->errback) ? 
+			              $args->errback : 'null'
 		]);
 
-		if (isset($args[ self::NAME ])) {
+		if (isset($args->name)) {
 			$fn = \Fabrico\Merge::parse(self::FUNC_DEF, [
-				'name' => $args[ self::NAME ],
+				'name' => $args->name,
 				'method_call' => $fn
 			]);
 		}
-		else if (isset($args[ self::ON ]) && isset($args[ self::SELECTOR ])) {
+		else if (isset($args->on) && isset($args->selector)) {
 			$onready = true;
 			$fn = \Fabrico\Merge::parse(self::EVENT_BIND, [
-				'selector' => $args[ self::SELECTOR ],
-				'event' => $args[ self::ON ],
+				'selector' => $args->selector,
+				'event' => $args->on,
 				'method_call' => $fn
 			]);
 		}

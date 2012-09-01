@@ -3,14 +3,25 @@
 namespace Fabrico\Page;
 
 class PaginationPager {
+	/**
+	 * pagination types
+	 */
+	const TYPE_DATASET = 'dataset';
+	const TYPE_MODEL = 'model';
+
+	/**
+	 * page information
+	 */
 	private $data;
 	private $rpp;
 	private $page;
+	private $type;
 
-	public function __construct (& $data, $rpp = 10, $page = 1) {
-		$this->data = & $data;
+	public function __construct (& $data, $rpp = 10, $page = 1, $type = self::TYPE_MODEL) {
 		$this->rpp = $rpp;
 		$this->page = $page;
+		$this->type = $type;
+		$this->data = & $data;
 	}
 
 	public function get_data () {
@@ -49,7 +60,7 @@ class PaginationPager {
 }
 
 trait Pagination {
-	private function init_pager () {
+	private function pager ($info) {
 		if (!$this->pager_page) {
 			$this->pager_page = 1;
 		}
@@ -57,13 +68,16 @@ trait Pagination {
 		if (!$this->pager_rpp) {
 			$this->pager_rpp = 10;
 		}
-	}
 
-	private function create_pager ($info) {
-		return new PaginationPager(
-			$info['data'],
-			$info['rpp'],
-			$info['page']
-		);
+		if (isset($info['dataset'])) {
+			$data = $info['dataset']::all();
+			$type = PaginationPager::TYPE_DATASET;
+		}
+		else if (isset($info['model'])) {
+			$data = $info['model']::all();
+			$type = PaginationPager::TYPE_MODEL;
+		}
+
+		$this->pager = new PaginationPager($data, $this->pager_rpp, $this->pager_page, $type);
 	}
 }

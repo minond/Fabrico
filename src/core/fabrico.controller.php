@@ -4,21 +4,29 @@ namespace Fabrico;
 
 class Controller {
 	/**
-	 * standard api methods
+	 * state helpers
 	 */
+	const STATE_ERROR = 'Invalid controller variable requested by state';
 	const GET_NODE_CONTENT = 'get_node_content';
 
 	/**
 	 * methods public to http requests
 	 * @var array
 	 */
-	public $public = [];
+	public $public = [
+		self::GET_NODE_CONTENT,
+		'pager_page',
+		'pager_rpp'
+	];
 
 	/**
 	 * state whitelist
 	 * @var array
 	 */
-	public $track = [];
+	public $track = [
+		'pager_page',
+		'pager_rpp'
+	];
 
 	/**
 	 * called after setting state
@@ -39,6 +47,10 @@ class Controller {
 		$state = [];
 
 		foreach ($this->track as $field) {
+			if (!property_exists($this, $field)) {
+				throw new \Exception(self::STATE_ERROR);
+			}
+
 			$state[ $field ] = $this->{ $field };
 		}
 
@@ -52,9 +64,11 @@ class Controller {
 	 */
 	public function __load_state ($state) {
 		foreach ($state as $field => $value) {
-			if (property_exists($this, $field)) {
-				$this->{ $field } = $value;
+			if (!property_exists($this, $field)) {
+				throw new \Exception(self::STATE_ERROR);
 			}
+
+			$this->{ $field } = $value;
 		}
 	}
 

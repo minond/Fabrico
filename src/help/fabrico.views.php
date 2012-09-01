@@ -14,8 +14,8 @@ namespace view;
  */
 function template ($name, $building = false) {
 	if (!$building) {
-		if (is_array($name)) {
-			$name = $name['file'];
+		if (is_object($name)) {
+			$name = $name->file;
 		}
 
 		return \Fabrico\Page::get_template($name);
@@ -36,8 +36,8 @@ function element ($name) {
 		$file;
 		$arg = func_get_arg($i);
 
-		if (is_array($arg)) {
-			$file = $arg['file'];
+		if (is_object($arg)) {
+			$file = $arg->file;
 		}
 		else {
 			$file = $arg;
@@ -67,19 +67,8 @@ function param ($data) {
 function space ($data) {
 	echo \Fabrico\html::div([
 		'style' => [
-			'height' => isset($data['height']) ? "{$data['height']}px" : '0px',
-			'width' => isset($data['width']) ? "{$data['width']}px" : '0px'
+			'height' => isset($data->height) ? "{$data->height}px" : '0px',
+			'width' => isset($data->width) ? "{$data->width}px" : '0px'
 		]
 	]);
-}
-
-/**
- * prints out object and kill script
- *
- * @param mixed data
- */
-function dpre ($data) {
-	die(\Fabrico\html::pre([
-		'content' => print_r($data, true)
-	]));
 }

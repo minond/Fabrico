@@ -25,7 +25,8 @@ class Core {
 		'../help/fabrico.test.php',
 		'../help/fabrico.page.php',
 		'../help/fabrico.pagination.php',
-		'../help/fabrico.utils.php'
+		'../help/fabrico.utils.php',
+		'../help/fabrico.params.php'
 	];
 
 	/**

@@ -4,21 +4,6 @@ namespace Fabrico;
 
 class Element {
 	/**
-	 * standard properties
-	 */
-	const A_PARAM = 'params';
-	const A_CONTENT = 'content';
-	const A_TYPE = 'type';
-	const A_NULL = 'null';
-	const A_CLASS = 'class';
-	const A_ID = 'id';
-	const A_DATA = 'data';
-	const A_KEY = 'key';
-	const A_NAME = 'name';
-	const A_LABEL = 'label';
-	const A_FORMAT = 'format';
-
-	/**
 	 * uses for open/close tag combinations
 	 * @var array
 	 */
@@ -89,41 +74,38 @@ class Element {
 		$klass = get_called_class();
 
 		if (static::$unique === true) {
-
 			if (!array_key_exists($klass, self::$unique_content)) {
 				self::$unique_content[ $klass ] = [];
 			}
 
-			if (isset($props[ self::A_CONTENT ])) {
-				if (in_array($props[ self::A_CONTENT ], self::$unique_content[ $klass ])) {
+			if (isset($props->content)) {
+				if (in_array($props->content, self::$unique_content[ $klass ])) {
 					return '';
 				}
 				else {
-					self::$unique_content[ $klass ][] = $props[ self::A_CONTENT ];
+					self::$unique_content[ $klass ][] = $props->content;
 				}
 			}
 		}
 
 		if (static::$type) {
-			$props[ self::A_TYPE ] = static::$type;
+			$props->type = static::$type;
 		}
 
 		// passed classes
-		if (isset($props[ self::A_CLASS ]) && is_string($props[ self::A_CLASS ])) {
-			$props[ self::A_CLASS ] = explode(' ', $props[ self::A_CLASS ]);
+		if (isset($props->class) && is_string($props->class)) {
+			$props->class = explode(' ', $props->class);
 		}
 		else {
-			$props[ self::A_CLASS ] = [];
+			$props->class = [];
 		}
 
-		if (!isset($props[ self::A_ID ])) {
-			$props[ self::A_ID ] = self::gen_id();
+		if (!isset($props->id)) {
+			$props->id = self::gen_id();
 		}
 
 		// check for new-mode pregen function
 		if (count(static::$getopt)) {
-			$props = (object) $props;
-
 			foreach (static::$getopt as $opt) {
 				if (!property_exists($props, $opt)) {
 					$props->{ $opt } = null;
@@ -131,12 +113,11 @@ class Element {
 			}
 
 			$build = static::pregen($props);
-			$props = (array) $props;
 
 			if (count(static::$ignore)) {
 				foreach (static::$ignore as $ignore) {
-					if (isset($props[ $ignore ])) {
-						unset($props[ $ignore ]);
+					if (isset($props->{ $ignore })) {
+						unset($props->{ $ignore });
 					}
 				}
 			}
@@ -145,18 +126,18 @@ class Element {
 			$build = static::pregen($props);
 		}
 
-		$props[ self::A_CLASS ] += static::$classes;
-		$props[ self::A_CLASS ] = implode(' ', $props[ self::A_CLASS ]);
+		$props->class += static::$classes;
+		$props->class = implode(' ', $props->class);
 
-		if (!$props[ self::A_CLASS ]) {
-			unset($props[ self::A_CLASS ]);
+		if (!$props->class) {
+			unset($props->class);
 		}
 
 		if ($has_children) {
-			Arbol::closing($klass, $props[ self::A_ID ], static::$tag, $props);
+			Arbol::closing($klass, $props->id, static::$tag, $props);
 		}
 		else {
-			Arbol::child($klass, $props[ self::A_ID ], static::$tag, $props);
+			Arbol::child($klass, $props->id, static::$tag, $props);
 		}
 
 		if ($build !== false && static::$tag !== false) {
@@ -199,10 +180,10 @@ class Element {
 		$args = array_pop(self::$callstack);
 
 		// parameters
-		$args[ self::A_PARAM ] = array_pop(self::$argstack);
+		$args->param = array_pop(self::$argstack);
 
 		// get content
-		$args[ self::A_CONTENT ] = trim(ob_get_clean());
+		$args->content = trim(ob_get_clean());
 
 		// generate element
 		return call_user_func_array([ 'self', 'generate' ], [ $args, true ]);
