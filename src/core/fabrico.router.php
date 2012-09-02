@@ -214,14 +214,6 @@ class Router {
 				$_controller->initialize();
 				$_controller->onview();
 
-				// make the controller data global in this scope
-				foreach ($_controller as $_var => $_val) {
-					$$_var = $_val;
-				}
-
-				unset($_val);
-				unset($_var);
-
 				if ($_build) {
 					Page::build();
 				}

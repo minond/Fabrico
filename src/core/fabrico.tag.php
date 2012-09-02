@@ -445,29 +445,6 @@ class Tag {
 	 * @return midex
 	 */
 	private static function parse_value ($val) {
-		// method calls
-		preg_match('/^"%{.+}"$/', $val, $matches_method);
-		if (count($matches_method)) {
-			$val = preg_replace([ '/^"%{/', '/}"$/' ], '', $val);
-			return $val;
-		}
-
-		// data provider calls
-		preg_match('/^"@{.+}"$/', $val, $matches_method);
-		if (count($matches_method)) {
-			$val = preg_replace(
-				[ '/^"@{/', '/}"$/' ],
-				[ '$_controller->', '' ],
-				preg_replace(
-					[ '/!(\w)/', '/!/', '/\./' ],
-					[ '()->$1', '()', '->' ], 
-					$val
-				)
-			);
-
-			return $val;
-		}
-
 		// number
 		$n_val = str_replace([ '"', '\'' ], '', $val);
 		if (is_numeric($n_val)) {
@@ -484,7 +461,7 @@ class Tag {
 			case '"false"':
 				return 'false';
 			default:
-				return Merge::output_string_placeholder($val);
+				return Merge::output_controller_placeholder($val, true);
 		}
 	}
 

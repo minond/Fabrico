@@ -26,12 +26,6 @@ trait View {
 			return $this->__content;
 		}
 
-		foreach ($this as $_var => $_val) {
-			$$_var = $_val;
-		}
-
-		unset($_var);
-		unset($_val);
 		$_controller =& $this;
 
 		ob_start();
