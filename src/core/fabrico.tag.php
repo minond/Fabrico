@@ -355,7 +355,7 @@ class Tag {
 
 		return call_user_func_array(
 			self::$custom_tags[ $namespace ][ $tagname ],
-			[ $type, $attrs, function ($label) use (& $attrs) { return self::attr_val($attrs, $label); } ]
+			[ $type, $attrs, function ($label, $clean = false) use (& $attrs) { return self::attr_val($attrs, $label, $clean); } ]
 		);
 	}
 
@@ -570,12 +570,18 @@ class Tag {
 	 *
 	 * @param array of attributes
 	 * @param string attribute label
+	 * @param boolean clean string
 	 * @return string attribute value
 	 */
-	public static function attr_val (& $attrs, $label) {
+	public static function attr_val (& $attrs, $label, $clean = false) {
 		foreach ($attrs as $index => $attr) {
 			if ($attr->label === $label) {
-				return $attr->value;
+				if ($clean) {
+					return preg_replace([ '/^"|\'/', '/"|\'$/' ], '', $attr->value);
+				}
+				else {
+					return $attr->value;
+				}
 			}
 		}
 
@@ -687,15 +693,23 @@ Tag::register_tag('js', 'obj', function ($type, $attrs, $attr) {
 });
 
 Tag::register_tag('page', 'controller', function ($type, $attrs, $attr) {
-	$name = $attr('use');
+	$name = $attr('use', true);
 	$file = Project::get_controller_file($name);
+	$page = strtolower($name);
+
 	return Tag::code(Merge::parse('
+/* controller re-set start */
 require "#{file}";
 $_controller = new #{controller}Controller;
 \Fabrico\State::load($_controller);
 $_controller->initialize();
-$_controller->onview();', [
+$_controller->onview();
+\Fabrico\Page::include_javascript("Fabrico.controller.std.destination = \"#{page}\"", true);
+\Fabrico\Page::include_javascript("Fabrico.controller.DESTINATION = \"#{page}\"", true);
+/* controller re-set end */
+', [
 		'controller' => $name,
-		'file' => strtolower($file)
+		'file' => strtolower($file),
+		'page' => $page
 	]));
 });

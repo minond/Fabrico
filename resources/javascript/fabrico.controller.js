@@ -12,7 +12,8 @@ Fabrico.controller = {
 	},
 
 	std: {
-		get_node_content: 'get_node_content'
+		get_node_content: "get_node_content",
+		destination: location.href
 	}
 };
 
@@ -20,7 +21,7 @@ Fabrico.controller = {
  * defalt request destination
  * @var string
  */
-Fabrico.controller.DESTINATION = location.href;
+Fabrico.controller.DESTINATION = Fabrico.controller.std.destination;
 
 /**
  * destination setter
@@ -28,7 +29,7 @@ Fabrico.controller.DESTINATION = location.href;
  * @return Fabrico controller object
  */
 Fabrico.controller.receiver = function (src) {
-	this.DESTINATION = src || location.href;
+	this.DESTINATION = src || this.std.destination;
 	return this;
 };
 
