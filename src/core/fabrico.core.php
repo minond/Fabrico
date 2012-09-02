@@ -52,6 +52,12 @@ class Core {
 	];
 
 	/**
+	 * controller reference
+	 * @var Controller
+	 */
+	public static $controller;
+
+	/**
 	 * path to framework configuration
 	 */
 	public static $configuration_path = '../../configuration/configuration.yml';
@@ -120,14 +126,14 @@ class Core {
 		}
 
 		// and instanciate it and load state
-		$controller = new $controller_info->controller_real_name;
-		State::load($controller);
+		self::$controller = new $controller_info->controller_real_name;
+		State::load(self::$controller);
 
 		// and send it to the router
-		Router::handle_request($controller, self::$configuration->state->build, true);
+		Router::handle_request(self::$controller, self::$configuration->state->build, true);
 
 		// clean up
-		State::save($controller);
+		State::save(self::$controller);
 		Logger::request('time: ' . (microtime() - $start));
 	}
 

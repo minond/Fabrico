@@ -702,6 +702,7 @@ Tag::register_tag('page', 'controller', function ($type, $attrs, $attr) {
 require "#{file}";
 $_controller = new #{controller}Controller;
 \Fabrico\State::load($_controller);
+\Fabrico\Core::$controller = & $_controller;
 $_controller->initialize();
 $_controller->onview();
 \Fabrico\Page::include_javascript("Fabrico.controller.std.destination = \"#{page}\"", true);

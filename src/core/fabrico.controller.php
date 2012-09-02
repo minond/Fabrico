@@ -7,7 +7,12 @@ class Controller {
 	 * state helpers
 	 */
 	const STATE_ERROR = 'Invalid controller variable requested by state';
+
+	/**
+	 * standard controller methods
+	 */
 	const GET_NODE_CONTENT = 'get_node_content';
+	const SET_PAGER_INFO = 'set_pager_info';
 
 	/**
 	 * methods public to http requests
@@ -15,18 +20,14 @@ class Controller {
 	 */
 	public $public = [
 		self::GET_NODE_CONTENT,
-		'pager_page',
-		'pager_rpp'
+		self::SET_PAGER_INFO,
 	];
 
 	/**
-	 * state whitelist
-	 * @var array
+	 * pagination variables
+	 * @var PaginationPager
 	 */
-	public $track = [
-		'pager_page',
-		'pager_rpp'
-	];
+	public $pager;
 
 	/**
 	 * called after setting state
@@ -71,22 +72,4 @@ class Controller {
 			$this->{ $field } = $value;
 		}
 	}
-
-	/**
-	 * pagination variables
-	 * @var PaginationPager
-	 */
-	public $pager;
-
-	/**
-	 * pager page number
-	 * @var integer
-	 */
-	public $pager_page;
-	
-	/**
-	 * pager results per page
-	 * @var integer
-	 */
-	public $pager_rpp;
 }

@@ -118,7 +118,12 @@ JS;
 					$parameters[] = 'Fabrico.helper.form2args("#' . $param->formdata . '")';
 				}
 				else if (!isset($param->assignto)) {
-					$parameters[] = self::QUOTE . $param->value . self::QUOTE;
+					if (isset($param->value)) {
+						$parameters[] = self::QUOTE . $param->value . self::QUOTE;
+					}
+					else if (isset($param->bindto)) {
+						$parameters[] = '$("' . $param->bindto . '").val()';
+					}
 				}
 				else {
 					if (in_array($param->assignto, $uniqueenv)) {

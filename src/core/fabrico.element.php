@@ -70,7 +70,7 @@ class Element {
 	 * @param boolean open/close tags with possbile child elements
 	 * @return string element html
 	 */
-	public static function generate ($props = [], $has_children = false) {
+	public static function generate ($props, $has_children = false) {
 		$klass = get_called_class();
 
 		if (static::$unique === true) {
@@ -153,8 +153,12 @@ class Element {
 	 *
 	 * @param array or properties
 	 */
-	public static function open ($props = []) {
+	public static function open ($props = false) {
 		$klass = get_called_class();
+
+		if (!$props) {
+			$props = new \stdClass;
+		}
 
 		// save properties in call stack
 		self::$callstack[] =& $props;
