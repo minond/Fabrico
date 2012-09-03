@@ -633,14 +633,14 @@ Tag::register_tag('fn', 'loop', function ($type, $attrs, $attr) {
 			if ($attr('index')) {
 				return Tag::code(Merge::parse('foreach (#{data} as $#{index} => $#{key}):', [
 					'data' => $attr('over'),
-					'index' => $attr('index'),
-					'key' => $attr('key')
+					'index' => $attr('index', true),
+					'key' => $attr('key', true)
 				]));
 			}
 			else {
 				return Tag::code(Merge::parse('foreach (#{data} as $#{key}):', [
 					'data' => $attr('over'),
-					'key' => $attr('key')
+					'key' => $attr('key', true)
 				]));
 			}
 	}

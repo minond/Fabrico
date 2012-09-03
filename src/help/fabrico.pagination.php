@@ -4,6 +4,11 @@ namespace Fabrico\Page;
 
 class PaginationPager {
 	/**
+	 * ui settings
+	 */
+	const MAXPAGES = 7;
+
+	/**
 	 * pagination types
 	 */
 	const TYPE_DATASET = 'dataset';
@@ -42,7 +47,8 @@ class PaginationPager {
 	}
 	
 	public function get_pages () {
-		$pages = range($this->get_page() - 5, $this->get_page() + 5);
+		$padding = floor(self::MAXPAGES / 2);
+		$pages = range($this->get_page() - $padding, $this->get_page() + $padding);
 		$max = $this->get_num_pages();
 
 		foreach ($pages as $index => $page) {
@@ -51,7 +57,7 @@ class PaginationPager {
 			}
 		}
 
-		return implode(', ', $pages);
+		return $pages;
 	}
 
 	public function get_first_page () {

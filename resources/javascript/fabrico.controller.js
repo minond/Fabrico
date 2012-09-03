@@ -13,6 +13,7 @@ Fabrico.controller = {
 
 	std: {
 		get_node_content: "get_node_content",
+		session_id: null,
 		destination: location.href
 	}
 };
@@ -110,6 +111,7 @@ Fabrico.controller.request = function (req, args, env, callback, errback) {
 	var dest = this.DESTINATION;
 	req._args = args || [];
 	req._env = env || {};
+	req._session_id = this.std.session_id;
 
 	// reset
 	this.receiver();
@@ -157,6 +159,7 @@ Fabrico.controller.redirect = function (req, args, env, preback) {
 	req._args = args || [];
 	req._env = env || {};
 	req._success = req._success || location.href;
+	req._session_id = this.std.session_id;
 
 	$.each(req, function (key, value) {
 		if ($.isArray(value))

@@ -24,6 +24,20 @@ class Controller {
 	];
 
 	/**
+	 * used to flag a variable as one to save in the state
+	 * @var array
+	 */
+	public $track = [];
+
+	/**
+	 * for method requests
+	 * @var session id
+	 */
+	public function session_id () {
+		return session_id();
+	}
+
+	/**
 	 * pagination variables
 	 * @var PaginationPager
 	 */

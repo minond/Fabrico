@@ -43,9 +43,13 @@ function element ($name) {
 			$file = $arg;
 		}
 
-		include_once \Fabrico\Project::find_file(
-			\Fabrico\Core::$configuration->directory->elements . $file
-		);
+		$file = \Fabrico\util::csv_string($file);
+
+		for ($i = 0; $i < count($file); $i++) {
+			include_once \Fabrico\Project::find_file(
+				\Fabrico\Core::$configuration->directory->elements . $file[ $i ]
+			);
+		}
 	}
 }
 

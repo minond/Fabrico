@@ -9,6 +9,7 @@ class Response {
 	const ERROR = 'error';
 	const SUCCESS = 'success';
 	const IN_PROCESS = 'in_process';
+	const INVALID_SESSION = 'invalid_session';
 
 	/**
 	 * method specific statuses

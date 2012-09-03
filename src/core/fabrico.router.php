@@ -53,7 +53,8 @@ class Router {
 		'success' => '_success',
 		'failure' => '_failure',
 		'error' => '_error',
-		'callback' => '_cb'
+		'callback' => '_cb',
+		'session_id' => '_session_id'
 	];
 
 	/**
@@ -278,6 +279,12 @@ class Router {
 					$envirment = [];
 				}
 
+				// check the session before anything else
+				if (self::req(self::$uri->session_id) !== $_controller->session_id()) {
+					$res->status = Response::INVALID_SESSION;
+					die($res);
+				}
+
 				// env setter
 				foreach ($envirment as $field => $value) {
 					if (!property_exists($_controller, $field)) {
@@ -313,10 +320,13 @@ class Router {
 						$_controller->onmethod($method, $arguments);
 
 						// call the method
-						$res->status = Response::SUCCESS;
-						$res->response = call_user_func_array(
-							[ $_controller, $method ], $arguments
-						);
+						try {
+							$res->response = call_user_func_array([ $_controller, $method ], $arguments);
+							$res->status = Response::SUCCESS;
+						} catch (\Exception $error) {
+							$res->response = $error;
+							$res->status = Response::ERROR;
+						}
 					}
 				}
 

@@ -11,8 +11,8 @@ class html {
 	 */
 	const CONTENT_KEY = 'content';
 	const STYLE_KEY = 'style';
-	const OPEN_CLOSE = '<%s %s>%s</%s>';
-	const SELF_CLOSE = '<%s %s />';
+	const OPEN_CLOSE = '<%s%s>%s</%s>';
+	const SELF_CLOSE = '<%s%s />';
 	const PROP = '%s="%s"';
 	const STYLE = '%s: %s;';
 
@@ -52,6 +52,9 @@ class html {
 			}
 		}
 
+		if (count($proplist)) {
+			$proplist[ 0 ] = ' ' . $proplist[ 0 ];
+		}
 
 		return in_array($tagname, self::$selfclosing) ?
 		       sprintf(self::SELF_CLOSE, $tagname, implode(' ', $proplist)) :
@@ -92,6 +95,30 @@ class util {
 	public static function last ($arr) {
 		return count($arr) ? $arr[ count($arr) - 1 ] : null;
 	}
+
+	/**
+	 * parses a string of comma separated values and
+	 * returns an array of those values
+	 *
+	 * @param string raw string
+	 * @param string return
+	 * @return mixed array | string
+	 */
+	public static function csv_string ($str, $as_str = false) {
+		$sep = mt_rand();
+		$parts = str_replace([ ', ', ',' ], $sep, $str);
+		$parts = explode($sep, $parts);
+
+		if ($as_str) {
+			foreach ($parts as $index => $part) {
+				$parts[ $index ] = "\"{$part}\"";
+			}
+
+			$parts = implode(', ', $parts);
+		}
+
+		return $parts;
+	}
 }
 
 /**
@@ -101,17 +128,17 @@ class util {
  */
 class scrypt {
 	public static function en ($str, $key) {
-		return base64_encode(
-			mcrypt_encrypt(
-				MCRYPT_RIJNDAEL_256, md5($key), $str, MCRYPT_MODE_CBC, md5(md5($key))
+		return \base64_encode(
+			\mcrypt_encrypt(
+				\MCRYPT_RIJNDAEL_256, \md5($key), $str, \MCRYPT_MODE_CBC, \md5(\md5($key))
 			)
 		);
 	}
 
 	public static function de ($str, $key) {
 		return rtrim(
-			mcrypt_decrypt(
-				MCRYPT_RIJNDAEL_256, md5($key), base64_decode($str), MCRYPT_MODE_CBC, md5(md5($key))
+			\mcrypt_decrypt(
+				\MCRYPT_RIJNDAEL_256, \md5($key), \base64_decode($str), \MCRYPT_MODE_CBC, \md5(\md5($key))
 			), "\0"
 		);
 	}
