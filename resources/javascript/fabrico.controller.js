@@ -38,17 +38,18 @@ Fabrico.controller.receiver = function (src) {
  * element update helper
  * @param array of element ids
  * @param object optional controller properties
+ * @param function before request is made
  * @param function success handler
  * @param function error handler
  */
-Fabrico.controller.update = function (ids, env, callback, errback) {
+Fabrico.controller.update = function (ids, env, before, callback, errback) {
 	if (!$.isArray(ids)) {
 		ids = [ ids ];
 	}
 
 	return this.request({
 		_update: ids
-	}, [], env, function (response, stat, promise) {
+	}, [], env, before, function (response, stat, promise) {
 		if (response.status === Fabrico.controller.response.SUCCESS) {
 			for (var i = 0, max = ids.length; i < max; i++)
 				$(document.getElementById(ids[ i ])).html(response.response[ ids[ i ] ]);
@@ -66,12 +67,13 @@ Fabrico.controller.update = function (ids, env, callback, errback) {
  * @param array optional arguments
  * @param array of components to update
  * @param object optional controller properties
+ * @param function before request is made
  * @param function success handler
  * @param function error handler
  * @return Promise
  * @see request
  */
-Fabrico.controller.method = function (method, args, updates, env, callback, errback) {
+Fabrico.controller.method = function (method, args, updates, env, before, callback, errback) {
 	if (!$.isArray(updates)) {
 		updates = [ updates ];
 	}
@@ -79,7 +81,7 @@ Fabrico.controller.method = function (method, args, updates, env, callback, errb
 	return this.request({
 		_method: method,
 		_update: updates
-	}, args, env, function (response, stat, promise) {
+	}, args, env, before, function (response, stat, promise) {
 		if (response.status === Fabrico.controller.response.SUCCESS) {
 			if (updates && updates.length)
 				for (var i = 0, max = updates.length; i < max; i++)
@@ -102,12 +104,13 @@ Fabrico.controller.method = function (method, args, updates, env, callback, errb
  * @param object default request variables
  * @param array optional arguments
  * @param object optional controller/global properties
+ * @param function before request is made
  * @param function success handler
  * @param function error handler
  * @return Promise
  * @see redirect
  */
-Fabrico.controller.request = function (req, args, env, callback, errback) {
+Fabrico.controller.request = function (req, args, env, before, callback, errback) {
 	var dest = this.DESTINATION;
 	req._args = args || [];
 	req._env = env || {};
@@ -115,6 +118,10 @@ Fabrico.controller.request = function (req, args, env, callback, errback) {
 
 	// reset
 	this.receiver();
+
+	if (before && $.isFunction(before)) {
+		before(req);
+	}
 
 	return $.ajax({
 		type: "POST", 
@@ -160,6 +167,20 @@ Fabrico.controller.redirect = function (req, args, env, preback) {
 	req._env = env || {};
 	req._success = req._success || location.href;
 	req._session_id = this.std.session_id;
+
+	for (var i = 0, max = req._args.length; i < max; i++) {
+		if ($.isPlainObject(req._args[ i ]) || $.isArray(req._args[ i ])) {
+			req._args[ i ] = JSON.stringify(req._args[ i ]);
+		}
+	}
+
+	for (var prop in req._env) {
+		if ($.isPlainObject(req._env[ prop ]) || $.isArray(req._env[ prop ])) {
+			req._env[ prop ] = JSON.stringify(req._env[ prop ]);
+		}
+	}
+
+	form.attr("action", this.DESTINATION);
 
 	$.each(req, function (key, value) {
 		if ($.isArray(value))
