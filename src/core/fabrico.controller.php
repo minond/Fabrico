@@ -30,6 +30,12 @@ class Controller {
 	public $track = [];
 
 	/**
+	 * allowed formats for data requests
+	 * @var array
+	 */
+	public $formats = [];
+
+	/**
 	 * for method requests
 	 * @var session id
 	 */

@@ -4,12 +4,12 @@
  * Fabrico controller helpers
  */
 
-namespace Fabrico;
+namespace Fabrico\Controller;
 
 /**
  * data controller interface
  */
-interface DataRequestController {
+interface DataRequest {
 	/**
 	 * called before data specific getter method
 	 */
@@ -19,7 +19,7 @@ interface DataRequestController {
 /**
  * javascript method api controller
  */
-interface PublicMethodController {
+interface PublicAccess {
 	/**
 	 * called before requested method
 	 */

@@ -210,6 +210,8 @@ class Router {
 	 * @param boolean build view file
 	 */
 	public static function handle_request (& $_controller, $_view, $_build = false) {
+		$R404 = false;
+
 		switch (self::request_method()) {
 			case self::VIEW:
 				$_controller->initialize();
@@ -230,7 +232,8 @@ class Router {
 			case self::JS:
 			case self::JSON:
 			case self::XML:
-				if ($_controller instanceof \Fabrico\DataRequestController) {
+				if ($_controller instanceof \Fabrico\Controller\DataRequest && 
+					in_array(strtolower(self::request_method()), $_controller->formats)) {
 					switch (self::request_method()) {
 						case self::JS:
 						case self::JSON:
@@ -242,7 +245,7 @@ class Router {
 
 							if (self::request_method() === self::JS) {
 								$callback = self::req(self::$uri->callback);
-								$data = "{$callback}($data)";
+								$data = "{$callback}($data);";
 							}
 
 							echo $data;
@@ -257,6 +260,9 @@ class Router {
 
 							break;
 					}
+				}
+				else {
+					$R404 = true;
 				}
 
 				break;
@@ -304,7 +310,7 @@ class Router {
 
 				if ($method) {
 					// check if controller allows method requests
-					if (!($_controller instanceof \Fabrico\PublicMethodController)) {
+					if (!($_controller instanceof \Fabrico\Controller\PublicAccess)) {
 						$res->status = Response::METHOD_PRIVATE_CLASS;
 					}
 					// check if method exits
@@ -344,15 +350,17 @@ class Router {
 
 				self::type_header(Router::JSON);
 				echo $res;
-
 				break;
 
 			case self::R404:
 			default:
-				self::http_header(self::R404);
-				require \view\template('redirect/404');
-
+				$R404 = true;
 				break;
+		}
+
+		if ($R404) {
+			self::http_header(self::R404);
+			require \view\template('redirect/404');
 		}
 	}
 }
