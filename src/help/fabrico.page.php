@@ -9,7 +9,7 @@ namespace Fabrico\Page;
 /**
  * page view trait
  */
-trait View {
+trait Access {
 	/**
 	 * page content
 	 * @var string
@@ -48,12 +48,10 @@ trait View {
 
 		return \Fabrico\Arbol::get($id);
 	}
-}
 
-/**
- * page update trait
- */
-trait Update {
+	/**
+	 * returns the contend for a list of components
+	 */
 	public function get_node_content ($ids) {
 		$updates = [];
 

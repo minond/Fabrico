@@ -20,6 +20,7 @@ class Core {
 	public static $help = [
 		'../help/fabrico.format.php',
 		'../help/fabrico.controllers.php',
+		'../help/fabrico.authentication.php',
 		'../help/fabrico.views.php',
 		'../help/fabrico.merge.php',
 		'../help/fabrico.test.php',

@@ -12,6 +12,7 @@ class Router {
 	/**
 	 * Fabrico methods
 	 */
+	const R401 = '401';
 	const R404 = '404';
 	const VIEW = 'VIEW';
 	const METHOD = 'METHOD';
@@ -27,6 +28,7 @@ class Router {
 	 */
 	private static $headers = [
 		'404' => '404 Not Found',
+		'401' => '401 Unauthorized',
 		'json' => 'application/json',
 		'js' => 'application/javascript',
 		'xml' => 'text/xml'
@@ -212,6 +214,16 @@ class Router {
 	public static function handle_request (& $_controller, $_view, $_build = false) {
 		$R404 = false;
 
+		// check authentication before
+		if ($_controller instanceof \Fabrico\Authentication\Basic) {
+			if (!$_controller->authenticate_basic()) {
+				self::http_header(self::R401);
+				require \view\template('redirect/401');
+				die;
+			}
+		}
+
+		// then serve the requested data
 		switch (self::request_method()) {
 			case self::VIEW:
 				$_controller->initialize();
