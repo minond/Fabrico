@@ -21,7 +21,12 @@ interface DataRequest {
  */
 interface PublicAccess {
 	/**
+	 * called after requested method
+	 */
+
+	public function onaftermethod ($method, & $arguments);
+	/**
 	 * called before requested method
 	 */
-	public function onmethod ($method, & $arguments);
+	public function onbeforemethod ($method, & $arguments);
 }

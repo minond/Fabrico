@@ -38,6 +38,7 @@
 /**
  * data table cell styles
  */
+.data_table tbody td.data_cell_date,
 .data_table tbody td.data_cell_number {
 	text-align: right;
 }

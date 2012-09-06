@@ -699,7 +699,7 @@ Tag::register_tag('page', 'controller', function ($type, $attrs, $attr) {
 
 	return Tag::code(Merge::parse('
 /* controller re-set start */
-require "#{file}";
+require_once "#{file}";
 $_controller = new #{controller}Controller;
 \Fabrico\State::load($_controller);
 \Fabrico\Core::$controller = & $_controller;

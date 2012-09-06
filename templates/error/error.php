@@ -28,6 +28,6 @@
 </f:resource:style>
 
 <div class="error_holder">
-	<div class="title">#{title} - #{file}, #{line}</div>
-	<div class="message">#{message}</div>
+	<div class="title"><?= $title ?> - <?= $file ?>, <?= $line ?></div>
+	<div class="message"><?= $message ?></div>
 </div>

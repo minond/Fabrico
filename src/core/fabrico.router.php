@@ -335,11 +335,12 @@ class Router {
 					}
 					else {
 						// on method
-						$_controller->onmethod($method, $arguments);
+						$_controller->onbeforemethod($method, $arguments);
 
 						// call the method
 						try {
 							$res->response = call_user_func_array([ $_controller, $method ], $arguments);
+							$_controller->onaftermethod($method, $arguments);
 							$res->status = Response::SUCCESS;
 						} catch (\Exception $error) {
 							$res->response = $error;
@@ -351,13 +352,17 @@ class Router {
 				if ($update && is_array($update)) {
 					if (!$method) {
 						// on method
-						$_controller->onmethod($method, $arguments);
+						$_controller->onbeforemethod($method, $arguments);
 						$res->status = Response::SUCCESS;
 					}
 
 					$res->response = call_user_func(
 						[ $_controller, Controller::GET_NODE_CONTENT ], $update
 					);
+
+					if (!$method) {
+						$_controller->onaftermethod($method, $arguments);
+					}
 				}
 
 				self::type_header(Router::JSON);
