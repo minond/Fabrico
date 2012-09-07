@@ -148,6 +148,15 @@ class Core {
 				Core::$configuration->configuration->database
 			)
 		);
+
+		// load db authentication file
+		$dbauth = (object) \sfYaml::load(
+			self::$configuration->database->credentials
+		);
+
+		// and save them
+		self::$configuration->database->username = $dbauth->username;
+		self::$configuration->database->password = $dbauth->password;
 	}
 
 	/**
