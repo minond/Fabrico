@@ -48,12 +48,47 @@ class PaginationPager {
 	
 	public function get_pages () {
 		$padding = floor(self::MAXPAGES / 2);
+		$range = $padding * 2 + 1;
 		$pages = range($this->get_page() - $padding, $this->get_page() + $padding);
 		$max = $this->get_num_pages();
 
 		foreach ($pages as $index => $page) {
 			if ($page < 1 || $page > $max) {
 				unset($pages[ $index ]);
+			}
+		}
+
+		$pages = array_values($pages);
+
+		// can we add down?
+		if (count($pages) < $range) {
+			$first = $pages[ 0 ];
+
+			if ($first != 1) {
+				for ($i = $first; $i != 0; $i--) {
+					if (count($pages) < $range) {
+						array_unshift($pages, $i);
+					}
+					else {
+						break;
+					}
+				}
+			}
+		}
+
+		// can we add up?
+		if (count($pages) < $range) {
+			$last = $pages[ count($pages) - 1 ];
+
+			if ($last != $this->get_last_page()) {
+				for ($i = $last; $i != $this->get_last_page(); $i++) {
+					if (count($pages) < $range) {
+						array_push($pages, $i);
+					}
+					else {
+						break;
+					}
+				}
 			}
 		}
 

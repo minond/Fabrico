@@ -16,7 +16,7 @@ view\element('action/ui');
 class pager extends Element {
 	protected static $tag = 'div';
 	protected static $getopt = [ 'bindto', 'controls' ];
-	protected static $classes = [ 'table_pager' ];
+	protected static $classes = [ 'table_pager', 'noselect' ];
 
 	private static $btn_code = '
 $("##{pagerid} .pager_page_move").live("click", function () {
