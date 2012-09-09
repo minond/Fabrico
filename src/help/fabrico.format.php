@@ -26,6 +26,10 @@ class Format {
 				return $raw;
 
 			case self::F_DATE:
+				if ($raw instanceof \DateTime) {
+					$raw = $raw->getTimestamp();
+				}
+
 				return date($format, $raw);
 
 			default:

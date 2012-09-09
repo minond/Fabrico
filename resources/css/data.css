@@ -53,9 +53,9 @@
 .table_pager div.pager_link {
 	display: inline-block;
 	padding: 2px 7px;
-	font: bold 12px Arial;
+	font: 10px Arial;
 	color: #0A0ADB;
-	border: 1px solid #0A0ADB;
+	border: 1px solid #BBB;
 	margin-right: 1px;
 	margin-left: 1px;
 	cursor: pointer;
@@ -64,8 +64,8 @@
 }
 
 .table_pager div.pager_link.pager_selected {
-	background-color: #0A0ADB;
-	color: white;
+	border: 1px solid #0A0ADB;
+	font-weight: bold;
 }
 
 .table_pager div.pager_link:hover {
@@ -83,7 +83,7 @@
 }
 
 .table_pager input {
-	font: bold 12px Arial;
+	font: 10px Arial;
 	color: #0A0ADB;
 	border: 1px solid #0A0ADB;
 	cursor: text;
@@ -93,7 +93,7 @@
 }
 
 .table_pager span {
-	font: bold 12px Arial;
+	font: 10px Arial;
 	color: #0A0ADB;
 	cursor: default;
 	margin-left: 3px;

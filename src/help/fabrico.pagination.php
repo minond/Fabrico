@@ -78,7 +78,7 @@ class PaginationPager {
 
 		// can we add up?
 		if (count($pages) < $range) {
-			$last = $pages[ count($pages) - 1 ];
+			$last = $pages[ count($pages) - 1 ] + 1;
 
 			if ($last != $this->get_last_page()) {
 				for ($i = $last; $i != $this->get_last_page(); $i++) {
