@@ -91,6 +91,7 @@ class Router {
 
 				// save it
 				Project::$file = implode('/', $parts);
+				break;
 			}
 		}
 	}
