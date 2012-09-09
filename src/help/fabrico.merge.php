@@ -17,9 +17,10 @@ class Merge {
 	 * parses a string for merge fields
 	 *
 	 * @param string raw
+	 * @param boolean return clean merge fields
 	 * @return array of merge fields
 	 */
-	private static function get_merge_fields ($string) {
+	public static function get_merge_fields ($string, $clean = false) {
 		$lastpos = 0;
 		$mergefields = [];
 
@@ -32,6 +33,12 @@ class Merge {
 
 			$lastpos = $matches[0][1] + 1;
 			$mergefields[] = $matches[0][0];
+		}
+
+		if ($clean) {
+			foreach ($mergefields as $index => $field) {
+				$mergefields[ $index ] = self::get_merge_field($field);
+			}
 		}
 
 		return $mergefields;

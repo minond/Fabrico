@@ -144,6 +144,13 @@ class Core {
 	 * loads project specific configuration
 	 */
 	public static function load_project_configuration () {
+		// custom routing
+		self::$configuration->routing = (object) \sfYaml::load(
+			Project::get_configuration_file(
+				Core::$configuration->configuration->routing
+			)
+		);
+
 		// database configuration
 		self::$configuration->database = (object) \sfYaml::load(
 			Project::get_configuration_file(

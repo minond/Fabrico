@@ -16,6 +16,9 @@ class Project {
 	public static function set_files () {
 		self::$file = Router::get_file_requested(true);
 
+		// custom routes
+		Router::check_project_routing();
+
 		if (is_dir(self::get_view_file(true))) {
 			self::$file .= '/' . Core::$configuration->convention->index_file;
 		}

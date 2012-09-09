@@ -60,7 +60,44 @@ class Router {
 	];
 
 	/**
+	 * runs custom project uri checkers and updaters
+	 */
+	public static function check_project_routing () {
+		foreach (Core::$configuration->routing->placeholders as $placeholder) {
+			$rawfields = Merge::get_merge_fields($placeholder);
+			$fields = Merge::get_merge_fields($placeholder, true);
+
+			// convert the placeholder string into a regular expression string
+			$regexp = Merge::placeholder($placeholder, function ($field) { return '(\w+?)'; });
+			$regexp = str_replace('/', '\/', $regexp);
+			$regexp = "/^{$regexp}$/";
+
+			preg_match($regexp, Project::$file, $matches);
+
+			// check if this is a matching uri
+			if (count($matches)) {
+				// update the request variables
+				foreach ($fields as $index => $field) {
+					self::$req[ $field ] = $matches[ $index + 1 ];
+				}
+
+				// and create the new uri
+				$parts = explode('/', $placeholder);
+				foreach ($parts as $index => $part) {
+					if (in_array($part, $rawfields)) {
+						unset($parts[ $index ]);
+					}
+				}
+
+				// save it
+				Project::$file = implode('/', $parts);
+			}
+		}
+	}
+
+	/**
 	 * setter for request variable
+	 *
 	 * @param array
 	 */
 	public static function set_request (& $req) {
