@@ -65,13 +65,8 @@ $("##{pagerid} .pager_page_move").live("click", function () {
 			'value' => $pgr->get_page()
 		]);
 
-		$rpplabel = html::span([
-			'content' => 'results per page: '
-		]);
-
-		$jumptolabel = html::span([
-			'content' => 'jump to: '
-		]);
+		$rpplabel = html::span([ 'content' => 'results per page: ' ]);
+		$jumptolabel = html::span([ 'content' => 'jump to: ' ]);
 
 		$controls = html::div([
 			'class' => 'controls',
@@ -88,14 +83,8 @@ $("##{pagerid} .pager_page_move").live("click", function () {
 			'on' => 'change'
 		]);
 
-		view\param((object) [
-			'bindto' => "#{$props->id} .pagenumber"
-		]);
-
-		view\param((object) [
-			'bindto' => "#{$props->id} .pagerpp"
-		]);
-
+		view\param((object) [ 'bindto' => "#{$props->id} .pagenumber" ]);
+		view\param((object) [ 'bindto' => "#{$props->id} .pagerpp" ]);
 		view\action\method::close();
 
 		Page::include_javascript(Merge::parse(self::$btn_code, [

@@ -27,7 +27,8 @@ class Core {
 		'../help/fabrico.page.php',
 		'../help/fabrico.pagination.php',
 		'../help/fabrico.utils.php',
-		'../help/fabrico.params.php'
+		'../help/fabrico.params.php',
+		'../help/fabrico.std.php'
 	];
 
 	/**
@@ -49,7 +50,8 @@ class Core {
 		'fabrico.error.php',
 		'fabrico.arbol.php',
 		'fabrico.state.php',
-		'fabrico.dataset.php'
+		'fabrico.dataset.php',
+		'fabrico.view.php'
 	];
 
 	/**

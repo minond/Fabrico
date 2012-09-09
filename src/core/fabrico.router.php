@@ -376,8 +376,13 @@ class Router {
 		}
 
 		if ($R404) {
-			self::http_header(self::R404);
-			require \view\template('redirect/404');
+			if (Std::controller_has_view_method($_controller)) {
+				$_controller->{ Std::get_controller_view_method() }();
+			}
+			else {
+				self::http_header(self::R404);
+				require \view\template('redirect/404');
+			}
 		}
 	}
 }
