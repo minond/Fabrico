@@ -1,8 +1,8 @@
 <?php
 
-namespace view\data;
+namespace view\table;
 
-class table extends \Fabrico\Element {
+class grid extends \Fabrico\Element {
 	protected static $tag = 'table';
 	protected static $classes = [ 'data_table' ];
 	protected static $getopt = [ 'params', 'data' ];
@@ -48,7 +48,7 @@ class table extends \Fabrico\Element {
 	$caption = '';
 
 	foreach ($params as $index => $param) {
-		if ($param->type === 'column') {
+		if ($param->classname === 'table_column') {
 			$col = new \stdClass;
 			$col->key = $param->key;
 			$col->format = isset($param->format) ? $param->format : \Fabrico\Format::F_STRING;
@@ -58,7 +58,7 @@ class table extends \Fabrico\Element {
 
 			$columns[] = $col;
 		}
-		else if ($param->type === 'caption') {
+		else if ($param->classname === 'caption') {
 			$caption = $param->content;
 		}
 	}

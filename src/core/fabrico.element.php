@@ -50,6 +50,12 @@ class Element {
 	 * @var string
 	 */
 	protected static $tag = 'span';
+
+	/**
+	 * treat element as a parameter
+	 * @var boolean
+	 */
+	protected static $parameter = false;
 	
 	/**
 	 * tag type
@@ -64,6 +70,24 @@ class Element {
 	protected static $classes = [];
 
 	/**
+	 * parses a class name for namespace and tag information
+	 *
+	 * @param string class name
+	 * @return array
+	 */
+	private static function parse_class_name ($klass) {
+		$info = new \stdClass;
+		$parts = explode('\\', $klass);
+		array_shift($parts);
+
+		$info->namespace = $parts[ 0 ];
+		$info->name = $parts[ 1 ];
+		$info->class = implode('_', $parts);
+
+		return $info;
+	}
+
+	/**
 	 * generates a new element
 	 *
 	 * @param array or properties
@@ -71,6 +95,7 @@ class Element {
 	 * @return string element html
 	 */
 	public static function generate ($props, $has_children = false) {
+		$build = false;
 		$klass = get_called_class();
 
 		if (static::$unique === true) {
@@ -111,19 +136,25 @@ class Element {
 					$props->{ $opt } = null;
 				}
 			}
+		}
 
+		if (!static::$parameter) {
 			$build = static::pregen($props);
-
-			if (count(static::$ignore)) {
-				foreach (static::$ignore as $ignore) {
-					if (isset($props->{ $ignore })) {
-						unset($props->{ $ignore });
-					}
-				}
-			}
 		}
 		else {
-			$build = static::pregen($props);
+			$klass_info = self::parse_class_name($klass);
+			$props->namespace = $klass_info->namespace;
+			$props->tagname = $klass_info->name;
+			$props->classname = $klass_info->class;
+			\view\param($props);
+		}
+
+		if (count(static::$ignore)) {
+			foreach (static::$ignore as $ignore) {
+				if (isset($props->{ $ignore })) {
+					unset($props->{ $ignore });
+				}
+			}
 		}
 
 		$props->class += static::$classes;
