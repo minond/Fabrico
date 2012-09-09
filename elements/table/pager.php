@@ -15,7 +15,7 @@ view\element('action/ui');
 
 class pager extends Element {
 	protected static $tag = 'div';
-	protected static $getopt = [ 'bindto', 'controls' ];
+	protected static $getopt = [ 'bindto', 'controls', 'range' ];
 	protected static $classes = [ 'table_pager', 'noselect' ];
 
 	private static $btn_code = '
@@ -76,6 +76,15 @@ $("##{pagerid} .pager_page_move").live("click", function () {
 			]
 		]);
 
+		$rangedata = $pgr->get_data_range();
+		$range = html::div([
+			'class' => 'range',
+			'content' => "{$rangedata->human_from} - {$rangedata->human_to} of {$rangedata->max}",
+			'style' => [
+				'display' => $props->range ? '' : 'none'
+			]
+		]);
+
 		view\action\method::open((object) [
 			'selector' => "#{$props->id} .pagenumber, #{$props->id} .pagerpp",
 			'update' => "$props->bindto, $props->id",
@@ -92,6 +101,6 @@ $("##{pagerid} .pager_page_move").live("click", function () {
 			'bindto' => util::csv_string($props->bindto, true)
 		]), true, true);
 
-		$props->content = $previous . $pages . $next . $controls;
+		$props->content = $previous . $pages . $next . $controls . $range;
 	}
 }

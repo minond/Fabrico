@@ -27,18 +27,28 @@ class PaginationPager {
 		$this->data = & $data;
 	}
 
+	public function get_data_range () {
+		$range = new \stdClass;
+
+		$range->from = $this->get_rpp() * ($this->get_page() - 1);
+		$range->to = $range->from + $this->get_rpp();
+		$range->max = $this->get_total();
+		$range->human_from = $range->from + 1;
+		$range->human_to = $range->to > $range->max ? $range->max : $range->to;
+		
+		return $range;
+	}
+
 	public function get_data () {
 		$results = [];
-		$from = $this->get_rpp() * ($this->get_page() - 1);
-		$to = $from + $this->get_rpp();
-		$max = $this->get_total();
+		$range = $this->get_data_range();
 
-		for ($i = $from; $i < $to; $i++) {
+		for ($i = $range->from; $i < $range->to; $i++) {
 			if (isset($this->data[ $i ])) {
 				$results[] = $this->data[ $i ];
 			}
 
-			if ($i > $max) {
+			if ($i > $range->max) {
 				break;
 			}
 		}
@@ -65,7 +75,7 @@ class PaginationPager {
 			$first = $pages[ 0 ];
 
 			if ($first != 1) {
-				for ($i = $first; $i != 0; $i--) {
+				for ($i = $first - 1; $i > 0; $i--) {
 					if (count($pages) < $range) {
 						array_unshift($pages, $i);
 					}
@@ -78,10 +88,10 @@ class PaginationPager {
 
 		// can we add up?
 		if (count($pages) < $range) {
-			$last = $pages[ count($pages) - 1 ] + 1;
+			$last = $pages[ count($pages) - 1 ];
 
 			if ($last != $this->get_last_page()) {
-				for ($i = $last; $i != $this->get_last_page(); $i++) {
+				for ($i = $last + 1; $i <= $this->get_last_page(); $i++) {
 					if (count($pages) < $range) {
 						array_push($pages, $i);
 					}
