@@ -10,16 +10,16 @@ use Fabrico\Element\Param;
 class grid extends Element {
 	protected static $tag = 'table';
 	protected static $classes = [ 'data_table' ];
-	protected static $getopt = [ 'params', 'data' ];
+	protected static $getopt = [ 'params', 'data', 'caption' ];
 
 	protected static function pregen (& $props) {
-		$caption = '';
 		$columns = [];
 		$row_data = [];
 		$header_data = [];
+		$caption = $props->caption;
 
 		// parse parameters
-		list($columns, $caption) = Param::run_reader('table', $props->param);
+		list($columns) = Param::run_reader('table', $props->param);
 
 		// build the body
 		foreach ($props->data as $row => $data) {
@@ -46,7 +46,6 @@ class grid extends Element {
  */
 Param::register_reader('table', function (& $params) {
 	$columns = [];
-	$caption = '';
 
 	foreach ($params as $index => $param) {
 		if ($param->classname === 'table_column') {
@@ -58,12 +57,9 @@ Param::register_reader('table', function (& $params) {
 
 			$columns[] = $col;
 		}
-		else if ($param->classname === 'caption') {
-			$caption = $param->content;
-		}
 	}
 
-	return [ $columns, $caption ];
+	return [ $columns ];
 });
 
 /**

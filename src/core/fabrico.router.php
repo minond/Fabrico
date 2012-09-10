@@ -255,9 +255,20 @@ class Router {
 		// check authentication before
 		if ($_controller instanceof \Fabrico\Authentication\Basic) {
 			if (!$_controller->authenticate_basic()) {
-				self::http_header(self::R401);
-				require \view\template('redirect/401');
-				die;
+				// check if we should redirect to something like a login page
+				$redirect = $_controller->authenticate_redirect();
+
+				if (is_string($redirect)) {
+					if ($redirect !== '/' . Core::$configuration->state->uri) {
+						header("Location: {$redirect}");
+						die;
+					}
+				}
+				else {
+					self::http_header(self::R401);
+					require \view\template('redirect/401');
+					die;
+				}
 			}
 		}
 
