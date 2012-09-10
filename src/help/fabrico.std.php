@@ -19,6 +19,7 @@ class Std {
 	 * @param Controller
 	 */
 	public static function controller_has_view_method (& $controller) {
-		return method_exists($controller, self::get_controller_view_method());
+		$method = self::get_controller_view_method();
+		return method_exists($controller, $method) && in_array($method, $controller->public);
 	}
 };

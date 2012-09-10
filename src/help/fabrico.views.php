@@ -76,3 +76,13 @@ function space ($data) {
 		]
 	]);
 }
+
+/**
+ * sends a location redirect header and kills the current process
+ *
+ * @param string uri
+ */
+function redirect ($uri) {
+	header("Location: {$uri}");
+	die;
+}

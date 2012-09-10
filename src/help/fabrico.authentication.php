@@ -21,6 +21,14 @@ interface Basic {
 	 * @return string
 	 */
 	public function authenticate_redirect ();
+
+	/**
+	 * called after authentication has been successful
+	 * the request is redirected to the returned url
+	 *
+	 * @return string
+	 */
+	public function authenticate_homepage ();
 }
 
 /**

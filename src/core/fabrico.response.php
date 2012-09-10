@@ -21,6 +21,11 @@ class Response {
 	const METHOD_PRIVATE_VARIABLE = 'private_variable';
 
 	/**
+	 * authentication statuses
+	 */
+	const AUTHENTICATION_INVALID = 'unauthenticated_session';
+
+	/**
 	 * response status
 	 *
 	 * @var string
