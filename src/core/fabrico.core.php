@@ -131,6 +131,7 @@ class Core {
 		// and instanciate it and load state
 		self::$controller = new $controller_info->controller_real_name;
 		State::load(self::$controller);
+		self::$controller->setup();
 
 		// and send it to the router
 		Router::handle_request(self::$controller, self::$configuration->state->build, true);

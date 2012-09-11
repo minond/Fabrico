@@ -36,6 +36,25 @@ class Controller {
 	public $formats = [];
 
 	/**
+	 * parameter getter helper
+	 * @var param
+	 */
+	public $param;
+
+	public function __construct () {
+		$this->param = new \param;
+	}
+	
+	/**
+	 * makes a method public
+	 *
+	 * @param string methods*
+	 */
+	public function publish ($methods) {
+		$this->public = array_merge($this->public, func_get_args());
+	}
+
+	/**
 	 * for method requests
 	 * @var session id
 	 */
@@ -45,6 +64,11 @@ class Controller {
 
 	/**
 	 * called after setting state
+	 */
+	public function setup () {}
+
+	/**
+	 * called right before serving request
 	 */
 	public function initialize () {}
 

@@ -114,3 +114,11 @@
 	font: 10px Arial;
 	color: #0A0ADB;
 }
+
+/**
+ * input fields
+ */
+input.data_input {
+	border: 1px solid #CDCDCD;
+	padding-left: 3px;
+}

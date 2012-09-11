@@ -3,6 +3,7 @@
 namespace view\table;
 
 use Fabrico\html;
+use Fabrico\Merge;
 use Fabrico\Format;
 use Fabrico\Element;
 use Fabrico\Element\Param;
@@ -51,9 +52,10 @@ Param::register_reader('table', function (& $params) {
 		if ($param->classname === 'table_column') {
 			$col = new \stdClass;
 			$col->key = $param->key;
-			$col->format = isset($param->format) ? $param->format : Format::F_STRING;
-			$col->formatstr = isset($param->formatstr) ? $param->formatstr : '';
+			$col->type = isset($param->type) ? $param->type : Format::F_STRING;
+			$col->format = isset($param->format) ? $param->format : '';
 			$col->label = isset($param->label) ? $param->label : ucwords($param->key);
+			$col->content = isset($param->content) ? $param->content : '';
 
 			$columns[] = $col;
 		}
@@ -81,8 +83,16 @@ Param::register_writer('table', function ($caption, $header, $body) {
  * builds cell elements
  */
 Param::register_writer('table_td', function ($row, $column) {
-	$content = isset($row->{ $column->key }) ? $row->{ $column->key } : '';
-	$content = Format::format($content, $column->format, $column->formatstr);
+	if (isset($column->key)) {
+		$content = isset($row->{ $column->key }) ? $row->{ $column->key } : '';
+		$content = Format::format($content, $column->type, $column->format);
+	}
+	else {
+		$content = Merge::parse(
+			$column->content, $row,
+			Merge::PLACEHOLDER_SELECTOR
+		);
+	}
 
 	return html::td([
 		'content' => $content,

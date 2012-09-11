@@ -7,6 +7,7 @@ class Merge {
 	 * merge field selector
 	 */
 	const SELECTOR = '/\\#\{.+?\}/';
+	const PLACEHOLDER_SELECTOR = '/\{\\#.+?\}/';
 
 	/**
 	 * iteration limit
@@ -20,12 +21,12 @@ class Merge {
 	 * @param boolean return clean merge fields
 	 * @return array of merge fields
 	 */
-	public static function get_merge_fields ($string, $clean = false) {
+	public static function get_merge_fields ($string, $clean = false, $selector = self::SELECTOR) {
 		$lastpos = 0;
 		$mergefields = [];
 
 		for ($i = 0; $i < self::MAX_ITERATIONS; $i++) {
-			preg_match(self::SELECTOR, $string, $matches, PREG_OFFSET_CAPTURE, $lastpos);
+			preg_match($selector, $string, $matches, PREG_OFFSET_CAPTURE, $lastpos);
 
 			if (!count($matches)) {
 				break;
@@ -55,8 +56,8 @@ class Merge {
 			[ '/!(\w)/', '/!/' ],
 			[ '()->$1', '()' ],
 			str_replace(
-				[ '#{', '}', '.' ],
-				[ '', '', '->' ],
+				[ '#{', '{#', '}', '.' ],
+				[ '', '', '', '->' ],
 				$raw
 			)
 		);
@@ -69,11 +70,18 @@ class Merge {
 	 * @param array of merge fields
 	 * @return string merged string
 	 */
-	public static function parse ($string, $mergevalues) {
-		foreach (self::get_merge_fields($string) as $field) {
+	public static function parse ($string, $mergevalues, $selector = self::SELECTOR) {
+		foreach (self::get_merge_fields($string, false, $selector) as $field) {
 			$cfield = self::get_merge_field($field);
-			$value = array_key_exists($cfield, $mergevalues) ?
-			         $mergevalues[ $cfield ] : '';
+
+			if (is_array($mergevalues)) {
+				$value = array_key_exists($cfield, $mergevalues) ?
+				         $mergevalues[ $cfield ] : '';
+			}
+			else if (is_object($mergevalues)) {
+				$value = isset($mergevalues->{ $cfield }) ?
+				         $mergevalues->{ $cfield } : '';
+			}
 
 			$string = str_replace($field, $value, $string);
 		}
@@ -104,6 +112,17 @@ class Merge {
 	}
 
 	/**
+	 * adds a controller prefix to a merge field is
+	 * it's part of the controller
+	 *
+	 * @param string $rawfield
+	 * @return string
+	 */
+	private static function controller_prefix ($rawfield) {
+		return '$_controller->' . $rawfield;
+	}
+
+	/**
 	 * helper for generating php output tags
 	 *
 	 * @param string with merge fields
@@ -111,7 +130,8 @@ class Merge {
 	 */
 	public static function output_controller_string_placeholder ($string) {
 		return self::placeholder($string, function ($field) {
-			return '{$_controller->' . $field . '}';
+			return '{' . self::controller_prefix($field) . '}';
+			// return '{$_controller->' . $field . '}';
 		});
 	}
 
@@ -139,7 +159,8 @@ class Merge {
 
 		if (count($matches)) {
 			$string = self::get_merge_field($string);
-			return '$_controller->' . substr($string, 1, strlen($string) - 2);
+			return self::controller_prefix(substr($string, 1, strlen($string) - 2));
+			// return '$_controller->' . substr($string, 1, strlen($string) - 2);
 		}
 
 		if ($in_string) {
@@ -147,6 +168,7 @@ class Merge {
 		}
 		else {
 			return self::placeholder($string, function ($field) {
+				return '<?= ' . self::controller_prefix($field) . ' ?>';
 				return '<?= $_controller->' . $field . ' ?>';
 			});
 		}

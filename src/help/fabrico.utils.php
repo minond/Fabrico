@@ -7,6 +7,10 @@ class param {
 	public static function __callStatic ($method, $args) {
 		return Fabrico\Router::req($method);
 	}
+
+	public function __get ($var) {
+		return Fabrico\Router::req($var);
+	}
 }
 
 /**
