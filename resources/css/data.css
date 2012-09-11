@@ -14,14 +14,15 @@
 	background-color: #EFF0E5;
 }
 
-.data_table tbody td {
+.data_table > tbody > tr > td {
 	font: normal 13px Arial;
 	padding: 2px 5px;
 	border: 1px solid #cecece;
 	cursor: default;
+	background-color: white;
 }
 
-.data_table tbody tr:nth-child(even) td {
+.data_table > tbody > tr:nth-child(even) > td {
 	background-color: #F7F7F7;
 }
 

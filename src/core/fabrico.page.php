@@ -103,9 +103,10 @@ class Page {
 	 * checks builds as well
 	 *
 	 * @param boolean soft build
+	 * @param boolean include javascript
 	 */
-	public static function close ($soft = false) {
-		$html = self::put_together(ob_get_clean(), $soft);
+	public static function close ($soft = false, $include_js = true) {
+		$html = self::put_together(ob_get_clean(), $soft, $include_js);
 
 		Build::view(
 			Core::$configuration->state->uri, $html
@@ -118,9 +119,10 @@ class Page {
 	 * merges in link and script tags into the html string
 	 *
 	 * @param string html content
-	 * @param bolean soft build
+	 * @param boolean soft build
+	 * @param boolean include js
 	 */
-	private static function put_together ($content, $soft = false) {
+	private static function put_together ($content, $soft = false, $include_js = true) {
 		if (!$soft) {
 			$jsstr = implode("\n", self::$javascript);
 			$cssstr = implode("\n", self::$css);
@@ -142,7 +144,7 @@ class Page {
 				self::JAVASCRIPT,
 				self::JAVASCRIPT_CODE,
 				self::CSS
-			], [ $jsstr, $jscode, $cssstr ], $content);
+			], [ $include_js ? $jsstr : '', $include_js ? $jscode : '', $cssstr ], $content);
 		}
 		else {
 			return self::$tag->start_html . self::CSS .

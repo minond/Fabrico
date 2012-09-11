@@ -527,6 +527,10 @@ class Tag {
 				$arg_list = false;
 			}
 		}
+		
+		if (!$is_method && !count($props)) {
+			$arg_list = false;
+		}
 
 		$props = implode(', ', $props);
 		return $arg_list ? "({$props})" : "((object) [ {$props} ])";

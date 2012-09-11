@@ -15,6 +15,7 @@ class Router {
 	const R401 = '401';
 	const R404 = '404';
 	const VIEW = 'VIEW';
+	const PDF = 'PDF';
 	const METHOD = 'METHOD';
 	const UPDATE = 'UPDATE';
 	const ERROR = 'ERROR';
@@ -63,6 +64,12 @@ class Router {
 	 * runs custom project uri checkers and updaters
 	 */
 	public static function check_project_routing () {
+		$ext = self::data_method();
+
+		if ($ext) {
+			$ext = strtolower(".{$ext}");
+		}
+
 		foreach (Core::$configuration->routing->placeholders as $placeholder) {
 			$rawfields = Merge::get_merge_fields($placeholder);
 			$fields = Merge::get_merge_fields($placeholder, true);
@@ -72,7 +79,7 @@ class Router {
 			$regexp = str_replace('/', '\/', $regexp);
 			$regexp = "/^{$regexp}$/";
 
-			preg_match($regexp, Project::$file, $matches);
+			preg_match($regexp, Project::get_file_no_data(Project::$file), $matches);
 
 			// check if this is a matching uri
 			if (count($matches)) {
@@ -90,7 +97,7 @@ class Router {
 				}
 
 				// save it
-				Project::$file = implode('/', $parts);
+				Project::$file = implode('/', $parts) . $ext;
 				break;
 			}
 		}
@@ -168,6 +175,9 @@ class Router {
 		}
 		else if (util::ends_with($req, strtolower(self::JS))) {
 			return self::JS;
+		}
+		else if (util::ends_with($req, strtolower(self::PDF))) {
+			return self::PDF;
 		}
 	}
 
@@ -251,6 +261,7 @@ class Router {
 	 */
 	public static function handle_request (& $_controller, $_view, $_build = false) {
 		$R404 = false;
+		$is_pdf = false;
 
 		// check authentication before
 		if ($_controller instanceof \Fabrico\Authentication\Basic) {
@@ -279,6 +290,17 @@ class Router {
 
 		// then serve the requested data
 		switch (self::request_method()) {
+			case self::PDF:
+				if (in_array(strtolower(self::PDF), $_controller->formats)) {
+					$is_pdf = true;
+					self::$req[ self::$uri->file ] = Project::get_file_no_data(Core::$configuration->state->uri);
+					Project::set_files(false);
+				}
+				else {
+					$R404 = true;
+					break;
+				}
+
 			case self::VIEW:
 				$_controller->initialize();
 				$_controller->onview();
@@ -286,13 +308,25 @@ class Router {
 				if ($_build) {
 					Page::build();
 				}
-				
+
 				require Core::$configuration->state->build;
 				
 				if ($_build) {
-					echo Page::close();
+					if ($is_pdf) {
+						require_once Project::get_dependency_file('dompdf/dompdf_config.inc.php');
+
+						$dompdf = new \DOMPDF();
+						$dompdf->load_html(Page::close(false, !$is_pdf));
+						$dompdf->set_paper('letter', 'portrait');
+						$dompdf->render();
+
+						$dompdf->stream(Core::$configuration->state->uri . '.pdf', [ 'Attachment' => false ]); 
+					}
+					else {
+						echo Page::close();
+					}
 				}
-				
+
 				break;
 
 			case self::JS:

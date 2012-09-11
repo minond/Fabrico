@@ -12,12 +12,16 @@ class Project {
 
 	/**
 	 * loads the view and controller files into the router
+	 *
+	 * @param boolean $check_routing
 	 */
-	public static function set_files () {
+	public static function set_files ($check_routing = true) {
 		self::$file = Router::get_file_requested(true);
 
 		// custom routes
-		Router::check_project_routing();
+		if ($check_routing) {
+			Router::check_project_routing();
+		}
 
 		if (is_dir(self::get_view_file(true))) {
 			self::$file .= '/' . Core::$configuration->convention->index_file;
@@ -351,6 +355,28 @@ class Project {
 	 * @return string view build file path
 	 */
 	public static function get_build_file_from_data () {
-		return str_replace([ '.json', '.xml', '.js' ], '', Core::$configuration->state->build);
+		return str_replace([ '.json', '.xml', '.js', '.pdf' ], '', Core::$configuration->state->build);
+	}
+
+	/**
+	 * returns the path to a file without data extensions
+	 *
+	 * @param string $file
+	 * @return string
+	 */
+	public static function get_file_no_data ($file) {
+		return str_replace([ '.json', '.xml', '.js', '.pdf' ], '', $file);
+	}
+
+	/**
+	 * returns the path to an internal dependency file
+	 *
+	 * @param string $name
+	 * @return string name
+	 */
+	public static function get_dependency_file ($name) {
+		return Core::$configuration->loading->httproot .
+		       Core::$configuration->loading->internal .
+		       Core::$configuration->directory->dependency . $name;
 	}
 }

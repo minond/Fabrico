@@ -8,6 +8,7 @@ loading:
   suffix: .php
   prefix: ../../../
   internal: /Fabrico
+  httproot: /var/www/Dropbox/apache
 
 directory:
   templates: /templates/
@@ -24,6 +25,7 @@ directory:
   include: /include/
   logs: /internals/logs/
   build: /internals/build
+  dependency: /src/deps/
 
 configuration:
   database: database/database
