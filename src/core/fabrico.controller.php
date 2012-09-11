@@ -44,12 +44,6 @@ class Controller {
 	}
 
 	/**
-	 * pagination variables
-	 * @var PaginationPager
-	 */
-	public $pager;
-
-	/**
 	 * called after setting state
 	 */
 	public function initialize () {}

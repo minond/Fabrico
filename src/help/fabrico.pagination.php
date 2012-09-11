@@ -174,11 +174,11 @@ trait Pagination {
 			$type = PaginationPager::TYPE_MODEL;
 		}
 
-		$this->pager = new PaginationPager($data, $type);
+		return new PaginationPager($data, $type);
 	}
 
-	public function set_pager_info ($page, $rpp) {
-		$this->pager->set_rpp($rpp);
-		$this->pager->set_page($page);
+	public function set_pager_info ($pager, $page, $rpp) {
+		$this->{ $pager }->set_rpp($rpp);
+		$this->{ $pager }->set_page($page);
 	}
 }

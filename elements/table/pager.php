@@ -15,17 +15,17 @@ view\element('action/ui');
 
 class pager extends Element {
 	protected static $tag = 'div';
-	protected static $getopt = [ 'bindto', 'controls', 'range' ];
+	protected static $getopt = [ 'bindto', 'controls', 'range', 'pager' ];
 	protected static $classes = [ 'table_pager', 'noselect' ];
 
 	private static $btn_code = '
 $("##{pagerid} .pager_page_move").live("click", function () {
 	var $this = $(this);
-	Fabrico.controller.method("set_pager_info", [ $this.data("page"), $this.data("rpp") ], [ #{bindto}, "#{pagerid}" ]);
+	Fabrico.controller.method("set_pager_info", [ "#{pager}", $this.data("page"), $this.data("rpp") ], [ #{bindto}, "#{pagerid}" ]);
 });';
 
 	public static function pregen (& $props) {
-		$pgr = & Core::$controller->pager;
+		$pgr = & Core::$controller->{ $props->pager };
 		$pages = '';
 		$controls = '';
 
@@ -92,11 +92,13 @@ $("##{pagerid} .pager_page_move").live("click", function () {
 			'on' => 'change'
 		]);
 
+		view\param((object) [ 'value' => $props->pager ]);
 		view\param((object) [ 'bindto' => "#{$props->id} .pagenumber" ]);
 		view\param((object) [ 'bindto' => "#{$props->id} .pagerpp" ]);
 		view\action\method::close();
 
 		Page::include_javascript(Merge::parse(self::$btn_code, [
+			'pager' => $props->pager,
 			'pagerid' => $props->id,
 			'bindto' => util::csv_string($props->bindto, true)
 		]), true, true);
