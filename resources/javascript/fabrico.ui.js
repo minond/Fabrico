@@ -10,6 +10,24 @@ Fabrico.ui = {
 	},
 
 	/**
+	 * popup center on window resize listener
+	 */
+	popup_resize_center: function () {
+		$(window).resize(function () {
+			$(".popup_modal_border", ".popup_modal:visible").each(function () {
+				var $this = $(this);
+
+				$this.css({
+					top: (innerHeight - $this.height()) / 2,
+					left: (innerWidth - $this.width()) / 2
+				});
+			});
+		});
+
+		this.popup_resize_center = function () {};
+	},
+
+	/**
 	 * prevent submit action with submit event lister
 	 * that triggers the submit button's click action
 	 */

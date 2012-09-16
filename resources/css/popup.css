@@ -1,5 +1,5 @@
 .popup_modal {
-	text-align: center;
+	display: none;
 	cursor: default;
 }
 
@@ -15,7 +15,8 @@
 
 .popup_modal .popup_modal_border {
 	position: fixed;
-	top: 40px;
+	top: 0px;
+	left: 0px;
 	display: inline-block;
 	border: 1px solid #CECECE;
 	padding: 10px;

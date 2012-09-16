@@ -3,6 +3,7 @@
 namespace view\popup;
 
 use \Fabrico\html;
+use \Fabrico\Page;
 use \Fabrico\Element;
 
 class modal extends Element {
@@ -46,8 +47,17 @@ class modal extends Element {
 			'content' => $props->content
 		]);
 
+		// background
 		$props->content = html::div([
 			'class' => 'popup_modal_background'
 		]) . $props->content;
+
+		// align
+		$props->content = html::center([
+			'content' => $props->content
+		]);
+
+		Page::include_javascript('Fabrico.ui.popup_resize_center();', true, true);
+		Page::include_javascript('$(window).trigger("resize");', true, true);
 	}
 }
