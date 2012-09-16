@@ -18,7 +18,7 @@ Fabrico.ui = {
 				var $this = $(this);
 
 				$this.css({
-					top: (innerHeight - $this.height()) / 2,
+					top: (innerHeight - $this.height()) / 2 - ($this.height() / 2),
 					left: (innerWidth - $this.width()) / 2
 				});
 			});

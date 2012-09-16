@@ -8,8 +8,8 @@ use \Fabrico\Element;
 
 class modal extends Element {
 	protected static $tag = 'div';
-	protected static $getopt = [ 'title' ];
-	protected static $ignore = [ 'title' ];
+	protected static $getopt = [ 'title', 'show' ];
+	protected static $ignore = [ 'title', 'show' ];
 	protected static $classes = [ 'popup_modal' ];
 
 	protected static function pregen (& $props) {
@@ -58,6 +58,11 @@ class modal extends Element {
 		]);
 
 		Page::include_javascript('Fabrico.ui.popup_resize_center();', true, true);
+
+		if ($props->show) {
+			Page::include_javascript("$('#{$props->id}').show();", true, true);
+		}
+
 		Page::include_javascript('$(window).trigger("resize");', true, true);
 	}
 }
