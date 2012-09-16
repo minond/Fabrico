@@ -636,14 +636,14 @@ Tag::register_tag('fn', 'loop', function ($type, $attrs, $attr) {
 		case Tag::TAG_OPEN:
 			if ($attr('index')) {
 				return Tag::code(Merge::parse('foreach (#{data} as $#{index} => $#{key}):', [
-					'data' => $attr('over'),
+					'data' => $attr('over', true),
 					'index' => $attr('index', true),
 					'key' => $attr('key', true)
 				]));
 			}
 			else {
 				return Tag::code(Merge::parse('foreach (#{data} as $#{key}):', [
-					'data' => $attr('over'),
+					'data' => $attr('over', true),
 					'key' => $attr('key', true)
 				]));
 			}

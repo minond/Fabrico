@@ -48,10 +48,10 @@ class style extends \Fabrico\Element {
  */
 class img extends \Fabrico\Element {
 	protected static $tag = 'img';
-	protected static $getopt = [ 'src' ];
+	protected static $getopt = [ 'src', 'core' ];
 
 	protected static function pregen (& $props) {
-		$props->src = \Fabrico\Project::get_image_file($props->src);
+		$props->src = \Fabrico\Project::get_image_file($props->src, $props->core);
 	}
 }
 

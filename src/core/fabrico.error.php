@@ -103,7 +103,7 @@ class Error {
 		\view\element('error/error');
 		ob_start();
 
-		\error\error::generate([
+		\view\error\error::generate([
 			'title' => $title,
 			'message' => $message,
 			'file' => $file,
