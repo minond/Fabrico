@@ -61,6 +61,28 @@ class Router {
 	];
 
 	/**
+	 * parses a placeholder url
+	 *
+	 * @param string $placeholder
+	 * @return object
+	 */
+	private static function rewrite_parse ($placeholder) {
+		$info = new \stdClass;
+		$parts = explode(' >> ', $placeholder);
+
+		if (count($parts) > 1) {
+			$info->placeholder = $parts[ 0 ];
+			$info->rewrite = $parts[ 1 ];
+		}
+		else {
+			$info->placeholder = $placeholder;
+			$info->rewrite = false;
+		}
+
+		return $info;
+	}
+
+	/**
 	 * runs custom project uri checkers and updaters
 	 */
 	public static function check_project_routing () {
@@ -71,11 +93,13 @@ class Router {
 		}
 
 		foreach (Core::$configuration->routing->placeholders as $placeholder) {
-			$rawfields = Merge::get_merge_fields($placeholder);
-			$fields = Merge::get_merge_fields($placeholder, true);
+			// is this a re-write?
+			$url = self::rewrite_parse($placeholder);
+			$rawfields = Merge::get_merge_fields($url->placeholder);
+			$fields = Merge::get_merge_fields($url->placeholder, true);
 
 			// convert the placeholder string into a regular expression string
-			$regexp = Merge::placeholder($placeholder, function ($field) { return '(\w+?)'; });
+			$regexp = Merge::placeholder($url->placeholder, function ($field) { return '(\w+?)'; });
 			$regexp = str_replace('/', '\/', $regexp);
 			$regexp = "/^{$regexp}$/";
 
@@ -89,15 +113,25 @@ class Router {
 				}
 
 				// and create the new uri
-				$parts = explode('/', $placeholder);
-				foreach ($parts as $index => $part) {
-					if (in_array($part, $rawfields)) {
-						unset($parts[ $index ]);
+				$new_url = '';
+
+				if (!$url->rewrite) {
+					$parts = explode('/', $url->placeholder);
+
+					foreach ($parts as $index => $part) {
+						if (in_array($part, $rawfields)) {
+							unset($parts[ $index ]);
+						}
 					}
+
+					$new_url = implode('/', $parts) . $ext;
+				}
+				else {
+					$new_url = $url->rewrite;
 				}
 
 				// save it
-				Project::$file = implode('/', $parts) . $ext;
+				Project::$file = $new_url;
 				break;
 			}
 		}
