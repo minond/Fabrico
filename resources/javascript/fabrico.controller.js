@@ -7,6 +7,7 @@ Fabrico.controller = {
 		ERROR: "error",
 		SUCCESS: "success",
 		IN_PROCESS: "in_process",
+		INVALID_SESSION: "invalid_session",
 		PRIVATE_METHOD: "private_method",
 		UNKNOWN_METHOD: "unknown_method"
 	},

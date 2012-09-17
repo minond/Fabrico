@@ -16,9 +16,10 @@ Fabrico.ui = {
 		$(window).resize(function () {
 			$(".popup_modal_border", ".popup_modal:visible").each(function () {
 				var $this = $(this);
+				var top = (innerHeight - $this.height()) / 2 - $this.height();
 
 				$this.css({
-					top: (innerHeight - $this.height()) / 2 - ($this.height() / 2),
+					top: top > 10 ? top : 10,
 					left: (innerWidth - $this.width()) / 2
 				});
 			});

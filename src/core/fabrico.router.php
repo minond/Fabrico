@@ -303,7 +303,10 @@ class Router {
 				// check if we should redirect to something like a login page
 				$redirect = $_controller->authenticate_redirect();
 
-				if (self::request_method() === self::VIEW) {
+				if (self::request_method() === self::METHOD) {
+					die(new Response(Response::AUTHENTICATION_INVALID));
+				}
+				else {
 					if (is_string($redirect)) {
 						if ($redirect !== '/' . Core::$configuration->state->uri) {
 							header("Location: {$redirect}");
@@ -315,9 +318,6 @@ class Router {
 						require \view\template('redirect/401');
 						die;
 					}
-				}
-				else {
-					die(new Response(Response::AUTHENTICATION_INVALID));
 				}
 			}
 		}

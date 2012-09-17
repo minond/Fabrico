@@ -54,17 +54,11 @@ class modal extends Element {
 			'class' => 'popup_modal_background'
 		]) . $props->content;
 
-		// align
-		$props->content = html::center([
-			'content' => $props->content
-		]);
-
 		Page::include_javascript('Fabrico.ui.popup_resize_center();', true, true);
 
 		if ($props->show) {
 			Page::include_javascript("$('#{$props->id}').show();", true, true);
+			Page::include_javascript('$(window).trigger("resize");', true, true);
 		}
-
-		Page::include_javascript('$(window).trigger("resize");', true, true);
 	}
 }
