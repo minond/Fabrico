@@ -18,6 +18,11 @@ class Page {
 	public static $tag;
 
 	/**
+	 * @var string
+	 */
+	public static $title;
+
+	/**
 	 * list of javascript files to include
 	 * @var array
 	 */
@@ -147,7 +152,7 @@ class Page {
 			], [ $include_js ? $jsstr : '', $include_js ? $jscode : '', $cssstr ], $content);
 		}
 		else {
-			return self::$tag->start_html . self::CSS .
+			return sprintf(self::$tag->start_html, self::$tag->title_placeholder) . self::CSS .
 			       self::get_body_tag() . $content . self::$tag->end_body . "\n" .
 				   self::JAVASCRIPT . "\n" . self::JAVASCRIPT_CODE . self::$tag->end_html;
 		}
@@ -189,11 +194,17 @@ class Page {
 	}
 }
 
+Page::$title = explode('/', $_SERVER['REDIRECT_URL']);
+Page::$title = array_filter(Page::$title);
+Page::$title = array_shift(Page::$title);
+Page::$title = ucwords(Page::$title);
+
 Page::$tag = (object) [
 	'script_code' => "\n<script type=\"text/javascript\">\n%s\njQuery(function () {\n%s\n});\n</script>",
 	'script' => '<script type="text/javascript" src="%s"></script>',
 	'css' => '<link type="text/css" rel="stylesheet" href="%s" />',
-	'start_html' => "<!doctype html>\n<html>\n\t<head>",
+	'title_placeholder' => '<?= \Fabrico\Page::$title ?>',
+	'start_html' => "<!doctype html>\n<html>\n\t<head><title>%s</title>",
 	'start_body' => "\n\t</head>\n\t<body class='%s'>",
 	'end_body' => "\n\t</body>",
 	'end_html' => "\n</html>"
