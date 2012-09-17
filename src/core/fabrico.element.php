@@ -98,6 +98,10 @@ class Element {
 		$build = false;
 		$klass = get_called_class();
 
+		if (is_array($props)) {
+			$props = (object) $props;
+		}
+
 		if (static::$unique === true) {
 			if (!array_key_exists($klass, self::$unique_content)) {
 				self::$unique_content[ $klass ] = [];
@@ -146,7 +150,7 @@ class Element {
 			$props->namespace = $klass_info->namespace;
 			$props->tagname = $klass_info->name;
 			$props->classname = $klass_info->class;
-			\view\param($props);
+			self::argument($props);
 		}
 
 		if (count(static::$ignore)) {
@@ -231,6 +235,48 @@ class Element {
 	 */
 	public static function argument ($value) {
 		self::$argstack[ count(self::$argstack) - 1 ][] = $value;
+	}
+
+	/**
+	 * parameter search
+	 * 
+	 * @param string $classname
+	 * @return array
+	 */
+	public static function param_get ($classname, & $params) {
+		$ret = array();
+
+		foreach ($params as & $param) {
+			if ($param->classname === $classname) {
+				$ret[] = & $param;
+			}
+
+			unset($param);
+		}
+
+		return $ret;
+	}
+
+	/**
+	 * param_get short-cut
+	 *
+	 * @param object $params
+	 * @return array
+	 */
+	public static function search (& $params) {
+		$klass_info = self::parse_class_name(get_called_class());
+		return self::param_get($klass_info->class, $params->param);
+	}
+
+	/**
+	 * template merger
+	 *
+	 * @param string $template
+	 * @param mixed array|object $data
+	 * @return string
+	 */
+	public static function merge ($template, $data) {
+		return Merge::parse($template, $data, Merge::PLACEHOLDER_SELECTOR);
 	}
 
 	/**
