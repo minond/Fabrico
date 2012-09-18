@@ -1,0 +1,16 @@
+.lists_items {
+	cursor: default;
+	border: 1px solid #cecece;
+	padding: 5px;
+	background-color: #F1F1F1;
+}
+
+.lists_items .lists_item {
+	border: 1px solid #cecece;
+	background-color: white;
+	font: normal 13px Arial;
+}
+
+.lists_items .lists_item_separator {
+	height: 5px;
+}

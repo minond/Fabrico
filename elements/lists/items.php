@@ -6,6 +6,9 @@ use \Fabrico\html;
 use \Fabrico\Merge;
 use \Fabrico\Element;
 
+/**
+ * items holder
+ */
 class items extends Element {
 	protected static $tag = 'div';
 	protected static $classes = [ 'lists_items' ];
@@ -13,19 +16,33 @@ class items extends Element {
 	protected static function pregen (& $props) {
 		$template = self::param_get('lists_template', $props->param)[ 0 ]->content;
 
-		foreach ($props->data as $data) {
+		foreach ($props->data as $index => $data) {
+			$itemtemplate = preg_replace('/{#iteration}/', $index, $template);
+
+			if ($index) {
+				$props->content .= html::div([
+					'class' => 'lists_item_separator'
+				]);
+			}
+
 			$props->content .= item::generate([
-				'content' => self::merge($template, $data)
+				'content' => self::merge($itemtemplate, $data)
 			]);
 		}
 	}
 }
 
+/**
+ * item element
+ */
 class item extends Element {
 	protected static $tag = 'div';
 	protected static $classes = [ 'lists_item' ];
 }
 
+/**
+ * item content template
+ */
 class template extends Element {
 	protected static $parameter = true;
 }
