@@ -16,10 +16,22 @@ class FabricoPubSub implements Ratchet\Wamp\WampServerInterface {
 		$conn->callError($id, $topic, 'RPC not supported');
 	}
 
-	public function onSubscribe(ConnectionInterface $conn, $topic) {}
-	public function onUnSubscribe(ConnectionInterface $conn, $topic) {}
-	public function onOpen (ConnectionInterface $conn) {}
-	public function onClose (ConnectionInterface $conn) {}
+	public function onSubscribe(ConnectionInterface $conn, $topic) {
+		echo "subscription requested: {$topic}\n";
+	}
+
+	public function onUnSubscribe(ConnectionInterface $conn, $topic) {
+		echo "unsubscription requested: {$topic}\n";
+	}
+
+	public function onOpen (ConnectionInterface $conn) {
+		echo "socket opened\n";
+	}
+
+	public function onClose (ConnectionInterface $conn) {
+		echo "socket closed\n";
+	}
+
 	public function onError (ConnectionInterface $conn, Exception $error) {}
 }
 
