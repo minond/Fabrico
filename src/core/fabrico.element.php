@@ -269,6 +269,17 @@ class Element {
 	}
 
 	/**
+	 * search short-cut
+	 *
+	 * @param object $param
+	 * @return Element
+	 */
+	public static function first (& $params) {
+		$ret = static::search($params);
+		return count($ret) ? $ret[ 0 ] : false;
+	}
+
+	/**
 	 * template merger
 	 *
 	 * @param string $template

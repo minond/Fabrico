@@ -10,6 +10,10 @@ class block extends \Fabrico\Element {
 	protected static $tag = 'div';
 }
 
+class linkto extends \Fabrico\Element {
+	protected static $tag = 'a';
+}
+
 class form extends \Fabrico\Element {
 	protected static $tag = 'form';
 	protected static $getopt = [ 'class' ];

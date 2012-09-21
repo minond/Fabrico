@@ -5,6 +5,13 @@
 Fabrico.debug = {};
 
 /**
+ * NOTE: handle call
+ */
+Fabrico.debug.log = function () {
+	// ...
+};
+
+/**
  * @name json
  * @var object
  */

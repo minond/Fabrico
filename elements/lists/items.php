@@ -14,7 +14,7 @@ class items extends Element {
 	protected static $classes = [ 'lists_items' ];
 
 	protected static function pregen (& $props) {
-		$template = self::param_get('lists_template', $props->param)[ 0 ]->content;
+		$template = template::first($props)->content;
 
 		foreach ($props->data as $index => $data) {
 			$itemtemplate = preg_replace('/{#iteration}/', $index, $template);
