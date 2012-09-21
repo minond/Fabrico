@@ -70,6 +70,18 @@ class Element {
 	protected static $classes = [];
 
 	/**
+	 * scripts to load
+	 * @var array
+	 */
+	protected static $scripts = [];
+
+	/**
+	 * css to load
+	 * @var array
+	 */
+	protected static $styles = [];
+
+	/**
 	 * parses a class name for namespace and tag information
 	 *
 	 * @param string class name
@@ -168,6 +180,7 @@ class Element {
 			unset($props->class);
 		}
 
+		// child hierarchy
 		if ($has_children) {
 			Arbol::closing($klass, $props->id, static::$tag, $props);
 		}
@@ -175,12 +188,29 @@ class Element {
 			Arbol::child($klass, $props->id, static::$tag, $props);
 		}
 
-		if ($build !== false && static::$tag !== false) {
-			return trim(html::generate(static::$tag, $props));
+		// scripts
+		if (count(static::$scripts)) {
+			foreach (static::$scripts as $script) {
+				\view\resource\script::generate([
+					'src' => is_array($script) ? $script[ 0 ] : $script,
+					'core' => is_array($script)
+				]);
+			}
 		}
-		else {
-			return '';
+
+		// styles
+		if (count(static::$styles)) {
+			foreach (static::$styles as $style) {
+				\view\resource\style::generate([
+					'href' => is_array($style) ? $style[ 0 ] : $style,
+					'core' => is_array($style)
+				]);
+			}
 		}
+
+		// to html
+		return $build !== false && static::$tag !== false ?
+		       trim(html::generate(static::$tag, $props)) : '';
 	}
 
 	/**
