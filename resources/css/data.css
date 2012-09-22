@@ -122,4 +122,10 @@
 input.data_input {
 	border: 1px solid #CDCDCD;
 	padding-left: 3px;
+	font: normal 12px Arial;
+}
+
+input.data_button {
+	height: 19px;
+	font: bold 11px Arial;
 }

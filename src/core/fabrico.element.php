@@ -146,14 +146,6 @@ class Element {
 			$props->type = static::$type;
 		}
 
-		// passed classes
-		if (isset($props->class) && is_string($props->class)) {
-			$props->class = explode(' ', $props->class);
-		}
-		else {
-			$props->class = [];
-		}
-
 		if (!isset($props->id)) {
 			$props->id = self::gen_id();
 		}
@@ -186,7 +178,15 @@ class Element {
 			}
 		}
 
-		$props->class += static::$classes;
+		// passed classes
+		if (isset($props->class) && is_string($props->class)) {
+			$props->class = explode(' ', $props->class);
+		}
+		else {
+			$props->class = [];
+		}
+
+		$props->class = array_merge(static::$classes, $props->class);
 		$props->class = implode(' ', $props->class);
 
 		if (!$props->class) {
