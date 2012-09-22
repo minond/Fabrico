@@ -70,6 +70,12 @@ class Element {
 	protected static $classes = [];
 
 	/**
+	 * elements to load
+	 * @var array
+	 */
+	protected static $elements = [];
+
+	/**
 	 * scripts to load
 	 * @var array
 	 */
@@ -106,12 +112,19 @@ class Element {
 	 * @param boolean open/close tags with possbile child elements
 	 * @return string element html
 	 */
-	public static function generate ($props, $has_children = false) {
+	public static function generate ($props = [], $has_children = false) {
 		$build = false;
 		$klass = get_called_class();
 
 		if (is_array($props)) {
 			$props = (object) $props;
+		}
+
+		// load elements
+		if (count(static::$elements)) {
+			foreach (static::$elements as $element) {
+				\view\element($element);
+			}
 		}
 
 		if (static::$unique === true) {
