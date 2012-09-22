@@ -27,13 +27,21 @@ Fabrico.wamp.onClose = function (code, reason) {};
  * @param object uri
  * @param object subscriptions
  */
-Fabrico.wamp.open = function (info, subscriptions) {
+Fabrico.wamp.connect = function (info, subscriptions) {
 	var uri;
 
-	if ($.isPlainObject(info)) {
-		if ("port" in info) {
-			uri = sprintf("ws://%s:%s", location.host, info.port);
-		}
+	if (!info) {
+		info = {};
+	}
+
+	if ("port" in info) {
+		uri = sprintf("ws://%s:%s", location.host, info.port);
+	}
+
+	if (!subscriptions && "bind" in info) {
+		info.saveto = info.bind.socket;
+		subscriptions = {};
+		subscriptions[ info.bind.namespace ] = info.bind.handle;
 	}
 
 	ab.connect(uri, function (session) {
@@ -91,11 +99,33 @@ Fabrico.wamp.open = function (info, subscriptions) {
 	}
 };
 
+/**
+ * wamp helper
+ *
+ * @param string namespace
+ */
+Fabrico.wamp.manager = function (namespace) {
+	// for subscriptions
+	this.namespace = namespace || "send";
+
+	// ui related methods go here
+	this.ui = {};
+
+	// standard methods go here
+	this.action = {};
+
+	// socket publishers go here
+	this.socket = {};
+
+	// socket subscriptions go here
+	this.handle = {};
+};
+
 
 /**
  * samples:
 
-Fabrico.wamp.open({ port: 9000 }, {
+Fabrico.wamp.connect({ port: 9000 }, {
 	chat: console.log.bind(console) 
 });
 
