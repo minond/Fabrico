@@ -17,18 +17,16 @@ class modal extends Element {
 
 		// title
 		if ($props->title) {
-			$title = html::div([
-				'class' => 'popup_modal_content_title',
-				'content' => $props->title
+			$close = \view\resource\img::generate((object) [
+				'core' => true,
+				'src' => 'close.gif',
+				'onclick' => "$('#{$props->id}').hide();"
 			]);
 
-			if (!$props->show) {
-				$title .= \view\resource\img::generate((object) [
-					'core' => true,
-					'src' => 'close.gif',
-					'onclick' => "$('#{$props->id}').hide();"
-				]);
-			}
+			$title = html::div([
+				'class' => 'popup_modal_content_title',
+				'content' => $props->title . ($props->show ? '' : $close)
+			]);
 		}
 
 		// body

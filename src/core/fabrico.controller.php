@@ -77,6 +77,16 @@ class Controller {
 	 */
 	public function onview () {}
 
+	/** 
+	 * placeholder for the Controller\PublicAccess interface
+	 */
+	public function onbeforemethod ($method, & $arguments) {}
+
+	/** 
+	 * placeholder for the Controller\PublicAccess interface
+	 */
+	public function onaftermethod ($method, & $arguments) {}
+
 	/**
 	 * state getter
 	 *
