@@ -159,6 +159,14 @@ class Element {
 			}
 		}
 
+		// passed classes
+		if (isset($props->class) && is_string($props->class)) {
+			$props->class = explode(' ', $props->class);
+		}
+		else {
+			$props->class = [];
+		}
+
 		if (!static::$parameter) {
 			$build = static::pregen($props);
 		}
@@ -176,14 +184,6 @@ class Element {
 					unset($props->{ $ignore });
 				}
 			}
-		}
-
-		// passed classes
-		if (isset($props->class) && is_string($props->class)) {
-			$props->class = explode(' ', $props->class);
-		}
-		else {
-			$props->class = [];
 		}
 
 		$props->class = array_merge(static::$classes, $props->class);

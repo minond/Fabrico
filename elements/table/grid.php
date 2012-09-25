@@ -11,7 +11,8 @@ use Fabrico\Element\Param;
 class grid extends Element {
 	protected static $tag = 'table';
 	protected static $classes = [ 'data_table' ];
-	protected static $getopt = [ 'params', 'data', 'caption' ];
+	protected static $getopt = [ 'params', 'data', 'caption', 'nohighlight', 'noborder' ];
+	protected static $ignore = [ 'noborder', 'nohighlight', 'params', 'data', 'caption' ];
 
 	protected static function pregen (& $props) {
 		$columns = [];
@@ -19,26 +20,38 @@ class grid extends Element {
 		$header_data = [];
 		$caption = $props->caption;
 
+		if (!$props->nohighlight) {
+			$props->class[] = 'data_table_reading';
+		}
+
+		if (!$props->noborder) {
+			$props->class[] = 'show_border';
+		}
+
 		// parse parameters
 		list($columns) = Param::run_reader('table', $props->param);
 
 		// build the body
-		foreach ($props->data as $row => $data) {
-			$row_data[ $row ] = [];
-
-			foreach ($columns as $column) {
-				$row_data[ $row ][] = Param::run_writer('table_td', [ $data, $column ]);
+		if (is_array($columns) && count($columns)) {
+			if (isset($props->data)) {
+				foreach ($props->data as $row => $data) {
+					$row_data[ $row ] = [];
+	
+					foreach ($columns as $column) {
+						$row_data[ $row ][] = Param::run_writer('table_td', [ $data, $column ]);
+					}
+		
+					$row_data[ $row ] = html::tr([ 'content' => implode('', $row_data[ $row ]) ]);
+				}
 			}
 
-			$row_data[ $row ] = html::tr([ 'content' => implode('', $row_data[ $row ]) ]);
-		}
+			// build the header
+			foreach ($columns as $column) {
+				$header_data[] = html::th([ 'content' => $column->label ]);
+			}
 
-		// build the header
-		foreach ($columns as $column) {
-			$header_data[] = html::th([ 'content' => $column->label ]);
+			$props->content = Param::run_writer('table', [ $caption, $header_data, $row_data ]);
 		}
-
-		$props->content = Param::run_writer('table', [ $caption, $header_data, $row_data ]);
 	}
 }
 
@@ -51,6 +64,7 @@ Param::register_reader('table', function (& $params) {
 	foreach ($params as $index => $param) {
 		if ($param->classname === 'table_column') {
 			$col = new \stdClass;
+
 			$col->key = $param->key;
 			$col->type = isset($param->type) ? $param->type : Format::F_STRING;
 			$col->format = isset($param->format) ? $param->format : '';

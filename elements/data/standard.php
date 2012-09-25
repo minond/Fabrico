@@ -2,21 +2,29 @@
 
 namespace view\data;
 
-class output extends \Fabrico\Element {
+use Fabrico\Element;
+
+class output extends Element {
 	protected static $tag = 'span';
 }
 
-class block extends \Fabrico\Element {
+class label extends Element {
+	protected static $tag = 'label';
+}
+
+class block extends Element {
 	protected static $tag = 'div';
 }
 
-class linkto extends \Fabrico\Element {
+class linkto extends Element {
 	protected static $tag = 'a';
 }
 
-class form extends \Fabrico\Element {
+class form extends Element {
 	protected static $tag = 'form';
 	protected static $getopt = [ 'class' ];
+	protected static $classes = [ 'formbasic' ];
+	protected static $styles = [ ['form.css'] ];
 
 	protected static function pregen (& $props) {
 		if (in_array('ajax', $props->class)) {

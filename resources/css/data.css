@@ -14,15 +14,17 @@
 	background-color: #EFF0E5;
 }
 
-.data_table > tbody > tr > td {
+.data_table td {
 	font: normal 13px Arial;
 	padding: 2px 5px;
-	border: 1px solid #cecece;
 	cursor: default;
-	background-color: white;
 }
 
-.data_table > tbody > tr:nth-child(even) > td {
+.data_table.show_border td {
+	border: 1px solid #cecece;
+}
+
+.data_table.data_table_reading tr:nth-child(even) td {
 	background-color: #F7F7F7;
 }
 
@@ -128,4 +130,11 @@ input.data_input {
 input.data_button {
 	height: 19px;
 	font: bold 11px Arial;
+}
+
+.data_textarea {
+	border: 1px solid #CDCDCD;
+	padding-left: 3px;
+	font: normal 12px Arial;
+	margin-top: 1px;
 }
