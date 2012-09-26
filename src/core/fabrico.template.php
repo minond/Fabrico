@@ -23,6 +23,12 @@ class Template {
 	 * @param array or template variables
 	 */
 	public static function generate ($_data) {
+		$_controller = & Core::$controller;
+
+		if (is_object($_data)) {
+			$_data = (array) $_data;
+		}
+
 		if (is_array($_data)) {
 			foreach ($_data as $_var => $_value) {
 				$$_var = $_value;
