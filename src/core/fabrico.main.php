@@ -3,12 +3,13 @@
 namespace fabrico;
 
 require 'fabrico.core.php';
-require 'fabrico.autoload.php';
 require 'fabrico.loader.php';
+require 'fabrico.loader.core.php';
 
-// load everything
-Core::instance()->loader = new FabricoLoader;
-Core::instance()->loader->load('core');
+// load core
+Core::instance()->loader = new CoreLoader;
+Core::instance()->loader->load();
 
-// start buiding the parts
-Core::instance()->router = new Router;
+// initialize modules
+Core::instance()->router = new Router($_REQUEST);
+Core::instance()->event = new EventDispatch;

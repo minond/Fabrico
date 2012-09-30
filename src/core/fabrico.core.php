@@ -19,6 +19,11 @@ class Core {
 	public $router;
 
 	/**
+	 * @var EventDispatch
+	 */
+	public $event;
+
+	/**
 	 * instance getter
 	 * @return Core
 	 */
