@@ -2,6 +2,6 @@
 
 namespace fabrico;
 
-class Configuration {
+class ConfigurationManager {
 	
 }

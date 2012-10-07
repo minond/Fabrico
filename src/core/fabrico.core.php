@@ -9,9 +9,14 @@ class Core {
 	private static $instance;
 
 	/**
-	 * @var Loader
+	 * @var CoreLoader
 	 */
-	public $loader;
+	public $core;
+
+	/**
+	 * @var DepsLoader
+	 */
+	public $deps;
 
 	/**
 	 * @var Router

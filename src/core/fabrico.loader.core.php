@@ -7,7 +7,9 @@ class CoreLoader extends Loader {
 		'core' => [
 			'router',
 			'configuration',
-			'event'
+			'event',
+			'project',
+			'loader.deps'
 		]
 	];
 
