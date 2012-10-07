@@ -14,8 +14,6 @@ class DepsLoader extends Loader {
 	}
 
 	public function conf_dep_file ($file) {
-		print_r($this->core);
-		die;
 		return "../../../admin/php_include/{$file}";
 	}
 }

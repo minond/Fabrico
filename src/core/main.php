@@ -2,10 +2,10 @@
 
 namespace fabrico;
 
-require 'fabrico.core.php';
-require 'fabrico.module.php';
-require 'fabrico.loader.php';
-require 'fabrico.loader.core.php';
+require 'core.php';
+require 'module.php';
+require 'loader.php';
+require 'loader.core.php';
 
 // loaders
 Core::instance()->core = new CoreLoader;

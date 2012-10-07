@@ -18,6 +18,6 @@ class CoreLoader extends Loader {
 	}
 
 	public function std_core_file ($file) {
-		return "fabrico.{$file}.php";
+		return "{$file}.php";
 	}
 }
