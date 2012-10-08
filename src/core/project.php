@@ -2,10 +2,10 @@
 
 namespace fabrico;
 
-class ProjectManager {
+class ProjectManager extends Module {
 	/**
 	 * main configuraiton
 	 * @var ConfigurationManager
 	 */
-	private $configuration;
+	public $configuration;
 }

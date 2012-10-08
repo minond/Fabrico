@@ -2,6 +2,10 @@
 
 namespace fabrico;
 
-class ConfigurationManager {
-	
+class ConfigurationManager extends Module {
+	/**
+	 * yml file parser
+	 * @var Reader
+	 */
+	public $reader;
 }

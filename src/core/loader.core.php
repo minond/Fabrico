@@ -9,7 +9,7 @@ class CoreLoader extends Loader {
 			'configuration',
 			'event',
 			'project',
-			'loader.deps'
+			'reader'
 		]
 	];
 
