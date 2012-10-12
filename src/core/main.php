@@ -31,3 +31,15 @@ Core::instance()->router->route();
 // project loader
 // Core::instance()->project = new ProjectManager;
 // Core::instance()->project->configuration = new ConfigurationManager;
+
+$cm = new ConfigurationManager;
+$ci = new ConfigurationItems;
+$c1 = new ConfigurationItem([
+	'templates' => '/templates/'
+]);
+
+$cm->set('core', $ci);
+$ci->set('dirs', $c1);
+
+util::dpre($cm);
+util::dpre($cm->core->dirs->templates);

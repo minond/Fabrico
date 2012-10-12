@@ -3,14 +3,14 @@
 namespace fabrico;
 
 class ConfigurationManager extends Module {
-	/**
-	 * @var array[string]ConfigurationManager
+	/** 
+	 * @param array[string]ConfigurationItems
 	 */
 	private $confs = [];
 
-	/**
-	 * @param string $name
-	 * @param ConfigurationItems $item
+	/** 
+	 * @param string $conf
+	 * @param ConfigurationItems $ci
 	 */
 	public function set ($conf, ConfigurationItems & $ci) {
 		if (!array_key_exists($conf, $this->confs)) {
@@ -18,7 +18,7 @@ class ConfigurationManager extends Module {
 		}
 	}
 
-	/** 
+	/**
 	 * @param string $conf
 	 * @return ConfigurationItems
 	 */

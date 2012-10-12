@@ -4,35 +4,26 @@ namespace fabrico;
 
 class ConfigurationItems {
 	/**
-	 * @var array[string]string
+	 * @var array[string]ConfigurationItems
 	 */
-	private $storage;
+	private $items = [];
 
 	/**
-	 * @param array[string]string $props
+	 * @param string $item
+	 * @param ConfigurationItem $ci
 	 */
-	public function __construct (array $props) {
-		$this->storage = $props;
-	}
-
-	/**
-	 * getter shortcut
-	 * @param string $prop
-	 * @return string
-	 */
-	public function __get ($prop) {
-		return array_key_exists($prop, $this->storage) ?
-		       $this->storage[ $prop ] : null;
-	}
-
-	/**
-	 * @param string $prop
-	 * @param string $value
-	 * @param boolean $allow_overwrite
-	 */
-	public function set ($prop, $value, $allow_overwrite = false) {
-		if ($allow_overwrite || !array_key_exists($prop, $this->storage)) {
-			$this->storage[ $prop ] = $value;
+	public function set ($item, ConfigurationItem & $ci) {
+		if (!array_key_exists($item, $this->items)) {
+			$this->items[ $item ] = & $ci;
 		}
+	}
+
+	/** 
+	 * @param string $item
+	 * @return ConfigurationItem
+	 */
+	public function __get ($item) {
+		return array_key_exists($item, $this->items) ?
+		       $this->items[ $item ] : null;
 	}
 }

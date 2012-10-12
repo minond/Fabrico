@@ -41,7 +41,7 @@ class Router {
 	}
 
 	public function route () {
-		util::dpre($this->request, self::$var);
+		util::dpr($this->request, self::$var);
 	}
 }
 
