@@ -5,8 +5,10 @@ namespace fabrico;
 class CoreLoader extends Loader {
 	protected $files = [
 		'core' => [
+			'configuration.items',
+			'configuration.manager',
+			'configuration.core',
 			'router',
-			'configuration',
 			'event',
 			'project',
 			'reader'

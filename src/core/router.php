@@ -9,9 +9,15 @@ class Router {
 	private $request;
 
 	/**
+	 * standard request variable names
+	 * @var object
+	 */
+	public static $var;
+
+	/**
 	 * @param array $req
 	 */
-	public function set_request (& $req) {
+	public function request (& $req) {
 		$this->request = & $req;
 	}
 
@@ -33,4 +39,22 @@ class Router {
 	public function set ($var, $val) {
 		return $this->request[ $var ] = $val;
 	}
+
+	public function route () {
+		util::dpre($this->request, self::$var);
+	}
 }
+
+// set vars
+Router::$var = (object) [
+	// file requests
+	'file' => '_file',
+	// controller method calls
+	'method' => '_method',
+	// controller method call arguments
+	'args' => '_args',
+	// controller variables
+	'env' => '_env',
+	// component updates
+	'element' => '_element'
+];

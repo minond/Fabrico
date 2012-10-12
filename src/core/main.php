@@ -4,6 +4,7 @@ namespace fabrico;
 
 require 'core.php';
 require 'module.php';
+require 'util.php';
 require 'loader.php';
 require 'loader.core.php';
 require 'loader.deps.php';
@@ -14,18 +15,19 @@ Core::instance()->deps = new DepsLoader;
 Core::instance()->deps->set_path('../../../admin/php_include/');
 
 Core::instance()->core->load();
-Core::instance()->deps->load('yml');
 
 // prepare the configuration's reader
+// Core::instance()->deps->load('yml');
 Reader::yml(function ($file) {
 	return \sfYaml::load($file);
 });
 
 // initialize core modules
-Core::instance()->router = new Router($_REQUEST);
 Core::instance()->event = new EventDispatch;
+Core::instance()->router = new Router($_REQUEST);
+Core::instance()->router->request($_REQUEST);
+Core::instance()->router->route();
 
 // project loader
-Core::instance()->project = new ProjectManager;
-Core::instance()->project->configuration = new ConfigurationManager;
-Core::instance()->project->configuration->reader = new Reader;
+// Core::instance()->project = new ProjectManager;
+// Core::instance()->project->configuration = new ConfigurationManager;
