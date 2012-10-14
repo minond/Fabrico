@@ -8,6 +8,10 @@
 namespace fabrico;
 
 class Module {
+	use Mediator;
+}
+
+trait Mediator {
 	public function __get ($var) {
 		switch ($var) {
 			case 'core':

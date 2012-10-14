@@ -4,6 +4,11 @@ namespace fabrico;
 
 class Loader {
 	/**
+	 * formatter function name convention
+	 */
+	const FORMATTER = '%s_format';
+
+	/**
 	 * @var array
 	 */
 	protected $files = [];
@@ -12,6 +17,19 @@ class Loader {
 	 * @var array
 	 */
 	protected $formats = [];
+
+	/**
+	 * acts as an auto format setter
+	 */
+	public function __construct () {
+		foreach ($this->files as $ns => $files) {
+			$fn = sprintf(self::FORMATTER, $ns);
+
+			if (method_exists($this, $fn)) {
+				$this->format($ns, [ $this, $fn ]);
+			}
+		}
+	}
 
 	/**
 	 * @param string $namespace
