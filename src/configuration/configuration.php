@@ -1,8 +1,16 @@
 <?php
 
-namespace fabrico;
+/**
+ * @package fabrico\configuration
+ */
+namespace fabrico\configuration;
 
-class ConfigurationManager extends Module {
+use fabrico\core\Module;
+
+/**
+ * ConfigurationItems manager
+ */
+class Configuration extends Module {
 	/** 
 	 * @param array[string]ConfigurationItems
 	 */

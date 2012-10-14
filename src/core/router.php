@@ -1,7 +1,13 @@
 <?php
 
+/**
+ * @package fabrico\core
+ */
 namespace fabrico;
 
+/**
+ * request file server
+ */
 class Router {
 	/**
 	 * @var array
@@ -17,7 +23,7 @@ class Router {
 	/**
 	 * @param array $req
 	 */
-	public function request (& $req) {
+	public function __construct (& $req) {
 		$this->request = & $req;
 	}
 
@@ -40,8 +46,12 @@ class Router {
 		return $this->request[ $var ] = $val;
 	}
 
+	/**
+	 * route the request to the correct
+	 * request server
+	 */
 	public function route () {
-		util::dpr($this->request, self::$var);
+		// util::dpr($this->request, self::$var);
 	}
 }
 

@@ -11,13 +11,19 @@ class CoreLoader extends Loader {
 		'configuration' => [
 			'item',
 			'items',
-			'manager',
+			'configuration',
 		],
 		'core' => [
 			'router',
 			'event',
-			'project',
 			'reader'
+		],
+		'page' => [
+			'page',
+			'parser'
+		],
+		'error' => [
+			'exception'
 		]
 	];
 
@@ -31,5 +37,13 @@ class CoreLoader extends Loader {
 
 	public function observer_format ($file) {
 		return "observer/{$file}.php";
+	}
+
+	public function page_format ($file) {
+		return "page/{$file}.php";
+	}
+
+	public function error_format ($file) {
+		return "error/{$file}.php";
 	}
 }

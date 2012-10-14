@@ -2,15 +2,26 @@
 
 /**
  * class mediator
- * @package fabrico
+ * @package fabrico\core
  */
 
-namespace fabrico;
+namespace fabrico\core;
 
+/**
+ * mediator class
+ */
 class Module {
-	use Mediator;
+	public function __get ($var) {
+		switch ($var) {
+			case 'core':
+				return Core::instance();
+		}
+	}
 }
 
+/**
+ * mediator functions
+ */
 trait Mediator {
 	public function __get ($var) {
 		switch ($var) {

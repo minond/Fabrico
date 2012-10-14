@@ -1,7 +1,13 @@
 <?php
 
-namespace fabrico;
+/**
+ * @package fabrico\configuration
+ */
+namespace fabrico\configuration;
 
+/**
+ * a configuration map
+ */
 class ConfigurationItem {
 	/**
 	 * @var array[string]string

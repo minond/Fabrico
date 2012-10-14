@@ -1,8 +1,14 @@
 <?php
 
-namespace fabrico;
+/**
+ * @package fabrico\core
+ */
+namespace fabrico\core;
 
-class util extends Module {
+/**
+ * utility belt class
+ */
+class util {
 	/**
 	 * prints arguments
 	 * @param mixed $output*

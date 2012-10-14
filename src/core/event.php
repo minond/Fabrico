@@ -1,7 +1,13 @@
 <?php
 
-namespace fabrico;
+/**
+ * @package fabrico\core
+ */
+namespace fabrico\core;
 
+/**
+ * event listener
+ */
 class EventDispatch {
 	/**
 	 * event lineters
