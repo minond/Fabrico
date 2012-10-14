@@ -1,0 +1,15 @@
+directory:
+  build: /internal/build/
+  configuration: /configuration/
+  controllers: /controllers/
+  css: /resources/css/
+  elements: /elements/
+  images: /resources/images/
+  include: /include/
+  javascript: /resources/javascript/
+  logs: /internal/logs/
+  models: /models/
+  routers: /routers/
+  templates: /templates/
+  triggers: /triggers/
+  views: /views/
