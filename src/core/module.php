@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * class mediator
+ * @package fabrico
+ */
+
 namespace fabrico;
 
 class Module {
