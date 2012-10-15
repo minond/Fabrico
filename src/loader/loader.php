@@ -1,7 +1,13 @@
 <?php
 
-namespace fabrico;
+/**
+ * @package fabrico\loader
+ */
+namespace fabrico\loader;
 
+/**
+ * auto loader
+ */
 class Loader {
 	/**
 	 * formatter function name convention

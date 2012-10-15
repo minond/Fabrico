@@ -1,7 +1,13 @@
 <?php
 
-namespace fabrico;
+/**
+ * @package fabrico\loader
+ */
+namespace fabrico\loader;
 
+/**
+ * core file loader
+ */
 class CoreLoader extends Loader {
 	protected $files = [
 		'observer' => [
@@ -20,6 +26,9 @@ class CoreLoader extends Loader {
 		],
 		'page' => [
 			'page',
+			'lexer',
+			'token',
+			'tagtoken',
 			'parser'
 		],
 		'error' => [

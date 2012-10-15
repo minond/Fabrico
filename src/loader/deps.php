@@ -1,7 +1,13 @@
 <?php
 
-namespace fabrico;
+/**
+ * @package fabrico\loader
+ */
+namespace fabrico\loader;
 
+/**
+ * dependency loader
+ */
 class DepsLoader extends Loader {
 	/**
 	 * deps base path

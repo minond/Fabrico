@@ -3,7 +3,7 @@
 /**
  * @package fabrico\core
  */
-namespace fabrico;
+namespace fabrico\core;
 
 /**
  * request file server
