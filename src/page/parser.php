@@ -94,9 +94,9 @@ $p->load_tags(Parser::STD, 'page', ['def', 'conf']);
 $p->load_tags(Parser::STD, 'field', ['text', 'select', 'option', 'checkbox']);
 
 $mu = <<<MU
-<f:page:def>
-</f:page:conf title="Add New User"                 >
+</f:page:conf title="Add New User"                 />
 <f:page:def controller="UserManager" format="html, mobile, pdf" />
+<f:page:def>
 <f:page:def
 controller="UserManager" 
 format="html, mobile, pdf"
