@@ -11,55 +11,9 @@ namespace fabrico\page;
  */
 class Parser {
 	/**
-	 * default tag package
-	 */
-	const STD = 'f';
-
-	/**
-	 * tag info separator
-	 * package:namespace:name
-	 */
-	const SEP = ':';
-
-	/**
-	 * tag pattern
-	 * <code>
-	 * /
-	 *   \<         # tag start
-	 *     \/?      # optional closing tag
-	 *     (\w?):   # package character
-	 *     (\w+?):  # tag namespace
-	 *     (\w+)    # tag name
-	 *     (.*?)?   # optional tag properties
-	 *     \/?      # optional self closing tag
-	 *   \>         # tag end
-	 * /ms          # multiline, dot all
-	 * </code>
-	 */
-	const TAG = '/\<\/?(\w?):(\w+?):(\w+)(.*?)?\/?\>/ms';
-
-	/**
 	 * maximum parser iterations
 	 */
 	const MAX_ITERATION = 1000;
-
-	/**
-	 * @var array
-	 */
-	private $tags = [];
-
-	/**
-	 * custom tag setter
-	 * @param string $ns
-	 * @param array $tags
-	 */
-	public function load_tags ($package, $ns, array $tags) {
-		if (!isset($this->tags[ $package ])) {
-			$this->tags[ $package ] = [];
-		}
-
-		$this->tags[ $package ][ $ns ] = $tags;
-	}
 
 	/**
 	 * parses custom tags and replaces them
@@ -109,15 +63,12 @@ format="html, mobile, pdf"
 </f:page:def>
 MU;
 
-$p = new Parser;
-$p->load_tags(Parser::STD, 'page', ['def', 'conf']);
-$p->load_tags(Parser::STD, 'field', ['text', 'select', 'option', 'checkbox']);
-
 $lexer = new Lexer;
 $lexer->add_token(new TagToken);
 $lexer->set_string($mu);
 
-$p->parse($lexer);
+$parser = new Parser;
+$parser->parse($lexer);
 
 \fabrico\core\util::dpr($lexer);
 
