@@ -10,6 +10,12 @@ namespace fabrico\page;
  */
 abstract class Token {
 	/**
+	 * token's regular expression
+	 * @var string
+	 */
+	public static $pattern = '/.+/';
+
+	/**
 	 * raw matched string
 	 * @var string
 	 */

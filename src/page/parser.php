@@ -64,34 +64,32 @@ class Parser {
 	/**
 	 * parses custom tags and replaces them
 	 * with php code
-	 * @param string $pattern
-	 * @param string $markup
 	 * @param Lexer $lexer
 	 * @return string
 	 */
-	public function parse ($pattern, $markup, Lexer $lexer) {
-		$offset = 0;
+	public function parse (Lexer $lexer) {
+		foreach ($lexer->tokens as & $token) {
+			$offset = 0;
 
-		for ($i = 0; $i < self::MAX_ITERATION; $i++) {
-			preg_match($pattern, $markup, $matches, PREG_OFFSET_CAPTURE, $offset);
-			
-			if (count($matches)) {
-				// reset the offset and save in lexer
-				$offset = strlen($matches[ 0 ][ 0 ]) + $matches[ 0 ][ 1 ];
-				$lexer->save_raw($matches);
+			for ($i = 0; $i < self::MAX_ITERATION; $i++) {
+				preg_match($token::$pattern, $lexer->get_string(), $matches, PREG_OFFSET_CAPTURE, $offset);
+				
+				if (count($matches)) {
+					// reset the offset and save in lexer
+					$offset = strlen($matches[ 0 ][ 0 ]) + $matches[ 0 ][ 1 ];
+					$mytoken = clone $token;
+					$mytoken->parse($matches);
+					$lexer->add_match($mytoken);
+				}
+				else {
+					break;
+				}
 			}
-			else {
-				break;
-			}
+
+			unset($token);
 		}
 	}
 }
-
-$lexer = new Lexer;
-$lexer->token = new TagToken;
-$p = new Parser;
-$p->load_tags(Parser::STD, 'page', ['def', 'conf']);
-$p->load_tags(Parser::STD, 'field', ['text', 'select', 'option', 'checkbox']);
 
 $mu = <<<MU
 </f:page:conf title="Add New User"                 />
@@ -111,14 +109,17 @@ format="html, mobile, pdf"
 </f:page:def>
 MU;
 
-$mu2 = $p->parse(Parser::TAG, $mu, $lexer);
+$p = new Parser;
+$p->load_tags(Parser::STD, 'page', ['def', 'conf']);
+$p->load_tags(Parser::STD, 'field', ['text', 'select', 'option', 'checkbox']);
 
+$lexer = new Lexer;
+$lexer->add_token(new TagToken);
+$lexer->set_string($mu);
+
+$p->parse($lexer);
 
 \fabrico\core\util::dpr($lexer);
-
-echo $mu . "\n\n";
-echo $mu2;
-
 
 
 die;

@@ -9,6 +9,25 @@ namespace fabrico\page;
  * tag token
  */
 class TagToken extends Token {
+	/** 
+	 * tag pattern
+	 * <code>
+	 * /
+	 *   \<         # tag start
+	 *     \/?      # optional closing tag
+	 *     (\w?):   # package character
+	 *     (\w+?):  # tag namespace
+	 *     (\w+)    # tag name
+	 *     (.*?)?   # optional tag properties
+	 *     \/?      # optional self closing tag
+	 *   \>         # tag end
+	 * /ms          # multiline, dot all
+	 * </code>
+	 * @var string
+	 */
+	public static $pattern = '/\<\/?(\w?):(\w+?):(\w+)(.*?)?\/?\>/ms';
+
+
 	/**
 	 * number of matches a valid raw token should have
 	 */

@@ -11,31 +11,63 @@ namespace fabrico\page;
  */
 class Lexer {
 	/**
-	 * @var Token
+	 * tokens used by this lexer
+	 * @var Token[]
 	 */
-	public $token;
+	public $tokens = [];
 
 	/**
 	 * match tokens
 	 * @var Tokens[]
 	 */
-	private $tokens = [];
+	private $matches = [];
+
+	/**
+	 * raw string
+	 * @var string
+	 */
+	private $str = '';
 
 	/**
 	 * delete all tokens
 	 */
 	public function __destruct () {
-		unset($this->token);
+		unset($this->matches);
 		unset($this->tokens);
 	}
 
 	/**
-	 * new raw token setter
-	 * @param array $match
+	 * @return Token[]
 	 */
-	public function save_raw (array & $match) {
-		$token = clone $this->token;
-		$token->parse($match);
+	public function get_matches () {
+		return $this->matches;
+	}
+
+	/**
+	 * @param Token $token
+	 */
+	public function add_match (Token & $token) {
+		$this->matches[] = $token;
+	}
+
+	/**
+	 * @param Token $token
+	 */
+	public function add_token (Token & $token) {
 		$this->tokens[] = $token;
+	}
+
+	/**
+	 * @param string $str
+	 */
+	public function set_string ($str) {
+		$this->str = $str;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_string () {
+		return $this->str;
 	}
 }
