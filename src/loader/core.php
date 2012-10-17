@@ -28,6 +28,7 @@ class CoreLoader extends Loader {
 			'page',
 			'lexer',
 			'token',
+			'propertytoken',
 			'tagtoken',
 			'parser'
 		],

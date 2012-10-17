@@ -22,6 +22,8 @@ class Parser {
 	 * @return string
 	 */
 	public function parse (Lexer $lexer) {
+		$parsedstr = $lexer->get_string();
+
 		foreach ($lexer->tokens as & $token) {
 			$offset = 0;
 
@@ -42,6 +44,13 @@ class Parser {
 
 			unset($token);
 		}
+
+		foreach ($lexer->get_matches() as $token) {
+			$parsedstr = str_replace($token->string, $token->replacement, $parsedstr);
+		}
+
+		\fabrico\core\util::dpre($parsedstr);
+		return $parsedstr;
 	}
 }
 

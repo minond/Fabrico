@@ -73,6 +73,11 @@ class TagToken extends Token {
 	private $properties;
 
 	/**
+	 * @var PropertyToken
+	 */
+	private $property_token;
+
+	/**
 	 * @see Token::parse
 	 */
 	public function parse (array $raw) {
@@ -82,8 +87,12 @@ class TagToken extends Token {
 			$this->package = $raw[ 1 ][ 0 ];
 			$this->namespace = $raw[ 2 ][ 0 ];
 			$this->name = $raw[ 3 ][ 0 ];
-			$this->properties = $raw[ 4 ][ 0 ];
 			$this->type = $this->get_type();
+
+			// prop tokenizer
+			$this->properties = $raw[ 4 ][ 0 ];
+			$this->property_token = new PropertyToken;
+			$this->property_token->parse(array($this->properties));
 		}
 		
 		$this->replacement = $this->as_component();
@@ -110,18 +119,10 @@ class TagToken extends Token {
 	 * @return string
 	 */
 	private function as_component () {
-		$properties = '[]';
+		$properties = "[ {$this->property_token->replacement} ]";
 
-		return !$this->valid ? '<!-- invalid tag -->' : <<<PHP
-<?php
-	echo Tag::factory([
-		'type' => '{$this->type}',
-		'package' => '{$this->package}',
-		'namespace' => '{$this->namespace}',
-		'name' => '{$this->name}',
-		'properties' => (object) {$properties}
-	]);
-?>
-PHP;
+		return !$this->valid ?
+		       '<!-- invalid tag -->' :
+		       "<?php echo \\fabrico\\page\\Tag::factory([ 'type' => '{$this->type}', 'package' => '{$this->package}', 'namespace' => '{$this->namespace}', 'name' => '{$this->name}', 'properties' => (object) {$properties} ]); ?>";
 	}
 }
