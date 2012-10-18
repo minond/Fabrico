@@ -5,6 +5,8 @@
  */
 namespace fabrico\core;
 
+use fabrico\loader\DepsLoader;
+
 /**
  * file reader
  */
@@ -18,7 +20,15 @@ class Reader extends Module {
 	/**
 	 * @param callable $reader
 	 */
-	public static function yml (callable $reader) {
+	public static function set_yml (callable $reader) {
 		self::$yml = $reader;
+	}
+
+	/**
+	 * @param string $file
+	 */
+	public function yml ($file) {
+		$this->getc()->deps->load(DepsLoader::YML);
+		return call_user_func(self::$yml, $file);
 	}
 }

@@ -7,6 +7,7 @@ namespace fabrico\page;
 
 /**
  * tag token
+ * @uses PropertyToken
  */
 class TagToken extends Token {
 	/** 
@@ -123,6 +124,14 @@ class TagToken extends Token {
 
 		return !$this->valid ?
 		       '<!-- invalid tag -->' :
-		       "<?php echo \\fabrico\\page\\Tag::factory([ 'type' => '{$this->type}', 'package' => '{$this->package}', 'namespace' => '{$this->namespace}', 'name' => '{$this->name}', 'properties' => (object) {$properties} ]); ?>";
+		       <<<PHP
+<?php echo \\fabrico\\page\\Tag::factory([
+ 'type' => '{$this->type}',
+ 'package' => '{$this->package}',
+ 'namespace' => '{$this->namespace}',
+ 'name' => '{$this->name}',
+ 'properties' => (object) {$properties}
+]); ?>
+PHP;
 	}
 }

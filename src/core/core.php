@@ -30,9 +30,19 @@ class Core {
 	public $router;
 
 	/**
+	 * @var Reader
+	 */
+	public $reader;
+
+	/**
 	 * @var EventDispatch
 	 */
 	public $event;
+
+	/**
+	 * @var Configuration
+	 */
+	public $configuration;
 
 	/**
 	 * instance getter

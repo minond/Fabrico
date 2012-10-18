@@ -25,6 +25,7 @@ class CoreLoader extends Loader {
 			'reader'
 		],
 		'page' => [
+			'build',
 			'page',
 			'lexer',
 			'token',

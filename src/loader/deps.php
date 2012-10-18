@@ -10,6 +10,11 @@ namespace fabrico\loader;
  */
 class DepsLoader extends Loader {
 	/**
+	 * yml readers
+	 */
+	const YML = 'yml';
+
+	/**
 	 * deps base path
 	 * @var string
 	 */
@@ -24,15 +29,11 @@ class DepsLoader extends Loader {
 		]
 	];
 
-	public function __construct () {
-		$this->format('yml', [ $this, 'conf_dep_file' ]);
-	}
-
 	/**
 	 * deps file formatter
 	 * @return string
 	 */
-	public function conf_dep_file ($file) {
+	public function conf_yml_file ($file) {
 		return $this->path_to . $file;
 	}
 

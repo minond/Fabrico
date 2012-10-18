@@ -31,14 +31,16 @@ Core::instance()->core->load('error');
 
 // prepare the configuration's reader
 // Core::instance()->deps->load('yml');
-Reader::yml(function ($file) {
+Reader::set_yml(function ($file) {
 	return \sfYaml::load($file);
 });
 
 // initialize core modules
+Core::instance()->reader = new Reader;
 Core::instance()->event = new EventDispatch;
 Core::instance()->router = new Router($_REQUEST);
-
+Core::instance()->configuration = new Configuration;
+Core::instance()->configuration->load('../configuration/httpconf.yml', Configuration::APC);
 
 
 

@@ -49,7 +49,6 @@ class Parser {
 			$parsedstr = str_replace($token->string, $token->replacement, $parsedstr);
 		}
 
-		\fabrico\core\util::dpre($parsedstr);
 		return $parsedstr;
 	}
 }
@@ -69,6 +68,9 @@ format="html, mobile, pdf"
 		<f:field:option value="one" label="1" />
 		<f:field:option value="two">2</f:field:option>
 	</f:field:select>
+
+	<f:page:footer size=43 />
+	<f:page:footer size=32>this is my footer...</f:page:footer>
 </f:page:def>
 MU;
 
@@ -77,9 +79,7 @@ $lexer->add_token(new TagToken);
 $lexer->set_string($mu);
 
 $parser = new Parser;
-$parser->parse($lexer);
+$mu2 = $parser->parse($lexer);
 
 \fabrico\core\util::dpr($lexer);
-
-
-die;
+\fabrico\core\util::dpre($mu2);

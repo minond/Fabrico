@@ -10,12 +10,19 @@ namespace fabrico\core;
 /**
  * mediator class
  */
-class Module {
+abstract class Module {
+	const __PROP_NAME = 'core';
+
 	public function __get ($var) {
+		\fabrico\core\util::dpre($var);
 		switch ($var) {
-			case 'core':
-				return Core::instance();
+			case self::__PROP_NAME:
+				return $this->getc();
 		}
+	}
+
+	public function getc () {
+		return Core::instance();
 	}
 }
 
@@ -25,8 +32,12 @@ class Module {
 trait Mediator {
 	public function __get ($var) {
 		switch ($var) {
-			case 'core':
-				return Core::instance();
+			case Module::__PROP_NAME:
+				return $this->getc();
 		}
+	}
+
+	public function getc () {
+		return Core::instance();
 	}
 }
