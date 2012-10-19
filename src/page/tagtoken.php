@@ -28,7 +28,6 @@ class TagToken extends Token {
 	 */
 	public static $pattern = '/\<\/?(\w?):(\w+?):(\w+)(.*?)?\/?\>/ms';
 
-
 	/**
 	 * number of matches a valid raw token should have
 	 */
@@ -79,6 +78,24 @@ class TagToken extends Token {
 	private $property_token;
 
 	/**
+	 * @var string
+	 */
+	public static $valid_tag = <<<PHP
+<?php echo \\fabrico\\page\\Tag::factory([
+ 'type' => '%type',
+ 'package' => '%package',
+ 'namespace' => '%namespace',
+ 'name' => '%name',
+ 'properties' => (object) [ %properties ]
+]); ?>
+PHP;
+
+	/**
+	 * @var string
+	 */
+	public static $invalid_tag = '<!-- invalid tag -->';
+
+	/**
 	 * @see Token::parse
 	 */
 	public function parse (array $raw) {
@@ -120,18 +137,11 @@ class TagToken extends Token {
 	 * @return string
 	 */
 	private function as_component () {
-		$properties = "[ {$this->property_token->replacement} ]";
-
-		return !$this->valid ?
-		       '<!-- invalid tag -->' :
-		       <<<PHP
-<?php echo \\fabrico\\page\\Tag::factory([
- 'type' => '{$this->type}',
- 'package' => '{$this->package}',
- 'namespace' => '{$this->namespace}',
- 'name' => '{$this->name}',
- 'properties' => (object) {$properties}
-]); ?>
-PHP;
+		return !$this->valid ? self::$invalid_tag :
+			str_replace(
+				['%type', '%package', '%namespace', '%name', '%properties'],
+				[$this->type, $this->package, $this->namespace, $this->name, $this->property_token->replacement],
+				self::$valid_tag
+			);
 	}
 }

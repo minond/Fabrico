@@ -17,4 +17,4 @@ class Build extends Module {
 
 
 $bld = new Build;
-util::dpre($bld->core);
+//util::dpre($bld->getc());

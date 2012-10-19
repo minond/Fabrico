@@ -30,7 +30,6 @@ Core::instance()->core->load('configuration');
 Core::instance()->core->load('error');
 
 // prepare the configuration's reader
-// Core::instance()->deps->load('yml');
 Reader::set_yml(function ($file) {
 	return \sfYaml::load($file);
 });
@@ -40,10 +39,7 @@ Core::instance()->reader = new Reader;
 Core::instance()->event = new EventDispatch;
 Core::instance()->router = new Router($_REQUEST);
 Core::instance()->configuration = new Configuration;
-Core::instance()->configuration->load('../configuration/httpconf.yml', Configuration::APC);
-
-
-
+Core::instance()->configuration->load('core', '../configuration/httpconf.yml', Configuration::APC);
 
 
 
@@ -53,15 +49,3 @@ Core::instance()->configuration->load('../configuration/httpconf.yml', Configura
 Core::instance()->router->route();
 
 Core::instance()->core->load('page');
-
-$cm = new Configuration;
-$ci = new ConfigurationItems;
-$c1 = new ConfigurationItem([
-	'templates' => '/templates/'
-]);
-
-$cm->set('core', $ci);
-$ci->set('dirs', $c1);
-
-util::dpre($cm);
-util::dpre($cm->core->dirs->templates);
