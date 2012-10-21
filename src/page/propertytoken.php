@@ -7,17 +7,47 @@ namespace fabrico\page;
 
 /**
  * tag property token
+ * @uses MergeToken
  */
 class PropertyToken extends Token {
 	/**
 	 * @see Token::parse
 	 */
 	public function parse (array $match) {
-		$prop = trim($match[ 0 ]);
-		$parts = explode('=', $prop);
-		$lastprop = count($parts) - 1;
+		list($props, $vals) = $this->get_prop_val($match[ 0 ]);
+		$this->replacement = $this->get_props_str($props, $vals);
+		$this->valid = true;
+	}
+
+	/**
+	 * @param array $props
+	 * @param array $vals
+	 * @return string
+	 */
+	private function get_props_str (array $props, array $vals) {
 		$propstrs = [];
 		$propmap = [];
+
+		foreach ($props as $index => $prop) {
+			if (isset($vals[ $index ])) {
+				$propmap[ trim($prop) ] = $this->parse_value($vals[ $index ]);
+			}
+		}
+
+		foreach ($propmap as $property => $value) {
+			$propstrs[] = $this->array_prop($property, $value);
+		}
+
+		return implode(', ', $propstrs);
+	}
+
+	/**
+	 * @param string $propstr
+	 * @return array[array]
+	 */
+	private function get_prop_val ($propstr) {
+		$parts = explode('=', trim($propstr));
+		$lastprop = count($parts) - 1;
 		$props = [];
 		$vals = [];
 
@@ -35,18 +65,33 @@ class PropertyToken extends Token {
 			}
 		}
 
-		foreach ($props as $index => $prop) {
-			if (isset($vals[ $index ])) {
-				$propmap[ trim($prop) ] = trim($vals[ $index ]);
-			}
-		}
+		return [ $props, $vals ];
+	}
 
-		foreach ($propmap as $property => $value) {
-			$propstrs[] = "'{$property}' => {$value}";
-		}
+	/**
+	 * @param string $property
+	 * @param string $value
+	 * @return string
+	 */
+	private function array_prop ($property, $value) {
+		return "'{$property}' => {$value}";
+	}
 
-		$this->replacement = implode(', ', $propstrs);
-		$this->string = trim($match[ 0 ]);
-		$this->valid = true;
+	/** 
+	 * @param string $value
+	 * @return string
+	 */
+	private function parse_value ($value) {
+		$parser = new Parser;
+		$lexer = new Lexer;
+		$lexer->add_token(new MergeToken);
+		$lexer->set_string(trim($value));
+
+		$orig = MergeToken::$holder;
+		MergeToken::$holder = MergeToken::IN_STR;
+		$value = $parser->parse($lexer);
+		MergeToken::$holder = $orig;
+
+		return $value;
 	}
 }

@@ -5,9 +5,6 @@
  */
 namespace fabrico\page;
 
-use fabrico\core\util;
-use fabrico\page\Token;
-
 /**
  * merge field token
  */
@@ -58,7 +55,7 @@ class MergeToken extends Token {
 	 * holder name
 	 * @var string
 	 */
-	public $holder = self::IN_PHP;
+	public static $holder = self::IN_PHP;
 
 	/**
 	 * possible holders
@@ -76,7 +73,7 @@ class MergeToken extends Token {
 		list($find, $replace) = $this->getspecial();
 		$type = self::$types[ $raw[ 1 ][ 0 ] ];
 		$merge = str_replace($find, $replace, $raw[ 2 ][ 0 ]);
-		$holder = self::$holders[ $this->holder ];
+		$holder = self::$holders[ self::$holder ];
 		$this->replacement = str_replace(['%type', '%merge'], [$type, $merge], $holder);
 	}
 

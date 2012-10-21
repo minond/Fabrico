@@ -59,7 +59,8 @@ $mu = <<<MU
 @{page:title!}
 @{page:title!}
 #{page:ti:tl:e!}
-<f:page:def controller="UserManager" format="html, mobile, pdf" />
+<f:page:def controller="UserManager" format="html, mobile, pdf, #{anotherone}" />
+#{page:ti:tl:e!}
 <f:page:def>
 <f:page:def
 controller="UserManager" 
