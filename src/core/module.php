@@ -11,13 +11,16 @@ namespace fabrico\core;
  * mediator class
  */
 abstract class Module {
-	const __PROP_NAME = 'core';
+	const __CORE_NAME = 'core';
+	const __CONF_NAME = 'configuration';
 
 	public function __get ($var) {
-		\fabrico\core\util::dpre($var);
 		switch ($var) {
-			case self::__PROP_NAME:
+			case self::__CORE_NAME:
 				return $this->getc();
+
+			case self::__CONF_NAME:
+				return $this->getc()->configuration;
 		}
 	}
 
@@ -32,8 +35,11 @@ abstract class Module {
 trait Mediator {
 	public function __get ($var) {
 		switch ($var) {
-			case Module::__PROP_NAME:
+			case Module::__CORE_NAME:
 				return $this->getc();
+
+			case self::__CONF_NAME:
+				return $this->getc()->configuration;
 		}
 	}
 

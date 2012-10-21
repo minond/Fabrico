@@ -31,7 +31,9 @@ class CoreLoader extends Loader {
 			'token',
 			'propertytoken',
 			'tagtoken',
-			'parser'
+			'mergetoken',
+			'parser',
+			'view'
 		],
 		'error' => [
 			'exception'

@@ -13,3 +13,6 @@ directory:
   templates: /templates/
   triggers: /triggers/
   views: /views/
+
+templates:
+  build: true

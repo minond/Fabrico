@@ -34,6 +34,7 @@ class Parser {
 					// reset the offset and save in lexer
 					$offset = strlen($matches[ 0 ][ 0 ]) + $matches[ 0 ][ 1 ];
 					$mytoken = clone $token;
+					$mytoken->string = $matches[ 0 ][ 0 ];
 					$mytoken->parse($matches);
 					$lexer->add_match($mytoken);
 				}
@@ -55,6 +56,9 @@ class Parser {
 
 $mu = <<<MU
 </f:page:conf title="Add New User"                 />
+@{page:title!}
+@{page:title!}
+#{page:ti:tl:e!}
 <f:page:def controller="UserManager" format="html, mobile, pdf" />
 <f:page:def>
 <f:page:def
@@ -76,6 +80,7 @@ MU;
 
 $lexer = new Lexer;
 $lexer->add_token(new TagToken);
+$lexer->add_token(new MergeToken);
 $lexer->set_string($mu);
 
 $parser = new Parser;

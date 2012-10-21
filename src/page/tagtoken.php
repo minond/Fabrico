@@ -113,7 +113,6 @@ PHP;
 	public function parse (array $raw) {
 		if (count($raw) === self::VALID_MATCH_COUNT) {
 			$this->valid = true;
-			$this->string = $raw[ 0 ][ 0 ];
 			$this->package = $raw[ 1 ][ 0 ];
 			$this->namespace = $raw[ 2 ][ 0 ];
 			$this->name = $raw[ 3 ][ 0 ];
