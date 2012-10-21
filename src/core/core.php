@@ -45,6 +45,11 @@ class Core {
 	public $configuration;
 
 	/**
+	 * @var Project
+	 */
+	public $project;
+
+	/**
 	 * instance getter
 	 * @return Core
 	 */

@@ -1,3 +1,7 @@
+file:
+  ext:
+    views: .php
+
 directory:
   build: /internal/build/
   configuration: /configuration/
@@ -16,3 +20,7 @@ directory:
 
 templates:
   build: true
+
+project:
+  name: Propositum
+  path: /var/www/Dropbox/apache/Propositum

@@ -13,12 +13,6 @@ use fabrico\core\util;
  */
 class Build extends Module {
 	/**
-	 * file types
-	 */
-	const VIEW = 'view';
-	const TEMPLATE = 'template';
-	
-	/**
 	 * @return boolean
 	 */
 	public function can_build () {

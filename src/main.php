@@ -13,6 +13,7 @@ use fabrico\core\util;
 use fabrico\core\Core;
 use fabrico\core\Reader;
 use fabrico\core\Router;
+use fabrico\core\Project;
 use fabrico\core\EventDispatch;
 use fabrico\loader\CoreLoader;
 use fabrico\loader\DepsLoader;
@@ -35,6 +36,7 @@ Reader::set_yml(function ($file) {
 });
 
 // initialize core modules
+Core::instance()->project = new Project;
 Core::instance()->reader = new Reader;
 Core::instance()->event = new EventDispatch;
 Core::instance()->router = new Router($_REQUEST);

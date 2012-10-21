@@ -5,6 +5,7 @@
  */
 namespace fabrico\page;
 
+use fabrico\core\Project;
 use fabrico\core\Module;
 use fabrico\core\util;
 
@@ -21,11 +22,14 @@ class View extends Module {
 	 * @param string $file
 	 */
 	public function dispatch ($file) {
-		util::dpre("dispatching $file");
+		$path = $this->core->project->get_file($file, Project::VIEW);
+		util::dpre("dispatching $path");
 	}
 }
 
+$p = new Project;
+$p->get_file("test", Project::VIEW);
+
 $v = new View;
 $v->builder = new Build;
-
-
+$v->dispatch("index");

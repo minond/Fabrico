@@ -54,6 +54,7 @@ class Parser {
 	}
 }
 
+/*
 $mu = <<<MU
 </f:page:conf title="Add New User"                 />
 @{page:title!}
@@ -89,3 +90,4 @@ $mu2 = $parser->parse($lexer);
 
 \fabrico\core\util::dpr($lexer);
 \fabrico\core\util::dpre($mu2);
+*/
