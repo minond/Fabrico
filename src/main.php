@@ -47,5 +47,4 @@ Core::instance()->configuration->load('core', '../configuration/httpconf.yml', C
 
 
 Core::instance()->router->route();
-
 Core::instance()->core->load('page');

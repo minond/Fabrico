@@ -20,37 +20,11 @@ class Loader {
 	protected $files = [];
 
 	/**
-	 * @var array
-	 */
-	protected $formats = [];
-
-	/**
-	 * acts as an auto format setter
-	 */
-	public function __construct () {
-		foreach ($this->files as $ns => $files) {
-			$fn = sprintf(self::FORMATTER, $ns);
-
-			if (method_exists($this, $fn)) {
-				$this->format($ns, [ $this, $fn ]);
-			}
-		}
-	}
-
-	/**
 	 * @param string $namespace
 	 * @param array $files
 	 */
 	protected function register ($namespace, $files) {
 		$this->files[ $namespace ] = $files;
-	}
-
-	/**
-	 * @param string $namespace
-	 * @param callable $format
-	 */
-	protected function format ($namespace, callable $format) {
-		$this->formats[ $namespace ] = $format;
 	}
 
 	/**
@@ -88,7 +62,12 @@ class Loader {
 	 * @return string
 	 */
 	private function format_file ($file, $namespace) {
-		return !array_key_exists($namespace, $this->formats) ? $file :
-		       call_user_func($this->formats[ $namespace ], $file);
+		$fn = sprintf(self::FORMATTER, $namespace);
+
+		if (method_exists($this, $fn)) {
+			$file = $this->{ $fn }($file);
+		}
+
+		return $file;
 	}
 }

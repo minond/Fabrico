@@ -29,6 +29,18 @@ class TagToken extends Token {
 	public static $pattern = '/\<\/?(\w?):(\w+?):(\w+)(.*?)?\/?\>/ms';
 
 	/**
+	 * identifier string matching self closing tags
+	 * @var string
+	 */
+	public static $single_identifier = '/>';
+
+	/**
+	 * identifier string matching closing tags
+	 * @var string
+	 */
+	public static $close_identifier = '</';
+
+	/**
 	 * number of matches a valid raw token should have
 	 */
 	const VALID_MATCH_COUNT = 5;
@@ -121,10 +133,10 @@ PHP;
 	 * @return string
 	 */
 	private function get_type () {
-		if (substr($this->string, 0, 2) === '</') {
+		if (substr($this->string, 0, 2) === self::$close_identifier) {
 			return self::CLOSE;
 		}
-		else if (substr($this->string, -2, 2) === '/>') {
+		else if (substr($this->string, -2, 2) === self::$single_identifier) {
 			return self::SINGLE;
 		}
 		else {
