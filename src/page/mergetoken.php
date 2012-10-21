@@ -13,6 +13,12 @@ use fabrico\page\Token;
  */
 class MergeToken extends Token {
 	/**
+	 * holder types
+	 */
+	const IN_PHP = 'php';
+	const IN_STR = 'str';
+
+	/**
 	 * merge field patterns:
 	 *  @{merge_field_name}  -> [controller]->merge_field_name
 	 *  @{merge_field:name}  -> [controller]->merge_field->name
@@ -49,20 +55,19 @@ class MergeToken extends Token {
 	];
 
 	/**
-	 * include php tags in replacement
-	 * @var boolean
-	 */
-	public $in_tag = true;
-
-	/**
+	 * holder name
 	 * @var string
 	 */
-	public static $tag = '<?php echo %type%merge; ?>';
+	public $holder = self::IN_PHP;
 
 	/**
+	 * possible holders
 	 * @var string
 	 */
-	public static $str = '{%type%merge}';
+	public static $holders = [
+		self::IN_PHP => '<?php echo %type%merge; ?>',
+		self::IN_STR => '{%type%merge}'
+	];
 
 	/**
 	 * @see Token::parse
@@ -71,7 +76,7 @@ class MergeToken extends Token {
 		list($find, $replace) = $this->getspecial();
 		$type = self::$types[ $raw[ 1 ][ 0 ] ];
 		$merge = str_replace($find, $replace, $raw[ 2 ][ 0 ]);
-		$holder = $this->in_tag ? self::$tag : self::$str;
+		$holder = self::$holders[ $this->holder ];
 		$this->replacement = str_replace(['%type', '%merge'], [$type, $merge], $holder);
 	}
 
