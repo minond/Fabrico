@@ -15,6 +15,8 @@ use fabrico\core\Reader;
 use fabrico\core\Router;
 use fabrico\core\Project;
 use fabrico\core\EventDispatch;
+use fabrico\page\View;
+use fabrico\page\Build;
 use fabrico\loader\CoreLoader;
 use fabrico\loader\DepsLoader;
 use fabrico\configuration\Configuration;
@@ -50,3 +52,7 @@ Core::instance()->configuration->load('core', '../configuration/httpconf.yml', C
 
 Core::instance()->router->route();
 Core::instance()->core->load('page');
+
+$v = new View;
+$v->builder = new Build;
+$v->dispatch("index", Project::VIEW);

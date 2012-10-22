@@ -56,7 +56,3 @@ class View extends Module {
 		}
 	}
 }
-
-$v = new View;
-$v->builder = new Build;
-$v->dispatch("index", Project::VIEW);
