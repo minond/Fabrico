@@ -26,6 +26,7 @@ class CoreLoader extends Loader {
 			'project'
 		],
 		'page' => [
+			'tag',
 			'build',
 			'page',
 			'lexer',

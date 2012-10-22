@@ -74,7 +74,32 @@ class PropertyToken extends Token {
 	 * @return string
 	 */
 	private function array_prop ($property, $value) {
-		return "'{$property}' => {$value}";
+		return "'{$property}' => {$this->nice_value($value)}";
+	}
+
+	/**
+	 * @param string $value
+	 * @return string
+	 */
+	private function nice_value ($value) {
+		$sub = substr($value, 1, strlen($value) - 2);
+
+		switch ($value) {
+			case "'true'":
+			case '"true"':
+				return "true";
+
+			case "'false'":
+			case '"false"':
+				return "false";
+		}
+
+		switch (true) {
+			case is_numeric($sub):
+				return $sub;
+		}
+
+		return $value;
 	}
 
 	/** 

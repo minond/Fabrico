@@ -26,7 +26,7 @@ class TagToken extends Token {
 	 * </code>
 	 * @var string
 	 */
-	public static $pattern = '/\<\/?(\w?):(\w+?):(\w+)(.*?)?\/?\>/ms';
+	public static $pattern = '/\<\/?(\w+?):(\w+?):(\w+)(.*?)?\/?\>/ms';
 
 	/**
 	 * identifier string matching self closing tags

@@ -8,6 +8,7 @@ namespace fabrico\page;
 use fabrico\core\Project;
 use fabrico\core\Module;
 use fabrico\core\util;
+use fabrico\page\Tag;
 
 /**
  * view dispatcher
@@ -28,10 +29,6 @@ class View extends Module {
 		if ($this->builder->can_build()) {
 			if ($this->builder->should_build([ $raw ], $build)) {
 				$built = $this->builder->build([ $raw ], $build);
-
-				if (!$built) {
-					echo "error building $raw";
-				}
 			}
 		}
 
@@ -43,7 +40,6 @@ class View extends Module {
 	 */
 	private function inc_file ($self) {
 		require $self;
-		util::dpre("dispatching $self");
 	}
 
 	/**
