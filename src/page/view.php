@@ -19,26 +19,45 @@ class View extends Module {
 	public $builder;
 
 	/**
-	 * @param string $file
+	 * @param string $raw 
+	 * @param string $build 
 	 */
-	public function dispatch ($file, $type) {
-		$viewr = $this->core->project->get_file($file, $type);
-		$build = $this->core->project->get_build($file, $type);
+	private function request_build ($raw, $build) {
+		$built = true;
 
 		if ($this->builder->can_build()) {
-			if ($this->builder->should_build([$viewr], $build)) {
-				$success = $this->builder->build([$viewr], $build);
+			if ($this->builder->should_build([ $raw ], $build)) {
+				$built = $this->builder->build([ $raw ], $build);
 
-				if (!$success) {
-					echo "error while building view";
-				}
-				else {
-					echo "view built!";
+				if (!$built) {
+					echo "error building $raw";
 				}
 			}
 		}
-		
-		util::dpre("dispatching [$type] $viewr, $build");
+
+		return $built;
+	}
+
+	/**
+	 * @param string $self
+	 */
+	private function inc_file ($self) {
+		require $self;
+		util::dpre("dispatching $self");
+	}
+
+	/**
+	 * @param string $file 
+	 * @param string $type 
+	 */
+	public function dispatch ($file, $type) {
+		$view = $this->core->project->get_file($file, $type);
+		$build = $this->core->project->get_build($file, $type);
+		$ready = $this->request_build($view, $build);
+
+		if ($ready) {
+			$this->inc_file($build);
+		}
 	}
 }
 

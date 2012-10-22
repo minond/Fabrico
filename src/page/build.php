@@ -7,6 +7,10 @@ namespace fabrico\page;
 
 use fabrico\core\Module;
 use fabrico\core\util;
+use fabrico\page\Lexer;
+use fabrico\page\Parser;
+use fabrico\page\TagToken;
+use fabrico\page\MergeToken;
 
 /**
  * fabrico template builder
@@ -17,14 +21,6 @@ class Build extends Module {
 	 */
 	public function can_build () {
 		return $this->configuration->core->templates->build;
-	}
-
-	/**
-	 * @param string $file 
-	 * @return int
-	 */
-	private function fmodt ($file) {
-		return file_exists($file) ? filemtime($file) : 0;
 	}
 
 	/**
@@ -39,7 +35,77 @@ class Build extends Module {
 			$newest = max($newest, $this->fmodt($file));
 		}
 
-		return $this->fmodt($build) > $newest;
+		return $this->fmodt($build) < $newest;
+	}
+
+	/**
+	 * @param string $file
+	 * @return string
+	 */
+	public function get_content_of ($file) {
+		return file_exists($file) ? file_get_contents($file) : '';
+	}
+
+	/**
+	 * @param string $file 
+	 * @return int
+	 */
+	private function fmodt ($file) {
+		return file_exists($file) ? filemtime($file) : 0;
+	}
+
+	/**
+	 * @param string $file
+	 * @param boolean $is_file
+	 */
+	private function makedir ($path, $is_file = true) {
+		if ($is_file) {
+			$parts = explode(DIRECTORY_SEPARATOR, $path);
+			array_pop($parts);
+			$path = implode(DIRECTORY_SEPARATOR, $parts);
+		}
+
+		if (!is_dir($path)) {
+			mkdir($path, 0777, true);
+		}
+	}
+
+	/**
+	 * @param string $file
+	 * @param string $content
+	 * @return boolean
+	 */
+	private function file_put ($file, $content) {
+		if (!file_exists($file)) {
+			$this->makedir($file);
+		}
+
+		$success = false;
+		$file = fopen($file, 'w+');
+
+		if (is_resource($file)) {
+			fwrite($file, $content);
+			fclose($file);
+			$success = true;
+		}
+
+		return $success;
+	}
+
+	/**
+	 * parses a view template
+	 * @param string $content
+	 * @return string
+	 */
+	public function std_parse ($content) {
+		$parser = new Parser;
+		$lexer = new Lexer;
+		
+		$lexer->set_string($content);
+		$lexer->add_token(new TagToken);
+		$lexer->add_token(new MergeToken);
+
+		return $parser->parse($lexer);
 	}
 
 	/**
@@ -49,7 +115,13 @@ class Build extends Module {
 	 */
 	public function build (array $raw, $target) {
 		$success = false;
+		$content = '';
 
-		return $success;
+		foreach ($raw as $file) {
+			$content .= $this->get_content_of($file);
+		}
+
+		$parsed = $this->std_parse($content);
+		return $this->file_put($target, $parsed);
 	}
 }
