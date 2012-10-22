@@ -13,6 +13,7 @@ class Project extends Module {
 	 * file types
 	 */
 	const VIEW = 'views';
+	const BUILD = 'build';
 
 	/**
 	 * @return string
@@ -53,6 +54,7 @@ class Project extends Module {
 	 * @return string
 	 */
 	public function get_build ($name, $type) {
-		
+		return $this->root() . $this->dr(self::BUILD) .
+		       $this->dr($type) . $name . $this->ext($type);
 	}
 }

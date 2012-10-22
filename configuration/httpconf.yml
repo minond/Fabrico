@@ -3,7 +3,7 @@ file:
     views: .php
 
 directory:
-  build: /internal/build/
+  build: /internals/build
   configuration: /configuration/
   controllers: /controllers/
   css: /resources/css/
@@ -11,7 +11,7 @@ directory:
   images: /resources/images/
   include: /include/
   javascript: /resources/javascript/
-  logs: /internal/logs/
+  logs: /internals/logs/
   models: /models/
   routers: /routers/
   templates: /templates/
