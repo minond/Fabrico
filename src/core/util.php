@@ -14,13 +14,13 @@ class util {
 	 * @param mixed $output*
 	 */
 	public static function dpr ($output) {
-		echo '<pre>';
+		echo "<pre>\n";
 
 		foreach (func_get_args() as $arg) {
 			print_r($arg);
 		}
 
-		echo '</pre>';
+		echo "\n</pre>";
 	}
 
 	/**
