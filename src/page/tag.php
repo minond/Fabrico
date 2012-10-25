@@ -21,10 +21,24 @@ class Tag {
 	private static $propstack = [];
 
 	/**
+	 * argument tags stack
+	 * @var array
+	 */
+	private static $argstack = [[]];
+
+	/**
 	 * tag name
+	 * set if this element should be rendered as html
 	 * @var string
 	 */
-	protected static $tag;
+	protected static $tag = false;
+
+	/**
+	 * arg flag
+	 * set if this element should saved as an argument
+	 * @var boolean
+	 */
+	protected static $arg = false;
 
 	/**
 	 * properties to be added to the tag html
@@ -46,6 +60,24 @@ class Tag {
 	 * @var string
 	 */
 	public $__content = '';
+
+	/**
+	 * argument tags
+	 * @var array
+	 */
+	public $__args = [];
+
+	/**
+	 * standard properties - id
+	 * @var string
+	 */
+	public $id;
+
+	/**
+	 * standard properties - name
+	 * @var string
+	 */
+	public $name;
 
 	/**
 	 * tag format: <package:namespace:name />
@@ -87,15 +119,24 @@ class Tag {
 	private static function prepare (Tag & $tag, \stdClass & $props) {
 		switch ($tag->__type) {
 			case TagToken::OPEN:
+				// start gathering this tag's conten,
 				ob_start();
+
+				// stack it's properties and create an
+				// argument stack for it
 				self::$propstack[] = & $props;
+				self::$argstack[ count(self::$argstack) ] = [];
 				break;
 
 			case TagToken::CLOSE:
+				// get it's open tag's properties, arguments,
+				// and content
 				$props = array_pop(self::$propstack);
+				$tag->__args = array_pop(self::$argstack);
 				$tag->__content = trim(ob_get_clean());
 
 			case TagToken::SINGLE:
+				// set the properties and initialize it
 				$tag->sets($props);
 				$tag->initialize();
 				break;
@@ -103,6 +144,11 @@ class Tag {
 			default:
 				throw new LoggedException("Invalid tag type: {$tag->__type}");
 				break;
+		}
+
+		// add self to argument stack if needed
+		if ($tag::$arg === true) {
+			self::$argstack[ count(self::$argstack) - 1 ][] = & $tag;
 		}
 	}
 
@@ -146,10 +192,12 @@ class Tag {
 	 * @return string
 	 */
 	final public function __toString () {
-		switch ($this->__type) {
-			case TagToken::SINGLE:
-			case TagToken::CLOSE:
-				return self::html(static::$tag, $this->get_tag_props(), $this->__content);
+		if (static::$tag) {
+			switch ($this->__type) {
+				case TagToken::SINGLE:
+				case TagToken::CLOSE:
+					return self::html(static::$tag, $this->get_tag_props(), $this->__content);
+			}
 		}
 
 		return '';
@@ -201,4 +249,14 @@ class Text extends Tag {
 
 class Div extends Tag {
 	protected static $tag = 'div';
+	protected static $tagopt = ['id'];
+	protected function initialize () {
+		$this->id = '~~' . $this->__args[ count($this->__args) - 1 ]->value;
+	}
+}
+
+class Arg extends Tag {
+	protected static $arg = true;
+	public $name;
+	public $value;
 }
