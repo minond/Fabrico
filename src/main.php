@@ -10,7 +10,7 @@ require 'loader/core.php';
 require 'loader/deps.php';
 
 use fabrico\core\util;
-use fabrico\core\Core;
+use fabrico\core\core;
 use fabrico\core\Reader;
 use fabrico\core\Router;
 use fabrico\core\Project;
@@ -24,13 +24,13 @@ use fabrico\configuration\ConfigurationItem;
 use fabrico\configuration\ConfigurationItems;
 
 // loaders
-Core::instance()->core = new CoreLoader;
-Core::instance()->deps = new DepsLoader;
-Core::instance()->deps->set_path('../../../admin/php_include/');
+core::instance()->core = new CoreLoader;
+core::instance()->deps = new DepsLoader;
+core::instance()->deps->set_path('../../../admin/php_include/');
 
-Core::instance()->core->load('core');
-Core::instance()->core->load('configuration');
-Core::instance()->core->load('error');
+core::instance()->core->load('core');
+core::instance()->core->load('configuration');
+core::instance()->core->load('error');
 
 // prepare the configuration's reader
 Reader::set_yml(function ($file) {
@@ -38,20 +38,20 @@ Reader::set_yml(function ($file) {
 });
 
 // initialize core modules
-Core::instance()->project = new Project;
-Core::instance()->reader = new Reader;
-Core::instance()->event = new EventDispatch;
-Core::instance()->router = new Router($_REQUEST);
-Core::instance()->configuration = new Configuration;
-Core::instance()->configuration->load('core', '../configuration/httpconf.yml', Configuration::APC);
+core::instance()->project = new Project;
+core::instance()->reader = new Reader;
+core::instance()->event = new EventDispatch;
+core::instance()->router = new Router($_REQUEST);
+core::instance()->configuration = new Configuration;
+core::instance()->configuration->load('core', '../configuration/httpconf.yml', Configuration::APC);
 
 
 
 
 
 
-Core::instance()->router->route();
-Core::instance()->core->load('page');
+core::instance()->router->route();
+core::instance()->core->load('page');
 
 $v = new View;
 $v->builder = new Build;

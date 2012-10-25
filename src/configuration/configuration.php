@@ -6,7 +6,7 @@
 namespace fabrico\configuration;
 
 use fabrico\core\util;
-use fabrico\core\Core;
+use fabrico\core\core;
 use fabrico\core\Module;
 use fabrico\error\LoggedException;
 

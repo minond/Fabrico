@@ -8,9 +8,9 @@ namespace fabrico\core;
 /**
  * main
  */
-class Core {
+class core {
 	/**
-	 * @var Core
+	 * @var core
 	 */
 	private static $instance;
 
@@ -51,7 +51,7 @@ class Core {
 
 	/**
 	 * instance getter
-	 * @return Core
+	 * @return core
 	 */
 	public static function instance () {
 		return self::$instance = (

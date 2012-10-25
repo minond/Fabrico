@@ -25,7 +25,7 @@ abstract class Module {
 	}
 
 	public function getc () {
-		return Core::instance();
+		return core::instance();
 	}
 }
 
@@ -44,6 +44,6 @@ trait Mediator {
 	}
 
 	public function getc () {
-		return Core::instance();
+		return core::instance();
 	}
 }

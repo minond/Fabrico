@@ -48,7 +48,7 @@ class MergeToken extends Token {
 	 */
 	public static $types = [
 		'@' => '$',
-		'#' => '$Core->controller->'
+		'#' => '$core->controller->'
 	];
 
 	/**
