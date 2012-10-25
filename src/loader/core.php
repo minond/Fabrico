@@ -43,22 +43,22 @@ class CoreLoader extends Loader {
 	];
 
 	public function core_format ($file) {
-		return "core/{$file}.php";
+		return "../core/{$file}.php";
 	}
 
 	public function configuration_format ($file) {
-		return "configuration/{$file}.php";
+		return "../configuration/{$file}.php";
 	}
 
 	public function observer_format ($file) {
-		return "observer/{$file}.php";
+		return "../observer/{$file}.php";
 	}
 
 	public function page_format ($file) {
-		return "page/{$file}.php";
+		return "../page/{$file}.php";
 	}
 
 	public function error_format ($file) {
-		return "error/{$file}.php";
+		return "../error/{$file}.php";
 	}
 }
