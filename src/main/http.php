@@ -2,12 +2,12 @@
 
 namespace fabrico;
 
-require 'core/core.php';
-require 'core/module.php';
-require 'core/util.php';
-require 'loader/loader.php';
-require 'loader/core.php';
-require 'loader/deps.php';
+require '../core/core.php';
+require '../core/module.php';
+require '../core/util.php';
+require '../loader/loader.php';
+require '../loader/core.php';
+require '../loader/deps.php';
 
 use fabrico\core\util;
 use fabrico\core\core;
@@ -15,6 +15,7 @@ use fabrico\core\Reader;
 use fabrico\core\Router;
 use fabrico\core\Project;
 use fabrico\core\EventDispatch;
+use fabrico\page\Page;
 use fabrico\page\View;
 use fabrico\page\Build;
 use fabrico\loader\CoreLoader;
@@ -45,14 +46,16 @@ core::instance()->router = new Router($_REQUEST);
 core::instance()->configuration = new Configuration;
 core::instance()->configuration->load('core', '../configuration/httpconf.yml', Configuration::APC);
 
-
-
-
-
-
-core::instance()->router->route();
-core::instance()->core->load('page');
-
-$v = new View;
-$v->builder = new Build;
-$v->dispatch("index", Project::VIEW);
+// route the request
+switch (true) {
+	case core::instance()->router->is_view:
+		core::instance()->core->load('page');
+		core::instance()->page = new Page;
+		core::instance()->view = new View;
+		core::instance()->view->builder = new Build;
+		core::instance()->view->dispatch('index', Project::VIEW);
+		break;
+	
+	default:
+		break;
+}

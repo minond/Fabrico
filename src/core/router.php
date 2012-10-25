@@ -5,6 +5,8 @@
  */
 namespace fabrico\core;
 
+use fabrico\core\util;
+
 /**
  * request file server
  */
@@ -21,10 +23,40 @@ class Router {
 	public static $var;
 
 	/**
+	 * true if current request is for a view
+	 * @var boolean
+	 */
+	public $is_view = false;
+
+	/**
+	 * true if current request is for an element update
+	 * @var boolean
+	 */
+	public $is_update = false;
+
+	/**
+	 * true if current request is for a controller method call
+	 * @var boolean
+	 */
+	public $is_method = false;
+
+	/**
 	 * @param array $req
 	 */
 	public function __construct (& $req) {
 		$this->request = & $req;
+
+		if ($this->get(self::$var->file)) {
+			if ($this->get(self::$var->method) && $this->get(self::$var->controller)) {
+				$this->is_method = true;
+			}
+			else if ($this->get(self::$var->element)) {
+				$this->is_update = true;
+			}
+			else {
+				$this->is_view = true;
+			}
+		}
 	}
 
 	/**
@@ -45,20 +77,14 @@ class Router {
 	public function set ($var, $val) {
 		return $this->request[ $var ] = $val;
 	}
-
-	/**
-	 * route the request to the correct
-	 * request server
-	 */
-	public function route () {
-		// util::dpr($this->request, self::$var);
-	}
 }
 
 // set vars
 Router::$var = (object) [
 	// file requests
 	'file' => '_file',
+	// controller name
+	'controller' => '_controller',
 	// controller method calls
 	'method' => '_method',
 	// controller method call arguments

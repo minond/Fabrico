@@ -15,6 +15,16 @@ class core {
 	private static $instance;
 
 	/**
+	 * @var View
+	 */
+	public $view;
+
+	/**
+	 * @var Page
+	 */
+	public $page;
+
+	/**
 	 * @var CoreLoader
 	 */
 	public $core;
