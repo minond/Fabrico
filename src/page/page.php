@@ -14,6 +14,13 @@ use fabrico\page\MergeToken;
  */
 class Page extends Module {
 	/**
+	 * variables types
+	 */
+	const NONE = 0;
+	const STR = 1;
+	const JSON = 2;
+
+	/**
 	 * @var string
 	 */
 	private $html;
@@ -66,31 +73,108 @@ class Page extends Module {
 	private $js_code = [];
 
 	/**
+	 * js code
+	 * @var array
+	 */
+	private $js_load = [];
+
+	/**
+	 * @param array $what
+	 * @return string
+	 */
+	private function stdjoin (array $what) {
+		return "\n" . implode("\n", $what);
+	}
+
+	/**
 	 * @return string
 	 */
 	private function get_css_file () {
-		return implode('', $this->css_file);
+		return $this->stdjoin($this->css_file);
 	}
 
 	/**
 	 * @return string
 	 */
 	private function get_css_code () {
-		return implode('', $this->css_code);
+		return $this->stdjoin($this->css_code);
 	}
 
 	/**
 	 * @return string
 	 */
 	private function get_js_file () {
-		return implode('', $this->js_file);
+		return $this->stdjoin($this->js_file);
 	}
 
 	/**
 	 * @return string
 	 */
 	private function get_js_code () {
-		return implode('', $this->js_code);
+		return $this->stdjoin($this->js_code);
+	}
+
+	/**
+	 * @return string
+	 */
+	private function get_js_load () {
+		return $this->stdjoin($this->js_load);
+	}
+
+	/**
+	 * @param string $href
+	 */
+	public function add_css_file ($href) {
+		$this->css_file[] = "<link rel='stylesheet' href='{$href}' />";
+	}
+
+	/**
+	 * @param string $css
+	 */
+	public function add_css_code ($css) {
+		$this->css_code[] = $css;
+	}
+
+	/**
+	 * @param string $src
+	 */
+	public function add_js_file ($src) {
+		$this->js_file[] = "<script type='text/javascript' src='{$src}'></script>";
+	}
+
+	/**
+	 * @param string $js
+	 */
+	public function add_js_code ($js) {
+		$this->js_code[] = $js;
+	}
+
+	/**
+	 * @param string $js
+	 */
+	public function add_js_load ($js) {
+		$this->js_load[] = $js;
+	}
+
+	/**
+	 * @param string $name
+	 * @param string $value
+	 * @param string $type
+	 */
+	public function declare_var ($name, $value, $type = self::NONE) {
+		switch ($type) {
+			case self::JSON:
+				$value = json_encode($value);
+				$value = "({$value})";
+				break;
+
+			case self::STR:
+				$value = addslashes($value);
+				$value = "\"{$value}\"";
+				break;
+		}
+
+		$this->js_code[] = "window.{$name} = {$value};";
 	}
 
 	/**
@@ -104,7 +188,8 @@ class Page extends Module {
 			'css-file' => $this->get_css_file(),
 			'css-code' => $this->get_css_code(),
 			'js-file' => $this->get_js_file(),
-			'js-code' => $this->get_js_code()
+			'js-code' => $this->get_js_code(),
+			'js-load' => $this->get_js_load()
 		]);
 	}
 }
@@ -120,14 +205,19 @@ Page::$template = <<<HTML
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 		<title>#{title}</title>
 		<meta name="description" content="">
-		<meta name="viewport" content="width=device-width">
-		#{css-file}
-		#{css-code}
+		<meta name="viewport" content="width=device-width">#{css-file}
+		<style type="text/css">#{css-code}
+		</style>
 	</head>
 	<body>
-		#{content}
-		#{js-file}
-		#{js-code}
+#{content}#{js-file}
+		<script type="text/javascript">#{js-code}
+
+		if (window.jQuery) {
+			$(function () {#{js-load}
+			});
+		}
+		</script>
 	</body>
 </html>
 HTML;
