@@ -6,6 +6,7 @@
 namespace fabrico\page;
 
 use fabrico\core\Module;
+use fabrico\core\Project;
 use fabrico\page\MergeToken;
 
 /**
@@ -175,6 +176,15 @@ class Page extends Module {
 		}
 
 		$this->js_code[] = "window.{$name} = {$value};";
+	}
+
+	/**
+	 * @param string $view
+	 */
+	public function get ($view) {
+		ob_start();
+		$this->view->dispatch($view, Project::VIEW);
+		$this->content = ob_get_clean();
 	}
 
 	/**

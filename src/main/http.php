@@ -46,13 +46,6 @@ core::instance()->router = new Router($_REQUEST);
 core::instance()->configuration = new Configuration;
 core::instance()->configuration->load('core', '../configuration/httpconf.yml', Configuration::APC);
 
-core::instance()->core->load('page');
-$page = new Page;
-$page->title = "this is my title";
-$page->content = "this is my content!";
-echo $page->render();
-die;
-
 // route the request
 switch (true) {
 	case core::instance()->router->is_view:
@@ -60,7 +53,8 @@ switch (true) {
 		core::instance()->page = new Page;
 		core::instance()->page->view = new View;
 		core::instance()->page->view->builder = new Build;
-		core::instance()->page->view->dispatch('index', Project::VIEW);
+		core::instance()->page->get('index');
+		echo core::instance()->page->render();
 		break;
 	
 	default:
