@@ -48,6 +48,8 @@ core::instance()->configuration->load('core', '../configuration/httpconf.yml', C
 
 core::instance()->core->load('page');
 $page = new Page;
+$page->title = "this is my title";
+$page->content = "this is my content!";
 
 echo $page->render();
 die;

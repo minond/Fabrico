@@ -94,4 +94,18 @@ class MergeToken extends Token {
 
 		return [ $find, $replace ];
 	}
+
+	/**
+	 * simple merge field parser
+	 * @param string $tmpl
+	 * @param array $data
+	 * @return string
+	 */
+	public static function merge ($tmpl, array $data) {
+		foreach ($data as $field => $value) {
+			$tmpl = str_replace("#{{$field}}", $value, $tmpl);
+		}
+
+		return $tmpl;
+	}
 }
