@@ -46,14 +46,20 @@ core::instance()->router = new Router($_REQUEST);
 core::instance()->configuration = new Configuration;
 core::instance()->configuration->load('core', '../configuration/httpconf.yml', Configuration::APC);
 
+core::instance()->core->load('page');
+$page = new Page;
+
+echo $page->render();
+die;
+
 // route the request
 switch (true) {
 	case core::instance()->router->is_view:
 		core::instance()->core->load('page');
 		core::instance()->page = new Page;
-		core::instance()->view = new View;
-		core::instance()->view->builder = new Build;
-		core::instance()->view->dispatch('index', Project::VIEW);
+		core::instance()->page->view = new View;
+		core::instance()->page->view->builder = new Build;
+		core::instance()->page->view->dispatch('index', Project::VIEW);
 		break;
 	
 	default:

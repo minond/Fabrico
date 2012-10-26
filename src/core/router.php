@@ -77,6 +77,15 @@ class Router {
 	public function set ($var, $val) {
 		return $this->request[ $var ] = $val;
 	}
+
+	/**
+	 * @return Request
+	 */
+	public function get_request () {
+		$req = new Request;
+
+		return $req;
+	}
 }
 
 // set vars

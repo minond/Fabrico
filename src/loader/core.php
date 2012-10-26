@@ -21,6 +21,7 @@ class CoreLoader extends Loader {
 		],
 		'core' => [
 			'router',
+			'request',
 			'event',
 			'reader',
 			'project'
