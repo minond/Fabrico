@@ -19,9 +19,10 @@ class Parser {
 	 * parses custom tags and replaces them
 	 * with php code
 	 * @param Lexer $lexer
+	 * @param Closure $cb
 	 * @return string
 	 */
-	public function parse (Lexer & $lexer) {
+	public function parse (Lexer & $lexer, \Closure $cb = null) {
 		foreach ($lexer->tokens as & $token) {
 			$offset = 0;
 
@@ -40,7 +41,14 @@ class Parser {
 			unset($token);
 		}
 
-		return $this->replace_tokens($lexer);
+		$orig = $lexer->get_string();
+		$html = $this->replace_tokens($lexer);
+
+		if (!is_null($cb) && $cb instanceof \Closure) {
+			$cb($orig, $html, $lexer->get_matches());
+		}
+
+		return $html;
 	}
 
 	/**

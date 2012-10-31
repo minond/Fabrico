@@ -5,6 +5,7 @@
  */
 namespace fabrico\page;
 
+use fabrico\core\util;
 use fabrico\core\Module;
 use fabrico\core\Project;
 use fabrico\page\MergeToken;
@@ -22,6 +23,13 @@ class Page extends Module {
 	const JSON = 2;
 
 	/**
+	 * page definition tags
+	 */
+	const DEF_TAG = 'def';
+	const DEF_NS = 'page';
+	const DEF_PKG = 'f';
+
+	/**
 	 * @var string
 	 */
 	private $html;
@@ -30,12 +38,6 @@ class Page extends Module {
 	 * @var View
 	 */
 	public $view;
-
-	/**
-	 * page template
-	 * @var string
-	 */
-	public static $template;
 
 	/**
 	 * title
@@ -78,6 +80,38 @@ class Page extends Module {
 	 * @var array
 	 */
 	private $js_load = [];
+
+	/**
+	 * page template
+	 * @var string
+	 */
+	public static $template = <<<HTML
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<title>#{title}</title>
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width">#{css-file}
+		<style type="text/css">#{css-code}
+		</style>
+	</head>
+	<body>
+#{content}#{js-file}
+		<script type="text/javascript">#{js-code}
+
+		if (window.jQuery) {
+			$(function () {#{js-load}
+			});
+		}
+		</script>
+	</body>
+</html>
+HTML;
 
 	/**
 	 * @param array $what
@@ -202,32 +236,54 @@ class Page extends Module {
 			'js-load' => $this->get_js_load()
 		]);
 	}
+
+	/**
+	 * @param TagToken $tt
+	 * @return boolean
+	 */
+	private function is_def (TagToken & $tt) {
+		return $tt->package === self::DEF_PKG &&
+			$tt->namespace === self::DEF_NS &&
+			$tt->name === self::DEF_TAG;
+	}
+
+	/**
+	 * standard page build preparation
+	 * manages tokens and check the generated html
+	 * @param strign $content
+	 * @return string
+	 */
+	public function prepare ($content) {
+		$parser = new Parser;
+		$lexer = new Lexer;
+
+		$lexer->set_string($content);
+		$lexer->add_token(new TagToken);
+		$lexer->add_token(new MergeToken);
+
+		return $parser->parse($lexer, function ($orig, & $html, $tokens) {
+			$defined = false;
+
+			foreach ($tokens as & $token) {
+				if ($this->is_def($token)) {
+					$defined = true;
+					unset($token);
+					break;
+				}
+
+				unset($token);
+			}
+
+			$def = new TagToken;
+			$def->name = self::DEF_TAG;
+			$def->type = TagToken::SINGLE;
+			$def->package = self::DEF_PKG;
+			$def->namespace = self::DEF_NS;
+			$def->property_token = new PropertyToken;
+			$def->property_token->parse(array("controller='Testing'"));
+			$def->valid = true;
+			$html = $def->as_component() . $html;
+		});
+	}
 }
 
-Page::$template = <<<HTML
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title>#{title}</title>
-		<meta name="description" content="">
-		<meta name="viewport" content="width=device-width">#{css-file}
-		<style type="text/css">#{css-code}
-		</style>
-	</head>
-	<body>
-#{content}#{js-file}
-		<script type="text/javascript">#{js-code}
-
-		if (window.jQuery) {
-			$(function () {#{js-load}
-			});
-		}
-		</script>
-	</body>
-</html>
-HTML;

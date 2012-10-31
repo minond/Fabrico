@@ -6,6 +6,7 @@
 namespace fabrico\page;
 
 use fabrico\core\util;
+use fabrico\core\Mediator;
 use fabrico\error\LoggedException;
 
 /**
@@ -259,4 +260,12 @@ class Arg extends Tag {
 	protected static $arg = true;
 	public $name;
 	public $value;
+}
+
+class Def extends Tag {
+	use Mediator;
+	public $controller;
+	protected function initialize () {
+		$this->core->page->title = "Ctrl: {$this->controller}";
+	}
 }

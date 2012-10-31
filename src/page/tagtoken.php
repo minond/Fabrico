@@ -57,37 +57,37 @@ class TagToken extends Token {
 	 * tag package character
 	 * @var string
 	 */
-	private $package;
+	public $package;
 
 	/**
 	 * tag package namespace
 	 * @var string
 	 */
-	private $namespace;
+	public $namespace;
 
 	/**
 	 * tag name
 	 * @param string
 	 */
-	private $name;
+	public $name;
 
 	/**
 	 * tag type
 	 * open, close, self closing
 	 * @var string
 	 */
-	private $type;
+	public $type;
 
 	/**
 	 * raw properties string
 	 * @var sting
 	 */
-	private $properties;
+	public $properties;
 
 	/**
 	 * @var PropertyToken
 	 */
-	private $property_token;
+	public $property_token;
 
 	/**
 	 * @var string
@@ -147,7 +147,7 @@ PHP;
 	 * returns the php code used to create this element
 	 * @return string
 	 */
-	private function as_component () {
+	public function as_component () {
 		return !$this->valid ? self::$invalid_tag :
 			str_replace(
 				['%type', '%package', '%namespace', '%name', '%properties'],

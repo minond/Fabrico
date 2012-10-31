@@ -105,7 +105,6 @@ class Build extends Module {
 		$lexer->add_token(new TagToken);
 		$lexer->add_token(new MergeToken);
 
-		return $parser->parse($lexer);
 	}
 
 	/**
@@ -121,7 +120,7 @@ class Build extends Module {
 			$content .= $this->get_content_of($file);
 		}
 
-		$parsed = $this->std_parse($content);
+		$parsed = $this->core->page->prepare($content);
 		return $this->file_put($target, $parsed);
 	}
 }
