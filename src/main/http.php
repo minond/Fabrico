@@ -23,6 +23,7 @@ use fabrico\loader\DepsLoader;
 use fabrico\configuration\Configuration;
 use fabrico\configuration\ConfigurationItem;
 use fabrico\configuration\ConfigurationItems;
+use fabrico\controller\Controller;
 
 // loaders
 core::instance()->core = new CoreLoader;
@@ -44,7 +45,13 @@ core::instance()->reader = new Reader;
 core::instance()->event = new EventDispatch;
 core::instance()->router = new Router($_REQUEST);
 core::instance()->configuration = new Configuration;
-core::instance()->configuration->load('core', '../configuration/httpconf.yml', Configuration::APC);
+core::instance()->configuration->load('core', '../../configuration/httpconf.yml', Configuration::APC);
+
+
+core::instance()->core->load('controller');
+$c = new Controller;
+
+die;
 
 // route the request
 switch (true) {

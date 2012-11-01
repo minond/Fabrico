@@ -15,6 +15,11 @@ class core {
 	private static $instance;
 
 	/**
+	 * @var Controller
+	 */
+	public $controller;
+
+	/**
 	 * @var Page
 	 */
 	public $page;

@@ -38,6 +38,9 @@ class CoreLoader extends Loader {
 			'parser',
 			'view'
 		],
+		'controller' => [
+			'controller'
+		],
 		'error' => [
 			'exception'
 		]
@@ -45,6 +48,10 @@ class CoreLoader extends Loader {
 
 	public function core_format ($file) {
 		return "../core/{$file}.php";
+	}
+
+	public function controller_format ($file) {
+		return "../controller/{$file}.php";
 	}
 
 	public function configuration_format ($file) {
