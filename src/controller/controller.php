@@ -11,7 +11,9 @@ use fabrico\core\Module;
  * controller base
  */
 class Controller extends Module {
+	public $name;
 	public function __construct () {
-		echo "crateing a new " . get_class($this);
+		$this->name = get_class($this);
 	}
+	public function name () { return "~~{$this->name}"; }
 }

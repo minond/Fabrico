@@ -216,9 +216,7 @@ HTML;
 	 * @param string $view
 	 */
 	public function get ($view) {
-		ob_start();
-		$this->view->dispatch($view, Project::VIEW);
-		$this->content = ob_get_clean();
+		$this->content = $this->view->get($view, Project::VIEW);
 	}
 
 	/**
@@ -241,8 +239,9 @@ HTML;
 	 * @param TagToken $tt
 	 * @return boolean
 	 */
-	private function is_def (TagToken & $tt) {
-		return $tt->package === self::DEF_PKG &&
+	private function is_def (Token & $tt) {
+		return $tt instanceof TagToken &&
+			$tt->package === self::DEF_PKG &&
 			$tt->namespace === self::DEF_NS &&
 			$tt->name === self::DEF_TAG;
 	}

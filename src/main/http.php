@@ -45,13 +45,13 @@ core::instance()->reader = new Reader;
 core::instance()->event = new EventDispatch;
 core::instance()->router = new Router($_REQUEST);
 core::instance()->configuration = new Configuration;
-core::instance()->configuration->load('core', '../../configuration/httpconf.yml', Configuration::APC);
+//core::instance()->configuration->load('core', '../../configuration/httpconf.yml', Configuration::APC);
+core::instance()->configuration->load('core', '../../configuration/httpconf.yml');
 
 
 core::instance()->core->load('controller');
-$c = new Controller;
+core::instance()->controller = new Controller;
 
-die;
 
 // route the request
 switch (true) {

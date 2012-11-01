@@ -1,6 +1,7 @@
 file:
   ext:
     views: .php
+    templates: .php
 
 directory:
   build: /internals/build

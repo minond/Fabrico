@@ -7,7 +7,10 @@ namespace fabrico\page;
 
 use fabrico\core\util;
 use fabrico\core\Mediator;
+use fabrico\core\Project;
 use fabrico\error\LoggedException;
+use fabrico\page\View;
+use fabrico\page\Build;
 
 /**
  * custom tag generator
@@ -240,9 +243,10 @@ class Tag {
 
 class Text extends Tag {
 	protected static $tag = 'input';
-	protected static $tagopt = [ 'name', 'user' => 'data-us' ];
+	protected static $tagopt = [ 'name', 'user' => 'data-us', 'value' ];
 	public $name;
 	public $user;
+	public $value;
 	protected function initialize () {
 		$this->name .= "_input_field";
 	}
@@ -252,7 +256,7 @@ class Div extends Tag {
 	protected static $tag = 'div';
 	protected static $tagopt = ['id'];
 	protected function initialize () {
-		$this->id = '~~' . $this->__args[ count($this->__args) - 1 ]->value;
+		//$this->id = '~~' . $this->__args[ count($this->__args) - 1 ]->value;
 	}
 }
 
@@ -267,5 +271,20 @@ class Def extends Tag {
 	public $controller;
 	protected function initialize () {
 		$this->core->page->title = "Ctrl: {$this->controller}";
+	}
+}
+
+class Partial extends Tag {
+	private static $view;
+	public $file;
+	private function init () {
+		if (!self::$view) {
+			self::$view = new View;
+			self::$view->builder = new Build;
+		}
+	}
+	protected function initialize () {
+		$this->init();
+		echo self::$view->get($this->file, Project::TEMPLATE);
 	}
 }

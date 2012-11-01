@@ -11,7 +11,7 @@ use fabrico\core\util;
 use fabrico\page\Tag;
 
 /**
- * view dispatcher
+ * view retriever
  */
 class View extends Module {
 	/**
@@ -36,23 +36,35 @@ class View extends Module {
 	}
 
 	/**
-	 * @param string $self
-	 */
-	private function inc_file ($self) {
-		require $self;
-	}
-
-	/**
 	 * @param string $file 
 	 * @param string $type 
 	 */
-	public function dispatch ($file, $type) {
+	public function retrive ($file, $type) {
 		$view = $this->core->project->get_file($file, $type);
 		$build = $this->core->project->get_build($file, $type);
 		$ready = $this->request_build($view, $build);
 
 		if ($ready) {
-			$this->inc_file($build);
+			$this->load_template($build);
 		}
+	}
+
+	/**
+	 * @param string $file
+	 */
+	public function load_template ($file) {
+		$core = & $this->core;
+		require $file;
+	}
+
+	/**
+	 * @param string $file 
+	 * @param string $type 
+	 * @return string
+	 */
+	public function get ($file, $type) {
+		ob_start();
+		$this->retrive($file, $type);
+		return ob_get_clean();
 	}
 }

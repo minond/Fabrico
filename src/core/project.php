@@ -14,6 +14,7 @@ class Project extends Module {
 	 */
 	const VIEW = 'views';
 	const BUILD = 'build';
+	const TEMPLATE = 'templates';
 
 	/**
 	 * @return string
