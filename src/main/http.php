@@ -50,6 +50,7 @@ core::instance()->configuration = new Configuration;
 core::instance()->configuration->load('core', '../../configuration/httpconf.yml');
 
 core::instance()->response = new Response;
+core::instance()->response->as = Response::HTML;
 core::instance()->core->load('controller');
 core::instance()->controller = new Controller;
 
@@ -64,7 +65,7 @@ switch (true) {
 		break;
 	
 	default:
-		die("invalid request");
+		core::instance()->response->addheader('HTTP/1.0 404 Not Found');
 		break;
 }
 
