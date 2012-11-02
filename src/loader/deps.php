@@ -33,7 +33,7 @@ class DepsLoader extends Loader {
 	 * deps file formatter
 	 * @return string
 	 */
-	public function conf_yml_file ($file) {
+	public function yml_format ($file) {
 		return $this->path_to . $file;
 	}
 

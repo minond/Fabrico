@@ -20,9 +20,9 @@ class core {
 	public $controller;
 
 	/**
-	 * @var Page
+	 * @var Response
 	 */
-	public $page;
+	public $response;
 
 	/**
 	 * @var CoreLoader

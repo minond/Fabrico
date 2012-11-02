@@ -270,7 +270,7 @@ class Def extends Tag {
 	use Mediator;
 	public $controller;
 	protected function initialize () {
-		$this->core->page->title = "Ctrl: {$this->controller}";
+		$this->core->response->page->title = "Ctrl: {$this->controller}";
 	}
 }
 

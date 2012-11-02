@@ -13,6 +13,7 @@ use fabrico\core\util;
 use fabrico\core\core;
 use fabrico\core\Reader;
 use fabrico\core\Router;
+use fabrico\core\Response;
 use fabrico\core\Project;
 use fabrico\core\EventDispatch;
 use fabrico\page\Page;
@@ -48,22 +49,23 @@ core::instance()->configuration = new Configuration;
 //core::instance()->configuration->load('core', '../../configuration/httpconf.yml', Configuration::APC);
 core::instance()->configuration->load('core', '../../configuration/httpconf.yml');
 
-
+core::instance()->response = new Response;
 core::instance()->core->load('controller');
 core::instance()->controller = new Controller;
-
 
 // route the request
 switch (true) {
 	case core::instance()->router->is_view:
 		core::instance()->core->load('page');
-		core::instance()->page = new Page;
-		core::instance()->page->view = new View;
-		core::instance()->page->view->builder = new Build;
-		core::instance()->page->get('index');
-		echo core::instance()->page->render();
+		core::instance()->response->page = new Page;
+		core::instance()->response->page->view = new View;
+		core::instance()->response->page->view->builder = new Build;
+		core::instance()->response->page->get('index');
 		break;
 	
 	default:
+		die("invalid request");
 		break;
 }
+
+core::instance()->response->reply();
