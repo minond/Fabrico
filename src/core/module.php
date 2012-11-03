@@ -4,30 +4,7 @@
  * class mediator
  * @package fabrico\core
  */
-
 namespace fabrico\core;
-
-/**
- * mediator class
- */
-abstract class Module {
-	const __CORE_NAME = 'core';
-	const __CONF_NAME = 'configuration';
-
-	public function __get ($var) {
-		switch ($var) {
-			case self::__CORE_NAME:
-				return $this->getc();
-
-			case self::__CONF_NAME:
-				return $this->getc()->configuration;
-		}
-	}
-
-	public function getc () {
-		return core::instance();
-	}
-}
 
 /**
  * mediator functions
@@ -35,11 +12,8 @@ abstract class Module {
 trait Mediator {
 	public function __get ($var) {
 		switch ($var) {
-			case Module::__CORE_NAME:
-				return $this->getc();
-
-			case self::__CONF_NAME:
-				return $this->getc()->configuration;
+			case 'core': return $this->getc();
+			case 'configuration': return $this->getc()->configuration;
 		}
 	}
 
@@ -47,3 +21,8 @@ trait Mediator {
 		return core::instance();
 	}
 }
+
+/**
+ * mediator class
+ */
+abstract class Module { use Mediator; }
