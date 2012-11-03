@@ -2,13 +2,6 @@
 
 namespace fabrico;
 
-require '../core/core.php';
-require '../core/module.php';
-require '../core/util.php';
-require '../loader/loader.php';
-require '../loader/core.php';
-require '../loader/deps.php';
-
 use fabrico\core\util;
 use fabrico\core\core;
 use fabrico\core\Reader;
@@ -27,44 +20,33 @@ use fabrico\configuration\ConfigurationItem;
 use fabrico\configuration\ConfigurationItems;
 use fabrico\controller\Controller;
 
+require '../core/core.php';
+require '../core/module.php';
+require '../core/util.php';
+require '../loader/loader.php';
+require '../loader/core.php';
+require '../loader/deps.php';
+
 // loaders
 core::instance()->core = new CoreLoader;
 core::instance()->deps = new DepsLoader;
-core::instance()->deps->set_path('../../../admin/php_include/');
-
-core::instance()->core->load('core');
-core::instance()->core->load('configuration');
-core::instance()->core->load('error');
-
-// prepare the configuration's reader
-Reader::set_yml(function ($file) {
-	return \sfYaml::load($file);
-});
+require core::DEPS_INITIALIZER;
 
 // framework configuration
-core::instance()->configuration = new Configuration;
-core::instance()->configuration->load('core', '../../configuration/httpconf.yml', Configuration::APC);
-
-// project configuration
-// ...
-
 // initialize core modules
-core::instance()->project = new Project;
-core::instance()->reader = new Reader;
-core::instance()->event = new EventDispatch;
-core::instance()->request = new Request;
-core::instance()->router = new Router($_REQUEST);
-core::instance()->response = new Response;
-core::instance()->response->as = Response::HTML;
+core::instance()->configuration = new Configuration;
+core::instance()->configuration->load(Configuration::CORE, Configuration::HTTPCONF, Configuration::APC);
+require core::CORE_INITIALIZER;
 
 // route the request
 switch (true) {
 	case core::instance()->router->is_view:
-		require 'view.php';
+		core::instance()->core->load('page');
+		require core::VIEW_INITIALIZER;
 		break;
 	
 	default:
-		core::instance()->response->addheader('HTTP/1.0 404 Not Found');
+		core::instance()->response->addheader(Response::HTTP404);
 		break;
 }
 

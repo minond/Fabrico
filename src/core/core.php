@@ -10,6 +10,13 @@ namespace fabrico\core;
  */
 class core {
 	/**
+	 * logic loaders
+	 */
+	const VIEW_INITIALIZER = 'view.php';
+	const CORE_INITIALIZER = 'core.php';
+	const DEPS_INITIALIZER = 'deps.php';
+
+	/**
 	 * @var core
 	 */
 	private static $instance;

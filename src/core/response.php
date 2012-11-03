@@ -19,6 +19,11 @@ class Response extends Module {
 	const TEXT = 'text';
 
 	/**
+	 * possible http statuses
+	 */
+	const HTTP404 = 'HTTP/1.0 404 Not Found';
+
+	/**
 	 * headers to send
 	 * @var array
 	 */

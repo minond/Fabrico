@@ -20,6 +20,21 @@ class Loader {
 	protected $files = [];
 
 	/**
+	 * files to load right away
+	 * @var array
+	 */
+	protected $autoload = [];
+
+	/**
+	 * trigger the autoload
+	 */
+	public function __construct () {
+		foreach ($this->autoload as $ns) {
+			$this->load($ns);
+		}
+	}
+
+	/**
 	 * @param string $namespace
 	 * @param array $files
 	 */

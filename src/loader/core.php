@@ -47,6 +47,8 @@ class CoreLoader extends Loader {
 		]
 	];
 
+	protected $autoload = ['core', 'configuration', 'error'];
+
 	public function core_format ($file) {
 		return "../core/{$file}.php";
 	}

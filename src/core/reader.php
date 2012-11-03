@@ -32,3 +32,7 @@ class Reader extends Module {
 		return call_user_func(self::$yml, $file);
 	}
 }
+
+Reader::set_yml(function ($file) {
+	return \sfYaml::load($file);
+});
