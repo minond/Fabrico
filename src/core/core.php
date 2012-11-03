@@ -10,13 +10,6 @@ namespace fabrico\core;
  */
 class core {
 	/**
-	 * logic loaders
-	 */
-	const VIEW_INITIALIZER = 'view.php';
-	const CORE_INITIALIZER = 'core.php';
-	const DEPS_INITIALIZER = 'deps.php';
-
-	/**
 	 * @var core
 	 */
 	private static $instance;
@@ -76,10 +69,10 @@ class core {
 	 * @return core
 	 */
 	public static function instance () {
-		return self::$instance = (
-			self::$instance ?
-			self::$instance :
-			new self
-		);
+		if (!self::$instance) {
+			self::$instance = new self;
+		}
+
+		return self::$instance;
 	}
 }

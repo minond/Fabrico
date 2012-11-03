@@ -9,4 +9,3 @@ use fabrico\page\Build;
 core::instance()->response->page = new Page;
 core::instance()->response->page->view = new View;
 core::instance()->response->page->view->builder = new Build;
-core::instance()->response->page->get(core::instance()->request->file);
