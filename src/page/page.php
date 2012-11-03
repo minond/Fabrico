@@ -23,13 +23,6 @@ class Page extends Module {
 	const JSON = 2;
 
 	/**
-	 * page definition tags
-	 */
-	const DEF_TAG = 'def';
-	const DEF_NS = 'page';
-	const DEF_PKG = 'f';
-
-	/**
 	 * @var string
 	 */
 	private $html;
@@ -210,17 +203,6 @@ class Page extends Module {
 	}
 
 	/**
-	 * @param TagToken $tt
-	 * @return boolean
-	 */
-	private function is_def (Token & $tt) {
-		return $tt instanceof TagToken &&
-			$tt->package === self::DEF_PKG &&
-			$tt->namespace === self::DEF_NS &&
-			$tt->name === self::DEF_TAG;
-	}
-
-	/**
 	 * standard page build preparation
 	 * manages tokens and check the generated html
 	 * @param strign $content
@@ -234,29 +216,7 @@ class Page extends Module {
 		$lexer->add_token(new TagToken);
 		$lexer->add_token(new MergeToken);
 
-		return $parser->parse($lexer, function ($orig, & $html, $tokens) {
-			$defined = false;
-
-			foreach ($tokens as & $token) {
-				if ($this->is_def($token)) {
-					$defined = true;
-					unset($token);
-					break;
-				}
-
-				unset($token);
-			}
-
-			$def = new TagToken;
-			$def->name = self::DEF_TAG;
-			$def->type = TagToken::SINGLE;
-			$def->package = self::DEF_PKG;
-			$def->namespace = self::DEF_NS;
-			$def->property_token = new PropertyToken;
-			$def->property_token->parse(array("controller='Testing'"));
-			$def->valid = true;
-			$html = $def->as_component() . $html;
-		});
+		return $parser->parse($lexer);
 	}
 }
 

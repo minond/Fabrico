@@ -6,11 +6,12 @@
 namespace fabrico\core;
 
 use fabrico\core\util;
+use fabrico\core\Module;
 
 /**
  * request file server
  */
-class Router {
+class Router extends Module {
 	/**
 	 * @var array
 	 */
@@ -42,8 +43,9 @@ class Router {
 
 	/**
 	 * @param array $req
+	 * @param boolean $build_request
 	 */
-	public function __construct (& $req) {
+	public function __construct (& $req, $build_request = true) {
 		$this->request = & $req;
 
 		if ($this->get(self::$var->file)) {
@@ -55,6 +57,10 @@ class Router {
 			}
 			else {
 				$this->is_view = true;
+			}
+
+			if ($build_request) {
+				$this->build_request();
 			}
 		}
 	}
@@ -79,10 +85,22 @@ class Router {
 	}
 
 	/**
+	 * parses a raw request uri
+	 * @param string $raw
+	 * @return
+	 */
+	public function parse_raw_request_uri ($raw) {
+		return $raw;
+	}
+
+	/**
 	 * @return Request
 	 */
-	public function get_request () {
-		$req = new Request;
+	public function build_request () {
+		$req = & $this->core->request;
+
+		$req->raw_file = $this->get(self::$var->file);
+		$req->file = $this->parse_raw_request_uri($req->raw_file);
 
 		return $req;
 	}

@@ -9,6 +9,7 @@ namespace fabrico\core;
  * request object
  */
 class Request {
+	public $file;
 	public $raw_file;
-	public $clean_file;
+	public $format;
 }

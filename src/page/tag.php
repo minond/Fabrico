@@ -11,6 +11,7 @@ use fabrico\core\Project;
 use fabrico\error\LoggedException;
 use fabrico\page\View;
 use fabrico\page\Build;
+use fabrico\controller\Controller;
 
 /**
  * custom tag generator
@@ -184,7 +185,11 @@ class Tag {
 		$props = [];
 
 		foreach (static::$tagopt as $prop => $name) {
-			$props[ $name ] = $this->{ is_numeric($prop) ? $name : $prop };
+			$val = $this->{ is_numeric($prop) ? $name : $prop };
+
+			if (strlen($val)) {
+				$props[ $name ] = $val;
+			}
 		}
 		
 		return $props;
@@ -252,7 +257,7 @@ class Text extends Tag {
 	}
 }
 
-class Div extends Tag {
+class Block extends Tag {
 	protected static $tag = 'div';
 	protected static $tagopt = ['id'];
 	protected function initialize () {
@@ -269,8 +274,11 @@ class Arg extends Tag {
 class Def extends Tag {
 	use Mediator;
 	public $controller;
+	public $format;
 	protected function initialize () {
-		$this->core->response->page->title = "Ctrl: {$this->controller}";
+		$this->core->core->load('controller');
+		$this->core->controller = new Controller;
+		$this->core->response->page->title = "Ctrl: {$this->controller}!";
 	}
 }
 

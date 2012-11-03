@@ -120,7 +120,7 @@ class Build extends Module {
 			$content .= $this->get_content_of($file);
 		}
 
-		$parsed = $this->core->page->prepare($content);
+		$parsed = $this->core->response->page->prepare($content);
 		return $this->file_put($target, $parsed);
 	}
 }

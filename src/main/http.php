@@ -13,6 +13,7 @@ use fabrico\core\util;
 use fabrico\core\core;
 use fabrico\core\Reader;
 use fabrico\core\Router;
+use fabrico\core\Request;
 use fabrico\core\Response;
 use fabrico\core\Project;
 use fabrico\core\EventDispatch;
@@ -40,28 +41,26 @@ Reader::set_yml(function ($file) {
 	return \sfYaml::load($file);
 });
 
+// framework configuration
+core::instance()->configuration = new Configuration;
+core::instance()->configuration->load('core', '../../configuration/httpconf.yml', Configuration::APC);
+
+// project configuration
+// ...
+
 // initialize core modules
 core::instance()->project = new Project;
 core::instance()->reader = new Reader;
 core::instance()->event = new EventDispatch;
+core::instance()->request = new Request;
 core::instance()->router = new Router($_REQUEST);
-core::instance()->configuration = new Configuration;
-//core::instance()->configuration->load('core', '../../configuration/httpconf.yml', Configuration::APC);
-core::instance()->configuration->load('core', '../../configuration/httpconf.yml');
-
 core::instance()->response = new Response;
 core::instance()->response->as = Response::HTML;
-core::instance()->core->load('controller');
-core::instance()->controller = new Controller;
 
 // route the request
 switch (true) {
 	case core::instance()->router->is_view:
-		core::instance()->core->load('page');
-		core::instance()->response->page = new Page;
-		core::instance()->response->page->view = new View;
-		core::instance()->response->page->view->builder = new Build;
-		core::instance()->response->page->get('index');
+		require 'view.php';
 		break;
 	
 	default:

@@ -40,6 +40,11 @@ class core {
 	public $router;
 
 	/**
+	 * @var Request
+	 */
+	public $request;
+
+	/**
 	 * @var Reader
 	 */
 	public $reader;
