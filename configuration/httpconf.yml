@@ -20,14 +20,12 @@ directory:
   triggers: /triggers/
   views: /views/
 
-templates:
-  build: true
-
 project:
   name: Propositum
   path: /var/www/Dropbox/apache/Propositum
 
 templates:
+  build: true
   txt: !str!#{content}
   html:  |
          <!DOCTYPE html>

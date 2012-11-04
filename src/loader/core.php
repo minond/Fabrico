@@ -28,16 +28,23 @@ class CoreLoader extends Loader {
 			'project'
 		],
 		'page' => [
-			'tag',
 			'build',
 			'page',
+			'tag',
+			'view',
+			// NOTE: move these out
+			'token',
+			'tagtoken',
+			// NOTE: this one is questionable
+			'mergetoken'
+		],
+		'parse' => [
+			'parser',
 			'lexer',
 			'token',
-			'propertytoken',
 			'tagtoken',
-			'mergetoken',
-			'parser',
-			'view'
+			'propertytoken',
+			'mergetoken'
 		],
 		'controller' => [
 			'controller'
@@ -66,6 +73,10 @@ class CoreLoader extends Loader {
 	}
 
 	public function page_format ($file) {
+		return "../page/{$file}.php";
+	}
+
+	public function parse_format ($file) {
 		return "../page/{$file}.php";
 	}
 

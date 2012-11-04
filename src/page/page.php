@@ -203,6 +203,7 @@ class Page extends Module {
 	 * @return string
 	 */
 	public function prepare ($content) {
+		$this->core->core->load('parse');
 		$parser = new Parser;
 		$lexer = new Lexer;
 
