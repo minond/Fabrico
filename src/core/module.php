@@ -17,7 +17,11 @@ trait Mediator {
 		}
 	}
 
-	public function getc () {
+	public function & getc () {
+		return self::getcore();
+	}
+
+	protected static function & getcore () {
 		return core::instance();
 	}
 }

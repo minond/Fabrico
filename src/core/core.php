@@ -68,7 +68,7 @@ class core {
 	 * instance getter
 	 * @return core
 	 */
-	public static function instance () {
+	public static function & instance () {
 		if (!self::$instance) {
 			self::$instance = new self;
 		}

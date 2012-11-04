@@ -2,6 +2,7 @@ file:
   ext:
     views: .php
     templates: .php
+    controllers: .php
 
 directory:
   build: /internals/build
@@ -25,3 +26,33 @@ templates:
 project:
   name: Propositum
   path: /var/www/Dropbox/apache/Propositum
+
+templates:
+  text:  |
+         #{content}
+  html:  |
+         <!DOCTYPE html>
+         <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+         <!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+         <!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+         <!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+         	<head>
+         		<meta charset="utf-8">
+         		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+         		<meta name="description" content="">
+         		<meta name="viewport" content="width=device-width">#{css-file}
+         		<title>#{title}</title>
+         		<style type="text/css">#{css-code}
+         		</style>
+         	</head>
+         	<body>
+         #{content}#{js-file}
+         		<script type="text/javascript">#{js-code}
+
+         			if (window.jQuery) {
+         				$(function () {#{js-load}
+         				});
+         			}
+         		</script>
+         	</body>
+         </html>

@@ -75,12 +75,6 @@ class Page extends Module {
 	private $js_load = [];
 
 	/**
-	 * page templates
-	 * @var array
-	 */
-	public static $templates = [];
-
-	/**
 	 * @param array $what
 	 * @return string
 	 */
@@ -191,7 +185,7 @@ class Page extends Module {
 	 * @return string
 	 */
 	public function render ($type) {
-		return MergeToken::merge(self::$templates[ $type ], [
+		return MergeToken::merge($this->configuration->core->templates->{ $type }, [
 			'title' => $this->title,
 			'content' => $this->content,
 			'css-file' => $this->get_css_file(),
@@ -219,32 +213,3 @@ class Page extends Module {
 		return $parser->parse($lexer);
 	}
 }
-
-Page::$templates['text'] = "#{content}";
-Page::$templates['html'] = <<<HTML
-<!DOCTYPE html>
-<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<title>#{title}</title>
-		<meta name="description" content="">
-		<meta name="viewport" content="width=device-width">#{css-file}
-		<style type="text/css">#{css-code}
-		</style>
-	</head>
-	<body>
-#{content}#{js-file}
-		<script type="text/javascript">#{js-code}
-
-		if (window.jQuery) {
-			$(function () {#{js-load}
-			});
-		}
-		</script>
-	</body>
-</html>
-HTML;

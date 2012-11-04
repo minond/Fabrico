@@ -14,8 +14,11 @@ require 'core.php';
 // route the request
 switch (true) {
 	case core::instance()->router->is_view:
+		// load page related modules and initialize them
 		core::instance()->core->load('page');
 		require 'view.php';
+
+		// load the view file
 		core::instance()->response->page->get(core::instance()->request->file);
 		break;
 	

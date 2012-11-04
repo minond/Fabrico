@@ -15,6 +15,7 @@ class Project extends Module {
 	const VIEW = 'views';
 	const BUILD = 'build';
 	const TEMPLATE = 'templates';
+	const CONTROLLER = 'controllers';
 
 	/**
 	 * @return string
@@ -47,6 +48,17 @@ class Project extends Module {
 	public function get_file ($name, $type) {
 		return $this->root() . $this->dr($type) .
 		       $name . $this->ext($type);
+	}
+
+	/**
+	 * @see get_file
+	 * @param string $name
+	 * @param string $type
+	 * @return array [string, boolean]
+	 */
+	public function got_file ($name, $type) {
+		$file = $this->get_file($name, $type);
+		return [ $file, file_exists($file) ];
 	}
 
 	/**

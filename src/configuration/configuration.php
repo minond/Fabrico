@@ -72,6 +72,16 @@ class Configuration extends Module {
 	}
 
 	/**
+	 * generate a cache hash name
+	 * @param string $ns
+	 * @param string $file
+	 * @return string
+	 */
+	private function get_hash ($ns, $file) {
+		return self::CACHE . $ns . $file;
+	}
+
+	/**
 	 * load a configuration. configuration content can optionally
 	 * be saved to (and read from) APC
 	 * @param string $ns
@@ -83,7 +93,7 @@ class Configuration extends Module {
 			$this->read_and_load($ns, $file);
 		}
 		else {
-			$hash = self::CACHE . $ns . $file;
+			$hash = $this->get_hash($ns, $file);
 
 			switch ($cache) {
 				case self::APC:
@@ -100,6 +110,22 @@ class Configuration extends Module {
 				default:
 					throw new LoggedException("Invalid cache type: {$cache}");
 			}
+		}
+	}
+
+	/**
+	 * clears cached configuration
+	 * @param string $ns
+	 * @param string $file
+	 * @param string $cache
+	 */
+	public function clear ($ns, $file, $cache) {
+		$hash = $this->get_hash($ns, $file);
+
+		switch ($cache) {
+			case self::APC:
+				apc_delete($hash);
+				break;
 		}
 	}
 }

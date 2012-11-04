@@ -25,7 +25,7 @@ class MergeToken extends Token {
 	 *  #{merge_field:name!} -> $merge_field->name()
 	 * @var string
 	 */
-	public static $pattern = '/([\\#|@])\{(.+)?\}/';
+	public static $pattern = '/([\\#|@]){(.+?)}/';
 
 	/**
 	 * special merge field characters and replacements

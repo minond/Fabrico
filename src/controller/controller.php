@@ -5,6 +5,8 @@
  */
 namespace fabrico\controller;
 
+use fabrico\core\util;
+use fabrico\core\Project;
 use fabrico\core\Module;
 
 /**
@@ -16,4 +18,19 @@ class Controller extends Module {
 		$this->name = get_class($this);
 	}
 	public function name () { return "~~{$this->name}"; }
+
+	/**
+	 * load and setup a new controller
+	 * @param string $controller
+	 * @return Controller
+	 */
+	public static function & load ($controller) {
+		$core = & self::getcore();
+		$file = $core->project->get_file($controller, Project::CONTROLLER);
+
+		require $file;
+		$core->controller = new $controller;
+
+		return $core->controller;
+	}
 }
