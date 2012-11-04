@@ -98,10 +98,7 @@ class Router extends Module {
 	 */
 	public function build_request () {
 		$req = & $this->core->request;
-
-		$req->raw_file = $this->get(self::$var->file);
-		$req->file = $this->parse_raw_request_uri($req->raw_file);
-
+		$req->parse($this->get(self::$var->file));
 		return $req;
 	}
 }

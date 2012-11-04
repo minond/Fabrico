@@ -30,10 +30,24 @@ class Response extends Module {
 	private $headers = [];
 
 	/**
+	 * header aliases
+	 * @var array
+	 */
+	public static $header_alias = [
+		'html' => 'text/html',
+		'txt' => 'text'
+	];
+
+	/**
+	 * content type header
+	 */
+	public static $content_type = 'Content-type: %s';
+
+	/**
 	 * response type
 	 * @var string
 	 */
-	public $as;
+	public $as = self::HTML;
 
 	/**
 	 * @var Page
@@ -52,12 +66,22 @@ class Response extends Module {
 	 * handles all reply types
 	 */
 	public function reply () {
+		// repond in the requested format
+		$this->as = $this->core->request->format;
+
+		// send the content type
+		header(sprintf(self::$content_type, self::$header_alias[ $this->as ]));
+
+		// then the rest of the headers
 		foreach ($this->headers as $header) {
 			header($header);
 		}
 
-		if ($this->page instanceof Page) {
-			echo $this->page->render($this->as);
+		// then the content
+		switch (true) {
+			case $this->page instanceof Page:
+				echo $this->page->render($this->as);
+				break;
 		}
 	}
 }

@@ -277,9 +277,14 @@ class Def extends Tag {
 	public $format;
 	protected function initialize () {
 		if ($this->controller) {
+			// load the controller
 			$this->core->core->load('controller');
 			Controller::load($this->controller);
-			$this->core->response->page->title = "Ctrl: {$this->controller}!";
+		}
+
+		if ($this->format) {
+//			util::dpre($this->core->response);
+//			util::dpre($this->format);
 		}
 	}
 }
