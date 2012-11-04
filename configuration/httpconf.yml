@@ -28,8 +28,7 @@ project:
   path: /var/www/Dropbox/apache/Propositum
 
 templates:
-  text:  |
-         #{content}
+  text:  !str!#{content}
   html:  |
          <!DOCTYPE html>
          <!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
@@ -45,8 +44,7 @@ templates:
          		<style type="text/css">#{css-code}
          		</style>
          	</head>
-         	<body>
-         #{content}#{js-file}
+         	<body>#{content}#{js-file}
          		<script type="text/javascript">#{js-code}
 
          			if (window.jQuery) {

@@ -24,4 +24,6 @@ core::instance()->configuration->load(Configuration::CORE, Configuration::HTTPCO
 core::instance()->request = new Request;
 core::instance()->router = new Router($_REQUEST);
 core::instance()->response = new Response;
+
+// always default to an HTML response
 core::instance()->response->as = Response::HTML;
