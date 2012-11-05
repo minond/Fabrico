@@ -11,19 +11,6 @@ require '../loader/deps.php';
 require 'deps.php';
 require 'core.php';
 
-
-use fabrico\logz\Logz;
-use fabrico\logz\handler\FileHandler;
-core::instance()->core->load('log');
-
-$log = new Logz('Testing');
-$log->add_handler(new FileHandler(Logz::INFO, 'out.log'));
-$log->information('test');
-
-$log->stop();
-util::dpre($log);
-die;
-
 // route the request
 switch (true) {
 	case core::instance()->router->is_view:
