@@ -94,11 +94,11 @@ class TagToken extends Token {
 	 */
 	public static $valid_tag = <<<PHP
 <?php echo \\fabrico\\page\\Tag::factory([
- 'type' => '%type',
- 'package' => '%package',
- 'namespace' => '%namespace',
- 'name' => '%name',
- 'properties' => (object) [ %properties ]
+ 'type' => '#{type}',
+ 'package' => '#{package}',
+ 'namespace' => '#{namespace}',
+ 'name' => '#{name}',
+ 'properties' => (object) [ #{properties} ]
 ]); ?>
 PHP;
 
@@ -148,11 +148,12 @@ PHP;
 	 * @return string
 	 */
 	public function as_component () {
-		return !$this->valid ? self::$invalid_tag :
-			str_replace(
-				['%type', '%package', '%namespace', '%name', '%properties'],
-				[$this->type, $this->package, $this->namespace, $this->name, $this->property_token->replacement],
-				self::$valid_tag
-			);
+		return !$this->valid ? self::$invalid_tag : MergeToken::merge(self::$valid_tag, [
+			'type' => $this->type,
+			'package' => $this->package,
+			'namespace' => $this->namespace,
+			'name' => $this->name,
+			'properties' => $this->property_token->replacement
+		]);
 	}
 }
