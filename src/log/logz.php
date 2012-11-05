@@ -122,6 +122,16 @@ class Logz {
 	}
 
 	/**
+	 * calls stop on all of its handlers
+	 */
+	public function stop () {
+		foreach ($this->handlers as & $handler) {
+			$handler->stop();
+			unset($handler);
+		}
+	}
+
+	/**
 	 * trigger a message of any type
 	 * @param string $level
 	 * @param array $args

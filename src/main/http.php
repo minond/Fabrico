@@ -20,6 +20,7 @@ $log = new Logz('Testing');
 $log->add_handler(new FileHandler(Logz::INFO, 'out.log'));
 $log->information('test');
 
+$log->stop();
 util::dpre($log);
 die;
 

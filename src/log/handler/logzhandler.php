@@ -45,7 +45,15 @@ abstract class LogzHandler {
 	}
 
 	/**
-	 * can I handle this message?
+	 * closes a handler if opened
+	 */
+	final public function stop () {
+		if ($this->opened) {
+			$this->close();
+		}
+	}
+
+	/**
 	 * by default only works with messages of current type
 	 * @param int $level
 	 * @return boolean
@@ -54,22 +62,20 @@ abstract class LogzHandler {
 		return $this->level === $level;
 	}
 
-	public function parse ($msg) {
-		
-	}
-
 	/**
+	 * virtual
 	 * called when Logz is ready to start sending messages
 	 */
-	abstract public function open ();
+	public function open () {}
 
 	/**
+	 * virtual
 	 * called after Logz is done logging messages
 	 */
-	abstract public function close ();
+	public function close () {}
 
 	/**
-	 * virtual method
+	 * virtual
 	 * writes to desired output
 	 * @param string $msg
 	 */
