@@ -172,7 +172,7 @@ class Tag {
 		}
 
 		return "<{$tag}{$propstr}" .
-		       (in_array($tag, ['input']) ?
+		       (in_array($tag, ['input', 'img']) ?
 		       " />" : ">{$content}</{$tag}>");
 	}
 

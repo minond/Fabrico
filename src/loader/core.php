@@ -51,10 +51,19 @@ class CoreLoader extends Loader {
 		],
 		'error' => [
 			'exception'
+		],
+		'log' => [
+			'logz',
+			'handler/logzhandler',
+			'handler/filehandler'
 		]
 	];
 
 	protected $autoload = ['core', 'configuration', 'error'];
+
+	public function log_format ($file) {
+		return "../log/{$file}.php";
+	}
 
 	public function core_format ($file) {
 		return "../core/{$file}.php";
