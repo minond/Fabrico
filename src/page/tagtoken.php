@@ -10,6 +10,19 @@ namespace fabrico\page;
  * @uses PropertyToken
  */
 class TagToken extends Token {
+	/**
+	 * number of matches a valid raw token should have
+	 */
+	const VALID_MATCH_COUNT = 5;
+
+	/**
+	 * tag types
+	 * open, close, and self closing tags
+	 */
+	const OPEN = 'open';
+	const CLOSE = 'close';
+	const SINGLE = 'single';
+
 	/** 
 	 * tag pattern
 	 * <code>
@@ -39,19 +52,6 @@ class TagToken extends Token {
 	 * @var string
 	 */
 	public static $close_identifier = '</';
-
-	/**
-	 * number of matches a valid raw token should have
-	 */
-	const VALID_MATCH_COUNT = 5;
-
-	/**
-	 * tag types
-	 * open, close, and self closing tags
-	 */
-	const OPEN = 'open';
-	const CLOSE = 'close';
-	const SINGLE = 'single';
 
 	/**
 	 * tag package character
@@ -122,6 +122,7 @@ PHP;
 			$this->properties = $raw[ 4 ][ 0 ];
 			$this->property_token = new PropertyToken;
 			$this->property_token->parse(array($this->properties));
+			$this->properties = $this->property_token->replacement;
 		}
 		
 		$this->replacement = $this->as_component();
@@ -148,12 +149,6 @@ PHP;
 	 * @return string
 	 */
 	public function as_component () {
-		return !$this->valid ? self::$invalid_tag : MergeToken::merge(self::$valid_tag, [
-			'type' => $this->type,
-			'package' => $this->package,
-			'namespace' => $this->namespace,
-			'name' => $this->name,
-			'properties' => $this->property_token->replacement
-		]);
+		return !$this->valid ? self::$invalid_tag : MergeToken::merge(self::$valid_tag, $this);
 	}
 }

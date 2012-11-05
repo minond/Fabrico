@@ -98,12 +98,14 @@ class MergeToken extends Token {
 	/**
 	 * simple merge field parser
 	 * @param string $tmpl
-	 * @param array $data
+	 * @param mixed $data
 	 * @return string
 	 */
-	public static function merge ($tmpl, array $data) {
+	public static function merge ($tmpl, $data) {
 		foreach ($data as $field => $value) {
-			$tmpl = str_replace("#{{$field}}", $value, $tmpl);
+			if (is_scalar($value)) {
+				$tmpl = str_replace("#{{$field}}", $value, $tmpl);
+			}
 		}
 
 		return $tmpl;
