@@ -12,23 +12,11 @@ class Logz {
 	/**
 	 * log levels
 	 */
-	const INFO = 0;
-	const WARN = 1;
-	const ERROR = 2;
-	const DEBUG = 3;
+	const DEBUG = 0;
+	const INFO = 1;
+	const WARN = 2;
+	const ERROR = 3;
 	const CRITICAL = 4;
-
-	/**
-	 * level dictionary
-	 * @var array
-	 */
-	private static $lvlmap = [
-		'information' => self::INFO,
-		'warning' => self::WARN,
-		'error' => self::ERROR,
-		'debug' => self::DEBUG,
-		'critical' => self::CRITICAL
-	];
 
 	/**
 	 * level names
@@ -132,13 +120,37 @@ class Logz {
 	}
 
 	/**
-	 * trigger a message of any type
-	 * @param string $level
-	 * @param array $args
+	 * @param string $msg
 	 */
-	public function __call ($level, array $args) {
-		if (array_key_exists($level, self::$lvlmap)) {
-			$this->find_and_send($args[ 0 ], self::$lvlmap[ $level ]);
-		}
+	public function information ($msg) {
+		$this->find_and_send($msg, self::INFO);
+	}
+
+	/**
+	 * @param string $msg
+	 */
+	public function warning ($msg) {
+		$this->find_and_send($msg, self::WARN);
+	}
+
+	/**
+	 * @param string $msg
+	 */
+	public function error ($msg) {
+		$this->find_and_send($msg, self::ERROR);
+	}
+
+	/**
+	 * @param string $msg
+	 */
+	public function debug ($msg) {
+		$this->find_and_send($msg, self::DEBUG);
+	}
+
+	/**
+	 * @param string $msg
+	 */
+	public function critical ($msg) {
+		$this->find_and_send($msg, self::CRITICAL);
 	}
 }
