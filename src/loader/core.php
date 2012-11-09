@@ -27,8 +27,9 @@ class CoreLoader extends Loader {
 			'reader',
 			'project'
 		],
-		'page' => [
+		'output' => [
 			'build',
+			'outputcontent',
 			'page',
 			'tag',
 			'view',
@@ -81,12 +82,12 @@ class CoreLoader extends Loader {
 		return "../observer/{$file}.php";
 	}
 
-	public function page_format ($file) {
-		return "../page/{$file}.php";
+	public function output_format ($file) {
+		return "../output/{$file}.php";
 	}
 
 	public function parse_format ($file) {
-		return "../page/{$file}.php";
+		return "../output/{$file}.php";
 	}
 
 	public function error_format ($file) {

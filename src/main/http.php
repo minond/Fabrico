@@ -27,11 +27,11 @@ util::dpre($log);
 switch (true) {
 	case core::instance()->router->is_view:
 		// load page related modules and initialize them
-		core::instance()->core->load('page');
+		core::instance()->core->load('output');
 		require 'view.php';
 
 		// load the view file
-		core::instance()->response->page->get(core::instance()->request->file);
+		core::instance()->response->outputcontent->get(core::instance()->request->file);
 		break;
 	
 	default:

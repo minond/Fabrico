@@ -14,7 +14,7 @@ use fabrico\page\MergeToken;
  * page manager
  * @uses MergeToken
  */
-class Page extends Module {
+class Page extends OutputContent {
 	/**
 	 * variables types
 	 */
@@ -23,26 +23,16 @@ class Page extends Module {
 	const JSON = 2;
 
 	/**
-	 * @var string
-	 */
-	private $html;
-
-	/**
-	 * @var View
-	 */
-	public $view;
-
-	/**
 	 * title
 	 * @var string
 	 */
-	public $title;
+	public $title = '';
 
 	/**
 	 * content
 	 * @var string
 	 */
-	public $content;
+	public $content = '';
 
 	/**
 	 * css files

@@ -6,6 +6,7 @@
 namespace fabrico\core;
 
 use fabrico\core\util;
+use fabrico\page\OutputContent;
 use fabrico\page\Page;
 
 /**
@@ -50,9 +51,9 @@ class Response extends Module {
 	public $as = self::HTML;
 
 	/**
-	 * @var Page
+	 * @var OutputContent
 	 */
-	public $page;
+	public $outputcontent;
 
 	/**
 	 * add a header
@@ -79,8 +80,8 @@ class Response extends Module {
 
 		// then the content
 		switch (true) {
-			case $this->page instanceof Page:
-				echo $this->page->render($this->as);
+			case $this->outputcontent instanceof OutputContent:
+				echo $this->outputcontent->render($this->as);
 				break;
 		}
 	}
