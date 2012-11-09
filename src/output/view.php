@@ -1,14 +1,14 @@
 <?php
 
 /**
- * @package fabrico\page
+ * @package fabrico\output
  */
-namespace fabrico\page;
+namespace fabrico\output;
 
 use fabrico\core\Project;
 use fabrico\core\Module;
 use fabrico\core\util;
-use fabrico\page\Tag;
+use fabrico\output\Tag;
 
 /**
  * view retriever

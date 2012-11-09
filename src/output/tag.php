@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @package fabrico\page
+ * @package fabrico\output
  */
-namespace fabrico\page;
+namespace fabrico\output;
 
 use fabrico\core\util;
 use fabrico\core\Mediator;
 use fabrico\core\Project;
 use fabrico\error\LoggedException;
-use fabrico\page\View;
-use fabrico\page\Build;
+use fabrico\output\View;
+use fabrico\output\Build;
 use fabrico\controller\Controller;
 
 /**
@@ -86,7 +86,7 @@ class Tag {
 
 	/**
 	 * tag format: <package:namespace:name />
-	 * namespace format: fabrico\page\package\namespace
+	 * namespace format: fabrico\output\package\namespace
 	 * class format: name
 	 * @param string $package
 	 * @param string $ns
@@ -94,8 +94,8 @@ class Tag {
 	 * @return string
 	 */
 	private static function getclass ($package, $namespace, $name) {
-		return "\\fabrico\\page\\{$name}";
-		return "\\fabrico\\page\\{$package}\\{$namespace}\\{$name}";
+		return "\\fabrico\\output\\{$name}";
+		return "\\fabrico\\output\\{$package}\\{$namespace}\\{$name}";
 	}
 
 	/**

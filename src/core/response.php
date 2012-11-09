@@ -6,8 +6,8 @@
 namespace fabrico\core;
 
 use fabrico\core\util;
-use fabrico\page\OutputContent;
-use fabrico\page\Page;
+use fabrico\output\OutputContent;
+use fabrico\output\Page;
 
 /**
  * response class

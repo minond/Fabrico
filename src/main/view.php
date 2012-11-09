@@ -2,9 +2,9 @@
 
 namespace fabrico\core;
 
-use fabrico\page\Page;
-use fabrico\page\View;
-use fabrico\page\Build;
+use fabrico\output\Page;
+use fabrico\output\View;
+use fabrico\output\Build;
 
 // add page module to the response, view and build
 core::instance()->response->outputcontent = new Page;

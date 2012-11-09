@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @package fabrico\page
+ * @package fabrico\output
  */
-namespace fabrico\page;
+namespace fabrico\output;
 
 /**
  * tag token
@@ -93,7 +93,7 @@ class TagToken extends Token {
 	 * @var string
 	 */
 	public static $valid_tag = <<<PHP
-<?php echo \\fabrico\\page\\Tag::factory([
+<?php echo \\fabrico\\output\\Tag::factory([
  'type' => '#{type}',
  'package' => '#{package}',
  'namespace' => '#{namespace}',

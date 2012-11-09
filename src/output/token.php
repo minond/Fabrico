@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @package fabrico\page
+ * @package fabrico\output
  */
-namespace fabrico\page;
+namespace fabrico\output;
 
 /**
  * basic token

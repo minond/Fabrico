@@ -1,14 +1,14 @@
 <?php
 
 /**
- * @package fabrico\page
+ * @package fabrico\output
  */
-namespace fabrico\page;
+namespace fabrico\output;
 
 use fabrico\core\util;
 use fabrico\core\Module;
 use fabrico\core\Project;
-use fabrico\page\MergeToken;
+use fabrico\output\MergeToken;
 
 /**
  * page manager

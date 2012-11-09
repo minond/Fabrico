@@ -1,16 +1,16 @@
 <?php
 
 /**
- * @package fabrico\page
+ * @package fabrico\output
  */
-namespace fabrico\page;
+namespace fabrico\output;
 
 use fabrico\core\Module;
 use fabrico\core\util;
-use fabrico\page\Lexer;
-use fabrico\page\Parser;
-use fabrico\page\TagToken;
-use fabrico\page\MergeToken;
+use fabrico\output\Lexer;
+use fabrico\output\Parser;
+use fabrico\output\TagToken;
+use fabrico\output\MergeToken;
 
 /**
  * fabrico template builder
