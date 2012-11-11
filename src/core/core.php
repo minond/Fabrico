@@ -87,11 +87,27 @@ class Core {
 	}
 
 	/**
+	 * custom setter setter
+	 * @param callable $fn
+	 */
+	public static function sets (callable $fn) {
+		self::instance()->set($fn);
+	}
+
+	/**
 	 * custom getter setter
 	 * @param callable $fn
 	 */
 	public function get (callable $fn) {
 		$this->getter = \Closure::bind($fn, $this, get_class($this));
+	}
+
+	/**
+	 * custom getter setter
+	 * @param callable $fn
+	 */
+	public static function gets (callable $fn) {
+		self::instance()->get($fn);
 	}
 
 	/**

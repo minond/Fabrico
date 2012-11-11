@@ -5,6 +5,7 @@
  */
 namespace fabrico;
 
+use fabrico\core\util;
 use fabrico\core\Core;
 use fabrico\core\Project;
 use fabrico\core\Reader;
@@ -40,11 +41,12 @@ Core::run(function (Core $app) {
 	$app->response = $response = new Response;
 
 	// base modules and configuration 
-	$app->project = new Project;
 	$app->reader = new Reader;
-	$app->event = new EventDispatch;
-	$app->configuration = new Configuration;
+	$app->configuration = $conf = new Configuration;
+	$app->configuration->clear(Configuration::CORE, Configuration::HTTPCONF, Configuration::APC);
 	$app->configuration->load(Configuration::CORE, Configuration::HTTPCONF, Configuration::APC);
+	$app->project = new Project($conf->core->project->name, $conf->core->project->path);
+	$app->event = new EventDispatch;
 
 	// route the request
 	switch (true) {

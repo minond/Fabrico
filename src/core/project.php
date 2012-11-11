@@ -18,10 +18,20 @@ class Project extends Module {
 	const CONTROLLER = 'controllers';
 
 	/**
-	 * @return string
+	 * project root directory
+	 * @string
 	 */
-	private function root () {
-		return $this->configuration->core->project->path;
+	private $root;
+
+	/**
+	 * project's name
+	 * @var string
+	 */
+	private $project_name;
+
+	public function __construct ($name, $root) {
+		$this->project_name = $name;
+		$this->root = $root;
 	}
 
 	/** 
@@ -46,7 +56,7 @@ class Project extends Module {
 	 * @return string
 	 */
 	public function get_file ($name, $type) {
-		return $this->root() . $this->dr($type) .
+		return $this->root . $this->dr($type) .
 		       $name . $this->ext($type);
 	}
 
@@ -67,7 +77,23 @@ class Project extends Module {
 	 * @return string
 	 */
 	public function get_build ($name, $type) {
-		return $this->root() . $this->dr(self::BUILD) .
+		return $this->root . $this->dr(self::BUILD) .
 		       $this->dr($type) . $name . $this->ext($type);
+	}
+
+	/**
+	 * project root getter
+	 * @return string
+	 */
+	public function get_project_root () {
+		return $this->root;
+	}
+
+	/**
+	 * project name getter
+	 * @return string
+	 */
+	public function get_project_name () {
+		return $this->project_name;
 	}
 }
