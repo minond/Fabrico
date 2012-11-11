@@ -20,8 +20,8 @@ class View extends Module {
 	public $builder;
 
 	/**
-	 * @param string $raw 
-	 * @param string $build 
+	 * @param string $raw
+	 * @param string $build
 	 */
 	private function request_build ($raw, $build) {
 		$built = true;
@@ -36,35 +36,44 @@ class View extends Module {
 	}
 
 	/**
-	 * @param string $file 
-	 * @param string $type 
+	 * @param string $file
+	 * @param string $type
+	 * @param array $args
 	 */
-	public function retrive ($file, $type) {
+	public function retrive ($file, $type, array & $args = null) {
 		$view = $this->core->project->get_file($file, $type);
 		$build = $this->core->project->get_build($file, $type);
 		$ready = $this->request_build($view, $build);
 
 		if ($ready) {
-			$this->load_template($build);
+			$this->load_template($build, $args);
 		}
 	}
 
 	/**
 	 * @param string $file
+	 * @param array $args
 	 */
-	public function load_template ($file) {
-		$core = & $this->core;
+	public function load_template ($file, array & $args = null) {
+		if (is_array($args)) {
+			foreach ($args as $var => $val) {
+				$$var = $val;
+			}
+		}
+
+		$controller = & $this->core->controller;
 		require $file;
 	}
 
 	/**
-	 * @param string $file 
-	 * @param string $type 
+	 * @param string $file
+	 * @param string $type
+	 * @param array $args
 	 * @return string
 	 */
-	public function get ($file, $type) {
+	public function get ($file, $type, array & $args = null) {
 		ob_start();
-		$this->retrive($file, $type);
+		$this->retrive($file, $type, $args);
 		return ob_get_clean();
 	}
 }

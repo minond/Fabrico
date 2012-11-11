@@ -54,6 +54,12 @@ class Tag {
 	protected static $tagopt = [];
 
 	/**
+	 * child tags
+	 * @var Tag[]
+	 */
+	private $__children = [];
+
+	/**
 	 * tag type (open|single|close)
 	 * @see TagToken
 	 * @var string
@@ -85,6 +91,20 @@ class Tag {
 	public $name;
 
 	/**
+	 * @param mixed $props
+	 * @param string $type
+	 */
+	public function __construct ($props = null, $type = TagToken::SINGLE) {
+		$this->__type = $type;
+
+		if (is_null($props)) {
+			$props = [];
+		}
+
+		self::prepare($this, $props);
+	}
+
+	/**
 	 * tag format: <package:namespace:name />
 	 * namespace format: fabrico\output\package\namespace
 	 * class format: name
@@ -110,18 +130,15 @@ class Tag {
 			throw new LoggedException("Invalid tag: {$el}");
 		}
 
-		$el = new $el;
-		$el->__type = $tag['type'];
-		self::prepare($el, $tag['properties']);
-		return $el;
+		return new $el($tag['properties'], $tag['type']);
 	}
 
 	/**
 	 * manages the property stack and sets it's content
 	 * @param Tag $tag
-	 * @param stdClass $props
+	 * @param array $props
 	 */
-	private static function prepare (Tag & $tag, \stdClass & $props) {
+	private static function prepare (Tag & $tag, array & $props) {
 		switch ($tag->__type) {
 			case TagToken::OPEN:
 				// start gathering this tag's conten,
@@ -139,11 +156,12 @@ class Tag {
 				$props = array_pop(self::$propstack);
 				$tag->__args = array_pop(self::$argstack);
 				$tag->__content = trim(ob_get_clean());
+				$tag->sets($props);
+				break;
 
 			case TagToken::SINGLE:
-				// set the properties and initialize it
+				// set the properties
 				$tag->sets($props);
-				$tag->initialize();
 				break;
 
 			default:
@@ -201,6 +219,12 @@ class Tag {
 	 * @return string
 	 */
 	final public function __toString () {
+		$this->initialize();
+
+		foreach ($this->__children as $child) {
+			$this->__content .= (string) $child;
+		}
+
 		if (static::$tag) {
 			switch ($this->__type) {
 				case TagToken::SINGLE:
@@ -214,9 +238,9 @@ class Tag {
 
 	/**
 	 * sets  the tag's properties
-	 * @param stdClass $props 
+	 * @param array $props
 	 */
-	public function sets (\stdClass & $props) {
+	public function sets (array & $props) {
 		foreach ($props as $prop => $value) {
 			$this->set($prop, $value);
 		}
@@ -235,6 +259,35 @@ class Tag {
 			$me = get_class($this);
 			throw new LoggedException("Invalid property \"{$prop}\" for \"{$me}\"");
 		}
+	}
+
+	/**
+	 * content getter
+	 * @return string
+	 */
+	public function get_content () {
+		return $this->__content;
+	}
+
+	/**
+	 * content setter
+	 * @param string $content
+	 * @return string
+	 */
+	public function set_content ($content) {
+		$this->__content = $content;
+	}
+
+	/**
+	 * add a child tag
+	 * @param Tag $tag
+	 */
+	public function add_child (Tag & $tag) {
+		if ($tag === $this) {
+			throw new LoggedException('Cannot add tag as child of itself');
+		}
+
+		$this->__children[] = & $tag;
 	}
 
 	/**
@@ -291,7 +344,23 @@ class Def extends Tag {
 
 class Partial extends Tag {
 	private static $view;
+	private $t_args = [];
 	public $file;
+
+	/**
+	 * overwrite to allow undefined variables
+	 * @param string $var
+	 * @param mixed $val
+	 */
+	public function set ($var, $val) {
+		if (property_exists($this, $var)) {
+			$this->{ $var } = $val;
+		}
+		else {
+			$this->t_args[ $var ] = $val;
+		}
+	}
+
 	private function init () {
 		if (!self::$view) {
 			self::$view = new View;
@@ -300,6 +369,6 @@ class Partial extends Tag {
 	}
 	protected function initialize () {
 		$this->init();
-		echo self::$view->get($this->file, Project::TEMPLATE);
+		echo self::$view->get($this->file, Project::TEMPLATE, $this->t_args);
 	}
 }

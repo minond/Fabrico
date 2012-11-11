@@ -98,7 +98,7 @@ class TagToken extends Token {
  'package' => '#{package}',
  'namespace' => '#{namespace}',
  'name' => '#{name}',
- 'properties' => (object) [ #{properties} ]
+ 'properties' => [ #{properties} ]
 ]); ?>
 PHP;
 
