@@ -63,34 +63,34 @@ class CoreLoader extends Loader {
 	protected $autoload = ['core', 'configuration', 'error'];
 
 	public function log_format ($file) {
-		return "../log/{$file}.php";
+		return "log/{$file}.php";
 	}
 
 	public function core_format ($file) {
-		return "../core/{$file}.php";
+		return "core/{$file}.php";
 	}
 
 	public function controller_format ($file) {
-		return "../controller/{$file}.php";
+		return "controller/{$file}.php";
 	}
 
 	public function configuration_format ($file) {
-		return "../configuration/{$file}.php";
+		return "configuration/{$file}.php";
 	}
 
 	public function observer_format ($file) {
-		return "../observer/{$file}.php";
+		return "observer/{$file}.php";
 	}
 
 	public function output_format ($file) {
-		return "../output/{$file}.php";
+		return "output/{$file}.php";
 	}
 
 	public function parse_format ($file) {
-		return "../output/{$file}.php";
+		return "output/{$file}.php";
 	}
 
 	public function error_format ($file) {
-		return "../error/{$file}.php";
+		return "error/{$file}.php";
 	}
 }

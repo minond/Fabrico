@@ -18,7 +18,7 @@ class Configuration extends Module {
 	 * conventions
 	 */
 	const CORE = 'core';
-	const HTTPCONF = '../../configuration/httpconf.yml';
+	const HTTPCONF = '../configuration/httpconf.yml';
 
 	/**
 	 * use APC to cache configuration settings
