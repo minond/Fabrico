@@ -1,77 +1,70 @@
 <?php
 
-namespace fabrico\core;
+/**
+ * standard handling of http requests
+ */
+namespace fabrico;
 
-require 'core/core.php';
-require 'core/module.php';
-require 'core/util.php';
-require 'loader/loader.php';
-require 'loader/core.php';
-require 'loader/deps.php';
-
-use fabrico\loader\CoreLoader;
-use fabrico\loader\DepsLoader;
+use fabrico\core\Core;
 use fabrico\core\Project;
 use fabrico\core\Reader;
 use fabrico\core\EventDispatch;
-use fabrico\core\Request;
-use fabrico\core\Router;
-use fabrico\core\Response;
-use fabrico\configuration\Configuration;
 use fabrico\output\Page;
 use fabrico\output\View;
 use fabrico\output\Build;
+use fabrico\core\Request;
+use fabrico\core\Router;
+use fabrico\core\Response;
+use fabrico\loader\CoreLoader;
+use fabrico\loader\DepsLoader;
+use fabrico\configuration\Configuration;
 
-// loaders
-core::instance()->core = new CoreLoader;
-core::instance()->deps = new DepsLoader;
-core::instance()->deps->set_path('../../admin/php_include/');
+require 'core/core.php';
 
-// base modules
-core::instance()->project = new Project;
-core::instance()->reader = new Reader;
-core::instance()->event = new EventDispatch;
+Core::run(function (Core $app) {
+	// load core mods
+	require_once 'core/module.php';
+	require_once 'core/util.php';
+	require_once 'loader/loader.php';
+	require_once 'loader/core.php';
+	require_once 'loader/deps.php';
 
-// load framework configuration
-core::instance()->configuration = new Configuration;
-//core::instance()->configuration->clear(Configuration::CORE, Configuration::HTTPCONF, Configuration::APC);
-core::instance()->configuration->load(Configuration::CORE, Configuration::HTTPCONF, Configuration::APC);
+	// loaders
+	$app->core = new CoreLoader;
+	$app->deps = new DepsLoader;
+	$app->deps->set_path('../../admin/php_include/');
 
-// request handlers
-core::instance()->request = new Request;
-core::instance()->router = new Router($_REQUEST);
-core::instance()->response = new Response;
+	// request handlers
+	$app->request = $request = new Request;
+	$app->router = $router = new Router($_REQUEST);
+	$app->response = $response = new Response;
 
-/*
-use fabrico\logz\Logz;
-use fabrico\logz\handler\FileHandler;
-core::instance()->core->load('log');
+	// base modules and configuration 
+	$app->project = new Project;
+	$app->reader = new Reader;
+	$app->event = new EventDispatch;
+	$app->configuration = new Configuration;
+	$app->configuration->load(Configuration::CORE, Configuration::HTTPCONF, Configuration::APC);
 
-$log = new Logz('Testing');
-$log->add_handler(new FileHandler(Logz::INFO, 'out.log'));
-$log->information('hi');
+	// route the request
+	switch (true) {
+		case $router->is_view:
+			// load page related modules and initialize them
+			$app->core->load('output');
 
-util::dpre($log);
-*/
+			// add page module to the response, view and build
+			$response->outputcontent = new Page;
+			$response->outputcontent->view = new View;
+			$response->outputcontent->view->builder = new Build;
 
-// route the request
-switch (true) {
-	case core::instance()->router->is_view:
-		// load page related modules and initialize them
-		core::instance()->core->load('output');
+			// load the view file
+			$response->outputcontent->load($request->file);
+			break;
 
-		// add page module to the response, view and build
-		core::instance()->response->outputcontent = new Page;
-		core::instance()->response->outputcontent->view = new View;
-		core::instance()->response->outputcontent->view->builder = new Build;
+		default:
+			$response->addheader(Response::HTTP404);
+			break;
+	}
 
-		// load the view file
-		core::instance()->response->outputcontent->get(core::instance()->request->file);
-		break;
-	
-	default:
-		core::instance()->response->addheader(\fabrico\core\Response::HTTP404);
-		break;
-}
-
-core::instance()->response->reply();
+	$response->send();
+});

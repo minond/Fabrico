@@ -23,8 +23,11 @@ trait Mediator {
 	 */
 	public function __get ($var) {
 		switch ($var) {
-			case 'core': return $this->getc();
-			case 'configuration': return $this->getc()->configuration;
+			case 'core':
+				return $this->getc();
+
+			case 'configuration':
+				return $this->getc()->configuration;
 		}
 	}
 
@@ -40,7 +43,7 @@ trait Mediator {
 	 * @return core
 	 */
 	protected static function & getcore () {
-		return core::instance();
+		return Core::instance();
 	}
 }
 

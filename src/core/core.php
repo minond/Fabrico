@@ -7,8 +7,10 @@ namespace fabrico\core;
 
 /**
  * main
+ * this is a singleton, but SHOULD only be accessed through
+ * its run method, or through either the Mediator or Module
  */
-class core {
+class Core {
 	/**
 	 * @var core
 	 */
@@ -132,5 +134,13 @@ class core {
 		}
 
 		return self::$instance;
+	}
+
+	/**
+	 * initialize core and triggers the callback
+	 * @param Closure $cb
+	 */
+	public static function run (\Closure $cb) {
+		$cb(self::instance());
 	}
 }

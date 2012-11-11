@@ -64,9 +64,9 @@ class Response extends Module {
 	}
 
 	/**
-	 * handles all reply types
+	 * handles all output types
 	 */
-	public function reply () {
+	public function send () {
 		// repond in the requested format
 		$this->as = $this->core->request->format;
 

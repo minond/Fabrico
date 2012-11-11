@@ -166,7 +166,7 @@ class Page extends OutputContent {
 	/**
 	 * @param string $view
 	 */
-	public function get ($view) {
+	public function load ($view) {
 		$this->content = $this->view->get($view, Project::VIEW);
 	}
 
