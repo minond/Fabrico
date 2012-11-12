@@ -20,7 +20,6 @@ class CoreLoader extends Loader {
 			'request',
 			'response',
 			'event',
-			'reader',
 			'project'
 		],
 		'output' => [

@@ -17,7 +17,6 @@ use fabrico\core\Request;
 use fabrico\core\Router;
 use fabrico\core\Response;
 use fabrico\loader\CoreLoader;
-use fabrico\loader\DepsLoader;
 use fabrico\configuration\Configuration;
 
 error_reporting(E_ALL);
@@ -29,12 +28,9 @@ Core::run(function (Core $app) {
 	require 'core/util.php';
 	require 'loader/loader.php';
 	require 'loader/core.php';
-	require 'loader/deps.php';
 
 	// loaders
 	$app->core = new CoreLoader;
-	$app->deps = new DepsLoader;
-	$app->deps->set_path('../../admin/php_include/');
 
 	// request handlers
 	$app->request = $request = new Request;
@@ -42,7 +38,6 @@ Core::run(function (Core $app) {
 	$app->response = $response = new Response;
 
 	// base modules and configuration 
-	$app->reader = new Reader;
 	$app->configuration = $conf = new Configuration;
 	$app->configuration->clear(Configuration::CORE, Configuration::HTTPCONF, Configuration::APC);
 	$app->configuration->load(Configuration::CORE, Configuration::HTTPCONF, Configuration::APC);

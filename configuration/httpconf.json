@@ -1,0 +1,35 @@
+{
+	"file": {
+  		"ext": {
+    		"views": ".php",
+    		"templates": ".php",
+    		"controllers": ".php"
+		}
+	},
+
+	"directory": {
+		"build": "/internals/build",
+		"configuration": "/configuration/",
+		"controllers": "/controllers/",
+		"css": "/resources/css/",
+		"elements": "/elements/",
+		"images": "/resources/images/",
+		"include": "/include/",
+		"javascript": "/resources/javascript/",
+		"logs": "/internals/logs/",
+		"models": "/models/",
+		"routers": "/routers/",
+		"templates": "/templates/",
+		"triggers": "/triggers/",
+		"views": "/views/"
+	},
+
+	"project": {
+		"name": "Propositum",
+		"path": "/var/www/Dropbox/apache/Propositum"
+	},
+
+	"templates": {
+		"build": "true"
+	}
+}

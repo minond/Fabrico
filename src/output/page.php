@@ -65,11 +65,29 @@ class Page extends OutputContent {
 	private $js_load = [];
 
 	/**
+	 * templates
+	 * @var array
+	 */
+	private static $template_map = [];
+
+	/**
+	 * add a template
+	 * @param string $name
+	 * @param string $content
+	 * @param boolean $allow_overwrite
+	 */
+	public static function set_template ($name, $content, $allow_overwrite = false) {
+		if (!isset(self::$template_map[ $name ]) || $allow_overwrite) {
+			self::$template_map[ $name ] = $content;
+		}
+	}
+
+	/**
 	 * @param array $what
 	 * @return string
 	 */
 	private function stdjoin (array $what) {
-		return "\n" . implode("\n", $what);
+		return implode("\n", $what);
 	}
 
 	/**
@@ -207,7 +225,7 @@ class Page extends OutputContent {
 	 * @return string
 	 */
 	public function render ($type) {
-		return MergeToken::merge($this->configuration->core->templates->{ $type }, [
+		return MergeToken::merge(self::$template_map[ $type ], [
 			'title' => $this->title,
 			'content' => $this->content,
 			'css-file' => $this->get_css_file(),
@@ -236,3 +254,35 @@ class Page extends OutputContent {
 		return $parser->parse($lexer);
 	}
 }
+
+Page::set_template('txt', '#{content}');
+Page::set_template('html', <<<HTML
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html> <!--<![endif]-->
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="description" content="">
+		<meta name="viewport" content="width=device-width">
+		#{css-file}
+		<title>#{title}</title>
+		<style type="text/css">#{css-code}</style>
+	</head>
+	<body>
+		#{content}
+		#{js-file}
+		<script type="text/javascript">
+		#{js-code}
+		if (window.jQuery) {
+			$(function () {
+				#{js-load}
+			});
+		}
+		</script>
+	</body>
+</html>
+HTML
+);

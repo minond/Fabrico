@@ -47,11 +47,6 @@ class Core {
 	private $request;
 
 	/**
-	 * @var Reader
-	 */
-	private $reader;
-
-	/**
 	 * @var EventDispatch
 	 */
 	private $event;

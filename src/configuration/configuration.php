@@ -18,7 +18,7 @@ class Configuration extends Module {
 	 * conventions
 	 */
 	const CORE = 'core';
-	const HTTPCONF = '../configuration/httpconf.yml';
+	const HTTPCONF = '../configuration/httpconf.json';
 
 	/**
 	 * use APC to cache configuration settings
@@ -60,7 +60,7 @@ class Configuration extends Module {
 	 * @return ConfigurationItems
 	 */
 	private function read_and_load ($ns, $file) {
-		$raw = $this->getc()->reader->yml($file);
+		$raw = json_decode(file_get_contents($file), true);
 		$items = new ConfigurationItems;
 
 		foreach ($raw as $item => $confs) {
