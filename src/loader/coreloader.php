@@ -9,6 +9,12 @@ namespace fabrico\loader;
  * core file loader
  */
 class CoreLoader extends Loader {
+	protected $autoload = [
+		'core',
+		'configuration',
+		'error'
+	];
+
 	protected $files = [
 		'configuration' => [
 			'item',
@@ -28,19 +34,19 @@ class CoreLoader extends Loader {
 			'page',
 			'tag',
 			'view',
-			// NOTE: move these out
-			'token',
-			'tagtoken',
-			// NOTE: this one is questionable
-			'mergetoken'
+			// TODO: move into perse namespace
+			'token/token',
+			'token/tagtoken',
+			'token/mergetoken'
 		],
 		'parse' => [
-			'parser',
-			'lexer',
-			'token',
-			'tagtoken',
-			'propertytoken',
-			'mergetoken'
+			'parser/parser',
+			'parser/lexer',
+			// TODO: move out of output namespace
+			// 'token/token',
+			// 'token/tagtoken',
+			// 'token/mergetoken',
+			'token/propertytoken'
 		],
 		'controller' => [
 			'controller'
@@ -55,33 +61,31 @@ class CoreLoader extends Loader {
 		]
 	];
 
-	protected $autoload = ['core', 'configuration', 'error'];
-
 	public function log_format ($file) {
-		return "log/{$file}.php";
+		return sprintf('%slog/%s.php', $this->path_to, $file);
 	}
 
 	public function core_format ($file) {
-		return "core/{$file}.php";
+		return sprintf('%score/%s.php', $this->path_to, $file);
 	}
 
 	public function controller_format ($file) {
-		return "controller/{$file}.php";
+		return sprintf('%scontroller/%s.php', $this->path_to, $file);
 	}
 
 	public function configuration_format ($file) {
-		return "configuration/{$file}.php";
+		return sprintf('%sconfiguration/%s.php', $this->path_to, $file);
 	}
 
 	public function output_format ($file) {
-		return "output/{$file}.php";
+		return sprintf('%soutput/%s.php', $this->path_to, $file);
 	}
 
 	public function parse_format ($file) {
-		return "output/{$file}.php";
+		return sprintf('%soutput/%s.php', $this->path_to, $file);
 	}
 
 	public function error_format ($file) {
-		return "error/{$file}.php";
+		return sprintf('%serror/%s.php', $this->path_to, $file);
 	}
 }

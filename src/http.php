@@ -27,7 +27,7 @@ Core::run(function (Core $app) {
 	require 'core/module.php';
 	require 'core/util.php';
 	require 'loader/loader.php';
-	require 'loader/core.php';
+	require 'loader/coreloader.php';
 
 	// loaders
 	$app->core = new CoreLoader;
