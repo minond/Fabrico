@@ -26,13 +26,13 @@ class Page extends OutputContent {
 	 * title
 	 * @var string
 	 */
-	public $title = '';
+	private $title = '';
 
 	/**
 	 * content
 	 * @var string
 	 */
-	public $content = '';
+	private $content = '';
 
 	/**
 	 * css files
@@ -140,6 +140,38 @@ class Page extends OutputContent {
 	 */
 	public function add_js_load ($js) {
 		$this->js_load[] = $js;
+	}
+
+	/**
+	 * title getter
+	 * @return string
+	 */
+	public function get_title () {
+		return $this->title;
+	}
+
+	/**
+	 * title setter
+	 * @param string $title
+	 */
+	public function set_title ($title) {
+		$this->title = $title;
+	}
+
+	/**
+	 * content getter
+	 * @return string
+	 */
+	public function get_content () {
+		return $this->content;
+	}
+
+	/**
+	 * content setter
+	 * @param string $content
+	 */
+	public function set_content ($content) {
+		$this->content = $content;
 	}
 
 	/**

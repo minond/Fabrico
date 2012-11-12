@@ -64,31 +64,31 @@ class Tag {
 	 * @see TagToken
 	 * @var string
 	 */
-	public $__type;
+	private $__type;
 
 	/**
 	 * tag's inner content
 	 * @var string
 	 */
-	public $__content = '';
+	private $__content = '';
 
 	/**
 	 * argument tags
 	 * @var array
 	 */
-	public $__args = [];
+	protected $__args = [];
 
 	/**
 	 * standard properties - id
 	 * @var string
 	 */
-	public $id;
+	protected $id;
 
 	/**
 	 * standard properties - name
 	 * @var string
 	 */
-	public $name;
+	protected $name;
 
 	/**
 	 * @param mixed $props

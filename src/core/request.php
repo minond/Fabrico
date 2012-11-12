@@ -21,14 +21,46 @@ class Request {
 	 * view file
 	 * @var string
 	 */
-	public $file;
+	private $file;
 
 	/**
 	 * requested format
 	 * defaults to HTML
 	 * @var string
 	 */
-	public $format = Response::HTML;
+	private $format = Response::HTML;
+
+	/**
+	 * format getter
+	 * @param string
+	 */
+	public function get_format () {
+		return $this->format;
+	}
+
+	/**
+	 * format setter
+	 * @param string $format
+	 */
+	public function set_format ($format) {
+		$this->format = $format;
+	}
+
+	/**
+	 * file fetter
+	 * @return string
+	 */
+	public function get_file () {
+		return $this->file;
+	}
+
+	/**
+	 * file setter
+	 * @param string $file
+	 */
+	public function set_file ($file) {
+		$this->file = $file;
+	}
 
 	/**
 	 * parse a raw request

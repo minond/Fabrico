@@ -13,15 +13,15 @@ use fabrico\core\Module;
  */
 class Router extends Module {
 	/**
-	 * @var array
-	 */
-	private $request;
-
-	/**
 	 * standard request variable names
 	 * @var object
 	 */
 	public static $var;
+
+	/**
+	 * @var array
+	 */
+	private $request;
 
 	/**
 	 * true if current request is for a view
@@ -43,11 +43,17 @@ class Router extends Module {
 
 	/**
 	 * @param array $req
-	 * @param boolean $build_request
 	 */
-	public function __construct (& $req, $build_request = true) {
+	public function __construct (& $req) {
 		$this->request = & $req;
+		$this->parse_request_type();
+		$this->build_request();
+	}
 
+	/**
+	 * figures out the request type
+	 */
+	public function parse_request_type () {
 		if ($this->get(self::$var->file)) {
 			if ($this->get(self::$var->method) && $this->get(self::$var->controller)) {
 				$this->is_method = true;
@@ -57,10 +63,6 @@ class Router extends Module {
 			}
 			else {
 				$this->is_view = true;
-			}
-
-			if ($build_request) {
-				$this->build_request();
 			}
 		}
 	}

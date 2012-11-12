@@ -29,6 +29,10 @@ class Project extends Module {
 	 */
 	private $project_name;
 
+	/**
+	 * @param string $name
+	 * @param string $root
+	 */
 	public function __construct ($name, $root) {
 		$this->project_name = $name;
 		$this->root = $root;

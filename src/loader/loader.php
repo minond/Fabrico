@@ -26,6 +26,12 @@ class Loader {
 	protected $autoload = [];
 
 	/**
+	 * base path
+	 * @var string
+	 */
+	protected $path_to = '';
+
+	/**
 	 * trigger the autoload
 	 */
 	public function __construct () {
@@ -84,5 +90,21 @@ class Loader {
 		}
 
 		return $file;
+	}
+
+	/**
+	 * path setter
+	 * @param string $path
+	 */
+	public function set_path ($path) {
+		$this->path_to = $path;
+	}
+
+	/**
+	 * path getter
+	 * @return string
+	 */
+	public function get_path () {
+		return $this->path_to;
 	}
 }

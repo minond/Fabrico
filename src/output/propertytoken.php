@@ -107,6 +107,7 @@ class PropertyToken extends Token {
 	 * @return string
 	 */
 	private function parse_value ($value) {
+		// TODO: make parse static var
 		$parser = new Parser;
 		$lexer = new Lexer;
 		$lexer->add_token(new MergeToken);

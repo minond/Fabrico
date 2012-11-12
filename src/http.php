@@ -20,15 +20,16 @@ use fabrico\loader\CoreLoader;
 use fabrico\loader\DepsLoader;
 use fabrico\configuration\Configuration;
 
+error_reporting(E_ALL);
 require 'core/core.php';
 
 Core::run(function (Core $app) {
 	// load core mods
-	require_once 'core/module.php';
-	require_once 'core/util.php';
-	require_once 'loader/loader.php';
-	require_once 'loader/core.php';
-	require_once 'loader/deps.php';
+	require 'core/module.php';
+	require 'core/util.php';
+	require 'loader/loader.php';
+	require 'loader/core.php';
+	require 'loader/deps.php';
 
 	// loaders
 	$app->core = new CoreLoader;
@@ -49,23 +50,20 @@ Core::run(function (Core $app) {
 	$app->event = new EventDispatch;
 
 	// route the request
-	switch (true) {
-		case $router->is_view:
-			// load page related modules and initialize them
-			$app->core->load('output');
+	if ($router->is_view) {
+		// load page related modules and initialize them
+		$app->core->load('output');
 
-			// add page module to the response, view and build
-			$response->outputcontent = new Page;
-			$response->outputcontent->view = new View;
-			$response->outputcontent->view->builder = new Build;
+		// add page module to the response, view and build
+		$response->outputcontent = new Page;
+		$response->outputcontent->view = new View;
+		$response->outputcontent->view->builder = new Build;
 
-			// load the view file
-			$response->outputcontent->load($request->file);
-			break;
-
-		default:
-			$response->addheader(Response::HTTP404);
-			break;
+		// load the view file
+		$response->outputcontent->load($request->get_file());
+	}
+	else {
+		$response->addheader(Response::HTTP404);
 	}
 
 	$response->send();

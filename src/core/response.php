@@ -48,7 +48,7 @@ class Response extends Module {
 	 * response type
 	 * @var string
 	 */
-	public $as = self::HTML;
+	private $as = self::HTML;
 
 	/**
 	 * @var OutputContent
@@ -64,11 +64,27 @@ class Response extends Module {
 	}
 
 	/**
+	 * response type getter
+	 * @return string
+	 */
+	public function get_response_type () {
+		return $this->as;
+	}
+
+	/**
+	 * response type setter
+	 * @param string $as
+	 */
+	public function set_response_type ($as) {
+		$this->as = $as;
+	}
+
+	/**
 	 * handles all output types
 	 */
 	public function send () {
 		// repond in the requested format
-		$this->as = $this->core->request->format;
+		$this->as = $this->core->request->get_format();
 
 		// send the content type
 		header(sprintf(self::$content_type, self::$header_alias[ $this->as ]));

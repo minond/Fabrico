@@ -15,12 +15,6 @@ class DepsLoader extends Loader {
 	const YML = 'yml';
 
 	/**
-	 * deps base path
-	 * @var string
-	 */
-	private $path_to;
-
-	/**
 	 * @var array
 	 */
 	protected $files = [
@@ -35,13 +29,5 @@ class DepsLoader extends Loader {
 	 */
 	public function yml_format ($file) {
 		return $this->path_to . $file;
-	}
-
-	/**
-	 * deps path setter
-	 * @param string $path
-	 */
-	public function set_path ($path) {
-		$this->path_to = $path;
 	}
 }
