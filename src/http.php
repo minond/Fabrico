@@ -17,7 +17,7 @@ use fabrico\output\Build;
 use fabrico\core\Request;
 use fabrico\core\Router;
 use fabrico\core\Response;
-use fabrico\core\Controller;
+use fabrico\controller\Controller;
 use fabrico\loader\CoreLoader;
 use fabrico\configuration\Configuration;
 
@@ -64,9 +64,10 @@ Core::run(function (Core $app) {
 		$app->core->load('output');
 		$app->core->load('controller');
 
+		$controller = Controller::req_load($request);
 		$response->outputcontent = new Json;
-		$response->outputcontent->status = Controller::request_status($request);
-		$response->outputcontent->output = Controller::trigger_method($request);
+		$response->outputcontent->status = Controller::request_status($controller, $request);
+		$response->outputcontent->return = Controller::trigger_method($controller, $request);
 	}
 	else {
 		$response->addheader(Response::HTTP404);

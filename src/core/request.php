@@ -5,12 +5,13 @@
  */
 namespace fabrico\core;
 
+use fabrico\core\Module;
 use fabrico\core\Response;
 
 /**
  * request object
  */
-class Request {
+class Request extends Module {
 	/**
 	 * valid formats
 	 * @var array
@@ -77,5 +78,16 @@ class Request {
 		else {
 			$this->file = $file;
 		}
+	}
+
+	/**
+	 * request value getter
+	 * @param string $var
+	 * @return mixed
+	 */
+	public function get ($var) {
+		// kind of ugly, shoudl find better way
+		// or move the request handling over to this class
+		return $this->core->router->get($var);
 	}
 }
