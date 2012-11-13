@@ -29,11 +29,14 @@ class CoreLoader extends Loader {
 			'project'
 		],
 		'output' => [
-			'build',
 			'outputcontent',
-			'page',
-			'tag',
-			'view',
+			'json'
+		],
+		'page' => [
+			'page/page',
+			'page/build',
+			'page/tag',
+			'page/view',
 			// TODO: move into perse namespace
 			'token/token',
 			'token/tagtoken',
@@ -75,6 +78,10 @@ class CoreLoader extends Loader {
 
 	public function configuration_format ($file) {
 		return sprintf('%sconfiguration/%s.php', $this->path_to, $file);
+	}
+
+	public function page_format ($file) {
+		return sprintf('%soutput/%s.php', $this->path_to, $file);
 	}
 
 	public function output_format ($file) {
