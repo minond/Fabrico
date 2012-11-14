@@ -13,7 +13,7 @@ class TagToken extends Token {
 	/**
 	 * number of matches a valid raw token should have
 	 */
-	const VALID_MATCH_COUNT = 5;
+	const VALID_MATCH_COUNT = 4;
 
 	/**
 	 * tag types
@@ -29,7 +29,6 @@ class TagToken extends Token {
 	 * /
 	 *   \<         # tag start
 	 *     \/?      # optional closing tag
-	 *     (\w?):   # package character
 	 *     (\w+?):  # tag namespace
 	 *     (\w+)    # tag name
 	 *     (.*?)?   # optional tag properties
@@ -39,7 +38,7 @@ class TagToken extends Token {
 	 * </code>
 	 * @var string
 	 */
-	public static $pattern = '/\<\/?(\w+?):(\w+?):(\w+)(.*?)?\/?\>/ms';
+	public static $pattern = '/\<\/?(\w+?):(\w+)(.*?)?\/?\>/ms';
 
 	/**
 	 * identifier string matching self closing tags
@@ -57,7 +56,7 @@ class TagToken extends Token {
 	 * tag package character
 	 * @var string
 	 */
-	public $package;
+	public $package = 'f';
 
 	/**
 	 * tag package namespace
@@ -113,13 +112,12 @@ PHP;
 	public function parse (array $raw) {
 		if (count($raw) === self::VALID_MATCH_COUNT) {
 			$this->valid = true;
-			$this->package = $raw[ 1 ][ 0 ];
-			$this->namespace = $raw[ 2 ][ 0 ];
-			$this->name = $raw[ 3 ][ 0 ];
+			$this->namespace = $raw[ 1 ][ 0 ];
+			$this->name = $raw[ 2 ][ 0 ];
 			$this->type = $this->get_type();
 
 			// prop tokenizer
-			$this->properties = $raw[ 4 ][ 0 ];
+			$this->properties = $raw[ 3 ][ 0 ];
 			$this->property_token = new PropertyToken;
 			$this->property_token->parse(array($this->properties));
 			$this->properties = $this->property_token->replacement;
