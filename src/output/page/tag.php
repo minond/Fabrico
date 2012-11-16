@@ -379,7 +379,7 @@ class Script extends Tag {
 
 	protected function initialize () {
 		$this->core->response->outputcontent->add_js_file(
-			$this->core->project->get_resource('fw.js', Project::JS)
+			$this->core->project->get_resource($this->file, Project::JS)
 		);
 	}
 }
