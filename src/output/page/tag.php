@@ -372,3 +372,14 @@ class Partial extends Tag {
 		echo self::$view->get($this->file, Project::TEMPLATE, $this->t_args);
 	}
 }
+
+class Script extends Tag {
+	use Mediator;
+	public $file;
+
+	protected function initialize () {
+		$this->core->response->outputcontent->add_js_file(
+			$this->core->project->get_resource('fw.js', Project::JS)
+		);
+	}
+}

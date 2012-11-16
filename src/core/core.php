@@ -5,6 +5,11 @@
  */
 namespace fabrico\core;
 
+require 'core/module.php';
+require 'core/util.php';
+require 'loader/loader.php';
+require 'loader/coreloader.php';
+
 /**
  * main
  * this is a singleton, but SHOULD only be accessed through

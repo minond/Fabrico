@@ -25,13 +25,6 @@ error_reporting(E_ALL);
 require 'core/core.php';
 
 Core::run(function (Core $app) {
-	// load core mods
-	require 'core/module.php';
-	require 'core/util.php';
-	require 'loader/loader.php';
-	require 'loader/coreloader.php';
-
-	// loaders
 	$app->core = new CoreLoader;
 
 	// request handlers
@@ -43,7 +36,7 @@ Core::run(function (Core $app) {
 	$app->configuration = $conf = new Configuration;
 	$app->configuration->clear(Configuration::CORE, Configuration::HTTPCONF, Configuration::APC);
 	$app->configuration->load(Configuration::CORE, Configuration::HTTPCONF, Configuration::APC);
-	$app->project = new Project($conf->core->project->name, $conf->core->project->path);
+	$app->project = new Project($conf->core->project->name, $conf->core->project->path, '/'.$conf->core->project->name);
 	$app->event = new EventDispatch;
 
 	// route the request

@@ -16,12 +16,19 @@ class Project extends Module {
 	const BUILD = 'build';
 	const TEMPLATE = 'templates';
 	const CONTROLLER = 'controllers';
+	const JS = 'javascript';
 
 	/**
 	 * project root directory
-	 * @string
+	 * @var string
 	 */
 	private $root;
+
+	/**
+	 * project web root
+	 * @var string
+	 */
+	private $webroot;
 
 	/**
 	 * project's name
@@ -32,10 +39,12 @@ class Project extends Module {
 	/**
 	 * @param string $name
 	 * @param string $root
+	 * @param string $webroot
 	 */
-	public function __construct ($name, $root) {
+	public function __construct ($name, $root, $webroot) {
 		$this->project_name = $name;
 		$this->root = $root;
+		$this->webroot = $webroot;
 	}
 
 	/** 
@@ -51,7 +60,13 @@ class Project extends Module {
 	 * @return string
 	 */
 	private function ext ($type) {
-		return $this->configuration->core->file->ext[ $type ];
+		return array_key_exists($type, $this->configuration->core->file->ext) ?
+			$this->configuration->core->file->ext[ $type ] : '';
+	}
+
+	public function get_resource ($name, $type) {
+		return $this->webroot . $this->dr($type) .
+			$name . $this->ext($type);
 	}
 
 	/**
