@@ -68,7 +68,8 @@ class CoreLoader extends Loader {
 		'cache' => [
 			'cache',
 			'apc',
-			'session'
+			'session',
+			'runtimememory',
 		],
 	];
 

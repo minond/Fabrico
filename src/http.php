@@ -68,3 +68,87 @@ Core::run(function (Core $app) {
 
 	$response->send();
 });
+
+
+
+use fabrico\cache\Apc;
+use fabrico\cache\RuntimeMemory;
+use fabrico\core\Module;
+use fabrico\configuration\RoutingRule;
+use fabrico\error\LoggedException;
+
+class Configuration_v2 extends Module {
+	/**
+	 * configuration storage
+	 * @var Cache
+	 */
+	private $cache;
+
+	/**
+	 * items acess
+	 * @var JsonReader[]
+	 */
+	private $items = [];
+
+	/**
+	 * item has format
+	 * @var string
+	 */
+	private $hash = 'configuration-item-%s';
+
+	/**
+	 * @param Cache $cache
+	 */
+	public function __construct ($cache) {
+		if ($cache instanceof cache\Cache) {
+			$this->cache = $cache;
+		}
+		else {
+			throw new LoggedException('Unknown cache system');
+		}
+	}
+
+	/**
+	 * items access
+	 * @param string $what
+	 * @return JsonReader
+	 */
+	public function __get ($what) {
+		return isset($this->items[ $what ]) ?
+			$this->items[ $what ] : null;
+	}
+
+	/**
+	 * load a configuration item, returns success
+	 * @param string $what
+	 * @param string $from
+	 * @param string $as
+	 * @return boolean 
+	 */
+	public function load ($what, $from, $as) {
+		$hash = sprintf($this->hash, $what);
+
+		if (!$this->cache->has($hash)) {
+			$this->items[ $hash ] = $this->cache->get($hash);
+		}
+		else {
+			
+		}
+	}
+}
+
+
+$c2 = new Configuration_v2(new RuntimeMemory);
+$c2->load('core', 'httpconf.json', 'configuration\Item');
+$c2->load('routingrules', 'httpconf.json', 'configuration\RoutingRule');
+
+
+
+
+
+
+
+
+
+
+
