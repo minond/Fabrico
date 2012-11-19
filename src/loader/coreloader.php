@@ -12,11 +12,14 @@ class CoreLoader extends Loader {
 	protected $autoload = [
 		'core',
 		'configuration',
-		'error'
+		'error',
+		'cache',
 	];
 
 	protected $files = [
 		'configuration' => [
+			'jsonreader',
+			'routingrule',
 			'item',
 			'items',
 			'configuration',
@@ -61,7 +64,12 @@ class CoreLoader extends Loader {
 			'logz',
 			'handler/logzhandler',
 			'handler/filehandler'
-		]
+		],
+		'cache' => [
+			'cache',
+			'apc',
+			'session'
+		],
 	];
 
 	public function log_format ($file) {
@@ -94,5 +102,9 @@ class CoreLoader extends Loader {
 
 	public function error_format ($file) {
 		return sprintf('%serror/%s.php', $this->path_to, $file);
+	}
+
+	public function cache_format ($file) {
+		return sprintf('%scache/%s.php', $this->path_to, $file);
 	}
 }

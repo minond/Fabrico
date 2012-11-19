@@ -1,9 +1,9 @@
 {
 	"file": {
-  		"ext": {
-    		"views": ".php",
-    		"templates": ".php",
-    		"controllers": ".php"
+		"ext": {
+			"views": ".php",
+			"templates": ".php",
+			"controllers": ".php"
 		}
 	},
 
