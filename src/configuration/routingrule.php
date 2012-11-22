@@ -5,10 +5,13 @@
  */
 namespace fabrico\configuration;
 
+use fabrico\core\util;
+use fabrico\configuration\ConfigurationReader;
+
 /**
  * represents a routing item
  */
-class RoutingRule {
+class RoutingRule implements ConfigurationReader {
 	/**
 	 * merge field format
 	 */
@@ -33,6 +36,12 @@ class RoutingRule {
 	private $cooked_url;
 
 	/**
+	 * url pointing to view file
+	 * @var string
+	 */
+	private $view_url;
+
+	/**
 	 * parameter labels
 	 * @var array
 	 */
@@ -42,10 +51,13 @@ class RoutingRule {
 	 * @param string $label
 	 * @param string $url
 	 */
-	public function __construct ($label, $url) {
+	public function __construct ($label = '', $url = '') {
 		$this->label = $label;
 		$this->raw_url = $url;
-		$this->compile_own_url();
+
+		if ($label && $url) {
+			$this->compile_own_url();
+		}
 	}
 
 	/**
@@ -55,26 +67,28 @@ class RoutingRule {
 	private function compile_own_url () {
 		preg_match_all(self::REGEXP, $this->raw_url, $matches);
 		$map = $this->build_matches($matches);
-		list($this->cooked_url, $this->labels) = $this->apply_merge_map($map, $this->raw_url);
+		list($this->cooked_url, $this->view_url, $this->labels) = $this->apply_merge_map($map, $this->raw_url);
 	}
 
 	/**
 	 * creates the cooked url
 	 * @param stdClass[] $map
 	 * @param string $raw_url
-	 * @return string
+	 * @return array
 	 */
 	private function apply_merge_map (array & $map, $raw_url) {
+		$view_url = $raw_url;
 		$raw_url = str_replace('/', '\\/', $raw_url);
 		$labels = [];
 
 		foreach ($map as & $param) {
 			$raw_url = str_replace($param->raw, $param->regex, $raw_url);
+			$view_url = str_replace('/' . $param->raw, '', $view_url);
 			$labels[] = $param->label;
 			unset($param);
 		}
 
-		return ["/$raw_url/", $labels];
+		return ["/$raw_url/", $view_url, $labels];
 	}
 
 	/**
@@ -129,6 +143,11 @@ class RoutingRule {
 		return $this->cooked_url;
 	}
 
+	/**
+	 * @param string $url
+	 * @param array $storage
+	 * @return boolean
+	 */
 	public function try_reading ($url, array & $storage = null) {
 		$match = false;
 		preg_match($this->cooked_url, $url, $matches);
@@ -142,21 +161,26 @@ class RoutingRule {
 				for ($i = 0, $len = count($matches); $i < $len; $i++) {
 					$storage[ $this->labels[ $i ] ] = $matches[ $i ];
 				}
+				$storage[ '_file' ] = $this->view_url;
 			}
 		}
 
 		return $match;
 	}
+
+	/**
+	 * @return RoutingRule[]
+	 */
+	public function load ($json) {
+		$routes = [];
+
+		foreach ($json as $name => $route) {
+			$routes[] = new self($name, $route);
+		}
+
+		return $routes;
+	}
 }
 
-/*
-$projects = new RoutingRule('projects_home', '/projects/#{project_id:\d+}/#{task_id:\d+}');
-
-$projects->try_reading('/my_page', $_REQUEST);
-$projects->try_reading('/projects/435', $_REQUEST);
-$projects->try_reading('/projects/435/', $_REQUEST);
-$projects->try_reading('/projects/435/43', $_REQUEST);
-$projects->try_reading('/projects/435/43/', $_REQUEST);
-
-fabrioc\core\util::dpre($_REQUEST);
-*/
+// $projects = new RoutingRule('projects_home', '/index/#{project_id:\d+}/#{task_id:\d+}');
+// $projects->try_reading($_SERVER['REDIRECT_URL'], $_REQUEST);

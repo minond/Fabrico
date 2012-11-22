@@ -60,7 +60,7 @@ class Request extends Module {
 	 * @param string $file
 	 */
 	public function set_file ($file) {
-		$this->file = $file;
+		$this->file = preg_replace([ '/^\//', '/\/$/' ], '', $file);
 	}
 
 	/**
@@ -73,10 +73,10 @@ class Request extends Module {
 		// remove the extension and save it
 		if (count($parts) && in_array($ext, self::$formats)) {
 			$this->format = $ext;
-			$this->file = implode('.', $parts);
+			$this->set_file(implode('.', $parts));
 		}
 		else {
-			$this->file = $file;
+			$this->set_file($file);
 		}
 	}
 

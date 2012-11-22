@@ -19,9 +19,12 @@ use fabrico\core\Router;
 use fabrico\core\Response;
 use fabrico\controller\Controller;
 use fabrico\loader\CoreLoader;
-use fabrico\configuration\Configuration;
+use fabrico\cache\RuntimeMemory;
+use fabrico\cache\Apc;
+use fabrico\configuration\StandardItem;
+use fabrico\configuration\RoutingRule;
+use fabrico\configuration\ConfigurationManager;
 
-error_reporting(E_ALL);
 require 'core/core.php';
 
 Core::run(function (Core $app) {
@@ -33,9 +36,10 @@ Core::run(function (Core $app) {
 	$app->response = $response = new Response;
 
 	// base modules and configuration 
-	$app->configuration = $conf = new Configuration;
-	$app->configuration->clear(Configuration::CORE, Configuration::HTTPCONF, Configuration::APC);
-	$app->configuration->load(Configuration::CORE, Configuration::HTTPCONF, Configuration::APC);
+	$app->configuration = $conf = new ConfigurationManager(new RuntimeMemory);
+	$conf->load('core', '../configuration/httpconf.json', new StandardItem);
+	$conf->load('routes', '../configuration/routes.json', new RoutingRule);
+
 	$app->project = new Project($conf->core->project->name, $conf->core->project->path, '/'.$conf->core->project->name);
 	$app->event = new EventDispatch;
 
@@ -68,87 +72,3 @@ Core::run(function (Core $app) {
 
 	$response->send();
 });
-
-
-
-use fabrico\cache\Apc;
-use fabrico\cache\RuntimeMemory;
-use fabrico\core\Module;
-use fabrico\configuration\RoutingRule;
-use fabrico\error\LoggedException;
-
-class Configuration_v2 extends Module {
-	/**
-	 * configuration storage
-	 * @var Cache
-	 */
-	private $cache;
-
-	/**
-	 * items acess
-	 * @var JsonReader[]
-	 */
-	private $items = [];
-
-	/**
-	 * item has format
-	 * @var string
-	 */
-	private $hash = 'configuration-item-%s';
-
-	/**
-	 * @param Cache $cache
-	 */
-	public function __construct ($cache) {
-		if ($cache instanceof cache\Cache) {
-			$this->cache = $cache;
-		}
-		else {
-			throw new LoggedException('Unknown cache system');
-		}
-	}
-
-	/**
-	 * items access
-	 * @param string $what
-	 * @return JsonReader
-	 */
-	public function __get ($what) {
-		return isset($this->items[ $what ]) ?
-			$this->items[ $what ] : null;
-	}
-
-	/**
-	 * load a configuration item, returns success
-	 * @param string $what
-	 * @param string $from
-	 * @param string $as
-	 * @return boolean 
-	 */
-	public function load ($what, $from, $as) {
-		$hash = sprintf($this->hash, $what);
-
-		if (!$this->cache->has($hash)) {
-			$this->items[ $hash ] = $this->cache->get($hash);
-		}
-		else {
-			
-		}
-	}
-}
-
-
-$c2 = new Configuration_v2(new RuntimeMemory);
-$c2->load('core', 'httpconf.json', 'configuration\Item');
-$c2->load('routingrules', 'httpconf.json', 'configuration\RoutingRule');
-
-
-
-
-
-
-
-
-
-
-

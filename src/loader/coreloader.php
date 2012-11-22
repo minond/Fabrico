@@ -11,18 +11,17 @@ namespace fabrico\loader;
 class CoreLoader extends Loader {
 	protected $autoload = [
 		'core',
-		'configuration',
 		'error',
 		'cache',
+		'configuration',
 	];
 
 	protected $files = [
 		'configuration' => [
-			'jsonreader',
+			'configurationmanager',
+			'configurationreader',
 			'routingrule',
-			'item',
-			'items',
-			'configuration',
+			'standarditem',
 		],
 		'core' => [
 			'router',

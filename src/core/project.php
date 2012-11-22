@@ -60,8 +60,8 @@ class Project extends Module {
 	 * @return string
 	 */
 	private function ext ($type) {
-		return array_key_exists($type, $this->configuration->core->file->ext) ?
-			$this->configuration->core->file->ext[ $type ] : '';
+		return property_exists($this->configuration->core->file->ext, $type) ?
+			$this->configuration->core->file->ext->{ $type } : '';
 	}
 
 	public function get_resource ($name, $type) {
