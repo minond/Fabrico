@@ -64,11 +64,12 @@ class ConfigurationManager extends Module {
 		$hash = sprintf($this->hash, $what);
 
 		if ($this->cache->has($hash)) {
-			$this->items[ $hash ] = $this->cache->get($hash);
+			$this->items[ $what ] = $this->cache->get($hash);
 		}
 		else {
 			if (file_exists($from)) {
 				$this->items[ $what ] = $as->load(json_decode(file_get_contents($from)));
+				$this->cache->set($hash, $this->items[ $what ]);
 			}
 			else {
 				throw new LoggedException("Configuration file not found: $from");

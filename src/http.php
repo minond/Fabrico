@@ -30,18 +30,29 @@ require 'core/core.php';
 Core::run(function (Core $app) {
 	$app->core = new CoreLoader;
 
-	// request handlers
-	$app->request = $request = new Request;
-	$app->router = $router = new Router($_REQUEST);
-	$app->response = $response = new Response;
-
 	// base modules and configuration 
 	$app->configuration = $conf = new ConfigurationManager(new RuntimeMemory);
 	$conf->load('core', '../configuration/httpconf.json', new StandardItem);
 	$conf->load('routes', '../configuration/routes.json', new RoutingRule);
 
-	$app->project = new Project($conf->core->project->name, $conf->core->project->path, '/'.$conf->core->project->name);
+	// apply routing rules
+	foreach ($conf->routes as $route) {
+		if ($route->try_reading($_SERVER['REDIRECT_URL'], $_REQUEST)) {
+			break;
+		}
+	}
+
+	// request handlers
+	$app->request = $request = new Request;
+	$app->router = $router = new Router($_REQUEST);
+	$app->response = $response = new Response;
+
 	$app->event = new EventDispatch;
+	$app->project = new Project(
+		$conf->core->project->name,
+		$conf->core->project->path,
+		'/' . $conf->core->project->name
+	);
 
 	// route the request
 	if ($router->is_view) {

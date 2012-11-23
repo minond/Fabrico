@@ -52,7 +52,7 @@ trait Mediator {
  */
 abstract class Module {
 	/**
-	 * it's no different than the Mediator trait
+	 * should be no different than the Mediator trait
 	 */
 	use Mediator;
 }

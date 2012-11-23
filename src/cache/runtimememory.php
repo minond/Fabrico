@@ -9,20 +9,20 @@ namespace fabrico\cache;
  * Run time memory
  */
 class RuntimeMemory implements Cache {
-	private $mem = [];
+	private static $mem = [];
 
 	/**
 	 * @see Cache::get
 	 */
 	public function get ($key) {
-		return $this->has($key) ? $this->mem[ $key ] : null;
+		return $this->has($key) ? self::$mem[ $key ] : null;
 	}
 
 	/**
 	 * @see Cache::set
 	 */
 	public function set ($key, $val) {
-		$this->mem[ $key ] = $val;
+		self::$mem[ $key ] = $val;
 		return true;
 	}
 
@@ -30,6 +30,6 @@ class RuntimeMemory implements Cache {
 	 * @see Cache::has
 	 */
 	public function has ($key) {
-		return isset($this->mem[ $key ]);
+		return isset(self::$mem[ $key ]);
 	}
 }

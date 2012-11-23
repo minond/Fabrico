@@ -161,6 +161,7 @@ class RoutingRule implements ConfigurationReader {
 				for ($i = 0, $len = count($matches); $i < $len; $i++) {
 					$storage[ $this->labels[ $i ] ] = $matches[ $i ];
 				}
+
 				$storage[ '_file' ] = $this->view_url;
 			}
 		}
@@ -181,6 +182,3 @@ class RoutingRule implements ConfigurationReader {
 		return $routes;
 	}
 }
-
-// $projects = new RoutingRule('projects_home', '/index/#{project_id:\d+}/#{task_id:\d+}');
-// $projects->try_reading($_SERVER['REDIRECT_URL'], $_REQUEST);

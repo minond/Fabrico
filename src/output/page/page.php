@@ -271,10 +271,10 @@ Page::set_template('html', <<<HTML
 		<title>#{title}</title>
 		<style type="text/css">#{css-code}</style>
 	</head>
-	<body>
-		#{content}
-		#{js-file}
-		<script type="text/javascript">
+	<body class="no-js">
+		#{content}#{js-file}<script type="text/javascript">
+		// clear no-js class
+		document.body.className = document.body.className.replace("no-js", "js");
 		#{js-code}
 		if (window.jQuery) {
 			$(function () {
