@@ -28,7 +28,7 @@ use fabrico\configuration\ConfigurationManager;
 require 'core/core.php';
 
 Core::run(function (Core $app) {
-	$app->core = new CoreLoader;
+	$app->loader = new CoreLoader;
 
 	// base modules and configuration 
 	$app->configuration = $conf = new ConfigurationManager(new RuntimeMemory);
@@ -57,8 +57,8 @@ Core::run(function (Core $app) {
 	// route the request
 	if ($router->is_view) {
 		// load page related modules and initialize them
-		$app->core->load('output');
-		$app->core->load('page');
+		$app->loader->load('output');
+		$app->loader->load('page');
 
 		// add page module to the response, view and build
 		$response->outputcontent = new Page;
@@ -69,8 +69,8 @@ Core::run(function (Core $app) {
 		$response->outputcontent->load($request->get_file());
 	}
 	else if ($router->is_method) {
-		$app->core->load('output');
-		$app->core->load('controller');
+		$app->loader->load('output');
+		$app->loader->load('controller');
 
 		$controller = Controller::req_load($request);
 		$response->outputcontent = new Json;

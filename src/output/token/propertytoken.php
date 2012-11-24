@@ -60,8 +60,9 @@ class PropertyToken extends Token {
 			}
 			else {
 				$strparts = explode(' ', $part);
-				$props[] = array_pop($strparts);
-				$vals[] = implode(' ', $strparts);
+				$strparts = preg_split('/\s+(?=\S*+$)/', rtrim($part));
+				$props[] = $strparts[ 1 ];
+				$vals[] = $strparts[ 0 ];
 			}
 		}
 

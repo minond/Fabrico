@@ -331,7 +331,7 @@ class Def extends Tag {
 	protected function initialize () {
 		if ($this->controller) {
 			// load the controller
-			$this->core->core->load('controller');
+			$this->core->loader->load('controller');
 			Controller::load($this->controller);
 		}
 

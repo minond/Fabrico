@@ -98,7 +98,7 @@ class Build extends Module {
 	 * @return string
 	 */
 	public function std_parse ($content) {
-		$this->core->core->load('parse');
+		$this->core->loader->load('parse');
 		$parser = new Parser;
 		$lexer = new Lexer;
 		

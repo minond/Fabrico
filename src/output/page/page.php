@@ -243,7 +243,7 @@ class Page extends OutputContent {
 	 * @return string
 	 */
 	public function prepare ($content) {
-		$this->core->core->load('parse');
+		$this->core->loader->load('parse');
 		$parser = new Parser;
 		$lexer = new Lexer;
 

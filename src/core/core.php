@@ -34,7 +34,7 @@ class Core {
 	/**
 	 * @var CoreLoader
 	 */
-	private $core;
+	private $loader;
 
 	/**
 	 * @var DepsLoader
