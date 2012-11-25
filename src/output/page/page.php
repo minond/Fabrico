@@ -244,6 +244,8 @@ class Page extends OutputContent {
 	 */
 	public function prepare ($content) {
 		$this->core->loader->load('parse');
+		$project = $this->core->project;
+		$conf = $this->configuration;
 		$parser = new Parser;
 		$lexer = new Lexer;
 
@@ -251,7 +253,49 @@ class Page extends OutputContent {
 		$lexer->add_token(new TagToken);
 		$lexer->add_token(new MergeToken);
 
-		return $parser->parse($lexer);
+		return $parser->parse($lexer, function ($orig, & $html, $tokens) use (& $project, & $conf) {
+			$includes = [];
+
+			foreach ($tokens as & $token) {
+				if ($token instanceof TagToken) {
+					$elfile = implode(DIRECTORY_SEPARATOR, [
+						$token->package,
+						$token->namespace,
+						$token->name
+					]);
+
+					list($projectfile, $in_project) = $project->got_file($elfile, Project::ELEMENT);
+					list($fabricofile, $in_fabrico) = $project->got_project_file(
+						$elfile, Project::ELEMENT,
+						$conf->core->file->to->elements
+					);
+
+					if ($in_project) {
+						$includes[] = $projectfile;
+					}
+					else if ($in_fabrico) {
+						$includes[] = $fabricofile;
+					}
+					else {
+						// not found
+					}
+				}
+
+				unset($token);
+			}
+
+			$includes = array_unique($includes);
+			foreach ($includes as $index => $file) {
+				$includes[ $index ] = sprintf('include_once "%s";', $file);
+			}
+
+			$includes = implode("\n", $includes);
+			$html = <<<HTML
+<?php
+{$includes}
+?>{$html}
+HTML;
+		});
 	}
 }
 

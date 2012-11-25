@@ -17,6 +17,7 @@ class Project extends Module {
 	const TEMPLATE = 'templates';
 	const CONTROLLER = 'controllers';
 	const JS = 'javascript';
+	const ELEMENT = 'elements';
 
 	/**
 	 * project root directory
@@ -80,6 +81,17 @@ class Project extends Module {
 	}
 
 	/**
+	 * @param string $name
+	 * @param string $type
+	 * @param string $prefix
+	 * @return string
+	 */
+	public function get_project_file ($name, $type, $prefix = '') {
+		return $prefix . $this->dr($type) .
+			$name . $this->ext($type);
+	}
+
+	/**
 	 * @see get_file
 	 * @param string $name
 	 * @param string $type
@@ -87,6 +99,18 @@ class Project extends Module {
 	 */
 	public function got_file ($name, $type) {
 		$file = $this->get_file($name, $type);
+		return [ $file, file_exists($file) ];
+	}
+
+	/**
+	 * @see get_project_file
+	 * @param string $name
+	 * @param string $type
+	 * @param string $prefix
+	 * @return array [string, boolean]
+	 */
+	public function got_project_file ($name, $type, $prefix = '') {
+		$file = $this->get_project_file($name, $type, $prefix);
 		return [ $file, file_exists($file) ];
 	}
 

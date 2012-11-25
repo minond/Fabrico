@@ -114,7 +114,6 @@ class Tag {
 	 * @return string
 	 */
 	private static function getclass ($package, $namespace, $name) {
-		return "\\fabrico\\output\\{$name}";
 		return "\\fabrico\\output\\{$package}\\{$namespace}\\{$name}";
 	}
 
@@ -297,89 +296,4 @@ class Tag {
 	 * @return void
 	 */
 	protected function initialize () {}
-}
-
-class Text extends Tag {
-	protected static $tag = 'input';
-	protected static $tagopt = [ 'name', 'user' => 'data-us', 'value' ];
-	public $name;
-	public $user;
-	public $value;
-	protected function initialize () {
-		$this->name .= "_input_field";
-	}
-}
-
-class Block extends Tag {
-	protected static $tag = 'div';
-	protected static $tagopt = ['id'];
-	protected function initialize () {
-		//$this->id = '~~' . $this->__args[ count($this->__args) - 1 ]->value;
-	}
-}
-
-class Arg extends Tag {
-	protected static $arg = true;
-	public $name;
-	public $value;
-}
-
-class Def extends Tag {
-	use Mediator;
-	public $controller;
-	public $format;
-	protected function initialize () {
-		if ($this->controller) {
-			// load the controller
-			$this->core->loader->load('controller');
-			Controller::load($this->controller);
-		}
-
-		if ($this->format) {
-//			util::dpre($this->core->response);
-//			util::dpre($this->format);
-		}
-	}
-}
-
-class Partial extends Tag {
-	private static $view;
-	private $t_args = [];
-	public $file;
-
-	/**
-	 * overwrite to allow undefined variables
-	 * @param string $var
-	 * @param mixed $val
-	 */
-	public function set ($var, $val) {
-		if (property_exists($this, $var)) {
-			$this->{ $var } = $val;
-		}
-		else {
-			$this->t_args[ $var ] = $val;
-		}
-	}
-
-	private function init () {
-		if (!self::$view) {
-			self::$view = new View;
-			self::$view->builder = new Build;
-		}
-	}
-	protected function initialize () {
-		$this->init();
-		echo self::$view->get($this->file, Project::TEMPLATE, $this->t_args);
-	}
-}
-
-class Script extends Tag {
-	use Mediator;
-	public $file;
-
-	protected function initialize () {
-		$this->core->response->outputcontent->add_js_file(
-			$this->core->project->get_resource($this->file, Project::JS)
-		);
-	}
 }

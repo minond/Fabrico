@@ -3,7 +3,12 @@
 		"ext": {
 			"views": ".php",
 			"templates": ".php",
-			"controllers": ".php"
+			"controllers": ".php",
+			"elements": ".php"
+		},
+
+		"to": {
+			"elements": ".."
 		}
 	},
 
