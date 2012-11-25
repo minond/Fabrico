@@ -17,12 +17,12 @@ class MergeToken extends Token {
 
 	/**
 	 * merge field patterns:
-	 *  #{merge_field_name}  -> [controller]->merge_field_name
-	 *  #{merge_field:name}  -> [controller]->merge_field->name
-	 *  #{merge_field:name!} -> [controller]->merge_field->name()
-	 *  @{merge_field_name}  -> $merge_field_name
-	 *  @{merge_field:name}  -> $merge_field->name
-	 *  @{merge_field:name!} -> $merge_field->name()
+	 *  #{merge_field_name}  = <Controller>->merge_field_name
+	 *  #{merge_field:name}  = <Controller>->merge_field->name
+	 *  #{merge_field:name!} = <Controller>->merge_field->name()
+	 *  @{merge_field_name}  = $merge_field_name
+	 *  @{merge_field:name}  = $merge_field->name
+	 *  @{merge_field:name!} = $merge_field->name()
 	 * @var string
 	 */
 	public static $pattern = '/([\\#|@]){(.+?)}/';
