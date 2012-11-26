@@ -289,12 +289,14 @@ class Page extends OutputContent {
 				$includes[ $index ] = sprintf('include_once "%s";', $file);
 			}
 
-			$includes = implode("\n", $includes);
-			$html = <<<HTML
+			if (count($includes)) {
+				$includes = implode("\n", $includes);
+				$html = <<<HTML
 <?php
 {$includes}
 ?>{$html}
 HTML;
+			}
 		});
 	}
 }

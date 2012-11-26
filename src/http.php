@@ -29,6 +29,7 @@ require 'core/core.php';
 
 Core::run(function (Core $app) {
 	$app->loader = new CoreLoader;
+	//$app->loader->load('model');
 
 	// base modules and configuration 
 	$app->configuration = $conf = new ConfigurationManager(new RuntimeMemory);

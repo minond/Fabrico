@@ -70,6 +70,10 @@ class CoreLoader extends Loader {
 			'session',
 			'runtimememory',
 		],
+		'model' => [
+			'abstractmodel',
+			'sessionmodel',
+		]
 	];
 
 	public function log_format ($file) {
@@ -106,5 +110,9 @@ class CoreLoader extends Loader {
 
 	public function cache_format ($file) {
 		return sprintf('%scache/%s.php', $this->path_to, $file);
+	}
+
+	public function model_format ($file) {
+		return sprintf('%smodel/%s.php', $this->path_to, $file);
 	}
 }

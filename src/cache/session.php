@@ -10,6 +10,15 @@ namespace fabrico\cache;
  */
 class Session implements Cache {
 	/**
+	 * check a session has started
+	 */
+	public function __construct () {
+		if (!strlen(session_id())) {
+			session_start();
+		}
+	}
+
+	/**
 	 * @see Cache::get
 	 */
 	public function get ($key) {
