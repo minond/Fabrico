@@ -5,11 +5,7 @@
  */
 namespace fabrico;
 
-use fabrico\core\util;
 use fabrico\core\Core;
-use fabrico\core\Project;
-use fabrico\core\Reader;
-use fabrico\core\EventDispatch;
 use fabrico\output\Page;
 use fabrico\output\Json;
 use fabrico\output\View;
@@ -18,27 +14,18 @@ use fabrico\core\Request;
 use fabrico\core\Router;
 use fabrico\core\Response;
 use fabrico\controller\Controller;
-use fabrico\loader\CoreLoader;
-use fabrico\cache\RuntimeMemory;
-use fabrico\cache\Apc;
-use fabrico\configuration\StandardItem;
 use fabrico\configuration\RoutingRule;
-use fabrico\configuration\ConfigurationManager;
 
-require 'core/core.php';
+require 'main.php';
 
 Core::run(function (Core $app) {
-	$app->loader = new CoreLoader;
-	//$app->loader->load('model');
-
-	// base modules and configuration 
-	$app->configuration = $conf = new ConfigurationManager(new RuntimeMemory);
-	$conf->load('core', '../configuration/httpconf.json', new StandardItem);
+	// load route
+	$conf = $app->configuration;
 	$conf->load('routes', '../configuration/routes.json', new RoutingRule);
 
 	// apply routing rules
 	foreach ($conf->routes as $route) {
-		if ($route->try_reading($_SERVER['REDIRECT_URL'], $_REQUEST)) {
+		if ($route->try_reading($_SERVER['REQUEST_URI'], $_REQUEST)) {
 			break;
 		}
 	}
@@ -47,13 +34,6 @@ Core::run(function (Core $app) {
 	$app->request = $request = new Request;
 	$app->router = $router = new Router($_REQUEST);
 	$app->response = $response = new Response;
-
-	$app->event = new EventDispatch;
-	$app->project = new Project(
-		$conf->core->project->name,
-		$conf->core->project->path,
-		'/' . $conf->core->project->name
-	);
 
 	// route the request
 	if ($router->is_view) {

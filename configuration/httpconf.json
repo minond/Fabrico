@@ -31,7 +31,9 @@
 
 	"project": {
 		"name": "Propositum",
-		"path": "/var/www/Dropbox/apache/Propositum"
+		"path": "/var/www/Dropbox/apache/Propositum",
+		"webroot": "/Propositum",
+		"fsroot": "/var/www/Dropbox/apache"
 	},
 
 	"templates": {

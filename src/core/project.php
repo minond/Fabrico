@@ -17,6 +17,7 @@ class Project extends Module {
 	const TEMPLATE = 'templates';
 	const CONTROLLER = 'controllers';
 	const JS = 'javascript';
+	const CSS = 'css';
 	const ELEMENT = 'elements';
 
 	/**
