@@ -57,20 +57,20 @@ class Tag {
 	 * child tags
 	 * @var Tag[]
 	 */
-	private $__children = [];
+	protected $__children = [];
 
 	/**
 	 * tag type (open|single|close)
 	 * @see TagToken
 	 * @var string
 	 */
-	private $__type;
+	protected $__type;
 
 	/**
 	 * tag's inner content
 	 * @var string
 	 */
-	private $__content = '';
+	protected $__content = '';
 
 	/**
 	 * argument tags

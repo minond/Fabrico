@@ -93,22 +93,6 @@ class Build extends Module {
 	}
 
 	/**
-	 * parses a view template
-	 * @param string $content
-	 * @return string
-	 */
-	public function std_parse ($content) {
-		$this->core->loader->load('parse');
-		$parser = new Parser;
-		$lexer = new Lexer;
-
-		$lexer->set_string($content);
-		$lexer->add_token(new TagToken);
-		$lexer->add_token(new MergeToken);
-
-	}
-
-	/**
 	 * @param array $raw
 	 * @param string $target
 	 * @return boolean

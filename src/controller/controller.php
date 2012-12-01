@@ -95,15 +95,4 @@ class Controller extends Module {
 
 		return $return;
 	}
-
-
-
-
-	/* testing */
-	public $name;
-	public function __construct () {
-		$this->name = get_class($this);
-	}
-	public function name () { return "~~{$this->name}"; }
-	/* testing */
 }

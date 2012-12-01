@@ -9,6 +9,7 @@ use fabrico\core\util;
 use fabrico\core\Module;
 use fabrico\core\Project;
 use fabrico\output\Tag;
+use fabrico\output\TagToken;
 use fabrico\output\MergeToken;
 
 /**
@@ -295,14 +296,24 @@ class Page extends OutputContent {
 						$token->name
 					);
 
-					$tag = new $tag($token->property_token->properties);
+					$tag = new $tag(
+						$token->property_token->properties,
+						$token->type
+					);
 
 					// real tag?
 					if ($tag instanceof Tag) {
+						if ($token->type === TagToken::OPEN) {
+							$tag->sets($token->property_token->properties);
+						}
+
 						$replace = $tag->assemble();
 
 						if (strlen($replace)) {
-							$html = str_replace($token->replacement, $replace, $html);
+							$html = str_replace(
+								$token->replacement,
+								$replace, $html
+							);
 						}
 					}
 
