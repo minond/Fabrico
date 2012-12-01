@@ -1,7 +1,0 @@
-tokens
- pri var
- constructors
- validator
-
-page
- remove extra pri fn

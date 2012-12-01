@@ -8,7 +8,7 @@ namespace fabrico\cache;
 /**
  * Session class interface
  */
-class Session implements Cache {
+class Session extends Cache {
 	/**
 	 * check a session has started
 	 */

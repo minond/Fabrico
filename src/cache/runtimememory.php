@@ -8,7 +8,7 @@ namespace fabrico\cache;
 /**
  * Run time memory
  */
-class RuntimeMemory implements Cache {
+class RuntimeMemory extends Cache {
 	private static $mem = [];
 
 	/**

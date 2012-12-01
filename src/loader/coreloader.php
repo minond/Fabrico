@@ -58,7 +58,7 @@ class CoreLoader extends Loader {
 			'controller'
 		],
 		'error' => [
-			'exception'
+			'logged'
 		],
 		'log' => [
 			'logz',

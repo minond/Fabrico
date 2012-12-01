@@ -27,7 +27,9 @@ abstract class AbstractModel {
 	 */
 	final public function __destruct () {
 		static::initialize();
-		static::$cache->set(static::hash($this->get_id()), serialize($this));
+		static::$cache->set(
+			static::hash($this->get_id()), serialize($this)
+		);
 	}
 
 	/**

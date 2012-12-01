@@ -8,7 +8,7 @@ namespace fabrico\cache;
 /**
  * Apc class interface
  */
-class Apc implements Cache {
+class Apc extends Cache {
 	/**
 	 * @see Cache::get
 	 */
