@@ -47,7 +47,7 @@ class Build extends Module {
 	}
 
 	/**
-	 * @param string $file 
+	 * @param string $file
 	 * @return int
 	 */
 	private function fmodt ($file) {
@@ -101,7 +101,7 @@ class Build extends Module {
 		$this->core->loader->load('parse');
 		$parser = new Parser;
 		$lexer = new Lexer;
-		
+
 		$lexer->set_string($content);
 		$lexer->add_token(new TagToken);
 		$lexer->add_token(new MergeToken);

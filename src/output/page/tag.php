@@ -208,7 +208,7 @@ class Tag {
 				$props[ $name ] = $val;
 			}
 		}
-		
+
 		return $props;
 	}
 
@@ -247,8 +247,8 @@ class Tag {
 
 	/**
 	 * sets a tag property
-	 * @param string $prop 
-	 * @param string $value 
+	 * @param string $prop
+	 * @param string $value
 	 */
 	public function set ($prop, $value) {
 		if (property_exists($this, $prop)) {

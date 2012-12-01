@@ -58,7 +58,7 @@ class ConfigurationManager extends Module {
 	 * @param string $what
 	 * @param string $from
 	 * @param ConfigurationReader $as
-	 * @return boolean 
+	 * @return boolean
 	 */
 	public function load ($what, $from, ConfigurationReader $as) {
 		$hash = sprintf($this->hash, $what);

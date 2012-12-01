@@ -22,7 +22,7 @@ abstract class AbstractModel {
 	 */
 	private $__id;
 
-	/** 
+	/**
 	 * saves model
 	 */
 	final public function __destruct () {
@@ -77,7 +77,7 @@ abstract class AbstractModel {
 		if (!$this->__id) {
 			$this->__id = uniqid();
 		}
-		
+
 		return $this->__id;
 	}
 
@@ -105,7 +105,7 @@ abstract class AbstractModel {
 		$data = static::$cache->get(static::hash($id));
 		return !is_null($data) ? unserialize($data) : null;
 	}
-	
+
 	/**
 	 * storage hash generator
 	 * @param string $id

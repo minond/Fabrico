@@ -20,7 +20,7 @@ require 'core/core.php';
 Core::run(function (Core $app) {
 	$app->loader = new CoreLoader;
 
-	// base modules and configuration 
+	// base modules and configuration
 	$app->configuration = $conf = new ConfigurationManager(new RuntimeMemory);
 	$conf->load('core', '../configuration/httpconf.json', new StandardItem);
 	$app->event = new EventDispatch;

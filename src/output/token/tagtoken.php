@@ -23,7 +23,7 @@ class TagToken extends Token {
 	const CLOSE = 'close';
 	const SINGLE = 'single';
 
-	/** 
+	/**
 	 * tag pattern
 	 * <code>
 	 * /
@@ -122,7 +122,7 @@ PHP;
 			$this->property_token->parse(array($this->properties));
 			$this->properties = $this->property_token->replacement;
 		}
-		
+
 		$this->replacement = $this->as_component();
 	}
 

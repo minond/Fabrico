@@ -28,7 +28,7 @@ class Parser {
 
 			for ($i = 0; $i < self::MAX_ITERATION; $i++) {
 				preg_match($token::$pattern, $lexer->get_string(), $matches, PREG_OFFSET_CAPTURE, $offset);
-				
+
 				if (!count($matches)) {
 					break;
 				}
@@ -52,9 +52,9 @@ class Parser {
 	}
 
 	/**
-	 * @param Lexer $lexer 
-	 * @param Token $token 
-	 * @param array $matches 
+	 * @param Lexer $lexer
+	 * @param Token $token
+	 * @param array $matches
 	 * @return void
 	 */
 	private function gen_token (Lexer & $lexer, Token & $token, array & $matches) {
@@ -63,9 +63,9 @@ class Parser {
 		$mytoken->parse($matches);
 		$lexer->add_match($mytoken);
 	}
-	
+
 	/**
-	 * @param Lexer $lexer 
+	 * @param Lexer $lexer
 	 * @return string
 	 */
 	private function replace_tokens (Lexer & $lexer) {

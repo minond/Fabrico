@@ -24,7 +24,7 @@ interface Cache {
 	 */
 	public function set ($key, $val);
 
-	/** 
+	/**
 	 * key checker, should return existance of key
 	 * @param mixed $key
 	 * @return boolean

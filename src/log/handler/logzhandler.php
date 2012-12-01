@@ -33,7 +33,7 @@ abstract class LogzHandler {
 	public function __construct ($level) {
 		$this->level = $level;
 	}
-	
+
 	/**
 	 * opens a handler is needed
 	 */

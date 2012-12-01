@@ -49,7 +49,7 @@ class Project extends Module {
 		$this->webroot = $webroot;
 	}
 
-	/** 
+	/**
 	 * @param string $type
 	 * @return string
 	 */

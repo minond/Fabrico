@@ -124,7 +124,7 @@ class PropertyToken extends Token {
 		], '', $value);
 	}
 
-	/** 
+	/**
 	 * @param string $value
 	 * @param string $holder
 	 * @return string
