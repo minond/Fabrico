@@ -113,7 +113,7 @@ class Tag {
 	 * @param string $name
 	 * @return string
 	 */
-	private static function getclass ($package, $namespace, $name) {
+	public static function getclass ($package, $namespace, $name) {
 		return "\\fabrico\\output\\{$package}\\{$namespace}\\{$name}";
 	}
 
@@ -291,9 +291,22 @@ class Tag {
 
 	/**
 	 * virtual
+	 * if declared by tag, function is called on when the page
+	 * is compiled and used as the tag's replacement.
+	 * @see Page::prepare
+	 * @return mixed
+	 */
+	public function assemble () {
+		return false;
+	}
+
+	/**
+	 * virtual
 	 * called right before the element's
 	 * html it generated for output
 	 * @return void
 	 */
-	protected function initialize () {}
+	protected function initialize () {
+		return;
+	}
 }

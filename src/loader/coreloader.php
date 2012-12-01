@@ -42,7 +42,8 @@ class CoreLoader extends Loader {
 			// TODO: move into perse namespace
 			'token/token',
 			'token/tagtoken',
-			'token/mergetoken'
+			'token/mergetoken',
+			'token/functiontoken',
 		],
 		'parse' => [
 			'parser/parser',

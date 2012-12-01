@@ -66,26 +66,36 @@ class MergeToken extends Token {
 	 * @var string
 	 */
 	public static $holders = [
-		self::IN_PHP => '<?php echo %type%merge; ?>',
-		self::IN_STR => '{%type%merge}'
+		self::IN_PHP => '<?php echo %merge; ?>',
+		self::IN_STR => '{%merge}'
 	];
 
 	/**
 	 * @see Token::parse
 	 */
 	public function parse (array $raw) {
-		list($find, $replace) = $this->getspecial();
+		list($find, $replace) = self::getspecial();
 		$type = self::$types[ $raw[ 1 ][ 0 ] ];
 		$merge = str_replace($find, $replace, $raw[ 2 ][ 0 ]);
 		$holder = self::$holders[ self::$holder ];
-		$this->replacement = str_replace(['%type', '%merge'], [$type, $merge], $holder);
+		$this->replacement = self::mergeholder($type.$merge, self::$holder);
+	}
+
+	/**
+	 * merge merge field into holder
+	 * @param string $merge
+	 * @param string $type
+	 * @return string
+	 */
+	public static function mergeholder ($merge, $type) {
+		return str_replace('%merge', $merge, self::$holders[ $type ]);
 	}
 
 	/**
 	 * special character find and replacement arrays
 	 * @return array[array]
 	 */
-	private function getspecial () {
+	public static function getspecial () {
 		static $find = [];
 		static $replace = [];
 
@@ -113,5 +123,17 @@ class MergeToken extends Token {
 		}
 
 		return $tmpl;
+	}
+
+	/**
+	 * clean up a merge variable
+	 * @param string $var
+	 * @return string
+	 */
+	public static function clean_var ($var) {
+		$type = $var[0];
+
+		return array_key_exists($type, self::$types) ?
+			self::$types[ $type ] . substr($var, 1) : $var;
 	}
 }

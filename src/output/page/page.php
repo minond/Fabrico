@@ -8,6 +8,7 @@ namespace fabrico\output;
 use fabrico\core\util;
 use fabrico\core\Module;
 use fabrico\core\Project;
+use fabrico\output\Tag;
 use fabrico\output\MergeToken;
 
 /**
@@ -252,12 +253,14 @@ class Page extends OutputContent {
 		$lexer->set_string($content);
 		$lexer->add_token(new TagToken);
 		$lexer->add_token(new MergeToken);
+		$lexer->add_token(new FunctionToken);
 
 		return $parser->parse($lexer, function ($orig, & $html, $tokens) use (& $project, & $conf) {
 			$includes = [];
 
 			foreach ($tokens as & $token) {
 				if ($token instanceof TagToken) {
+					$infile = '';
 					$elfile = implode(DIRECTORY_SEPARATOR, [
 						$token->package,
 						$token->namespace,
@@ -272,13 +275,38 @@ class Page extends OutputContent {
 
 					if ($in_project) {
 						$includes[] = $projectfile;
+						$infile = $projectfile;
 					}
 					else if ($in_fabrico) {
 						$includes[] = $fabricofile;
+						$infile = $fabricofile;
 					}
 					else {
 						// not found
 					}
+
+					if ($infile) {
+						require_once $infile;
+					}
+
+					$tag = Tag::getclass(
+						$token->package,
+						$token->namespace,
+						$token->name
+					);
+
+					$tag = new $tag($token->property_token->properties);
+
+					// real tag?
+					if ($tag instanceof Tag) {
+						$replace = $tag->assemble();
+
+						if (strlen($replace)) {
+							$html = str_replace($token->replacement, $replace, $html);
+						}
+					}
+
+					unset($tag);
 				}
 
 				unset($token);

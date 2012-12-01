@@ -15,7 +15,7 @@ use fabrico\core\util;
  */
 class Def extends Tag {
 	use Mediator;
-	
+
 	/**
 	 * page's controller
 	 */
@@ -35,11 +35,11 @@ class Def extends Tag {
 			// load the controller
 			$this->core->loader->load('controller');
 			Controller::load($this->controller);
-		}   
+		}
 
 		if ($this->format) {
 			util::dpr($this->core->response);
 			util::dpr($this->format);
-		}   
-	}   
+		}
+	}
 }

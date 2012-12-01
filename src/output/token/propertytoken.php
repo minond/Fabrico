@@ -11,6 +11,11 @@ namespace fabrico\output;
  */
 class PropertyToken extends Token {
 	/**
+	 * @var array
+	 */
+	public $properties;
+
+	/**
 	 * @see Token::parse
 	 */
 	public function parse (array $match) {
@@ -30,9 +35,14 @@ class PropertyToken extends Token {
 
 		foreach ($props as $index => $prop) {
 			if (isset($vals[ $index ])) {
-				$propmap[ trim($prop) ] = $this->parse_value($vals[ $index ]);
+				$prop = trim($prop);
+				$propmap[ $prop ] = $this->parse_value($vals[ $index ]);
+				// $this->properties[ $prop ] = $this->parse_value($vals[ $index ]);
+				// $this->properties[ $prop ] = $this->real_nice_value($this->parse_value($vals[ $index ], MergeToken::IN_PHP));
+				$this->properties[ $prop ] = $this->real_nice_value($vals[ $index ]);
 			}
 		}
+
 
 		foreach ($propmap as $property => $value) {
 			$propstrs[] = $this->array_prop($property, $value);
@@ -103,21 +113,48 @@ class PropertyToken extends Token {
 		return $value;
 	}
 
-	/** 
+	/**
+	 * returns merge field content (no quotes)
 	 * @param string $value
 	 * @return string
 	 */
-	private function parse_value ($value) {
-		// TODO: make parse static var
-		$parser = new Parser;
-		$lexer = new Lexer;
+	private function real_nice_value ($value) {
+		return preg_replace([
+			'/^"/', "/^'/", '/"$/', "/'$/",
+		], '', $value);
+	}
+
+	/** 
+	 * @param string $value
+	 * @param string $holder
+	 * @return string
+	 */
+	private function parse_value ($value, $holder = MergeToken::IN_STR) {
+		static $parser, $lexer;
+
+		if (!$parser || !$lexer) {
+			$parser = new Parser;
+			$lexer = new Lexer;
+		}
+
 		$lexer->add_token(new MergeToken);
+		$lexer->add_token(new FunctionToken);
 		$lexer->set_string(trim($value));
 
-		$orig = MergeToken::$holder;
-		MergeToken::$holder = MergeToken::IN_STR;
+		// save
+		$m_orig = MergeToken::$holder;
+		$f_orig = FunctionToken::$holder;
+
+		// overwrite
+		MergeToken::$holder = $holder;
+		FunctionToken::$holder = $holder;
+
+		// parse
 		$value = $parser->parse($lexer);
-		MergeToken::$holder = $orig;
+
+		// reset
+		MergeToken::$holder = $m_orig;
+		FunctionToken::$holder = $f_orig;
 
 		return $value;
 	}
