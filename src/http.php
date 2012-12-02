@@ -56,7 +56,7 @@ Core::run(function (Core $app) {
 		$controller = Controller::req_load($request);
 		$response->outputcontent = new Json;
 		$response->outputcontent->status = Controller::request_status($controller, $request);
-		$response->outputcontent->return = Controller::trigger_method($controller, $request);
+		$response->outputcontent->return = Controller::trigger_web_request($controller, $request);
 	}
 	else {
 		$response->addheader(Response::HTTP404);

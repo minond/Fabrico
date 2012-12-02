@@ -55,7 +55,8 @@ class CoreLoader extends Loader {
 			'token/propertytoken'
 		],
 		'controller' => [
-			'controller'
+			'controller',
+			'cliaccess',
 		],
 		'error' => [
 			'logged'
@@ -74,8 +75,17 @@ class CoreLoader extends Loader {
 		'model' => [
 			'abstractmodel',
 			'sessionmodel',
+		],
+		'cli' => [
+			'cliselfdocumenting',
+			'cliargloader',
+			'cliio',
 		]
 	];
+
+	public function cli_format ($file) {
+		return sprintf('%scli/%s.php', $this->path_to, $file);
+	}
 
 	public function log_format ($file) {
 		return sprintf('%slog/%s.php', $this->path_to, $file);

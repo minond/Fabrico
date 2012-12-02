@@ -83,7 +83,7 @@ class Controller extends Module {
 	 * @param Request $req
 	 * @return mixed
 	 */
-	public static function trigger_method (Controller $controller, Request $req) {
+	public static function trigger_web_request (Controller $controller, Request $req) {
 		$method = $req->get(Router::$var->method);
 		$return = null;
 
@@ -94,5 +94,22 @@ class Controller extends Module {
 		}
 
 		return $return;
+	}
+
+	/**
+	 * @param Controller $controller
+	 * @param string $method
+	 * @return mixed
+	 */
+	public static function trigger_cli_request (Controller $controller, $method) {
+		if (is_callable([$controller, $method])) {
+			return $controller->{ $method }();
+		}
+		else {
+			echo sprintf(
+				'Invalid method "%s" for "%s" controller%s',
+				$method, get_class($controller), PHP_EOL
+			);
+		}
 	}
 }

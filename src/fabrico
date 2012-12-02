@@ -1,3 +1,4 @@
 #!/bin/bash
 
-php term.php "$@"
+cd "$(locate Fabrico/src/term.php -l 1 | xargs dirname)"
+php term.php --request=$1 ${*:2}
