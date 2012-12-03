@@ -9,6 +9,7 @@ use fabrico\output\Tag;
 use fabrico\controller\Controller;
 use fabrico\core\Mediator;
 use fabrico\core\util;
+use fabrico\output\Page;
 
 /**
  * page definition/information
@@ -35,6 +36,13 @@ class Def extends Tag {
 			// load the controller
 			$this->core->loader->load('controller');
 			Controller::load($this->controller);
+
+			if ($this->core->response->outputcontent instanceof Page) {
+				$this->core->response->outputcontent->declare_var(
+					'fabrico.page.controller',
+					$this->controller, Page::STR
+				);
+			}
 		}
 
 		if ($this->format) {

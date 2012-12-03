@@ -218,19 +218,25 @@ class Tag {
 	 * @return string
 	 */
 	final public function __toString () {
+		/*
 		$this->initialize();
 
 		foreach ($this->__children as $child) {
 			$this->__content .= (string) $child;
 		}
+		*/
 
-		if (static::$tag) {
-			switch ($this->__type) {
-				case TagToken::SINGLE:
-				case TagToken::CLOSE:
+		switch ($this->__type) {
+			case TagToken::SINGLE:
+			case TagToken::CLOSE:
+				$this->initialize();
+
+				if (static::$tag) {
 					return self::html(static::$tag, $this->get_tag_props(), $this->__content);
+				}
+
+				break;
 			}
-		}
 
 		return '';
 	}
@@ -239,9 +245,11 @@ class Tag {
 	 * sets  the tag's properties
 	 * @param array $props
 	 */
-	public function sets (array & $props) {
-		foreach ($props as $prop => $value) {
-			$this->set($prop, $value);
+	public function sets (array & $props = null) {
+		if (is_array($props)) {
+			foreach ($props as $prop => $value) {
+				$this->set($prop, $value);
+			}
 		}
 	}
 

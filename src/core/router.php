@@ -115,8 +115,6 @@ Router::$var = (object) [
 	'method' => '_method',
 	// controller method call arguments
 	'args' => '_args',
-	// controller variables
-	'env' => '_env',
 	// component updates
 	'element' => '_element'
 ];

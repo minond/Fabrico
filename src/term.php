@@ -31,10 +31,10 @@ Core::run(function (Core $app) {
 			Controller::trigger_cli_request($controller, $method);
 		}
 		else {
-			echo sprintf('Controller "%s" in not public%s', get_class($controller), PHP_EOL);
+			printf('Controller "%s" in not public%s', get_class($controller), PHP_EOL);
 		}
 	}
 	else {
-		echo sprintf('Controller "%s" was not found%s', $controller, PHP_EOL);
+		printf('Controller "%s" was not found%s', $controller, PHP_EOL);
 	}
 });

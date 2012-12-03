@@ -27,10 +27,22 @@ class Project extends Module {
 	private $root;
 
 	/**
+	 * framework's root directory
+	 * @var string
+	 */
+	private $myroot;
+
+	/**
 	 * project web root
 	 * @var string
 	 */
 	private $webroot;
+
+	/**
+	 * framework's web root
+	 * @var string
+	 */
+	private $mywebroot;
 
 	/**
 	 * project's name
@@ -39,14 +51,38 @@ class Project extends Module {
 	private $project_name;
 
 	/**
-	 * @param string $name
+	 * @param string $project_name
+	 */
+	public function set_project_name ($project_name) {
+		$this->project_name = $project_name;
+	}
+
+	/**
 	 * @param string $root
+	 */
+	public function set_root ($root) {
+		$this->root = $root;
+	}
+
+	/**
 	 * @param string $webroot
 	 */
-	public function __construct ($name, $root, $webroot) {
-		$this->project_name = $name;
-		$this->root = $root;
+	public function set_webroot ($webroot) {
 		$this->webroot = $webroot;
+	}
+
+	/**
+	 * @param string $myroot
+	 */
+	public function set_myroot ($myroot) {
+		$this->myroot = $myroot;
+	}
+
+	/**
+	 * @param string $mywebroot
+	 */
+	public function set_mywebroot ($mywebroot) {
+		$this->mywebroot = $mywebroot;
 	}
 
 	/**
@@ -66,8 +102,16 @@ class Project extends Module {
 			$this->configuration->core->file->ext->{ $type } : '';
 	}
 
-	public function get_resource ($name, $type) {
-		return $this->webroot . $this->dr($type) .
+	/**
+	 * path to resource file (image, javascript, etc.)
+	 * @param string $name
+	 * @param string $type
+	 * @param boolean $internal
+	 * @return string
+	 */
+	public function get_resource ($name, $type, $internal = false) {
+		$root = $internal ? $this->mywebroot : $this->webroot;
+		return $root . $this->dr($type) .
 			$name . $this->ext($type);
 	}
 
@@ -123,21 +167,5 @@ class Project extends Module {
 	public function get_build ($name, $type) {
 		return $this->root . $this->dr(self::BUILD) .
 		       $this->dr($type) . $name . $this->ext($type);
-	}
-
-	/**
-	 * project root getter
-	 * @return string
-	 */
-	public function get_project_root () {
-		return $this->root;
-	}
-
-	/**
-	 * project name getter
-	 * @return string
-	 */
-	public function get_project_name () {
-		return $this->project_name;
 	}
 }

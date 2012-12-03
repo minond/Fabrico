@@ -7,7 +7,6 @@ namespace fabrico;
 
 use fabrico\core\Core;
 use fabrico\core\Project;
-use fabrico\core\EventDispatch;
 use fabrico\loader\CoreLoader;
 use fabrico\cache\RuntimeMemory;
 use fabrico\cache\Apc;
@@ -23,10 +22,12 @@ Core::run(function (Core $app) {
 	// base modules and configuration
 	$app->configuration = $conf = new ConfigurationManager(new RuntimeMemory);
 	$conf->load('core', '../configuration/httpconf.json', new StandardItem);
-	$app->event = new EventDispatch;
-	$app->project = new Project(
-		$conf->core->project->name,
-		$conf->core->project->path,
-		$conf->core->project->webroot
-	);
+
+	// project information
+	$app->project = new Project;
+	$app->project->set_project_name($conf->core->project->name);
+	$app->project->set_root($conf->core->project->root);
+	$app->project->set_webroot($conf->core->project->webroot);
+	$app->project->set_myroot($conf->core->project->myroot);
+	$app->project->set_mywebroot($conf->core->project->mywebroot);
 });

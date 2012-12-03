@@ -22,11 +22,33 @@ class Script extends Tag {
 	public $file;
 
 	/**
+	 * is core (fabrico) js file
+	 * @var boolean
+	 */
+	public $internal = false;
+
+	/**
+	 * execute code on page load
+	 * @var boolean
+	 */
+	public $onload = false;
+
+	/**
 	 * @see Tag::initialize
 	 */
 	protected function initialize () {
-		$this->core->response->outputcontent->add_js_file(
-			$this->core->project->get_resource($this->file, Project::JS)
-		);
+		if ($this->file) {
+			$this->core->response->outputcontent->add_js_file(
+				$this->core->project->get_resource(
+					$this->file, Project::JS, $this->internal
+				)
+			);
+		}
+		else if ($this->__content) {
+			if ($this->onload)
+				$this->core->response->outputcontent->add_js_load($this->__content);
+			else
+				$this->core->response->outputcontent->add_js_code($this->__content);
+		}
 	}
 }

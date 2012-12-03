@@ -31,9 +31,11 @@
 
 	"project": {
 		"name": "Propositum",
-		"path": "/var/www/Dropbox/apache/Propositum",
+		"root": "/var/www/Dropbox/apache/Propositum",
+		"myroot": "/var/www/Dropbox/apache/Fabrico",
+		"fsroot": "/var/www/Dropbox/apache",
 		"webroot": "/Propositum",
-		"fsroot": "/var/www/Dropbox/apache"
+		"mywebroot": "/Fabrico"
 	},
 
 	"templates": {
