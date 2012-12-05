@@ -11,12 +11,15 @@ use fabrico\core\Project;
 use fabrico\error\LoggedException;
 use fabrico\output\View;
 use fabrico\output\Build;
+use fabrico\output\Html;
 use fabrico\controller\Controller;
 
 /**
  * custom tag generator
  */
 class Tag {
+	use Html, Mediator;
+
 	/**
 	 * used to pass properties from an open
 	 * tag to its closing tag when generating
@@ -175,25 +178,6 @@ class Tag {
 	}
 
 	/**
-	 * generates html. creates a tag, properties, content
-	 * @param string $tag
-	 * @param mixed $props
-	 * @param string $content
-	 * @return string
-	 */
-	public static function html ($tag, $props = [], $content = '') {
-		$propstr = '';
-
-		foreach ($props as $prop => $val) {
-			$propstr .= " {$prop}=\"{$val}\"";
-		}
-
-		return "<{$tag}{$propstr}" .
-		       (in_array($tag, ['input', 'img']) ?
-		       " />" : ">{$content}</{$tag}>");
-	}
-
-	/**
 	 * generates a tag property array that will
 	 * be used when generating the html
 	 * @return array
@@ -309,6 +293,13 @@ class Tag {
 	}
 
 	/**
+	 * call toString method
+	 */
+	public function render () {
+		(string) $this;
+	}
+
+	/**
 	 * virtual
 	 * called right before the element's
 	 * html it generated for output
@@ -316,5 +307,51 @@ class Tag {
 	 */
 	protected function initialize () {
 		return;
+	}
+
+	/**
+	 * find a tag definition
+	 * @param mixed $tag
+	 * @return string
+	 */
+	public static function find ($tag) {
+		if (is_string($tag)) {
+			$tag = explode('/', $tag);
+		}
+
+		list($package, $namespace, $name) = $tag;
+		$elfile = implode(DIRECTORY_SEPARATOR, [$package, $namespace, $name]);
+
+		list($projectfile, $in_project) = self::getcore()->project->got_file(
+			$elfile, Project::ELEMENT
+		);
+
+		list($fabricofile, $in_fabrico) = self::getcore()->project->got_project_file(
+			$elfile, Project::ELEMENT, self::getcore()->configuration->core->file->to->elements
+		);
+
+		if ($in_project)
+			$elfile = $projectfile;
+		else if ($in_fabrico)
+			$elfile = $fabricofile;
+		else
+			$elfile = null;
+
+		return $elfile;
+	}
+
+	/**
+	 * load a tag definition
+	 * @param mixed $tag
+	 * @return string
+	 */
+	public static function load($tag) {
+		$file = self::find($tag);
+
+		if ($file) {
+			require_once $file;
+		}
+
+		return $file;
 	}
 }

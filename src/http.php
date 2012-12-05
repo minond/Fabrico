@@ -40,6 +40,8 @@ Core::run(function (Core $app) {
 		// load page related modules and initialize them
 		$app->loader->load('output');
 		$app->loader->load('page');
+		$app->loader->load('klass');
+		$app->loader->load('model');
 
 		// add page module to the response, view and build
 		$response->outputcontent = new Page;

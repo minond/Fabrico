@@ -89,7 +89,7 @@ class Page extends OutputContent {
 	 * @return string
 	 */
 	private function stdjoin (array $what) {
-		return implode("\n", $what);
+		return implode("\n", array_unique($what));
 	}
 
 	/**
@@ -261,33 +261,14 @@ class Page extends OutputContent {
 
 			foreach ($tokens as & $token) {
 				if ($token instanceof TagToken) {
-					$infile = '';
-					$elfile = implode(DIRECTORY_SEPARATOR, [
+					$infile = Tag::load([
 						$token->package,
 						$token->namespace,
 						$token->name
 					]);
 
-					list($projectfile, $in_project) = $project->got_file($elfile, Project::ELEMENT);
-					list($fabricofile, $in_fabrico) = $project->got_project_file(
-						$elfile, Project::ELEMENT,
-						$conf->core->file->to->elements
-					);
-
-					if ($in_project) {
-						$includes[] = $projectfile;
-						$infile = $projectfile;
-					}
-					else if ($in_fabrico) {
-						$includes[] = $fabricofile;
-						$infile = $fabricofile;
-					}
-					else {
-						// not found
-					}
-
 					if ($infile) {
-						require_once $infile;
+						$includes[] = $infile;
 					}
 
 					$tag = Tag::getclass(

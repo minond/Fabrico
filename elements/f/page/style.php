@@ -22,11 +22,24 @@ class Style extends Tag {
 	public $file;
 
 	/**
+	 * is core (fabrico) css file
+	 * @var boolean
+	 */
+	public $internal = false;
+
+	/**
 	 * @see Tag::initialize
 	 */
 	protected function initialize () {
-		$this->core->response->outputcontent->add_css_file(
-			$this->core->project->get_resource($this->file, Project::CSS)
-		);
+		if ($this->file) {
+			$this->core->response->outputcontent->add_css_file(
+				$this->core->project->get_resource(
+					$this->file, Project::CSS, $this->internal
+				)
+			);
+		}
+		else if ($this->__content) {
+			$this->core->response->outputcontent->add_css_code($this->__content);
+		}
 	}
 }

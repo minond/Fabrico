@@ -10,7 +10,8 @@ $resources = [
 ];
 
 $headers = [
-	'js' => [ 'Content-type: application/javascript' ]
+	'js' => [ 'Content-type: application/javascript' ],
+	'css' => [ 'Content-type: text/css' ],
 ];
 
 

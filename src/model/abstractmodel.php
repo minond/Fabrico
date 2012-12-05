@@ -10,7 +10,7 @@ use fabrico\cache\Cache;
 /**
  * model stored in any type of cache
  */
-abstract class AbstractModel {
+abstract class AbstractModel extends Model {
 	/**
 	 * @var Cache
 	 */
@@ -20,7 +20,14 @@ abstract class AbstractModel {
 	 * model's unique id
 	 * @var string
 	 */
-	private $__id;
+	private $id;
+
+	/**
+	 * initializes model
+	 */
+	public function __construct () {
+		static::initialize();
+	}
 
 	/**
 	 * saves model
@@ -33,62 +40,15 @@ abstract class AbstractModel {
 	}
 
 	/**
-	 * property getter
-	 * @param string $var
-	 * @return mixed
-	 */
-	public function __get ($var) {
-		return property_exists($this, $var) ? $this->{ $var } : null;
-	}
-
-	/**
-	 * property setter
-	 * @param string $var
-	 * @param mixed $val
-	 */
-	public function __set ($var, $val) {
-		if (property_exists($this, $var)) {
-			$this->{ $var } = $val;
-		}
-	}
-
-	/**
-	 * property check
-	 * @param string $var
-	 * @return boolean
-	 */
-	public function __isset ($var) {
-		return property_exists($this, $var);
-	}
-
-	/**
-	 * property unsetter
-	 * @var string $var
-	 */
-	public function __unset ($var) {
-		if (property_exists($this, $var)) {
-			$this->{ $var } = null;
-		}
-	}
-
-	/**
 	 * id getter
 	 * @return string
 	 */
 	public function get_id () {
-		if (!$this->__id) {
-			$this->__id = uniqid();
+		if (!$this->id) {
+			$this->id = uniqid();
 		}
 
-		return $this->__id;
-	}
-
-	/**
-	 * id setter
-	 * @param string $id
-	 */
-	public function set_id ($id) {
-		$this->__id = $id;
+		return $this->id;
 	}
 
 	/**

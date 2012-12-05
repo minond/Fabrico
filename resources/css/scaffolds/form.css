@@ -1,0 +1,16 @@
+.scaffold_field_holder {
+	display: block;
+}
+
+.scaffold_field_holder label {
+	font: bold 13px Arial;
+	margin-right: 3px;
+	margin-left: 2px;
+	display: block;
+}
+
+.scaffold_field_holder input {
+	border: 1px solid black;
+	padding-left: 2px;
+	font: normal 12px Arial;
+}

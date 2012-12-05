@@ -17,6 +17,9 @@ class CoreLoader extends Loader {
 	];
 
 	protected $files = [
+		'klass' => [
+			'docparser',
+		],
 		'configuration' => [
 			'configurationmanager',
 			'configurationreader',
@@ -32,7 +35,8 @@ class CoreLoader extends Loader {
 		],
 		'output' => [
 			'outputcontent',
-			'json'
+			'json',
+			'html',
 		],
 		'page' => [
 			'page/page',
@@ -73,8 +77,13 @@ class CoreLoader extends Loader {
 			'runtimememory',
 		],
 		'model' => [
+			'getset',
+			'model',
 			'abstractmodel',
 			'sessionmodel',
+			'modelform',
+			'modelformfield',
+			'testing',
 		],
 		'cli' => [
 			'cliselfdocumenting',
@@ -82,6 +91,10 @@ class CoreLoader extends Loader {
 			'cliio',
 		]
 	];
+
+	public function klass_format ($file) {
+		return sprintf('%sklass/%s.php', $this->path_to, $file);
+	}
 
 	public function cli_format ($file) {
 		return sprintf('%scli/%s.php', $this->path_to, $file);

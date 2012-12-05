@@ -110,6 +110,10 @@ class PropertyToken extends Token {
 				return $sub;
 		}
 
+		if ($sub[0] === '{' && $sub[ strlen($sub) - 1 ] === '}') {
+			return substr($sub, 1, strlen($sub) - 2);
+		}
+
 		return $value;
 	}
 
