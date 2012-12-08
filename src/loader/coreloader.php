@@ -81,9 +81,9 @@ class CoreLoader extends Loader {
 			'model',
 			'abstractmodel',
 			'sessionmodel',
+			'runtimememorymodel',
 			'modelform',
 			'modelformfield',
-			'testing',
 		],
 		'cli' => [
 			'cliselfdocumenting',

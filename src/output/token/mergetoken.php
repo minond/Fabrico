@@ -23,9 +23,12 @@ class MergeToken extends Token {
 	 *  @{merge_field_name}  = $merge_field_name
 	 *  @{merge_field:name}  = $merge_field->name
 	 *  @{merge_field:name!} = $merge_field->name()
+	 *  ~{merge_field_name}  = #{merge_field_name}
+	 *  ~{merge_field:name}  = #{merge_field:name}
+	 *  ~{merge_field:name!} = #{merge_field:name!}
 	 * @var string
 	 */
-	public static $pattern = '/([\\#|@]){(.+?)}/';
+	public static $pattern = '/([\\#|@|~]){(.+?)}/';
 
 	/**
 	 * special merge field characters and replacements
@@ -51,8 +54,9 @@ class MergeToken extends Token {
 	 * @var array
 	 */
 	public static $types = [
+		'#' => '$controller->',
 		'@' => '$',
-		'#' => '$controller->'
+		'~' => '',
 	];
 
 	/**
@@ -67,7 +71,8 @@ class MergeToken extends Token {
 	 */
 	public static $holders = [
 		self::IN_PHP => '<?php echo %merge; ?>',
-		self::IN_STR => '{%merge}'
+		self::IN_STR => '{%merge}',
+		'rep' => '#{%merge}'
 	];
 
 	/**
@@ -75,20 +80,21 @@ class MergeToken extends Token {
 	 */
 	public function parse (array $raw) {
 		list($find, $replace) = self::getspecial();
-		$type = self::$types[ $raw[ 1 ][ 0 ] ];
+		$mode = $raw[1][0];
+		$type = self::$types[ $mode ];
 		$merge = str_replace($find, $replace, $raw[ 2 ][ 0 ]);
-		$holder = self::$holders[ self::$holder ];
-		$this->replacement = self::mergeholder($type.$merge, self::$holder);
+		$holder = self::$holders[ $mode === '~' ? 'rep' : self::$holder ];
+		$this->replacement = self::mergeholder($type . $merge, $holder);
 	}
 
 	/**
 	 * merge merge field into holder
 	 * @param string $merge
-	 * @param string $type
+	 * @param string $holder
 	 * @return string
 	 */
-	public static function mergeholder ($merge, $type) {
-		return str_replace('%merge', $merge, self::$holders[ $type ]);
+	public static function mergeholder ($merge, $holder) {
+		return str_replace('%merge', $merge, $holder);
 	}
 
 	/**

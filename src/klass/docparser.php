@@ -12,6 +12,30 @@ use fabrico\core\util;
  */
 trait DocParser {
 	/**
+	 * parses a class' comments
+	 * @param string $class
+	 * @return array
+	 */
+	public function klass($class) {
+		$reflection = new \ReflectionClass($class);
+		$comment = $reflection->getDocComment();
+		return $this->parse($comment);
+	}
+
+	/**
+	 * parses a function's comments
+	 * @param string $class
+	 * @param string $name
+	 * @return array
+	 */
+	public function func($class, $name) {
+		$reflection = new \ReflectionClass($class);
+		$func = $reflection->getMethod($name);
+		$comment = $func->getDocComment();
+		return $this->parse($comment);
+	}
+
+	/**
 	 * parses a property's comments
 	 * @param string $class
 	 * @param string $name

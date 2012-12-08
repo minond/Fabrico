@@ -60,26 +60,32 @@ class Tag {
 	 * child tags
 	 * @var Tag[]
 	 */
-	protected $__children = [];
+	private $__children = [];
 
 	/**
 	 * tag type (open|single|close)
 	 * @see TagToken
 	 * @var string
 	 */
-	protected $__type;
+	private $__type;
 
 	/**
 	 * tag's inner content
 	 * @var string
 	 */
-	protected $__content = '';
+	private $__content = '';
+
+	/**
+	 * tag's classes
+	 * @var array
+	 */
+	private $__classes = [];
 
 	/**
 	 * argument tags
 	 * @var array
 	 */
-	protected $__args = [];
+	private $__args = [];
 
 	/**
 	 * standard properties - id
@@ -202,21 +208,19 @@ class Tag {
 	 * @return string
 	 */
 	final public function __toString () {
-		/*
-		$this->initialize();
-
-		foreach ($this->__children as $child) {
-			$this->__content .= (string) $child;
-		}
-		*/
-
 		switch ($this->__type) {
 			case TagToken::SINGLE:
 			case TagToken::CLOSE:
 				$this->initialize();
 
 				if (static::$tag) {
-					return self::html(static::$tag, $this->get_tag_props(), $this->__content);
+					$props = $this->get_tag_props();
+
+					if (count($this->__classes)) {
+						$props['class'] = implode(' ', $this->__classes);
+					}
+
+					return self::html(static::$tag, $props, $this->__content);
 				}
 
 				break;
@@ -267,6 +271,14 @@ class Tag {
 	 */
 	public function set_content ($content) {
 		$this->__content = $content;
+	}
+
+	/**
+	 * class adder
+	 * @param string $class
+	 */
+	public function add_class ($class) {
+		$this->__classes[] = $class;
 	}
 
 	/**

@@ -39,7 +39,10 @@ class FunctionToken extends Token {
 		$vars = implode(', ', $vars);
 		$this->valid = true;
 		$this->replacement = sprintf('%s(%s)', $func, $vars);
-		$this->replacement = MergeToken::mergeholder($this->replacement, self::$holder);
+		$this->replacement = MergeToken::mergeholder(
+			$this->replacement,
+			MergeToken::$holders[ self::$holder ]
+		);
 	}
 }
 

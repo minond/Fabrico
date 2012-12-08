@@ -13,7 +13,7 @@
 	},
 
 	"directory": {
-		"build": "/internals/build",
+		"build": "/build",
 		"configuration": "/configuration/",
 		"controllers": "/controllers/",
 		"css": "/resources/css/",
@@ -21,7 +21,7 @@
 		"images": "/resources/images/",
 		"include": "/include/",
 		"javascript": "/resources/javascript/",
-		"logs": "/internals/logs/",
+		"logs": "/logs/",
 		"models": "/models/",
 		"routers": "/routers/",
 		"templates": "/templates/",

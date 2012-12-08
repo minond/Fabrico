@@ -14,27 +14,39 @@ require 'main.php';
 
 Core::run(function (Core $app) {
 	global $argv, $argc;
-	$app->loader->load('cli');
-	$app->loader->load('controller');
+	$opts = getopt('', array('request:'));
 
-	list(, $request) = explode('=', $argv[1]);
-	list($controller, $method) = explode(':', $request);
-	$controller = ucwords($controller);
+	if ($argc > 1 && isset($opts['request']) && strlen($opts['request'])) {
+		$app->loader->load('cli');
+		$app->loader->load('controller');
 
-	list(, $found) = $app->project->got_file($controller, Project::CONTROLLER);
+		if (strpos($argv[1], ':') !== false && strpos($argv[1], '=') !== false) {
+			list(, $request) = explode('=', $argv[1]);
+			list($controller, $method) = explode(':', $request);
+			$controller = ucwords($controller);
 
-	if ($found) {
-		$controller = Controller::load($controller);
+			list(, $found) = $app->project->got_file($controller, Project::CONTROLLER);
 
-		if ($controller instanceof CliAccess) {
-			$controller->load_cli_arguments();
-			Controller::trigger_cli_request($controller, $method);
+			if ($found) {
+				$controller = Controller::load($controller);
+
+				if ($controller instanceof CliAccess) {
+					$controller->load_cli_arguments();
+					Controller::trigger_cli_request($controller, $method);
+				}
+				else {
+					printf('Controller "%s" in not public%s', get_class($controller), PHP_EOL);
+				}
+			}
+			else {
+				printf('Controller "%s" was not found%s', $controller, PHP_EOL);
+			}
 		}
 		else {
-			printf('Controller "%s" in not public%s', get_class($controller), PHP_EOL);
+			printf('Invalid request: "%s"%s', $argv[1], PHP_EOL);
 		}
 	}
 	else {
-		printf('Controller "%s" was not found%s', $controller, PHP_EOL);
+		printf('Request required%s', PHP_EOL);
 	}
 });

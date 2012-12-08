@@ -1,16 +1,37 @@
-.scaffold_field_holder {
-	display: block;
+.scaffold_form {
+	display: inline-block;
+	border: 1px solid #E5E5E5;
+	padding: 28px 23px;
+	background-color: #F1F1F1;
 }
 
-.scaffold_field_holder label {
+.scaffold_form .scaffold_field_holder {
+	display: block;
+	margin-bottom: 13px;
+}
+
+.scaffold_form .scaffold_field_holder:last-child {
+	margin-bottom: 0px;
+}
+
+.scaffold_form .scaffold_field_holder label {
 	font: bold 13px Arial;
 	margin-right: 3px;
 	margin-left: 2px;
+	margin-bottom: 5px;
 	display: block;
 }
 
-.scaffold_field_holder input {
-	border: 1px solid black;
-	padding-left: 2px;
+.scaffold_form .scaffold_field_holder input {
+	border: 1px solid #B9B9B9;
+	padding-left: 5px;
 	font: normal 12px Arial;
+	height: 18px;
+	width: 220px;
+}
+
+.scaffold_form .scaffold_form_title {
+	cursor: default;
+	font: normal 16px Arial;
+	margin: 0px 0px 12px 2px;
 }

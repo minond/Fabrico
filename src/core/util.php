@@ -31,4 +31,21 @@ class util {
 		call_user_func_array([ 'self', 'dpr' ], func_get_args());
 		die;
 	}
+
+	/**
+	 * simple merge field parser
+	 * @see MergeToken::merge
+	 * @param string $tmpl
+	 * @param mixed $data
+	 * @return string
+	 */
+	public static function merge ($tmpl, $data) {
+		foreach ($data as $field => $value) {
+			if (is_scalar($value)) {
+				$tmpl = str_replace("#{{$field}}", $value, $tmpl);
+			}
+		}
+
+		return $tmpl;
+	}
 }

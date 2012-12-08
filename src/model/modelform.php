@@ -6,9 +6,10 @@
 namespace fabrico\model;
 
 use fabrico\klass\DocParser;
+use fabrico\core\Mediator;
 
 class ModelForm {
-	use DocParser;
+	use DocParser, Mediator;
 
 	/**
 	 * class name
@@ -71,6 +72,17 @@ class ModelForm {
 			$name = $prop->getName();
 			$doc = $this->property($this->baseclass, $name);
 			$type = gettype($value);
+			$default = '';
+			$options = [];
+
+			if (isset($doc['enum'])) {
+				$options = explode(', ', $doc['enum']);
+				$type = 'array';
+			}
+
+			if (isset($doc['default'])) {
+				$default = $doc['default'];
+			}
 
 			if (isset($doc['label'])) {
 				$label = $doc['label'];
@@ -79,7 +91,7 @@ class ModelForm {
 				$label = ucwords(str_replace('_', ' ', $name));
 			}
 
-			$fields[] = new ModelFormField($name, $label, $type, $value);
+			$fields[] = new ModelFormField($name, $label, $type, $value, $default, $options);
 		}
 
 		return $fields;

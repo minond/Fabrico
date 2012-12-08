@@ -32,4 +32,9 @@ if (in_array($ext, $resources)) {
 	if (file_exists($file))
 		readfile($file);
 }
-else require 'http.php';
+else {
+	$f = fopen('php://stderr', 'w');
+	fputs($f, "Serving {$_REQUEST['_file']}\n");
+	fclose($f);
+	require 'http.php';
+}
