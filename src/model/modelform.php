@@ -5,11 +5,13 @@
  */
 namespace fabrico\model;
 
+use fabrico\output\Html;
 use fabrico\klass\DocParser;
 use fabrico\core\Mediator;
+use fabrico\model\AbstractModel;
 
 class ModelForm {
-	use DocParser, Mediator;
+	use DocParser, Mediator, Html;
 
 	/**
 	 * class name
@@ -75,7 +77,13 @@ class ModelForm {
 			$default = '';
 			$options = [];
 
-			if (isset($doc['enum'])) {
+			if ($prop->getName() === 'id') {
+				$type = 'hidden';
+			}
+			else if (isset($doc['field'])) {
+				$type = $doc['field'];
+			}
+			else if (isset($doc['enum'])) {
 				$options = explode(', ', $doc['enum']);
 				$type = 'array';
 			}
@@ -116,6 +124,20 @@ class ModelForm {
 		foreach ($this->fields() as $field) {
 			$html .= (string) $field;
 		}
+
+		// save model information
+		$html .= $this->html('input', [
+			'type' => 'hidden',
+			'name' => AbstractModel::WEB_NAME,
+			'value' => $this->baseclass
+		]);
+
+		// and request information
+		$html .= $this->html('input', [
+			'type' => 'hidden',
+			'name' => AbstractModel::WEB_PASS,
+			'value' => '1'
+		]);
 
 		return $html;
 	}

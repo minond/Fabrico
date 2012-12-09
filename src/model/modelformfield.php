@@ -127,16 +127,45 @@ class ModelFormField {
 					$options .= $this->option($option, $option, $this->value == $option);
 				}
 
-			case "boolean":
-				if (!$options) {
-					$options .= $this->option('1', 'Yes', $this->value);
-					$options .= $this->option('0', 'No', !$this->value);
-				}
-
 				$html = $this->wrap_field($label . $this->html('select', [
 					'id' => $id,
 					'name' => $this->name,
 				], $options));
+
+				break;
+
+			case "boolean":
+				// $options .= $this->option('1', 'Yes', $this->value);
+				// $options .= $this->option('0', 'No', !$this->value);
+
+				// $html = $this->wrap_field($label . $this->html('select', [
+					// 'id' => $id,
+					// 'name' => $this->name,
+				// ], $options));
+
+				$html = $this->wrap_field($label . $this->html('input', [
+					'type' => 'checkbox',
+					'id' => $id,
+					'name' => $this->name,
+				]));
+
+				break;
+
+			case "hidden":
+				$html = $this->html('input', [
+					'type' => 'hidden',
+					'id' => $id,
+					'name' => $this->name,
+					'value' => $this->value,
+				]);
+
+				break;
+
+			case "textarea":
+				$html = $this->wrap_field($label . $this->html('textarea', [
+					'id' => $id,
+					'name' => $this->name,
+				], $this->value));
 
 				break;
 

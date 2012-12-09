@@ -6,11 +6,21 @@
 namespace fabrico\model;
 
 use fabrico\cache\Cache;
+use fabrico\core\LightMediator;
+use fabrico\core\Router;
 
 /**
  * model stored in any type of cache
  */
 abstract class AbstractModel extends Model {
+	use LightMediator;
+
+	/**
+	 * model request variables
+	 */
+	const WEB_PASS = 'model_save';
+	const WEB_NAME = 'model_name';
+
 	/**
 	 * @var Cache
 	 */
@@ -20,7 +30,7 @@ abstract class AbstractModel extends Model {
 	 * model's unique id
 	 * @var string
 	 */
-	private $id;
+	protected $id;
 
 	/**
 	 * initializes model
@@ -58,6 +68,15 @@ abstract class AbstractModel extends Model {
 	protected static function initialize () {}
 
 	/**
+	 * storage hash generator
+	 * @param string $id
+	 * @return string
+	 */
+	private static function hash ($id) {
+		return sprintf('model-state-%s-%s', get_called_class(), $id);
+	}
+
+	/**
 	 * model getter
 	 * @param string $id
 	 * @return AbstractModel
@@ -69,11 +88,42 @@ abstract class AbstractModel extends Model {
 	}
 
 	/**
-	 * storage hash generator
-	 * @param string $id
-	 * @return string
+	 * look for and load a model passed through the router
+	 * @return Model
 	 */
-	private static function hash ($id) {
-		return sprintf('model-state-%s-%s', get_called_class(), $id);
+	public static function checkload() {
+		$router = static::getcore()->router;
+		$model = null;
+
+		if ($router instanceof Router) {
+			if ($router->get(self::WEB_PASS) && $router->get(self::WEB_NAME) === get_called_class()) {
+				$model = $router->get(self::WEB_NAME);
+
+				if (class_exists($model)) {
+					$model = $model::get($router->get('id'));
+
+					if (is_null($model)) {
+						$model = new static;
+					}
+
+					if ($model) {
+						foreach ($router->gets() as $key => $value) {
+							if (property_exists($model, $key)) {
+								if (method_exists($model, "set_{$key}")) {
+									$model->{"set_{$key}"}($value);
+								}
+								else {
+									$model->{ $key } = $value;
+								}
+							}
+						}
+
+						$model->__destruct();
+					}
+				}
+			}
+		}
+
+		return $model;
 	}
 }

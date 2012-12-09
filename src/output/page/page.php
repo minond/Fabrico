@@ -227,7 +227,7 @@ class Page extends OutputContent {
 	 * @return string
 	 */
 	public function render ($type) {
-		return MergeToken::merge(self::$template_map[ $type ], [
+		return util::merge(self::$template_map[ $type ], [
 			'title' => $this->title,
 			'content' => $this->content,
 			'css-file' => $this->get_css_file(),

@@ -19,6 +19,7 @@ class CoreLoader extends Loader {
 	protected $files = [
 		'klass' => [
 			'docparser',
+			'nicestring',
 		],
 		'configuration' => [
 			'configurationmanager',

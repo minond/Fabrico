@@ -12,9 +12,31 @@
 namespace fabrico\core;
 
 /**
+ * getter functions
+ */
+trait LightMediator {
+	/**
+	 * @see self::getcore
+	 * @return core
+	 */
+	protected function & getc () {
+		return self::getcore();
+	}
+
+	/**
+	 * @return core
+	 */
+	protected static function & getcore () {
+		return Core::instance();
+	}
+}
+
+/**
  * mediator functions
  */
 trait Mediator {
+	use LightMediator;
+
 	/**
 	 * additional property shortcuts can be added
 	 * as long as they all rely on Mediator::getc
@@ -29,21 +51,6 @@ trait Mediator {
 			case 'configuration':
 				return $this->getc()->configuration;
 		}
-	}
-
-	/**
-	 * @see self::getcore
-	 * @return core
-	 */
-	public function & getc () {
-		return self::getcore();
-	}
-
-	/**
-	 * @return core
-	 */
-	protected static function & getcore () {
-		return Core::instance();
 	}
 }
 

@@ -77,6 +77,13 @@ class Router extends Module {
 	}
 
 	/**
+	 * @return array
+	 */
+	public function gets() {
+		return $this->request;
+	}
+
+	/**
 	 * request variable setter
 	 * @param string $var
 	 * @param string $val

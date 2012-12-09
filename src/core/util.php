@@ -34,7 +34,6 @@ class util {
 
 	/**
 	 * simple merge field parser
-	 * @see MergeToken::merge
 	 * @param string $tmpl
 	 * @param mixed $data
 	 * @return string

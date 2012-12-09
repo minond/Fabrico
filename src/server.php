@@ -34,7 +34,7 @@ if (in_array($ext, $resources)) {
 }
 else {
 	$f = fopen('php://stderr', 'w');
-	fputs($f, "Serving {$_REQUEST['_file']}\n");
+	fputs($f, "Serving /{$_REQUEST['_file']}\n");
 	fclose($f);
 	require 'http.php';
 }

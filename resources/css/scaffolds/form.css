@@ -5,6 +5,12 @@
 	background-color: #F1F1F1;
 }
 
+.scaffold_form .scaffold_form_title {
+	cursor: default;
+	font: normal 16px Arial;
+	margin: 0px 0px 12px 2px;
+}
+
 .scaffold_form .scaffold_field_holder {
 	display: block;
 	margin-bottom: 13px;
@@ -30,8 +36,10 @@
 	width: 220px;
 }
 
-.scaffold_form .scaffold_form_title {
-	cursor: default;
-	font: normal 16px Arial;
-	margin: 0px 0px 12px 2px;
+.scaffold_form .scaffold_field_holder textarea {
+	border: 1px solid #B9B9B9;
+	height: 100px;
+	width: 300px;
+	font: normal 11px monospace;
+	padding: 5px;
 }

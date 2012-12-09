@@ -5,6 +5,8 @@
  */
 namespace fabrico\output;
 
+use \fabrico\core\util;
+
 /**
  * tag token
  * @uses PropertyToken
@@ -147,6 +149,7 @@ PHP;
 	 * @return string
 	 */
 	public function as_component () {
-		return !$this->valid ? self::$invalid_tag : MergeToken::merge(self::$valid_tag, $this);
+		return !$this->valid ? self::$invalid_tag :
+			util::merge(self::$valid_tag, $this);
 	}
 }
