@@ -19,6 +19,15 @@ class Session extends Cache {
 	}
 
 	/**
+	 * return reference
+	 * @param string $key
+	 * @return mixed
+	 */
+	public function & rget($key) {
+		return $_SESSION[ $key ];
+	}
+
+	/**
 	 * @see Cache::get
 	 */
 	public function get ($key) {

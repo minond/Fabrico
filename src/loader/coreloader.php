@@ -76,6 +76,7 @@ class CoreLoader extends Loader {
 			'apc',
 			'session',
 			'runtimememory',
+			'flash',
 		],
 		'model' => [
 			'getset',
