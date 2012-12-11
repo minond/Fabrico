@@ -282,6 +282,14 @@ class Tag {
 	}
 
 	/**
+	 * type getter
+	 * @return string
+	 */
+	public function get_type() {
+		return $this->__type;
+	}
+
+	/**
 	 * add a child tag
 	 * @param Tag $tag
 	 */

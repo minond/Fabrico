@@ -36,7 +36,7 @@ class PropertyToken extends Token {
 		foreach ($props as $index => $prop) {
 			if (isset($vals[ $index ])) {
 				$prop = trim($prop);
-				$propmap[ $prop ] = $this->parse_value($vals[ $index ]);
+				$propmap[ $prop ] = self::parse_value($vals[ $index ]);
 				// $this->properties[ $prop ] = $this->parse_value($vals[ $index ]);
 				// $this->properties[ $prop ] = $this->real_nice_value($this->parse_value($vals[ $index ], MergeToken::IN_PHP));
 				$this->properties[ $prop ] = $this->real_nice_value($vals[ $index ]);
@@ -133,7 +133,7 @@ class PropertyToken extends Token {
 	 * @param string $holder
 	 * @return string
 	 */
-	private function parse_value ($value, $holder = MergeToken::IN_STR) {
+	public static function parse_value ($value, $holder = MergeToken::IN_STR) {
 		static $parser, $lexer;
 
 		if (!$parser || !$lexer) {
