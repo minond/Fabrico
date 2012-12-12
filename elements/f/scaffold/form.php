@@ -37,6 +37,8 @@ class Form extends Tag {
 	 * @see Tag::initialize
 	 */
 	protected function initialize () {
+		Tag::load('f/page/style');
+
 		$form = new ModelForm($this->model);
 		$docs = $this->klass($this->model);
 		$status = isset($this->model->id) ? 'Edit' : 'Add';
@@ -63,25 +65,41 @@ class Form extends Tag {
 			'class' => 'scaffold_form_title'
 		], $title);
 
+		$header = $this->html('div', [
+			'class' => 'scaffold_form_header'
+		], $title);
+
 		$submit = $this->html('input', [
 			'value' => 'Submit',
-			'class' => 'scaffold_form_submit',
+			'class' => 'scaffold_form_submit form_submit',
 			'type' => 'submit'
 		]);
 
 		$reset = $this->html('input', [
 			'value' => 'Cancel',
-			'class' => 'scaffold_form_cancel',
+			'class' => 'scaffold_form_cancel form_reset',
 			'type' => 'reset'
 		]);
 
+		$footer = $this->html('div', [
+			'class' => 'scaffold_form_footer',
+		], $submit . $reset);
+
+		$content = $this->html('div', [
+			'class' => 'scaffold_form_content'
+		], $form);
+
 		$this->add_class('scaffold_form');
-		$this->set_content($title . $form . $submit . $reset);
+		$this->set_content($header . $content . $footer);
 
 		// load the css
-		Tag::load('f/page/style');
 		(string) new Style([
 			'file' => 'scaffolds/form.css',
+			'internal' => true
+		]);
+
+		(string) new Style([
+			'file' => 'form/button.css',
 			'internal' => true
 		]);
 	}
