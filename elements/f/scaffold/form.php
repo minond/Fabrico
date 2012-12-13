@@ -13,6 +13,13 @@ use fabrico\klass\DocParser;
 
 /**
  * ModelForm wrapper
+ *
+ * Model annotations
+ * @label (class) - form label, uses status merge field
+ * @label (property) - field label
+ * @enum (property) - select field options
+ * @default (property) - default field value
+ * @field (property) - force a field type
  */
 class Form extends Tag {
 	use DocParser;
@@ -83,7 +90,7 @@ class Form extends Tag {
 
 		$footer = $this->html('div', [
 			'class' => 'scaffold_form_footer',
-		], $submit . $reset);
+		], $reset . $submit);
 
 		$content = $this->html('div', [
 			'class' => 'scaffold_form_content'

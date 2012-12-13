@@ -143,11 +143,17 @@ class ModelFormField {
 					// 'name' => $this->name,
 				// ], $options));
 
-				$html = $this->wrap_field($label . $this->html('input', [
+				$props = [
 					'type' => 'checkbox',
 					'id' => $id,
 					'name' => $this->name,
-				]));
+				];
+
+				if ($this->value === true) {
+					$props['checked'] = true;
+				}
+
+				$html = $this->wrap_field($label . $this->html('input', $props));
 
 				break;
 

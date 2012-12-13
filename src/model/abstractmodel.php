@@ -8,6 +8,7 @@ namespace fabrico\model;
 use fabrico\cache\Cache;
 use fabrico\core\LightMediator;
 use fabrico\core\Router;
+use fabrico\output\Json;
 
 /**
  * model stored in any type of cache
@@ -45,8 +46,38 @@ abstract class AbstractModel extends Model {
 	final public function __destruct () {
 		static::initialize();
 		static::$cache->set(
-			static::hash($this->get_id()), serialize($this)
+			static::hash($this->get_id()),
+			serialize($this)
 		);
+	}
+
+	/**
+	 * @return string
+	 */
+	public function __toString() {
+		$me = get_class($this);
+		$props = [];
+
+		foreach ($this as $prop => $value) {
+			$props[] = sprintf('%s:%s="%s"', $me, $prop, htmlspecialchars($value));
+		}
+
+		$props = implode(' ', $props);
+		return "<model:{$me} {$props} />";
+	}
+
+	/**
+	 * @return string
+	 */
+	public function as_json() {
+		static::getcore()->loader->load('output');
+		$json = new Json;
+
+		foreach ($this as $prop => $value) {
+			$json->{ $prop } = $value;
+		}
+
+		return (string) $json;
 	}
 
 	/**
@@ -109,6 +140,10 @@ abstract class AbstractModel extends Model {
 					if ($model) {
 						foreach ($router->gets() as $key => $value) {
 							if (property_exists($model, $key)) {
+								if (is_bool($model->{ $key })) {
+									$value = (bool) $value;
+								}
+
 								if (method_exists($model, "set_{$key}")) {
 									$model->{"set_{$key}"}($value);
 								}

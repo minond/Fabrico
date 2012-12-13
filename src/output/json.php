@@ -57,6 +57,14 @@ class Json extends OutputContent implements \JsonSerializable {
 	}
 
 	/**
+	 * json_encode shortcut
+	 * @return string
+	 */
+	public function __toString() {
+		return json_encode($this);
+	}
+
+	/**
 	 * merges the template with user data
 	 * @return string
 	 */
