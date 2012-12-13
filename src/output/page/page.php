@@ -251,6 +251,9 @@ class Page extends OutputContent {
 		$parser = new Parser;
 		$lexer = new Lexer;
 
+		// remove comments
+		$content = preg_replace('/<!--.+?-->/', '', $content);
+
 		$lexer->set_string($content);
 		$lexer->add_token(new TagToken);
 		$lexer->add_token(new MergeToken);
