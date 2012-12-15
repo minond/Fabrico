@@ -30,6 +30,10 @@ class Cond extends Tag {
 				return "<?php if ({$this->if}): ?>";
 				break;
 
+			case TagToken::SINGLE:
+				return $this->if ? "<?php elseif ({$this->if}): ?>" : "<?php else: ?>";
+				break;
+
 			case TagToken::CLOSE:
 				return "<?php endif ?>";
 				break;

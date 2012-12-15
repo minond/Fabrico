@@ -37,6 +37,18 @@ class Page extends OutputContent {
 	private $content = '';
 
 	/**
+	 * set by the parser
+	 * @var string
+	 */
+	private $raw_content = '';
+
+	/**
+	 * set by the parser
+	 * @var string
+	 */
+	private $parsed_content = '';
+
+	/**
 	 * css files
 	 * @var array
 	 */
@@ -82,6 +94,22 @@ class Page extends OutputContent {
 		if (!isset(self::$template_map[ $name ]) || $allow_overwrite) {
 			self::$template_map[ $name ] = $content;
 		}
+	}
+
+	/**
+	 * @param string $raw
+	 * @param string $parsed
+	 */
+	public function set_contents($raw, $parsed) {
+		$this->raw_content = $raw;
+		$this->parsed_content = $parsed;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function get_contents() {
+		return [ $this->raw_content, $this->parsed_content ];
 	}
 
 	/**
@@ -246,6 +274,7 @@ class Page extends OutputContent {
 	 */
 	public function prepare ($content) {
 		$this->core->loader->load('parse');
+		$page = $this;
 		$project = $this->core->project;
 		$conf = $this->configuration;
 		$parser = new Parser;
@@ -259,8 +288,9 @@ class Page extends OutputContent {
 		$lexer->add_token(new MergeToken);
 		$lexer->add_token(new FunctionToken);
 
-		return $parser->parse($lexer, function ($orig, & $html, $tokens) use (& $project, & $conf) {
+		return $parser->parse($lexer, function ($orig, & $html, $tokens) use (& $page, & $project, & $conf) {
 			$includes = [];
+			$page->set_contents($orig, $html);
 
 			foreach ($tokens as & $token) {
 				if ($token instanceof TagToken) {
