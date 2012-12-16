@@ -10,14 +10,7 @@ namespace fabrico\project;
  */
 interface FileFinder {
 	/**
-	 * @param mixed $identifier
-	 * @return string
+	 * used by FileLoader
 	 */
-	public static function find_project_file($identifier);
-
-	/**
-	 * @param mixed $identifier
-	 * @return string
-	 */
-	public static function load_project_file($identifier);
+	public static function get_project_file_type();
 }

@@ -9,6 +9,7 @@ use fabrico\core\util;
 use fabrico\core\Mediator;
 use fabrico\project\Project;
 use fabrico\project\FileFinder;
+use fabrico\project\FileLoader;
 use fabrico\error\LoggedException;
 use fabrico\output\View;
 use fabrico\output\Build;
@@ -19,7 +20,7 @@ use fabrico\controller\Controller;
  * custom tag generator
  */
 class Tag implements FileFinder {
-	use Html, Mediator;
+	use Html, Mediator, FileLoader;
 
 	/**
 	 * used to pass properties from an open
@@ -331,48 +332,24 @@ class Tag implements FileFinder {
 	}
 
 	/**
-	 * find a tag definition
-	 * @param mixed $tag
+	 * for FileFinder
 	 * @return string
 	 */
-	public static function find_project_file($tag) {
-		if (is_string($tag)) {
-			$tag = explode('/', $tag);
-		}
-
-		list($package, $namespace, $name) = $tag;
-		$elfile = implode(DIRECTORY_SEPARATOR, [$package, $namespace, $name]);
-
-		list($projectfile, $in_project) = self::getcore()->project->got_file(
-			$elfile, Project::ELEMENT
-		);
-
-		list($fabricofile, $in_fabrico) = self::getcore()->project->got_project_file(
-			$elfile, Project::ELEMENT, self::getcore()->configuration->core->file->to->elements
-		);
-
-		if ($in_project)
-			$elfile = $projectfile;
-		else if ($in_fabrico)
-			$elfile = $fabricofile;
-		else
-			$elfile = null;
-
-		return $elfile;
+	public static function get_project_file_type() {
+		return Project::ELEMENT;
 	}
 
 	/**
-	 * load a tag definition
-	 * @param mixed $tag
+	 * for FileLoader
+	 * @param mixed $identifier
 	 * @return string
 	 */
-	public static function load_project_file($tag) {
-		$file = self::find_project_file($tag);
-
-		if ($file) {
-			require_once $file;
+	public static function parse_project_file_name($identifier) {
+		if (is_string($identifier)) {
+			$identifier = explode('/', $identifier);
 		}
 
-		return $file;
+		list($package, $namespace, $name) = $identifier;
+		return implode(DIRECTORY_SEPARATOR, [$package, $namespace, $name]);
 	}
 }

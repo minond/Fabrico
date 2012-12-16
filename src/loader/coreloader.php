@@ -37,6 +37,7 @@ class CoreLoader extends Loader {
 		'project' => [
 			'project',
 			'filefinder',
+			'fileloader',
 		],
 		'output' => [
 			'outputcontent',

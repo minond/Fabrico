@@ -8,7 +8,7 @@
 		},
 
 		"to": {
-			"elements": ".."
+			"internal_directory": "..",
 		}
 	},
 
