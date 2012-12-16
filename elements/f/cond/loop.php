@@ -3,13 +3,12 @@
 /**
  * @package fabrico\output\f
  */
-namespace fabrico\output\f\data;
+namespace fabrico\output\f\cond;
 
 use fabrico\output\Tag;
 use fabrico\output\TagToken;
 use fabrico\output\MergeToken;
 use fabrico\core\Mediator;
-use fabrico\project\Project;
 
 /**
  * while, for, foreach loops
@@ -32,7 +31,7 @@ class Loop extends Tag {
 	public function assemble () {
 		$this->over = MergeToken::clean_var($this->over);
 
-		switch ($this->__type) {
+		switch ($this->get_type()) {
 			case TagToken::OPEN:
 				return "<?php foreach ({$this->over} as \${$this->as}): ?>";
 				break;

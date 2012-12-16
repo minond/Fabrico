@@ -3,23 +3,25 @@
 /**
  * @package fabrico\output\f
  */
-namespace fabrico\output\f\data;
+namespace fabrico\output\f\cond;
 
 use fabrico\output\Tag;
 use fabrico\output\TagToken;
 use fabrico\output\PropertyToken;
-use fabrico\output\MergeToken;
 
 /**
- * while, for, foreach loops
+ * if, else if, else statements
  */
-class Cond extends Tag {
+class Check extends Tag {
 	/**
 	 * data
 	 * @var string
 	 */
 	public $if;
 
+	/**
+	 * @see Tag::assemble
+	 */
 	public function assemble () {
 		// TODO: create another parser function for this type of use
 		$this->if = PropertyToken::parse_value($this->if);

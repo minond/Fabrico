@@ -3,7 +3,7 @@
 /**
  * @package fabrico\output\f
  */
-namespace fabrico\output\f\scaffold;
+namespace fabrico\output\f\form;
 
 use fabrico\core\util;
 use fabrico\output\Tag;
@@ -21,7 +21,7 @@ use fabrico\klass\DocParser;
  * @default (property) - default field value
  * @field (property) - force a field type
  */
-class Form extends Tag {
+class Scaffold extends Tag {
 	use DocParser;
 
 	/**
