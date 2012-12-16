@@ -150,6 +150,16 @@ class Project extends Module {
 	}
 
 	/**
+	 * @see got_file
+	 * @param string $name
+	 * @param string $type
+	 * @return boolean
+	 */
+	public function has_file ($name, $type) {
+		return file_exists($this->get_file($name, $type));
+	}
+
+	/**
 	 * @see get_project_file
 	 * @param string $name
 	 * @param string $type
@@ -159,6 +169,19 @@ class Project extends Module {
 	public function got_project_file ($name, $type, $prefix = '') {
 		$file = $this->get_project_file($name, $type, $prefix);
 		return [ $file, file_exists($file) ];
+	}
+
+	/**
+	 * @see got_project_file
+	 * @param string $name
+	 * @param string $type
+	 * @param string $prefix
+	 * @return boolean
+	 */
+	public function has_project_file ($name, $type, $prefix = '') {
+		return file_exists(
+			$this->get_project_file($name, $type, $prefix)
+		);
 	}
 
 	/**

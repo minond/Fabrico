@@ -15,6 +15,7 @@ use fabrico\core\Router;
 use fabrico\core\Response;
 use fabrico\controller\Controller;
 use fabrico\configuration\RoutingRule;
+use fabrico\project\Project;
 
 require 'main.php';
 
@@ -49,7 +50,12 @@ Core::run(function (Core $app) {
 		$response->outputcontent->view->builder = new Build;
 
 		// load the view file
-		$response->outputcontent->load($request->get_file());
+		if ($app->project->has_file($request->get_file(), Project::VIEW)) {
+			$response->outputcontent->load($request->get_file());
+		}
+		else {
+			$response->outputcontent->load('404');
+		}
 	}
 	else if ($router->is_method) {
 		$app->loader->load('output');
