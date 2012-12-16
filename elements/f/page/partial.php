@@ -7,7 +7,7 @@ namespace fabrico\output\f\page;
 
 use fabrico\output\View;
 use fabrico\output\Build;
-use fabrico\core\Project;
+use fabrico\project\Project;
 
 /**
  * template loader

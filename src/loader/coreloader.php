@@ -14,6 +14,7 @@ class CoreLoader extends Loader {
 		'error',
 		'cache',
 		'configuration',
+		'project',
 	];
 
 	protected $files = [
@@ -32,7 +33,10 @@ class CoreLoader extends Loader {
 			'request',
 			'response',
 			'event',
-			'project'
+		],
+		'project' => [
+			'project',
+			'filefinder',
 		],
 		'output' => [
 			'outputcontent',
@@ -105,6 +109,10 @@ class CoreLoader extends Loader {
 
 	public function log_format ($file) {
 		return sprintf('%slog/%s.php', $this->path_to, $file);
+	}
+
+	public function project_format ($file) {
+		return sprintf('%sproject/%s.php', $this->path_to, $file);
 	}
 
 	public function core_format ($file) {

@@ -7,7 +7,7 @@ namespace fabrico\output;
 
 use fabrico\core\util;
 use fabrico\core\Module;
-use fabrico\core\Project;
+use fabrico\project\Project;
 use fabrico\output\Tag;
 use fabrico\output\TagToken;
 use fabrico\output\MergeToken;
@@ -294,7 +294,7 @@ class Page extends OutputContent {
 
 			foreach ($tokens as & $token) {
 				if ($token instanceof TagToken) {
-					$infile = Tag::load([
+					$infile = Tag::load_project_file([
 						$token->package,
 						$token->namespace,
 						$token->name

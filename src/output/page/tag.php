@@ -7,7 +7,8 @@ namespace fabrico\output;
 
 use fabrico\core\util;
 use fabrico\core\Mediator;
-use fabrico\core\Project;
+use fabrico\project\Project;
+use fabrico\project\FileFinder;
 use fabrico\error\LoggedException;
 use fabrico\output\View;
 use fabrico\output\Build;
@@ -17,7 +18,7 @@ use fabrico\controller\Controller;
 /**
  * custom tag generator
  */
-class Tag {
+class Tag implements FileFinder {
 	use Html, Mediator;
 
 	/**
@@ -334,7 +335,7 @@ class Tag {
 	 * @param mixed $tag
 	 * @return string
 	 */
-	public static function find ($tag) {
+	public static function find_project_file($tag) {
 		if (is_string($tag)) {
 			$tag = explode('/', $tag);
 		}
@@ -365,8 +366,8 @@ class Tag {
 	 * @param mixed $tag
 	 * @return string
 	 */
-	public static function load($tag) {
-		$file = self::find($tag);
+	public static function load_project_file($tag) {
+		$file = self::find_project_file($tag);
 
 		if ($file) {
 			require_once $file;

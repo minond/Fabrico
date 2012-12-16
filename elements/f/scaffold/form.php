@@ -44,7 +44,7 @@ class Form extends Tag {
 	 * @see Tag::initialize
 	 */
 	protected function initialize () {
-		Tag::load('f/page/style');
+		Tag::load_project_file('f/page/style');
 
 		$form = new ModelForm($this->model);
 		$docs = $this->klass($this->model);

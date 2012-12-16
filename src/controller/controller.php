@@ -6,10 +6,10 @@
 namespace fabrico\controller;
 
 use fabrico\core\util;
-use fabrico\core\Project;
 use fabrico\core\Module;
 use fabrico\core\Request;
 use fabrico\core\Router;
+use fabrico\project\Project;
 
 /**
  * controller base

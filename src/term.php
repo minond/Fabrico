@@ -6,7 +6,7 @@
 namespace fabrico;
 
 use fabrico\core\Core;
-use fabrico\core\Project;
+use fabrico\project\Project;
 use fabrico\controller\Controller;
 use fabrico\Controller\CliAccess;
 

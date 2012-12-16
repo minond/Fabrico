@@ -7,7 +7,7 @@ namespace fabrico\output\f\page;
 
 use fabrico\output\Tag;
 use fabrico\core\Mediator;
-use fabrico\core\Project;
+use fabrico\project\Project;
 
 /**
  * project script loader

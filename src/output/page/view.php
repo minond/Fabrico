@@ -5,7 +5,7 @@
  */
 namespace fabrico\output;
 
-use fabrico\core\Project;
+use fabrico\project\Project;
 use fabrico\core\Module;
 use fabrico\core\util;
 use fabrico\output\Tag;

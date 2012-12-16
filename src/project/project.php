@@ -1,9 +1,11 @@
 <?php
 
 /**
- * @package fabrico\core
+ * @package fabrico\project
  */
-namespace fabrico\core;
+namespace fabrico\project;
+
+use fabrico\core\Module;
 
 /**
  * project manager
