@@ -22,14 +22,11 @@ Core::run(function (Core $app) {
 
 		if (strpos($argv[1], ':') !== false && strpos($argv[1], '=') !== false) {
 			list(, $request) = explode('=', $argv[1]);
-			list($controller, $method) = explode(':', $request);
-			$controller = ucwords($controller);
+			list($controller_name, $method) = explode(':', $request);
+			$controller_name = ucwords($controller_name);
+			$controller = Controller::load($controller_name);
 
-			list(, $found) = $app->project->got_file($controller, Project::CONTROLLER);
-
-			if ($found) {
-				$controller = Controller::load($controller);
-
+			if ($controller) {
 				if ($controller instanceof CliAccess) {
 					$controller->load_cli_arguments();
 					Controller::trigger_cli_request($controller, $method);
@@ -39,7 +36,7 @@ Core::run(function (Core $app) {
 				}
 			}
 			else {
-				printf('Controller "%s" was not found%s', $controller, PHP_EOL);
+				printf('Controller "%s" was not found%s', $controller_name, PHP_EOL);
 			}
 		}
 		else {

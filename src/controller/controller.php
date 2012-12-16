@@ -66,7 +66,7 @@ class Controller extends Module implements FileFinder {
 			}
 		}
 
-		return $controller;
+		return $instance;
 	}
 
 	/**
