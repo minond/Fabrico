@@ -82,6 +82,7 @@ class CoreLoader extends Loader {
 			'getset',
 			'model',
 			'abstractmodel',
+			'webaccess',
 			'sessionmodel',
 			'runtimememorymodel',
 			'modelform',
