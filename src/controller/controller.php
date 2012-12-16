@@ -10,11 +10,15 @@ use fabrico\core\Module;
 use fabrico\core\Request;
 use fabrico\core\Router;
 use fabrico\project\Project;
+use fabrico\project\FileFinder;
+use fabrico\project\FileLoader;
 
 /**
  * controller base
  */
-class Controller extends Module {
+class Controller extends Module implements FileFinder {
+	use FileLoader;
+
 	/**
 	 * array of public methods
 	 * @var array
@@ -39,20 +43,27 @@ class Controller extends Module {
 	}
 
 	/**
+	 * for FileFinder
+	 */
+	public static function get_project_file_type() {
+		return Project::CONTROLLER;
+	}
+
+	/**
 	 * load and setup a new controller
 	 * @param string $controller
 	 * @param boolean $save
 	 * @return Controller
 	 */
-	public static function load ($controller, $save = true) {
-		$core = & self::getcore();
-		$file = $core->project->get_file($controller, Project::CONTROLLER);
+	public static function load($controller, $save = true) {
+		$instance = null;
 
-		require_once $file;
-		$controller = new $controller;
+		if (self::load_project_file($controller)) {
+			$instance = new $controller;
 
-		if ($save) {
-			$core->controller = $controller;
+			if ($save) {
+				self::getcore()->controller = $instance;
+			}
 		}
 
 		return $controller;
