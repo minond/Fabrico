@@ -124,8 +124,13 @@ class Tag implements FileFinder {
 	 * @param string $name
 	 * @return string
 	 */
-	public static function getclass ($package, $namespace, $name) {
-		return "\\fabrico\\output\\{$package}\\{$namespace}\\{$name}";
+	public static function getclass ($package, $namespace = '', $name = '') {
+		if ($namespace)
+			$namespace = "\\{$namespace}";
+		if ($name)
+			$name = "\\{$name}";
+
+		return "\\fabrico\\output\\{$package}{$namespace}{$name}";
 	}
 
 	/**
@@ -256,6 +261,45 @@ class Tag implements FileFinder {
 			$me = get_class($this);
 			throw new LoggedException("Invalid property \"{$prop}\" for \"{$me}\"");
 		}
+	}
+
+	/**
+	 * arguments finder
+	 * @param string $type
+	 * @return Tag[]
+	 */
+	public function find_args($type) {
+		$args = [];
+		$class = self::getclass($type);
+
+		foreach ($this->__args as & $arg) {
+			if ($arg instanceof $class) {
+				$args[] = $arg;
+			}
+
+			unset($arg);
+		}
+
+		return $args;
+	}
+
+	/**
+	 * argument finder
+	 * @param string $type
+	 * @return Tag
+	 */
+	public function find_arg($type) {
+		$class = self::getclass($type);
+
+		foreach ($this->__args as & $arg) {
+			if ($arg instanceof $class) {
+				return $arg;
+			}
+
+			unset($arg);
+		}
+
+		return null;
 	}
 
 	/**
