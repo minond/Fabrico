@@ -5,9 +5,11 @@
 	top: 0px;
 	left: 0px;
 	text-align: center;
+	overflow: scroll;
 }
 
 .modal .modal_outer {
+	position: relative;
 	border: 10px solid rgba(82, 82, 82, .7);
 	border-radius: 2px;
 	display: inline-block;
@@ -29,6 +31,7 @@
 .modal .modal_body {
 	font: 12px Arial;
 	padding: 10px;
+	background-color: white;
 }
 
 .modal .modal_footer {
@@ -37,4 +40,13 @@
 	text-align: right;
 	padding: 6px 21px;
 	font: 12px Arial;
+}
+.modal .modal_background {
+	background-color: white;
+	opacity: 0.7;
+	height: 100%;
+	width: 100%;
+	position: fixed;
+	top: 0px;
+	left: 0px;
 }

@@ -63,7 +63,11 @@ class Popup extends \fabrico\output\Tag {
 			'class' => 'modal_outer'
 		], $inner);
 
-		$this->set_content($outer);
+		$background = $this->html('div', [
+			'class' => 'modal_background'
+		]);
+
+		$this->set_content($background . $outer);
 		$this->add_class('modal');
 	}
 }
