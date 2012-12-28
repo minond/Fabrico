@@ -5,10 +5,10 @@
  */
 namespace fabrico\model;
 
-use \fabrico\core\LightMediator;
-use \fabrico\project\Project;
-use \fabrico\project\FileFinder;
-use \fabrico\project\FileLoader;
+use fabrico\core\LightMediator;
+use fabrico\project\Project;
+use fabrico\project\FileFinder;
+use fabrico\project\FileLoader;
 
 abstract class Model implements FileFinder {
 	use GetSet, FileLoader, LightMediator;

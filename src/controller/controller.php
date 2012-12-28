@@ -70,25 +70,6 @@ class Controller extends Module implements FileFinder {
 	}
 
 	/**
-	 * load a controller from a request
-	 * @param Request $req
-	 * @return Controller
-	 */
-	public static function req_load (Request $req) {
-		return self::load($req->get(Router::$var->controller), false);
-	}
-
-	/**
-	 * is method callable?
-	 * @param Controller $controller
-	 * @param Request $req
-	 * @return boolean
-	 */
-	public static function request_status (Controller $controller, Request $req) {
-		return $controller->published($req->get(Router::$var->method));
-	}
-
-	/**
 	 * trigger method
 	 * @param Controller $controller
 	 * @param Request $req

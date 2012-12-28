@@ -5,9 +5,6 @@
  */
 namespace fabrico\core;
 
-use fabrico\core\util;
-use fabrico\core\Module;
-
 /**
  * request file server
  */

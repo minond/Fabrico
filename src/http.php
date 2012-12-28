@@ -65,7 +65,8 @@ Core::run(function (Core $app) {
 		$app->loader->load('model');
 		$app->loader->load('controller');
 
-		$controller = Controller::req_load($request);
+		$controller = $request->get(Router::$var->controller);
+		$controller = Controller::load($controller, false);
 		$response->outputcontent = new Json;
 		$response->outputcontent->status = null;
 		$response->outputcontent->return = null;
@@ -73,11 +74,15 @@ Core::run(function (Core $app) {
 		if (is_null($controller)) {
 			$response->outputcontent->status = ControllerStatus::UNKNOWN_C;
 		}
-		else if ($controller instanceof WebAccess &&
-			Controller::request_status($controller, $request)) {
+		else if ($controller instanceof WebAccess) {
+			if ($controller->published($request->get(Router::$var->method))) {
 				$response->outputcontent->status = ControllerStatus::OK;
 				$response->outputcontent->return =
 					Controller::trigger_web_request($controller, $request);
+			}
+			else {
+				$response->outputcontent->status = ControllerStatus::PRIVATE_M;
+			}
 		}
 		else {
 			$response->outputcontent->status = ControllerStatus::PRIVATE_C;

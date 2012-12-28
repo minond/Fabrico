@@ -5,8 +5,6 @@
  */
 namespace fabrico\configuration;
 
-use fabrico\configuration\ConfigurationReader;
-
 /**
  * simple key/value pair information
  */

@@ -5,7 +5,6 @@
  */
 namespace fabrico\core;
 
-use fabrico\core\util;
 use fabrico\output\OutputContent;
 use fabrico\output\Page;
 

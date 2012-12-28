@@ -5,7 +5,7 @@
  */
 namespace fabrico\model;
 
-use \fabrico\output\Html;
+use fabrico\output\Html;
 
 class ModelFormField {
 	use Html;

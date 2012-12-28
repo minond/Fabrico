@@ -5,9 +5,6 @@
  */
 namespace fabrico\configuration;
 
-use fabrico\core\util;
-use fabrico\configuration\ConfigurationReader;
-
 /**
  * represents a routing item
  */

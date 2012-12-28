@@ -8,7 +8,6 @@ namespace fabrico\model;
 use fabrico\output\Html;
 use fabrico\klass\DocParser;
 use fabrico\core\Mediator;
-use fabrico\model\AbstractModel;
 
 class ModelForm {
 	use DocParser, Mediator, Html;

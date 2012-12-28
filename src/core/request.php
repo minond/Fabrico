@@ -5,9 +5,6 @@
  */
 namespace fabrico\core;
 
-use fabrico\core\Module;
-use fabrico\core\Response;
-
 /**
  * request object
  */

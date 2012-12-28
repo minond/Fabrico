@@ -5,7 +5,7 @@
  */
 namespace fabrico\output;
 
-use \fabrico\core\util;
+use fabrico\core\util;
 
 /**
  * tag token
