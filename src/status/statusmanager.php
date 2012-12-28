@@ -21,6 +21,7 @@ class StatusManager {
 	 * @return array
 	 */
 	public static function gets() {
-		return [];
+		$me = new \ReflectionClass(get_called_class());
+		return $me->getConstants();
 	}
 }

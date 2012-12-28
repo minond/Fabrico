@@ -10,6 +10,7 @@ use fabrico\controller\Controller;
 use fabrico\core\Mediator;
 use fabrico\core\util;
 use fabrico\output\Page;
+use fabrico\status\ControllerStatus;
 
 /**
  * page definition/information
@@ -41,6 +42,10 @@ class Def extends Tag {
 				$this->core->response->outputcontent->declare_var(
 					'fabrico.page.controller',
 					$this->controller, Page::STR
+				);
+				$this->core->response->outputcontent->declare_var(
+					'fabrico.controller.status',
+					ControllerStatus::gets(), Page::JSON
 				);
 			}
 		}

@@ -17,9 +17,22 @@ class Json extends OutputContent implements \JsonSerializable {
 
 	/**
 	 * generates new std class
+	 * @param array $varls
 	 */
-	public function __construct () {
+	public function __construct (array $vals = null) {
 		$this->vars = new \stdClass;
+		$this->load($vals);
+	}
+
+	/**
+	 * @param array $vals
+	 */
+	public function load(array $vals = null) {
+		if (is_array($vals)) {
+			foreach ($vals as $var => $val) {
+				$this->__set($var, $val);
+			}
+		}
 	}
 
 	/**
