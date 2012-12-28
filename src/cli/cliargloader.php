@@ -10,27 +10,30 @@ namespace fabrico\cli;
  */
 trait CliArgLoader {
 	/**
-	 * uses controller properties to parse arguments
+	 * arguments to be passed to requested function
+	 * @see self::load_cli_function_arguments
+	 * @var array
 	 */
-	public function load_cli_arguments() {
-		static $parsed;
+	private $__function_arguments = [];
+
+	/**
+	 * parses options
+	 * @param array $all
+	 * @return array
+	 */
+	private function short_longs($all) {
 		$short = [];
 		$longs = [];
+		$options = [];
 
-		if (!$parsed) {
-			$parsed = true;
-		}
-		else {
-			return;
-		}
-
-		$options = isset($this->options) ? $this->options : false;
-
-		if (!$options) {
-			foreach (array_keys(get_class_vars(get_class($this))) as $prop) {
-				$options[ "{$prop}::" ] = $prop;
-				$options[ "{$prop[0]}::" ] = $prop;
+		foreach ($all as $prop) {
+			// `private` vars
+			if (substr($prop, 0, 2) === '__') {
+				continue;
 			}
+
+			$options[ "{$prop}::" ] = $prop;
+			$options[ "{$prop[0]}::" ] = $prop;
 		}
 
 		foreach ($options as $arg => $variable) {
@@ -42,14 +45,7 @@ trait CliArgLoader {
 			}
 		}
 
-		foreach (getopt(implode('', $short), $longs) as $param => $value) {
-			foreach ($options as $arg => $variable) {
-				if ($this->clean_argument($arg) === $param) {
-					$this->{ $variable } = $value;
-					break;
-				}
-			}
-		}
+		return [ $short, $longs, $options ];
 	}
 
 	/**
@@ -69,5 +65,62 @@ trait CliArgLoader {
 		}
 
 		return $cache[ $arg ];
+	}
+
+	/**
+	 * uses controller properties to parse arguments
+	 */
+	public function load_cli_property_arguments() {
+		list($short, $longs, $options) = $this->short_longs(
+			array_keys(get_class_vars(get_class($this)))
+		);
+
+		foreach (getopt(implode('', $short), $longs) as $param => $value) {
+			foreach ($options as $arg => $variable) {
+				if ($this->clean_argument($arg) === $param) {
+					$this->{ $variable } = $value;
+					break;
+				}
+			}
+		}
+	}
+
+	/**
+	 * uses function parameters to parse arguments
+	 */
+	public function load_cli_function_arguments($func) {
+		$index = -1;
+		$args = [];
+		$re = new \ReflectionMethod(get_class($this), $func);
+
+		foreach ($re->getParameters() as $index => $par) {
+			$args[ $par->getName() ] = null;
+
+			if ($par->isDefaultValueAvailable()) {
+				$args[ $par->getName() ] = $par->getDefaultValue();
+			}
+		}
+
+		list($short, $longs, $options) = $this->short_longs(array_keys($args));
+		$parsed = getopt(implode('', $short), $longs);
+
+		foreach ($args as $name => $def_value) {
+			$index++;
+
+			$this->__function_arguments[ $index ] = array_key_exists($name, $parsed) ?
+				$parsed[ $name ] : null;
+
+			if (!strlen($this->__function_arguments[ $index ])) {
+				$this->__function_arguments[ $index ] = $def_value;
+			}
+		}
+	}
+
+	/**
+	 * arguments getter
+	 * @return array
+	 */
+	public function get_function_arguments() {
+		return $this->__function_arguments;
 	}
 }

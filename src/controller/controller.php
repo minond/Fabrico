@@ -114,13 +114,14 @@ class Controller extends Module implements FileFinder {
 	 */
 	public static function trigger_cli_request (Controller $controller, $method) {
 		if (is_callable([$controller, $method])) {
-			return $controller->{ $method }();
+			$args = $controller->get_function_arguments();
+			return call_user_func_array([ $controller, $method ], $args);
 		}
 		else {
-			echo sprintf(
+			throw new \Exception(sprintf(
 				'Invalid method "%s" for "%s" controller%s',
 				$method, get_class($controller), PHP_EOL
-			);
+			));
 		}
 	}
 }

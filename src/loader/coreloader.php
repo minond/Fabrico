@@ -10,6 +10,7 @@ namespace fabrico\loader;
  */
 class CoreLoader extends Loader {
 	protected $autoload = [
+		'status',
 		'core',
 		'error',
 		'cache',
@@ -18,6 +19,10 @@ class CoreLoader extends Loader {
 	];
 
 	protected $files = [
+		'status' => [
+			'statusmanager',
+			'controllerstatus',
+		],
 		'klass' => [
 			'docparser',
 			'nicestring',
@@ -67,6 +72,7 @@ class CoreLoader extends Loader {
 		'controller' => [
 			'controller',
 			'cliaccess',
+			'webaccess',
 		],
 		'error' => [
 			'logged'
@@ -150,5 +156,9 @@ class CoreLoader extends Loader {
 
 	public function model_format ($file) {
 		return sprintf('%smodel/%s.php', $this->path_to, $file);
+	}
+
+	public function status_format($file) {
+		return sprintf('%sstatus/%s.php', $this->path_to, $file);
 	}
 }

@@ -12,8 +12,6 @@ use fabrico\output\Json;
  * model stored in any type of cache
  */
 abstract class AbstractModel extends Model {
-	use LightMediator;
-
 	/**
 	 * model request variables
 	 */

@@ -27,6 +27,7 @@ Core::run(function (Core $app) {
 	$app->project = new Project;
 	$app->project->set_project_name($conf->core->project->name);
 	$app->project->set_root($conf->core->project->root);
+	$app->project->set_fsroot($conf->core->project->fsroot);
 	$app->project->set_webroot($conf->core->project->webroot);
 	$app->project->set_myroot($conf->core->project->myroot);
 	$app->project->set_mywebroot($conf->core->project->mywebroot);

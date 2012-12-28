@@ -13,7 +13,9 @@ use fabrico\output\Build;
 use fabrico\core\Request;
 use fabrico\core\Router;
 use fabrico\core\Response;
+use fabrico\status\ControllerStatus;
 use fabrico\controller\Controller;
+use fabrico\controller\WebAccess;
 use fabrico\configuration\RoutingRule;
 use fabrico\project\Project;
 
@@ -40,9 +42,9 @@ Core::run(function (Core $app) {
 	if ($router->is_view) {
 		// load page related modules and initialize them
 		$app->loader->load('output');
-		$app->loader->load('page');
 		$app->loader->load('klass');
 		$app->loader->load('model');
+		$app->loader->load('page');
 
 		// add page module to the response, view and build
 		$response->outputcontent = new Page;
@@ -59,12 +61,27 @@ Core::run(function (Core $app) {
 	}
 	else if ($router->is_method) {
 		$app->loader->load('output');
+		$app->loader->load('klass');
+		$app->loader->load('model');
 		$app->loader->load('controller');
 
 		$controller = Controller::req_load($request);
 		$response->outputcontent = new Json;
-		$response->outputcontent->status = Controller::request_status($controller, $request);
-		$response->outputcontent->return = Controller::trigger_web_request($controller, $request);
+		$response->outputcontent->status = null;
+		$response->outputcontent->return = null;
+
+		if (is_null($controller)) {
+			$response->outputcontent->status = ControllerStatus::UNKNOWN_C;
+		}
+		else if ($controller instanceof WebAccess &&
+			Controller::request_status($controller, $request)) {
+				$response->outputcontent->status = ControllerStatus::OK;
+				$response->outputcontent->return =
+					Controller::trigger_web_request($controller, $request);
+		}
+		else {
+			$response->outputcontent->status = ControllerStatus::PRIVATE_C;
+		}
 	}
 	else {
 		$response->addheader(Response::HTTP404);

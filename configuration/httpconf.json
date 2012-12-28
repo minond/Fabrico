@@ -4,7 +4,8 @@
 			"views": ".php",
 			"templates": ".php",
 			"controllers": ".php",
-			"elements": ".php"
+			"elements": ".php",
+			"models": ".php"
 		},
 
 		"to": {

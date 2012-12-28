@@ -5,8 +5,6 @@
  */
 namespace fabrico\klass;
 
-use fabrico\core\util;
-
 /**
  * PHPDoc comment parser
  */

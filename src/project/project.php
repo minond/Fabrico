@@ -21,6 +21,7 @@ class Project extends Module {
 	const JS = 'javascript';
 	const CSS = 'css';
 	const ELEMENT = 'elements';
+	const MODEL = 'models';
 
 	/**
 	 * project root directory
@@ -85,6 +86,20 @@ class Project extends Module {
 	 */
 	public function set_mywebroot ($mywebroot) {
 		$this->mywebroot = $mywebroot;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_fsroot() {
+		return $this->fsroot;
+	}
+
+	/**
+	 * @param string $fsroot
+	 */
+	public function set_fsroot($fsroot) {
+		$this->fsroot = $fsroot;
 	}
 
 	/**

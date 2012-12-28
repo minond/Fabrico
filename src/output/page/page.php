@@ -269,26 +269,47 @@ class Page extends OutputContent {
 	/**
 	 * standard page build preparation
 	 * manages tokens and check the generated html
-	 * @param strign $content
+	 *
+	 * TODO: clean this function up
+	 *
+	 * @param string $content
+	 * @param string $type
 	 * @return string
 	 */
-	public function prepare ($content) {
+	public function prepare ($content, $type) {
 		$this->core->loader->load('parse');
 		$page = $this;
-		$project = $this->core->project;
-		$conf = $this->configuration;
 		$parser = new Parser;
 		$lexer = new Lexer;
+		$project = $this->core->project;
+		$request = $this->core->request;
+		$conf = $this->configuration;
 
 		// remove comments
 		$content = preg_replace('/<!--.+?-->/ms', '', $content);
+
+		// view script and style
+		if ($type === Project::VIEW) {
+			$root = $project->get_fsroot();
+			$view = $request->get_file();
+			$script = $project->get_resource("views/{$view}.js", Project::JS);
+			$style = $project->get_resource("views/{$view}.css", Project::CSS);
+
+			if (file_exists($root . $script)) {
+				$content .= "<page:script file='views/{$view}.js' />";
+			}
+
+			if (file_exists($root . $style)) {
+				$content .= "<page:style file='views/{$view}.css' />";
+			}
+		}
 
 		$lexer->set_string($content);
 		$lexer->add_token(new TagToken);
 		$lexer->add_token(new MergeToken);
 		$lexer->add_token(new FunctionToken);
 
-		return $parser->parse($lexer, function ($orig, & $html, $tokens) use (& $page, & $project, & $conf) {
+		return $parser->parse($lexer, function($orig, & $html, $tokens) use (& $page, & $project, & $conf, & $request) {
 			$includes = [];
 			$page->set_contents($orig, $html);
 
@@ -337,6 +358,7 @@ class Page extends OutputContent {
 				unset($token);
 			}
 
+			// view elements
 			$includes = array_unique($includes);
 			foreach ($includes as $index => $file) {
 				$includes[ $index ] = sprintf('include_once "%s";', $file);

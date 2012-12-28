@@ -20,16 +20,22 @@ Core::run(function (Core $app) {
 		$app->loader->load('cli');
 		$app->loader->load('controller');
 
-		if (strpos($argv[1], ':') !== false && strpos($argv[1], '=') !== false) {
+		if (strpos($argv[1], '-') !== false && strpos($argv[1], '=') !== false) {
 			list(, $request) = explode('=', $argv[1]);
-			list($controller_name, $method) = explode(':', $request);
+			list($controller_name, $method) = explode('-', $request);
 			$controller_name = ucwords($controller_name);
 			$controller = Controller::load($controller_name);
 
 			if ($controller) {
 				if ($controller instanceof CliAccess) {
-					$controller->load_cli_arguments();
-					Controller::trigger_cli_request($controller, $method);
+					$controller->load_cli_property_arguments();
+					$controller->load_cli_function_arguments($method);
+
+					try {
+						Controller::trigger_cli_request($controller, $method);
+					} catch (\Exception $error) {
+						printf($error->getMessage());
+					}
 				}
 				else {
 					printf('Controller "%s" in not public%s', get_class($controller), PHP_EOL);

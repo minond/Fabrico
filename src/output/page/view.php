@@ -22,13 +22,14 @@ class View extends Module {
 	/**
 	 * @param string $raw
 	 * @param string $build
+	 * @param string $type
 	 */
-	private function request_build ($raw, $build) {
+	private function request_build ($raw, $build, $type) {
 		$built = true;
 
 		if ($this->builder->can_build()) {
 			if ($this->builder->should_build([ $raw ], $build)) {
-				$built = $this->builder->build([ $raw ], $build);
+				$built = $this->builder->build([ $raw ], $build, $type);
 			}
 		}
 
@@ -43,7 +44,7 @@ class View extends Module {
 	public function retrive ($file, $type, array & $args = null) {
 		$view = $this->core->project->get_file($file, $type);
 		$build = $this->core->project->get_build($file, $type);
-		$ready = $this->request_build($view, $build);
+		$ready = $this->request_build($view, $build, $type);
 
 		if ($ready) {
 			$this->load_template($build, $args);

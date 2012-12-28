@@ -95,9 +95,10 @@ class Build extends Module {
 	/**
 	 * @param array $raw
 	 * @param string $target
+	 * @param string $type
 	 * @return boolean
 	 */
-	public function build (array $raw, $target) {
+	public function build (array $raw, $target, $type) {
 		$success = false;
 		$content = '';
 
@@ -105,7 +106,7 @@ class Build extends Module {
 			$content .= $this->get_content_of($file);
 		}
 
-		$parsed = $this->core->response->outputcontent->prepare($content);
+		$parsed = $this->core->response->outputcontent->prepare($content, $type);
 		return $this->file_put($target, $parsed);
 	}
 }
