@@ -10,6 +10,13 @@ class Server extends Controller implements CliAccess {
 	use CliSelfDocumenting, CliArgLoader, CliIo;
 
 	/**
+	 * default
+	 */
+	public function trigger($port = '8080', $host = 'localhost', $router = 'server.php') {
+		$this->http($port, $host, $router);
+	}
+
+	/**
 	 * start php's http internal server
 	 */
 	public function http($port = '8080', $host = 'localhost', $router = 'server.php') {

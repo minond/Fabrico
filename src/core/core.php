@@ -79,6 +79,12 @@ class Core {
 	private $getter;
 
 	/**
+	 * working directory
+	 * @var string
+	 */
+	public $wd;
+
+	/**
 	 * custom setter setter
 	 * @param callable $fn
 	 */

@@ -17,6 +17,7 @@ use fabrico\configuration\ConfigurationManager;
 require 'core/core.php';
 
 Core::run(function (Core $app) {
+	$app->wd = getcwd();
 	$app->loader = new CoreLoader;
 
 	// base modules and configuration

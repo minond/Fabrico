@@ -1,4 +1,5 @@
 #!/bin/bash
 
+wd=$(pwd)
 cd "$(locate Fabrico/src/term.php -l 1 | xargs dirname)"
-php term.php --request=$1 ${*:2}
+php term.php --controllername=$1 --methodname=$2 --workingdirectory=$wd ${*:3}

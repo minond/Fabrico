@@ -36,12 +36,13 @@ class util {
 	 * simple merge field parser
 	 * @param string $tmpl
 	 * @param mixed $data
+	 * @param string $flag
 	 * @return string
 	 */
-	public static function merge ($tmpl, $data) {
+	public static function merge ($tmpl, $data, $flag = '#') {
 		foreach ($data as $field => $value) {
 			if (is_scalar($value)) {
-				$tmpl = str_replace("#{{$field}}", $value, $tmpl);
+				$tmpl = str_replace("{$flag}{{$field}}", $value, $tmpl);
 			}
 		}
 

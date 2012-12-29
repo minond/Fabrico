@@ -3,6 +3,7 @@
 		"ext": {
 			"views": ".php",
 			"templates": ".php",
+			"filetemplates": "",
 			"controllers": ".php",
 			"elements": ".php",
 			"models": ".php"
@@ -26,12 +27,19 @@
 		"models": "/models/",
 		"routers": "/routers/",
 		"templates": "/templates/",
+		"filetemplates": "/templates/",
 		"triggers": "/triggers/",
 		"views": "/views/"
 	},
 
+	"namespace": {
+		"controller": "\\Controller",
+		"controllers": "\\Controller\\"
+	},
+
 	"project": {
 		"name": "Propositum",
+		"namespace": "Propositum",
 		"root": "/var/www/Dropbox/apache/Propositum",
 		"myroot": "/var/www/Dropbox/apache/Fabrico",
 		"fsroot": "/var/www/Dropbox/apache",

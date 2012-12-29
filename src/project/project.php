@@ -17,6 +17,7 @@ class Project extends Module {
 	const VIEW = 'views';
 	const BUILD = 'build';
 	const TEMPLATE = 'templates';
+	const FILETEMPLATE = 'filetemplates';
 	const CONTROLLER = 'controllers';
 	const JS = 'javascript';
 	const CSS = 'css';
@@ -68,6 +69,13 @@ class Project extends Module {
 	}
 
 	/**
+	 * @return string
+	 */
+	public function get_root () {
+		return $this->root;
+	}
+
+	/**
 	 * @param string $webroot
 	 */
 	public function set_webroot ($webroot) {
@@ -106,7 +114,7 @@ class Project extends Module {
 	 * @param string $type
 	 * @return string
 	 */
-	private function dr ($type) {
+	public function dr ($type) {
 		return $this->configuration->core->directory->{ $type };
 	}
 
@@ -114,7 +122,7 @@ class Project extends Module {
 	 * @param string $type
 	 * @return string
 	 */
-	private function ext ($type) {
+	public function ext ($type) {
 		return property_exists($this->configuration->core->file->ext, $type) ?
 			$this->configuration->core->file->ext->{ $type } : '';
 	}
@@ -207,5 +215,27 @@ class Project extends Module {
 	public function get_build ($name, $type) {
 		return $this->root . $this->dr(self::BUILD) .
 		       $this->dr($type) . $name . $this->ext($type);
+	}
+
+	/**
+	 * @param string $elfile
+	 * @return string
+	 */
+	public function find_project_file($name, $type) {
+		$file = null;
+
+		list($project_file, $in_project) = $this->got_file($name, $type);
+		list($fabrico_file, $in_fabrico) = $this->got_project_file(
+			$name, $type, '..'
+		);
+
+		if ($in_project) {
+			$file = $project_file;
+		}
+		else if ($in_fabrico) {
+			$file = $fabrico_file;
+		}
+
+		return $file;
 	}
 }

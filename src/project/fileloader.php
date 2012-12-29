@@ -7,6 +7,7 @@ namespace fabrico\project;
 
 /**
  * finds a loads project files (controllers, models, etc.)
+ * TODO: deprivate this
  */
 trait FileLoader {
 	/**

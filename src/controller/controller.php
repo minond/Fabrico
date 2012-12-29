@@ -59,6 +59,13 @@ class Controller extends Module implements FileFinder {
 		$instance = null;
 
 		if (self::load_project_file($controller)) {
+			// project controller? otherwise, internal controller
+			if (self::getcore()->project->has_file($controller, Project::CONTROLLER)) {
+				$controller = self::getcore()->configuration->core->project->namespace .
+					self::getcore()->configuration->core->namespace->controllers .
+					$controller;
+			}
+
 			$instance = new $controller;
 
 			if ($save) {
