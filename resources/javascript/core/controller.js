@@ -1,7 +1,7 @@
 fabrico.register("controller", function(f) {
 	"use strict";
 
-	var gdata, pretty_up;
+	var gdata, pretty_up, me = this;
 
 	/**
 	 * @param string method
@@ -27,10 +27,18 @@ fabrico.register("controller", function(f) {
 	pretty_up = function(ajax, method, args, done, fail) {
 		return ajax
 			.done(function(text) {
-				done(ajax, text, method, args);
+				var json;
+
+				try {
+					json = JSON.parse(text);
+				} catch (ignore) {
+					json = null;
+				}
+
+				(done || me.on_done)(ajax, text, json, method, args);
 			})
 			.fail(function(me, status) {
-				fail(me, status, method, args);
+				(fail || me.on_fail)(me, status, method, args);
 			});
 	};
 
@@ -46,7 +54,7 @@ fabrico.register("controller", function(f) {
 	 * @param string method
 	 * @param array args
 	 */
-	this.on_error = function(jqXHR, text_status, method, args) {};
+	this.on_fail = function(jqXHR, text_status, method, args) {};
 
 	/**
 	 * should be overwritten
@@ -55,7 +63,7 @@ fabrico.register("controller", function(f) {
 	 * @param string method
 	 * @param array args
 	 */
-	this.on_success = function(jqXHR, text_response, method, args) {};
+	this.on_done = function(jqXHR, text_response, json_response, method, args) {};
 
 	/**
 	 * asynchronous controller method request
@@ -68,8 +76,7 @@ fabrico.register("controller", function(f) {
 	this.request = function (method, args, done, fail) {
 		return pretty_up($.ajax({
 			data: gdata(method, args)
-		}), method, args,
-			done || this.on_success, fail || this.on_error);
+		}), method, args, done, fail);
 	};
 
 	/**
@@ -84,8 +91,6 @@ fabrico.register("controller", function(f) {
 		return JSON.parse(pretty_up($.ajax({
 			async: false,
 			data: gdata(method, args)
-		}), method, args,
-			done || this.on_success, fail || this.on_error)
-				.responseText || "{}");
+		}), method, args, done, fail).responseText || "{}");
 	};
 });
