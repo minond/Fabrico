@@ -34,7 +34,7 @@ trait CliArgLoader {
 
 			$options[ "{$prop}::" ] = $prop;
 			$options[ "{$prop[0]}::" ] = $prop;
-		}
+	}
 
 		foreach ($options as $arg => $variable) {
 			if (strlen($this->clean_argument($arg)) === 1) {
@@ -89,9 +89,11 @@ trait CliArgLoader {
 	 * uses function parameters to parse arguments
 	 */
 	public function load_cli_function_arguments($func) {
-		$index = -1;
-		$args = [];
+		global $argv;
+
 		$re = new \ReflectionMethod(get_class($this), $func);
+		$arg_offset = 4;
+		$args = [];
 
 		foreach ($re->getParameters() as $index => $par) {
 			$args[ $par->getName() ] = null;
@@ -103,6 +105,7 @@ trait CliArgLoader {
 
 		list($short, $longs, $options) = $this->short_longs(array_keys($args));
 		$parsed = getopt(implode('', $short), $longs);
+		$index = -1;
 
 		foreach ($args as $name => $def_value) {
 			$index++;
@@ -112,6 +115,12 @@ trait CliArgLoader {
 
 			if (!strlen($this->__function_arguments[ $index ])) {
 				$this->__function_arguments[ $index ] = $def_value;
+			}
+
+			if (is_null($this->__function_arguments[ $index ])) {
+				if (isset($argv[ $index + $arg_offset ])) {
+					$this->__function_arguments[ $index ] = $argv[ $index + $arg_offset ];
+				}
 			}
 		}
 	}

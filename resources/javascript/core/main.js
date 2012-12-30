@@ -1,5 +1,19 @@
-"use strict";
+/**
+ * fabrico modules "namespace"
+ */
+var fabrico = {
+	/**
+	 * holds page information
+	 * @var object
+	 */
+	information: {},
 
-var fabrico = fabrico || {};
-
-fabrico.page = {};
+	/**
+	 * add new fabrico "modules"
+	 * @param string name
+	 * @param function runner
+	 */
+	register: function(name, runner) {
+		runner.apply(this[ name ] = {}, [ this ]);
+	}
+};

@@ -40,7 +40,7 @@ class Def extends Tag {
 
 			if ($this->core->response->outputcontent instanceof Page) {
 				$this->core->response->outputcontent->declare_var(
-					'fabrico.page.controller',
+					'fabrico.information.controller',
 					$this->controller, Page::STR
 				);
 				$this->core->response->outputcontent->declare_var(
