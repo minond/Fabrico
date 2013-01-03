@@ -41,6 +41,13 @@ class Loader {
 	}
 
 	/**
+	 * @see self::load
+	 */
+	public function __invoke() {
+		call_user_func_array([ $this, 'load' ], func_get_args());
+	}
+
+	/**
 	 * @param string $namespace
 	 * @param array $files
 	 */
@@ -52,8 +59,10 @@ class Loader {
 	 * loads files
 	 * @param string $namespace
 	 */
-	public function load ($namespace = false) {
-		$namespace ? $this->load_ns($namespace) : $this->load_all();
+	public function load ($namespace) {
+		foreach (func_get_args() as $namespace) {
+			$this->load_ns($namespace);
+		}
 	}
 
 	/**

@@ -30,6 +30,7 @@ Core::run(function (Core $app) {
 	}
 
 	if ($argc > 1 && isset($opts['controllername'])) {
+		$app->loader->load('klass');
 		$app->loader->load('cli');
 		$app->loader->load('controller');
 

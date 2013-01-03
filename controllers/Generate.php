@@ -80,6 +80,7 @@ class Generate extends Controller implements CliAccess {
 	}
 
 	/**
+	 * generate a new controller
 	 * @param string $name
 	 * @param boolean $force
 	 * @param string $template

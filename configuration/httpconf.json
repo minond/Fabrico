@@ -6,7 +6,8 @@
 			"filetemplates": "",
 			"controllers": ".php",
 			"elements": ".php",
-			"models": ".php"
+			"models": ".php",
+			"cache": ".json"
 		},
 
 		"to": {
@@ -29,7 +30,8 @@
 		"templates": "/templates/",
 		"filetemplates": "/templates/",
 		"triggers": "/triggers/",
-		"views": "/views/"
+		"views": "/views/",
+		"cache": "/build/cache/"
 	},
 
 	"namespace": {

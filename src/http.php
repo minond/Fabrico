@@ -41,10 +41,7 @@ Core::run(function (Core $app) {
 	// route the request
 	if ($router->is_view) {
 		// load page related modules and initialize them
-		$app->loader->load('output');
-		$app->loader->load('klass');
-		$app->loader->load('model');
-		$app->loader->load('page');
+		$app->loader->load('output', 'klass', 'model', 'page');
 
 		// add page module to the response, view and build
 		$response->outputcontent = new Page;
@@ -60,10 +57,7 @@ Core::run(function (Core $app) {
 		}
 	}
 	else if ($router->is_method) {
-		$app->loader->load('output');
-		$app->loader->load('klass');
-		$app->loader->load('model');
-		$app->loader->load('controller');
+		$app->loader->load('output', 'klass', 'model', 'controller');
 
 		$controller = $request->get(Router::$var->controller);
 		$controller = Controller::load($controller, false);

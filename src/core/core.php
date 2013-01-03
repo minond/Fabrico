@@ -17,6 +17,11 @@ require 'loader/coreloader.php';
  */
 class Core {
 	/**
+	 * events bound before an event manager is created.
+	 * @var array
+	 */
+	private $event_backlog = [];
+	/**
 	 * @var core
 	 */
 	private static $instance;
@@ -165,4 +170,34 @@ class Core {
 	public static function run (\Closure $cb) {
 		$cb(self::instance());
 	}
+
+	/**
+	 * @param string $namespace
+	 */
+	public static function load($namespace) {
+		if (isset(self::$instance->loader)) {
+			self::$instance->loader->load($namespace);
+		}
+	}
+
+	/**
+	 * invokation manager to EventDispatch::bind
+	 * @see EventDispatch::bind
+	 * @param strimg $namespace
+	 * @param string $event
+	 * @param callable $action
+	 * @return mixed boolean|null|string
+	 * return information: string - event was bound, boolean(false) - event
+	 * was not bound, null - event was added to event backlog
+	 */
+	public function bind($namespace, $event, $action, $backlog = false) {
+		if (isset($this->event)) {
+			$this->event->bind($namespace, $event, $action);
+		}
+		else if ($backlog) {
+			$this->event_backlog[] = func_get_args();
+		}
+	}
+
+	// public func
 }

@@ -78,7 +78,14 @@ trait DocParser {
 				$fspace = strpos($line, ' ');
 				$pname = trim(substr($line, 1, $fspace));
 				$notes = trim(substr($line, $fspace + 1));
-				$info[ $pname ] = [ $notes ];
+
+				if (isset($info[ $pname ])) {
+					$info[ $pname ][] = $notes;
+				}
+				else {
+					$info[ $pname ] = [ $notes ];
+				}
+
 				$last = & $info[ $pname ];
 			}
 			else {
@@ -87,7 +94,19 @@ trait DocParser {
 		}
 
 		foreach ($info as $key => $lines) {
-			$info[ $key ] = implode($sep, $lines);
+			switch ($key) {
+				case $text_label:
+					$info[ $key ] = implode($sep, $lines);
+					break;
+
+				case 'param':
+					foreach ($info['param'] as $index => $param) {
+						$parts = [ 'type' => '', 'name' => '' ];
+						list($parts['type'], $parts['name']) = explode(' ', $param);
+						$info['param'][ $index ] = $parts;
+					}
+					break;
+			}
 		}
 
 		if (!strlen($info[ $text_label ])) {

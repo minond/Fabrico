@@ -103,7 +103,11 @@ class CoreLoader extends Loader {
 			'cliselfdocumenting',
 			'cliargloader',
 			'cliio',
-		]
+		],
+		'fs' => [
+			'fileaccess',
+			'cache',
+		],
 	];
 
 	public function klass_format ($file) {
@@ -160,5 +164,9 @@ class CoreLoader extends Loader {
 
 	public function status_format($file) {
 		return sprintf('%sstatus/%s.php', $this->path_to, $file);
+	}
+
+	public function fs_format($file) {
+		return sprintf('%sfs/%s.php', $this->path_to, $file);
 	}
 }

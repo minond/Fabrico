@@ -23,6 +23,7 @@ class Project extends Module {
 	const CSS = 'css';
 	const ELEMENT = 'elements';
 	const MODEL = 'models';
+	const CACHE = 'cache';
 
 	/**
 	 * project root directory
@@ -87,6 +88,13 @@ class Project extends Module {
 	 */
 	public function set_myroot ($myroot) {
 		$this->myroot = $myroot;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_myroot() {
+		return $this->myroot;
 	}
 
 	/**
