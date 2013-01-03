@@ -95,6 +95,7 @@ class Generate extends Controller implements CliAccess {
 	}
 
 	/**
+	 * generate a new web controller
 	 * @param string $name
 	 * @param boolean $force
 	 */
@@ -103,6 +104,7 @@ class Generate extends Controller implements CliAccess {
 	}
 
 	/**
+	 * generate a new cli controller
 	 * @param string $name
 	 * @param boolean $force
 	 */

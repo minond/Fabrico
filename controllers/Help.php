@@ -32,8 +32,6 @@ class Help extends Controller implements Cli {
 	 */
 	public $fsa;
 
-	/**
-	 */
 	public function __construct() {
 		$this->fsa = new FileAccess($this->core->project);
 		$this->cdirs = [
@@ -44,11 +42,16 @@ class Help extends Controller implements Cli {
 		];
 	}
 
+	/**
+	 * @param array $funcs
+	 * @return string
+	 */
 	private function compile_document(array $funcs) {
 		$lines = [];
 		$count = 0;
 		$padding_len = 0;
 		$padding = '';
+		$small_padding = '  ';
 		$ruler = implode('', array_map(function() {
 			return '-';
 		}, range(1, $this->get_cli_dims()->cols)));
@@ -71,8 +74,10 @@ class Help extends Controller implements Cli {
 			}
 
 			$info = (array) $info;
-			$lines[] = $this->cbold(strtolower($controller));
-			$lines[] = $ruler;
+			$lines[] = 'fabrico ' .
+				$this->cbold(strtolower($controller)) .
+				' [<args>]';
+			// $lines[] = $ruler;
 
 			foreach ($info['functions'] as $fname => $function) {
 				$function = (array) $function;
@@ -82,8 +87,8 @@ class Help extends Controller implements Cli {
 				foreach ($function['params'] as $param) {
 					$param = (array) $param;
 					$params[] = sprintf(
-						'[--%s<%s>]',
-						$this->cfblue($param['name']),
+						'[--%s=<%s>]',
+						$this->cfblue(substr($param['name'], 1)),
 						$param['type']
 					);
 				}
@@ -92,10 +97,11 @@ class Help extends Controller implements Cli {
 
 				if (strlen($comment) && strlen($params)) {
 					$comment = $comment . PHP_EOL;
-					$params = $padding . $params;
+					$params = $small_padding . $padding . $params;
 				}
 
 				$lines[] = implode('', array_filter([
+					$small_padding,
 					str_pad($fname, $padding_len),
 					$comment, $params
 				]));
@@ -105,6 +111,9 @@ class Help extends Controller implements Cli {
 		return implode(PHP_EOL, $lines) . PHP_EOL;
 	}
 
+	/**
+	 * generate this help content
+	 */
 	public function generate() {
 		$clic = [];
 		$docs = [];
@@ -182,6 +191,9 @@ class Help extends Controller implements Cli {
 		return $docs;
 	}
 
+	/**
+	 * view this help content
+	 */
 	public function trigger() {
 		$docs = $this->jcread(self::DOC_CACHE);
 
