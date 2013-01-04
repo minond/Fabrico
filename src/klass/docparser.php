@@ -95,16 +95,17 @@ trait DocParser {
 
 		foreach ($info as $key => $lines) {
 			switch ($key) {
-				case $text_label:
-					$info[ $key ] = implode($sep, $lines);
-					break;
-
 				case 'param':
 					foreach ($info['param'] as $index => $param) {
 						$parts = [ 'type' => '', 'name' => '' ];
 						list($parts['type'], $parts['name']) = explode(' ', $param);
 						$info['param'][ $index ] = $parts;
 					}
+					break;
+
+				case $text_label:
+				default:
+					$info[ $key ] = implode($sep, $lines);
 					break;
 			}
 		}

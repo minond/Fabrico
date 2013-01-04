@@ -14,6 +14,19 @@ $headers = [
 	'css' => [ 'Content-type: text/css' ],
 ];
 
+$colors = [
+	'0;34',
+	'0;32',
+	'1;32',
+	'0;36',
+	'1;36',
+	'0;31',
+	'1;31',
+	'0;35',
+	'1;35',
+	'0;33',
+];
+
 
 $_REQUEST['_file'] = substr($uri, 1);
 
@@ -33,8 +46,14 @@ if (in_array($ext, $resources)) {
 		readfile($file);
 }
 else {
+	$color = $colors[ mt_rand(0, count($colors) - 1) ];
 	$f = fopen('php://stderr', 'w');
-	fputs($f, "Serving /{$_REQUEST['_file']}\n");
+	fputs($f, "\033[{$color}m\033[1m/{$_REQUEST['_file']}\033[0m\033[0m");
+	$color = $colors[ mt_rand(0, count($colors) - 1) ];
+	fputs($f, " \033[{$color}m");
+	fputs($f, json_encode($_REQUEST, JSON_PRETTY_PRINT));
+	fputs($f, "\033[0m");
+	fputs($f, "\n\n");
 	fclose($f);
 	require 'http.php';
 }
