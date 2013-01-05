@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @package fabrico\output\f
+ * @package fabrico\output
  */
-namespace fabrico\output\f\modal;
+namespace fabrico\output\modal;
 
 /**
  * popup content

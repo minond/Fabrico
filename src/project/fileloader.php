@@ -20,9 +20,10 @@ trait FileLoader {
 
 	/**
 	 * @param mixed $identifier
+	 * @param boolean $versioned
 	 * @return string
 	 */
-	public static function find_project_file($identifier) {
+	public static function find_project_file($identifier, $versioned = false) {
 		$elfile = self::parse_project_file_name($identifier);
 
 		list($projectfile, $in_project) = self::getcore()->project->got_file(

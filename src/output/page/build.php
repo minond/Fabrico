@@ -29,6 +29,8 @@ class Build extends Module {
 	 * @return boolean
 	 */
 	public function should_build (array $raw, $build) {
+		// TODO: remove once done testing
+		return true;
 		$newest = 0;
 
 		foreach ($raw as $file) {

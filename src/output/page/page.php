@@ -316,7 +316,7 @@ class Page extends OutputContent {
 			foreach ($tokens as & $token) {
 				if ($token instanceof TagToken) {
 					$infile = Tag::load_project_file([
-						$token->package,
+						$token->version,
 						$token->namespace,
 						$token->name
 					]);
@@ -325,12 +325,7 @@ class Page extends OutputContent {
 						$includes[] = $infile;
 					}
 
-					$tag = Tag::getclass(
-						$token->package,
-						$token->namespace,
-						$token->name
-					);
-
+					$tag = Tag::getclass($token->namespace, $token->name);
 					$tag = new $tag(
 						$token->property_token->properties,
 						$token->type
@@ -395,10 +390,12 @@ Page::set_template('html', <<<HTML
 	<body class="no-js">
 		#{content}#{js-file}<script type="text/javascript">
 		// clear no-js class
+		"use strict";
 		document.body.className = document.body.className.replace("no-js", "js");
 		#{js-code}
 		if (window.jQuery) {
 			$(function () {
+				"use strict";
 				#{js-load}
 			});
 		}

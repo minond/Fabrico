@@ -1,14 +1,14 @@
 <?php
 
 /**
- * @package fabrico\output\f
+ * @package fabrico\output
  */
-namespace fabrico\output\f\form;
+namespace fabrico\output\form;
 
 use fabrico\core\util;
 use fabrico\output\Tag;
 use fabrico\model\ModelForm;
-use fabrico\output\f\page\Style;
+use fabrico\output\page\Style;
 use fabrico\klass\DocParser;
 
 /**
@@ -44,7 +44,7 @@ class Scaffold extends Tag {
 	 * @see Tag::initialize
 	 */
 	protected function initialize () {
-		Tag::load_project_file('f/page/style');
+		Tag::load_project_file('v0/page/style');
 
 		$form = new ModelForm($this->model);
 		$docs = $this->klass($this->model);

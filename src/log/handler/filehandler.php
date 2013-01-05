@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @package fabrico\logz\handler
+ * @package fabrico\logging\handler
  */
-namespace fabrico\logz\handler;
+namespace fabrico\logging\handler;
 
 /**
  * log to a file

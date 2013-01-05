@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @package fabrico\logz
+ * @package fabrico\logging
  */
-namespace fabrico\logz;
+namespace fabrico\logging;
 
 /**
  * main log interface
@@ -46,12 +46,12 @@ class Logz {
 	 * log format
 	 * @var string
 	 */
-	private $format = '[%d] %n: %s';
+	private $format = '[%d.%m] %n: %s';
 
 	/**
 	 * @param string $name
 	 */
-	public function __construct ($name) {
+	public function __construct ($name = '') {
 		$this->name = $name;
 	}
 
@@ -102,9 +102,12 @@ class Logz {
 	 * @return string
 	 */
 	private function format_string ($format, $msg, $name) {
+		list(, $mt) = explode('.', (string) microtime(true));
+		$mt = str_pad($mt, 4, '0');
+
 		return str_replace(
-			[ '%d', '%n', '%s' ],
-			[ date('Y-m-d H:i:s'), $name, $msg ],
+			[ '%d', '%n', '%s', '%m' ],
+			[ date('Y-m-d H:i:s'), $name, $msg, $mt ],
 			$format
 		);
 	}
@@ -117,6 +120,14 @@ class Logz {
 			$handler->stop();
 			unset($handler);
 		}
+	}
+
+	/**
+	 * @param string $msg
+	 * @param int $level
+	 */
+	public function log($msg, $level) {
+		$this->find_and_send($msg, $level);
 	}
 
 	/**

@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @package fabrico\output\f
+ * @package fabrico\output
  */
-namespace fabrico\output\f\cond;
+namespace fabrico\output\cond;
 
 use fabrico\output\Tag;
 use fabrico\output\TagToken;

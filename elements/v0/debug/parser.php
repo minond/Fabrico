@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @package fabrico\output\f
+ * @package fabrico\output
  */
-namespace fabrico\output\f\debug;
+namespace fabrico\output\debug;
 
 use fabrico\output\Tag;
 use fabrico\core\Mediator;

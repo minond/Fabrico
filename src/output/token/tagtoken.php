@@ -55,13 +55,14 @@ class TagToken extends Token {
 	public static $close_identifier = '</';
 
 	/**
-	 * tag package character
+	 * tag version character
 	 * @var string
 	 */
-	public $package = 'f';
+	public $version = 'v0';
+	// public $version = 'v0.2';
 
 	/**
-	 * tag package namespace
+	 * tag namespace
 	 * @var string
 	 */
 	public $namespace;
@@ -96,7 +97,7 @@ class TagToken extends Token {
 	public static $valid_tag = <<<PHP
 <?php echo \\fabrico\\output\\Tag::factory([
  'type' => '#{type}',
- 'package' => '#{package}',
+ 'version' => '#{version}',
  'namespace' => '#{namespace}',
  'name' => '#{name}',
  'properties' => [ #{properties} ]

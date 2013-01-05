@@ -75,7 +75,7 @@ class Tag implements FileFinder {
 	 * tag's inner content
 	 * @var string
 	 */
-	private $__content = '';
+	private $content = '';
 
 	/**
 	 * tag's classes
@@ -116,21 +116,20 @@ class Tag implements FileFinder {
 	}
 
 	/**
-	 * tag format: <package:namespace:name />
-	 * namespace format: fabrico\output\package\namespace
+	 * tag format: <version:namespace:name />
+	 * namespace format: fabrico\output\namespace\tagname
 	 * class format: name
-	 * @param string $package
 	 * @param string $ns
 	 * @param string $name
 	 * @return string
 	 */
-	public static function getclass ($package, $namespace = '', $name = '') {
+	public static function getclass($namespace = '', $name = '') {
 		if ($namespace)
 			$namespace = "\\{$namespace}";
 		if ($name)
 			$name = "\\{$name}";
 
-		return "\\fabrico\\output\\{$package}{$namespace}{$name}";
+		return "\\fabrico\\output{$namespace}{$name}";
 	}
 
 	/**
@@ -139,7 +138,7 @@ class Tag implements FileFinder {
 	 * @return Tag
 	 */
 	public static function factory (array $tag) {
-		$el = self::getclass($tag['package'], $tag['namespace'], $tag['name']);
+		$el = self::getclass($tag['namespace'], $tag['name']);
 
 		if (!class_exists($el)) {
 			throw new LoggedException("Invalid tag: {$el}");
@@ -170,7 +169,7 @@ class Tag implements FileFinder {
 				// and content
 				$props = array_pop(self::$propstack);
 				$tag->__args = array_pop(self::$argstack);
-				$tag->__content = trim(ob_get_clean());
+				$tag->content = trim(ob_get_clean());
 				$tag->sets($props);
 				break;
 
@@ -227,7 +226,7 @@ class Tag implements FileFinder {
 						$props['class'] = implode(' ', $this->__classes);
 					}
 
-					return self::html(static::$tag, $props, $this->__content);
+					return self::html(static::$tag, $props, $this->content);
 				}
 
 				break;
@@ -307,7 +306,7 @@ class Tag implements FileFinder {
 	 * @return string
 	 */
 	public function get_content () {
-		return $this->__content;
+		return $this->content;
 	}
 
 	/**
@@ -316,7 +315,7 @@ class Tag implements FileFinder {
 	 * @return string
 	 */
 	public function set_content ($content) {
-		$this->__content = $content;
+		$this->content = $content;
 	}
 
 	/**
@@ -393,7 +392,7 @@ class Tag implements FileFinder {
 			$identifier = explode('/', $identifier);
 		}
 
-		list($package, $namespace, $name) = $identifier;
-		return implode(DIRECTORY_SEPARATOR, [$package, $namespace, $name]);
+		list($version, $namespace, $name) = $identifier;
+		return implode(DIRECTORY_SEPARATOR, [$version, $namespace, $name]);
 	}
 }

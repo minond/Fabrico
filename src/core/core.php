@@ -72,6 +72,11 @@ class Core {
 	private $project;
 
 	/**
+	 * @var Logz
+	 */
+	private $log;
+
+	/**
 	 * custom set function
 	 * @var callable
 	 */
@@ -177,6 +182,17 @@ class Core {
 	public static function load($namespace) {
 		if (isset(self::$instance->loader)) {
 			self::$instance->loader->load($namespace);
+		}
+	}
+
+	/**
+	 * invokes Logs
+	 * @param string $msg
+	 * @param int $level
+	 */
+	public function log($msg, $level = \fabrico\logging\Logz::INFO) {
+		if (isset($this->log)) {
+			$this->log->log($msg, $level);
 		}
 	}
 

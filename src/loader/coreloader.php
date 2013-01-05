@@ -16,6 +16,7 @@ class CoreLoader extends Loader {
 		'cache',
 		'configuration',
 		'project',
+		'log',
 	];
 
 	protected $files = [
@@ -80,7 +81,8 @@ class CoreLoader extends Loader {
 		'log' => [
 			'logz',
 			'handler/logzhandler',
-			'handler/filehandler'
+			'handler/filehandler',
+			'handler/stderrhandler',
 		],
 		'cache' => [
 			'cache',

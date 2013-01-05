@@ -25,10 +25,12 @@ Core::run(function (Core $app) {
 	// load route
 	$conf = $app->configuration;
 	$conf->load('routes', '../configuration/routes.json', new RoutingRule);
+	$app->log('routes loaded');
 
 	// apply routing rules
 	foreach ($conf->routes as $route) {
-		if ($route->try_reading($_SERVER['REQUEST_URI'], $_REQUEST)) {
+		if ($route->try_reading($_SERVER['REQUEST_URI'], $_REQUEST)) {	
+			$app->log('route found and applied');
 			break;
 		}
 	}
@@ -37,10 +39,12 @@ Core::run(function (Core $app) {
 	$app->request = $request = new Request;
 	$app->router = $router = new Router($_REQUEST);
 	$app->response = $response = new Response;
+	$app->log('request, router, and response created');
 
 	// route the request
 	if ($router->is_view) {
 		// load page related modules and initialize them
+		$app->log('preparting to serve view request');
 		$app->loader->load('output', 'klass', 'model', 'page');
 
 		// add page module to the response, view and build
@@ -57,6 +61,7 @@ Core::run(function (Core $app) {
 		}
 	}
 	else if ($router->is_method) {
+		$app->log('preparting to serve controller request');
 		$app->loader->load('output', 'klass', 'model', 'controller');
 
 		$controller = $request->get(Router::$var->controller);
@@ -83,8 +88,11 @@ Core::run(function (Core $app) {
 		}
 	}
 	else {
+		$app->log('invalid request');
 		$response->addheader(Response::HTTP404);
 	}
 
+	$app->log('sending response');
 	$response->send();
+	$app->log('response sent');
 });

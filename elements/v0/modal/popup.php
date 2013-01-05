@@ -1,9 +1,9 @@
 <?php
 
 /**
- * @package fabrico\output\f
+ * @package fabrico\output
  */
-namespace fabrico\output\f\modal;
+namespace fabrico\output\modal;
 
 /**
  * modal popup
@@ -19,9 +19,9 @@ class Popup extends \fabrico\output\Tag {
 		$footer_html = '';
 		$body_html = '';
 
-		$header = $this->find_arg('f\modal\Header');
-		$footer = $this->find_arg('f\modal\Footer');
-		$body = $this->find_arg('f\modal\Body');
+		$header = $this->find_arg('modal\Header');
+		$footer = $this->find_arg('modal\Footer');
+		$body = $this->find_arg('modal\Body');
 
 		if ($header) {
 			$header_html = $this->html('div', [
