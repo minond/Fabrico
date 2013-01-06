@@ -25,6 +25,7 @@ Core::run(function (Core $app) {
 	// load route
 	$conf = $app->configuration;
 	$conf->load('routes', '../configuration/routes.json', new RoutingRule);
+	$app->log('running as web app');
 	$app->log('routes loaded');
 
 	// apply routing rules

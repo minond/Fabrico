@@ -48,6 +48,7 @@ if (in_array($ext, $resources)) {
 else {
 	$color = $colors[ mt_rand(0, count($colors) - 1) ];
 	$f = fopen('php://stderr', 'w');
+	fputs($f, "\n");
 	fputs($f, "\033[{$color}m\033[1m/{$_REQUEST['_file']}\033[0m\033[0m");
 	$color = $colors[ mt_rand(0, count($colors) - 1) ];
 	fputs($f, " \033[{$color}m");
