@@ -12,6 +12,6 @@ class Header extends \fabrico\output\Tag {
 	protected static $arg = true;
 
 	protected function initialize() {
-		$this->set_content($this->get_content() . ' - from v0');
+		$this->set_content($this->get_content() . ' - from v1');
 	}
 }

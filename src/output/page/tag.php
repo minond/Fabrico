@@ -78,6 +78,12 @@ class Tag implements FileFinder {
 	private $content = '';
 
 	/**
+	 * element's version
+	 * @var int
+	 */
+	private $version = 0;
+
+	/**
 	 * tag's classes
 	 * @var array
 	 */

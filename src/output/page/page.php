@@ -79,6 +79,12 @@ class Page extends OutputContent {
 	private $js_load = [];
 
 	/**
+	 * element version
+	 * @var int
+	 */
+	public $version = 0;
+
+	/**
 	 * templates
 	 * @var array
 	 */
@@ -281,6 +287,7 @@ class Page extends OutputContent {
 		$page = $this;
 		$parser = new Parser;
 		$lexer = new Lexer;
+		$app = $this->core;
 		$project = $this->core->project;
 		$request = $this->core->request;
 		$conf = $this->configuration;
@@ -309,20 +316,48 @@ class Page extends OutputContent {
 		$lexer->add_token(new MergeToken);
 		$lexer->add_token(new FunctionToken);
 
-		return $parser->parse($lexer, function($orig, & $html, $tokens) use (& $page, & $project, & $conf, & $request) {
+		return $parser->parse($lexer, function($orig, & $html, $tokens) use (& $page, & $project, & $conf, & $request, & $app) {
 			$includes = [];
+			$fileloaded = false;
+			$orig_version = (int) $page->version;
 			$page->set_contents($orig, $html);
 
 			foreach ($tokens as & $token) {
 				if ($token instanceof TagToken) {
-					$infile = Tag::load_project_file([
-						$token->version,
-						$token->namespace,
-						$token->name
-					]);
+					$fileloaded = false;
 
-					if ($infile) {
-						$includes[] = $infile;
+					for ($i = $page->version; $i >= 0; $i--) {
+						$version = "v{$i}";
+
+						// don't overwrite tag specific versioning
+						if (isset($token->property_token->properties['version']) &&
+							$orig_version !== (int) $token->property_token->properties['version']) {
+								$i = -1;
+								$version = "v{$token->property_token->properties['version']}";
+						}
+
+						$infile = Tag::load_project_file([
+							$version,
+							$token->namespace,
+							$token->name
+						]);
+
+						if ($infile) {
+							$app->log("file: $infile, pagev: {$page->version}");
+							$includes[] = $infile;
+							$fileloaded = true;
+							break;
+						}
+					}
+
+					if (!$fileloaded) {
+						$app->log(
+							'file not found: ' .
+							Tag::getclass($token->namespace, $token->name)
+						);
+
+						unset($token);
+						continue;
 					}
 
 					$tag = Tag::getclass($token->namespace, $token->name);
@@ -345,6 +380,11 @@ class Page extends OutputContent {
 								$replace, $html
 							);
 						}
+					}
+
+					// def tag?
+					if ($tag instanceof \fabrico\output\page\Def) {
+						$page->version = (int) substr($version, 1);
 					}
 
 					unset($tag);
