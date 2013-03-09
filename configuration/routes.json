@@ -1,3 +1,0 @@
-{
-	"projects_home": "/projects/#{project_id:\\d+}/#{task_id:\\d+}"
-}
