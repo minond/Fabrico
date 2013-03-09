@@ -4,12 +4,13 @@
 define('FABRICO_NS_ROOT', 'Fabrico');
 define('FABRICO_DEF_EXT', '.php');
 define('FABRICO_SRC_ROOT', dirname(__FILE__));
+define('FABRICO_ROOT', FABRICO_SRC_ROOT . '/../');
 
 // everything should always be triggered from Fabrico's src directory
-chdir(FABRICO_SRC_ROOT);
+chdir(FABRICO_ROOT);
 
 // request the vendor's autoload
-require '../vendor/autoload.php';
+require 'vendor/autoload.php';
 
 // and create Fabrico's own autoload
 spl_autoload_register(function ($class) {

@@ -12,10 +12,10 @@ class Application {
 	private $root;
 
 	/**
-	 * current request (ie. http, cli)
-	 * @var ApplicationRequest
+	 * current task
+	 * @var Job
 	 */
-	private $request;
+	private $job;
 
 	/**
 	 * project root setter
@@ -29,23 +29,23 @@ class Application {
 	 * project root setter
 	 * @return string
 	 */
-	public function getRoot($root) {
+	public function getRoot() {
 		return $this->root;
 	}
 
 	/**
-	 * request setter
-	 * @param ApplicationRequest $request
+	 * job setter
+	 * @param Job $job
 	 */
-	public function setRequest(ApplicationRequest & $request) {
-		return $this->request = $request;
+	public function setJob( & $job) {
+		return $this->job = $job;
 	}
 
 	/**
-	 * request getter
-	 * @return ApplicationRequest
+	 * job getter
+	 * @return Job
 	 */
-	public function getRequest() {
-		return $this->request;
+	public function getJob() {
+		return $this->job;
 	}
 }
