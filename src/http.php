@@ -1,6 +1,6 @@
 <?php
 
-require 'Autoload.php';
+require 'autoload.php';
 
 call_user_func(function() {
 	$app = new Fabrico\Core\Application;
