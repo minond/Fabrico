@@ -24,6 +24,12 @@
 	font: bold 15px Arial;
 }
 
+.modal .modal_header .modal_close {
+	cursor: pointer;
+	font: normal 11px monospace;
+	float: right;
+}
+
 .modal .modal_content {
 	text-align: left;
 }

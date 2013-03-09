@@ -343,7 +343,6 @@ class Page extends OutputContent {
 						]);
 
 						if ($infile) {
-							$app->log("file: $infile, pagev: {$page->version}");
 							$includes[] = $infile;
 							$fileloaded = true;
 							break;
