@@ -1,9 +1,10 @@
 <?php
 
-namespace Fabrico\Test;
+namespace Fabrico\Test\Event;
 
 use Fabrico\Event\Listener;
 use Fabrico\Event\Signal;
+use Fabrico\Test\Test;
 
 class ListenerTest extends Test {
 	public function testListenersOfCorrentTypeAndLabelAreFound() {

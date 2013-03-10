@@ -1,10 +1,11 @@
 <?php
 
-namespace Fabrico\Test;
+namespace Fabrico\Test\Core;
 
 use Fabrico\Core\Job;
 use Fabrico\Core\Task;
-use Fabrico\Core\BlankTask;
+use Fabrico\Test\Mock\Core\BlankTask;
+use Fabrico\Test\Test;
 
 require 'tests/mocks/Core/Task/BlankTask.php';
 

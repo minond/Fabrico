@@ -1,9 +1,10 @@
 <?php
 
-namespace Fabrico\Test;
+namespace Fabrico\Test\Core;
 
 use Fabrico\Core\Application;
 use Fabrico\Core\Job;
+use Fabrico\Test\Test;
 
 class ApplicationTest extends Test {
 	public $app;

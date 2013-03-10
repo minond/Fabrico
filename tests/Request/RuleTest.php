@@ -1,8 +1,9 @@
 <?php
 
-namespace Fabrico\Test;
+namespace Fabrico\Test\Request;
 
 use Fabrico\Request\Rule;
+use Fabrico\Test\Test;
 
 class RuleTest extends Test {
 	public function testPatterStringsCanBeSetAndRetrieved() {

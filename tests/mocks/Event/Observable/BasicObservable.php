@@ -1,6 +1,9 @@
 <?php
 
-namespace Fabrico\Event;
+namespace Fabrico\Test\Mock\Event;
+
+use Fabrico\Event\Observable;
+use Fabrico\Event\Signal;
 
 class BasicObservable {
 	use Observable;

@@ -1,6 +1,8 @@
 <?php
 
-namespace Fabrico\Core;
+namespace Fabrico\Test\Mock\Core;
+
+use Fabrico\Core\Task;
 
 class BlankTask implements Task {
 	public function valid() {

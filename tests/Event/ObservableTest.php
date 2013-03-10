@@ -1,9 +1,10 @@
 <?php
 
-namespace Fabrico\Test;
+namespace Fabrico\Test\Event;
 
 use Fabrico\Event\Signal;
-use Fabrico\Event\BasicObservable;
+use Fabrico\Test\Mock\Event\BasicObservable;
+use Fabrico\Test\Test;
 
 require 'tests/mocks/Event/Observable/BasicObservable.php';
 

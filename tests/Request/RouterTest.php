@@ -1,9 +1,10 @@
 <?php
 
-namespace Fabrico\Test;
+namespace Fabrico\Test\Request;
 
 use Fabrico\Request\Router;
 use Fabrico\Request\Rule;
+use Fabrico\Test\Test;
 
 class RouterTest extends Test {
 	public function testOneRulesCanBeAdded() {
