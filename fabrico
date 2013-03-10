@@ -1,0 +1,20 @@
+#!/bin/bash
+
+build() {
+	# run all tests
+	./vendor/bin/phpunit
+
+	# and generate documentation
+	./vendor/bin/apigen.php --source src/ --destination bin/docs/
+}
+
+for arg in "$@"
+do
+	case "$arg" in
+		build)
+			build
+			;;
+		--)
+			exit 1
+	esac
+done
