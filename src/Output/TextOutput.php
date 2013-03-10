@@ -28,5 +28,7 @@ class TextOutput implements Output {
 	 * handles output data
 	 * @return void
 	 */
-	public function output();
+	public function output() {
+		echo $this->content;
+	}
 }

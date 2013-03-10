@@ -7,7 +7,7 @@ use Fabrico\Core\Task;
 use Fabrico\Test\Mock\Core\BlankTask;
 use Fabrico\Test\Test;
 
-require 'tests/mocks/Core/Task/BlankTask.php';
+require_once 'tests/mocks/Core/Task/BlankTask.php';
 
 class JobTest extends Test {
 	public $job;

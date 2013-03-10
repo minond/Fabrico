@@ -8,10 +8,11 @@ use Fabrico\Core\Job;
 call_user_func(function() {
 	$app = new Application;
 	$job = new Job;
+	$par = (object) $_REQUEST;
 
 	// parse project information
-	$app->setRoot('/home/server/' . $_REQUEST['_project']);
-	unset($_REQUEST['_project']);
+	$app->setRoot('/home/server/' . $par->_project);
+	unset($par->_project);
 
 	// parse view information
 	// $req->setViewFile($_REQUEST['_view']);
