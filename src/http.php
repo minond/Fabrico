@@ -2,9 +2,12 @@
 
 require 'autoload.php';
 
+use Fabrico\Core\Application;
+use Fabrico\Core\Job;
+
 call_user_func(function() {
-	$app = new Fabrico\Core\Application;
-	$job = new Fabrico\Core\Job;
+	$app = new Application;
+	$job = new Job;
 
 	// parse project information
 	$app->setRoot('/home/server/' . $_REQUEST['_project']);
@@ -24,5 +27,5 @@ call_user_func(function() {
 		// die("Invalid request");
 	// }
 
-	die("S");
+	echo("S");
 });

@@ -1,0 +1,15 @@
+<?php
+
+namespace Fabrico\Event;
+
+class BasicObservable {
+	use Observable;
+
+	public $func_called = false;
+
+	public function func() {
+		$this->signal(__FUNCTION__, Signal::PRE, func_get_args());
+		$this->func_called = true;
+		$this->signal(__FUNCTION__, Signal::POST, func_get_args());
+	}
+}
