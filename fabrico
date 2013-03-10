@@ -1,18 +1,33 @@
 #!/bin/bash
 
-build() {
-	# run all tests
+tests() {
 	./vendor/bin/phpunit
+}
 
-	# and generate documentation
+documentation() {
 	./vendor/bin/apigen.php --source src/ --destination bin/docs/
+}
+
+benchmark() {
+	ab -c 5 -n 1000 http://localhost/Fabrico/httpbench
 }
 
 for arg in "$@"
 do
 	case "$arg" in
+		test)
+			tests
+			;;
+		doc)
+			documentation
+			;;
+		bench)
+			benchmark
+			;;
 		build)
-			build
+			tests
+			documentation
+			bench
 			;;
 		--)
 			exit 1
