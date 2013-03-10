@@ -5,7 +5,7 @@ namespace Fabrico\Test;
 use Fabrico\Core\Application;
 use Fabrico\Core\Job;
 
-class ApplicationTest extends \PHPUnit_Framework_TestCase {
+class ApplicationTest extends Test {
 	public $app;
 
 	public function setUp() {

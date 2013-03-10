@@ -8,7 +8,7 @@ use Fabrico\Core\BlankTask;
 
 require 'tests/mocks/Core/Task/BlankTask.php';
 
-class JobTest extends \PHPUnit_Framework_TestCase {
+class JobTest extends Test {
 	public $job;
 	public $task;
 	public $tasks;
