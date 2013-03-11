@@ -1,4 +1,5 @@
 *.swp
 composer.lock
 vendor/
-bin/
+bin/tests/
+bin/docs/
