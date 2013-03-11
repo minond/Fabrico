@@ -12,21 +12,21 @@ namespace Fabrico\Event;
  *     use Observable;
  *
  *     public function greet($yourname) {
- *         $this->signal(__FUNCTION__, Signal::PRE, func_get_args());
+ *         $this->signal(__FUNCTION__, Listener::PRE, func_get_args());
  *         echo 'hi ' . $yourname;
- *         $this->signal(__FUNCTION__, Signal::POST, func_get_args());
+ *         $this->signal(__FUNCTION__, Listener::POST, func_get_args());
  *     }
  * }
  * 
  * // example class listener
- * User::observe('greet', Signal::PRE, function($name) {
+ * User::observe('greet', Listener::PRE, function($name) {
  *     // $this => instance
  *     // $name => $yourname
  * });
  * 
  * // example instance listener
  * $me = new User;
- * $me->subscribe('greet', Signal::PRE, function($name) {
+ * $me->subscribe('greet', Listener::PRE, function($name) {
  *     // $this => instance
  *     // $name => $yourname
  * });

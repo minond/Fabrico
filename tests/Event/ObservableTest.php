@@ -2,29 +2,29 @@
 
 namespace Fabrico\Test\Event;
 
-use Fabrico\Event\Signal;
 use Fabrico\Test\Mock\Event\BasicObservable;
 use Fabrico\Test\Test;
+use Fabrico\Event\Listener;
 
 require 'tests/mocks/Event/Observable/BasicObservable.php';
 
 class ObservableTest extends Test {
 	public function testClassListenersCanBeSaved() {
 		$this->assertTrue(BasicObservable::observe(
-			'rand', Signal::PRE, function() {}));
+			'rand', Listener::PRE, function() {}));
 	}
 
 	public function testInstanceListenersCanBeSaved() {
 		$obj = new BasicObservable;
 		$this->assertTrue($obj->subscribe(
-			'rand', Signal::PRE, function() {}));
+			'rand', Listener::PRE, function() {}));
 	}
 
 	public function testPreSignalsGoToAClassListener() {
 		$called = false;
 		$obj = new BasicObservable;
 
-		BasicObservable::observe('func', Signal::PRE, function() use (& $called) {
+		BasicObservable::observe('func', Listener::PRE, function() use (& $called) {
 			$called = true;
 		});
 
@@ -36,7 +36,7 @@ class ObservableTest extends Test {
 		$called = false;
 		$obj = new BasicObservable;
 
-		BasicObservable::observe('func', Signal::POST, function() use (& $called) {
+		BasicObservable::observe('func', Listener::POST, function() use (& $called) {
 			$called = true;
 		});
 
@@ -48,7 +48,7 @@ class ObservableTest extends Test {
 		$called = false;
 		$obj = new BasicObservable;
 
-		$obj->subscribe('func', Signal::PRE, function() use (& $called) {
+		$obj->subscribe('func', Listener::PRE, function() use (& $called) {
 			$called = true;
 		});
 
@@ -60,7 +60,7 @@ class ObservableTest extends Test {
 		$called = false;
 		$obj = new BasicObservable;
 
-		$obj->subscribe('func', Signal::POST, function() use (& $called) {
+		$obj->subscribe('func', Listener::POST, function() use (& $called) {
 			$called = true;
 		});
 
@@ -73,7 +73,7 @@ class ObservableTest extends Test {
 		$obj = new BasicObservable;
 		$you = new BasicObservable;
 
-		$obj->subscribe('func', Signal::POST, function() use (& $called) {
+		$obj->subscribe('func', Listener::POST, function() use (& $called) {
 			$called = true;
 		});
 

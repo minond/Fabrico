@@ -7,6 +7,16 @@ namespace Fabrico\Event;
  */
 class Listener {
 	/**
+	 * before a function call
+	 */
+	const PRE = 'pre';
+
+	/**
+	 * after a function call
+	 */
+	const POST = 'post';
+
+	/**
 	 * listener name
 	 * @var string
 	 */
@@ -15,7 +25,6 @@ class Listener {
 	/**
 	 * listener type
 	 * @var string
-	 * @see Signal
 	 */
 	private $type;
 

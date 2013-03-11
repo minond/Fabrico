@@ -3,7 +3,6 @@
 namespace Fabrico\Test\Event;
 
 use Fabrico\Event\Reporter;
-use Fabrico\Event\Signal;
 use Fabrico\Test\Mock\Event\BasicObservable;
 use Fabrico\Test\Mock\Event\UnusedObservable;
 use Fabrico\Test\Mock\Event\QueuedObservable1;
