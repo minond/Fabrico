@@ -2,6 +2,11 @@
 
 namespace Fabrico\Request;
 
+use Fabrico\Response\HttpResponse;
+use Fabrico\Output\TextOutput;
+use Fabrico\Output\HtmlOutput;
+use Fabrico\Output\JsonOutput;
+
 /**
  * handles all http requests
  */
@@ -211,5 +216,34 @@ class HttpRequest implements Request {
 	 */
 	public function getData() {
 		return $this->data;
+	}
+
+	/**
+	 * @inheritdoc
+	 */
+	public function respondWith() {
+		$res = new HttpResponse;
+		$out = null;
+
+		switch ($this->format) {
+			case self::JSON:
+				$out = new JsonOutput;
+				break;
+
+			case self::HTML:
+				$out = new HtmlOutput;
+				break;
+
+			case self::TEXT:
+			default:
+				$out = new TextOutput;
+				break;
+		}
+
+		if ($out) {
+			$res->setOutput($out);
+		}
+
+		return $res;
 	}
 }

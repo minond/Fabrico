@@ -5,7 +5,7 @@ tests() {
 }
 
 documentation() {
-	./vendor/bin/apigen.php --source src/ --destination bin/autogen/docs/
+	./vendor/bin/apigen.php --source src/ --destination bin/autogen/docs/ --todo 
 }
 
 benchmark() {

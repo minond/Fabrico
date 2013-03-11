@@ -3,6 +3,7 @@
 namespace Fabrico\Response;
 
 use Fabrico\Output\Output;
+use Fabrico\Output\HttpOutput;
 
 /**
  * responds to a browser
@@ -25,6 +26,10 @@ class HttpResponse implements Response {
 	 */
 	public function setOutput(Output $output) {
 		$this->output = $output;
+
+		if ($output instanceof HttpOutput) {
+			$this->setHeaders($output->getHeaders());
+		}
 	}
 
 	/**
@@ -44,6 +49,17 @@ class HttpResponse implements Response {
 	public function setHeader($header, $value, $overwrite = false) {
 		if ($overwrite || !$this->hasHeader($header)) {
 			$this->headers[ $header ] = $value;
+		}
+	}
+
+	/**
+	 * sets multiple headers at once
+	 * @param array $headers
+	 * @param boolean $overwrite
+	 */
+	public function setHeaders($headers, $overwrite = false) {
+		foreach ($headers as $header => $value) {
+			$this->setHeader($header, $value, $overwrite);
 		}
 	}
 

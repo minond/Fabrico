@@ -12,6 +12,29 @@ class HttpRequestTest extends Test {
 		$this->req = new HttpRequest;
 	}
 
+	/**
+	 * used to test Request::respondWith returns a response with the correct
+	 * output object
+	 */
+	public function dataProviderFormatOutputMap() {
+		return [
+			[ HttpRequest::HTML, '\Fabrico\Output\HtmlOutput' ],
+			[ HttpRequest::TEXT, '\Fabrico\Output\TextOutput' ],
+			[ HttpRequest::JSON, '\Fabrico\Output\JsonOutput' ],
+		];
+	}
+
+	/**
+	 * used to test all formats work
+	 */
+	public function dataProviderAllFormatTypes() {
+		return [
+			[ HttpRequest::HTML ],
+			[ HttpRequest::JSON ],
+			[ HttpRequest::TEXT ],
+		];
+	}
+
 	public function testDataCanBeSetAndRetrieved() {
 		$data = ['hi' => true];
 		$this->req->setData($data);
@@ -71,9 +94,12 @@ class HttpRequestTest extends Test {
 		$this->assertEquals('hi', $this->req->getViewFile());
 	}
 
-	public function testHttpRequestsUpdateTheFormatsAccordingToTheViewFileRequested() {
-		$this->req->setViewFile('hi.html');
-		$this->assertEquals('html', $this->req->getFormat());
+	/**
+	 * @dataProvider dataProviderAllFormatTypes
+	 */
+	public function testHttpRequestsUpdateTheFormatsAccordingToTheViewFileRequested($format) {
+		$this->req->setViewFile("hi.{$format}");
+		$this->assertEquals($format, $this->req->getFormat());
 	}
 
 	/**
@@ -93,5 +119,14 @@ class HttpRequestTest extends Test {
 		$this->req->setController('hi');
 		$this->req->setMethod('hi');
 		$this->assertTrue($this->req->valid());
+	}
+
+	/**
+	 * @dataProvider dataProviderFormatOutputMap
+	 */
+	public function testOutputTypeMatchRequestTypes($format, $class) {
+		$this->req->setFormat($format);
+		$out = $this->req->respondWith()->getOutput();
+		$this->assertInstanceOf($class, $out);
 	}
 }

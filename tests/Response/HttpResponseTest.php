@@ -48,6 +48,38 @@ class HttpResponseTest extends Test {
 		$this->assertFalse($this->res->hasHeader('hi'));
 	}
 
+	public function testMultipleHeadersCanBeSetAtOnce() {
+		$this->res->setHeaders(['hi' => 'bye', 'two' => 'yes']);
+		$this->assertTrue($this->res->hasHeader('hi'));
+		$this->assertTrue($this->res->hasHeader('two'));
+	}
+
+	public function testResponseLoadsDefaultHeadersSetByTheOutputObject() {
+		$text = new TextOutput;
+		$headers = $text->getHeaders();
+		$this->res->setOutput($text);
+
+		foreach ($headers as $header => $value) {
+			$this->assertTrue($this->res->hasHeader($header));
+			$this->assertEquals($value, $this->res->getHeader($header));
+		}
+	}
+
+	public function testOutputHeadersDoNotOverwriteHeadersAlreadySetInResponse() {
+		$text = new TextOutput;
+		$defval = 'thisisarandomstring';
+		$headers = $text->getHeaders();
+
+		foreach ($headers as $header => $value) break;
+
+		// set the header to any value
+		$this->res->setHeader($header, $defval);
+
+		// then set the output object
+		$this->res->setOutput($text);
+		$this->assertEquals($defval, $this->res->getHeader($header));
+	}
+
 	public function testResponseNeedsAnOutput() {
 		$this->assertFalse($this->res->ready());
 	}

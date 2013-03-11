@@ -5,8 +5,8 @@ namespace Fabrico\Output;
 /**
  * handles text output
  */
-class TextOutput implements Output {
-	private $content;
+class TextOutput implements Output, HttpOutput {
+	protected $content;
 
 	/**
 	 * content setter
@@ -30,5 +30,15 @@ class TextOutput implements Output {
 	 */
 	public function output() {
 		echo $this->content;
+	}
+
+	/**
+	 * sets Content-Type to text
+	 * @codeCoverageIgnore
+	 */
+	public function getHeaders() {
+		return [
+			'Content-Type' => 'text'
+		];
 	}
 }
