@@ -39,8 +39,10 @@ call_user_func(function() {
 	$app->setResponse($res);
 
 	if ($req->valid()) {
-		print_r($app);
-		die("Routing request");
+		$res->getOutput()->setContent('hi');
+		$res->getOutput()->output();
+		// print_r($app);
+		// die("Routing request");
 	} else {
 		die("Invalid request");
 	}

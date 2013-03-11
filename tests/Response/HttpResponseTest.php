@@ -97,4 +97,18 @@ class HttpResponseTest extends Test {
 		$this->res->setOutput($text);
 		$this->res->send();
 	}
+
+	/**
+	 * @expectedException Exception
+	 * @outputBuffering enabled
+	 */
+	public function testHeadersAreNotSentAfterContentHasBeenSend() {
+		$text = new TextOutput;
+		$text->setContent('hi');
+		$this->res->setOutput($text);
+		ob_start();
+		$this->res->send();
+		ob_get_clean();
+		$this->res->sendHeaders();
+	}
 }

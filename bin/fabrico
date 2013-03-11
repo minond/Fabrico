@@ -51,9 +51,19 @@ do
 			codequality
 			;;
 		build)
+			clear
+			echo "running tests..."
 			tests
+			echo "done"
+			echo "generating code quality..."
+			codequality
+			echo "done"
+			echo "generating documentation..."
 			documentation
-			bench
+			echo "done"
+			echo "running basic benchmark..."
+			benchmark
+			echo "done"
 			;;
 		--)
 			exit 1

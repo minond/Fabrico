@@ -10,6 +10,12 @@ use Fabrico\Output\HttpOutput;
  */
 class HttpResponse implements Response {
 	/**
+	 * checked before sending headers
+	 * @var boolean
+	 */
+	private $content_sent = false;
+
+	/**
 	 * @var Output
 	 */
 	private $output;
@@ -91,6 +97,23 @@ class HttpResponse implements Response {
 	}
 
 	/**
+	 * sends headers to brownser
+	 * @throws \Exception
+	 */
+	public function sendHeaders() {
+		if ($this->content_sent) {
+			throw new \Exception('Content already sent');
+		}
+
+		// TODO: implement test
+		// @codeCoverageIgnoreStart
+		foreach ($this->headers as $header => $val) {
+			header(strlen($val) ? "{$header}: {$val}" : $header);
+		}
+	}
+	// @codeCoverageIgnoreEnd
+
+	/**
 	 * @return boolean
 	 */
 	public function ready() {
@@ -101,8 +124,8 @@ class HttpResponse implements Response {
 	 * @return mixed
 	 */
 	public function send() {
-		// send headers
 		// then output
 		$this->output->output();
+		$this->content_sent = true;
 	}
 }
