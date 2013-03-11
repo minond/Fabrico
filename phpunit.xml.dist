@@ -28,6 +28,8 @@
     </filter>
 
 	<logging>
-		<log type="coverage-html" target="./bin/tests" highlight="true" />
+		<log type="coverage-html" target="./bin/autogen/tests/report/" highlight="true" />
+		<log type="tap" target="./bin/autogen/tests/list.tap" />
+		<log type="json" target="./bin/autogen/tests/data.json" />
 	</logging>
 </phpunit>

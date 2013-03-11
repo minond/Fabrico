@@ -1,5 +1,4 @@
 *.swp
 composer.lock
 vendor/
-bin/tests/
-bin/docs/
+bin/autogen/
