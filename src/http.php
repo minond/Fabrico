@@ -3,11 +3,12 @@
 require 'autoload.php';
 
 use Fabrico\Core\Application;
-use Fabrico\Core\Job;
+use Fabrico\Response\HttpResponse;
 
 call_user_func(function() {
 	$app = new Application;
-	$job = new Job;
+	$res = new HttpResponse;
+
 	$par = (object) $_REQUEST;
 
 	// parse project information

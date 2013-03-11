@@ -3,7 +3,8 @@
 namespace Fabrico\Test\Core;
 
 use Fabrico\Core\Application;
-use Fabrico\Core\Job;
+use Fabrico\Response\HttpResponse;
+use Fabrico\Request\HttpRequest;
 use Fabrico\Test\Test;
 
 class ApplicationTest extends Test {
@@ -18,9 +19,15 @@ class ApplicationTest extends Test {
 		$this->assertEquals('/', $this->app->getRoot());
 	}
 
-	public function testJobsCanBeSetAndRetrieved() {
-		$job = new Job;
-		$this->app->setJob($job);
-		$this->assertEquals($job, $this->app->getJob());
+	public function testRequestCanBeSetAndRetrieved() {
+		$req = new HttpRequest;
+		$this->app->setRequest($req);
+		$this->assertEquals($req, $this->app->getRequest());
+	}
+
+	public function testResponseCanBeSetAndRetrieved() {
+		$res = new HttpResponse;
+		$this->app->setResponse($res);
+		$this->assertEquals($res, $this->app->getResponse());
 	}
 }
