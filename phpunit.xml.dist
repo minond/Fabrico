@@ -9,7 +9,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="src/test.php">
+         bootstrap="src/scripts/test.php">
     <testsuites>
         <testsuite name="Fabrico Test Suite">
             <directory>./tests</directory>
@@ -20,6 +20,7 @@
         <whitelist>
             <directory>./src/*/</directory>
             <exclude>
+                <directory>./src/scripts</directory>
                 <directory>./vendor</directory>
                 <directory>./tests</directory>
             </exclude>

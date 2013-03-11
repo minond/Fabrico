@@ -3,8 +3,8 @@
 // basic information about Fabrico's namespace and file structure
 define('FABRICO_NS_ROOT', 'Fabrico');
 define('FABRICO_DEF_EXT', '.php');
-define('FABRICO_SRC_ROOT', dirname(__FILE__));
-define('FABRICO_ROOT', FABRICO_SRC_ROOT . '/../');
+define('FABRICO_SRC_ROOT', dirname(__FILE__) . '/../');
+define('FABRICO_ROOT', FABRICO_SRC_ROOT . '../');
 
 // everything should always be triggered from Fabrico's root directory
 chdir(FABRICO_ROOT);
