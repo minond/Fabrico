@@ -2,6 +2,9 @@
 
 namespace Fabrico\Request;
 
+/**
+ * base interface for all incoming request (ie. Http, Cli)
+ */
 interface Request {
 	/**
 	 * @return boolean

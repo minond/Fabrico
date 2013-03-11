@@ -28,6 +28,11 @@ class HttpRequestTest extends Test {
 		$this->assertEquals('hi', $this->req->getController());
 	}
 
+	public function testFormatCanBeSetAndRetrieved() {
+		$this->req->setController(HttpRequest::JSON);
+		$this->assertEquals(HttpRequest::JSON, $this->req->getController());
+	}
+
 	public function testMethodCanBeSetAndRetrieved() {
 		$this->req->setMethod('hi');
 		$this->assertEquals('hi', $this->req->getMethod());
@@ -59,6 +64,23 @@ class HttpRequestTest extends Test {
 	public function testHttpRequestsAreValidOnceTheyGetAViewFile() {
 		$this->req->setViewFile('hi');
 		$this->assertTrue($this->req->valid());
+	}
+
+	public function testHttpRequestsRemoveExtensionsFromViewFiles() {
+		$this->req->setViewFile('hi.html');
+		$this->assertEquals('hi', $this->req->getViewFile());
+	}
+
+	public function testHttpRequestsUpdateTheFormatsAccordingToTheViewFileRequested() {
+		$this->req->setViewFile('hi.html');
+		$this->assertEquals('html', $this->req->getFormat());
+	}
+
+	/**
+	 * @expectedException Exception
+	 */
+	public function testHttpRequestsDoNotSetInvalidFormats() {
+		$this->req->setFormat('invalid');
 	}
 
 	public function testHttpRequestsAreValidOnceTheyGetAControllerAction() {

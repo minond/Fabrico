@@ -5,6 +5,10 @@ namespace Fabrico\Core;
 use Fabrico\Request\Request;
 use Fabrico\Response\Response;
 
+/**
+ * base Fabrico application class. stores the request and reposnse object along
+ * with basic information about the active project.
+ */
 class Application {
 	/**
 	 * project root directory

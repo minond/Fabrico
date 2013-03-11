@@ -2,7 +2,25 @@
 
 namespace Fabrico\Request;
 
+/**
+ * handles all http requests
+ */
 class HttpRequest implements Request {
+	/**
+	 * .html - default
+	 */
+	const HTML = 'html';
+
+	/**
+	 * .json
+	 */
+	const JSON = 'json';
+
+	/**
+	 * .text
+	 */
+	const TEXT = 'text';
+
 	/**
 	 * request parameters
 	 * @var array
@@ -34,6 +52,19 @@ class HttpRequest implements Request {
 	private $action;
 
 	/**
+	 * requested format
+	 * @var string
+	 */
+	private $format;
+
+	/**
+	 * sets default format to HTML
+	 */
+	public function __construct() {
+		$this->format = self::HTML;
+	}
+
+	/**
 	 * gives access to $data values
 	 * @param string $var
 	 * @return mixed
@@ -58,7 +89,12 @@ class HttpRequest implements Request {
 	 * @param string $file
 	 */
 	public function setViewFile($file) {
-		$this->view_file = $file;
+		$parts = explode('.', $file);
+		$this->view_file = $parts[0];
+
+		if (isset($parts[1])) {
+			$this->setFormat($parts[1]);
+		}
 	}
 
 	/**
@@ -118,23 +154,44 @@ class HttpRequest implements Request {
 	}
 
 	/**
+	 * format setter
+	 * @param string $format
+	 * @throws \Exception
+	 */
+	public function setFormat($format) {
+		if (!in_array($format, [ self::TEXT, self::JSON, self::HTML ])) {
+			throw new \Exception("Invalid format: {$format}");
+		}
+
+		$this->format = $format;
+	}
+
+	/**
+	 * format getter
+	 * @return string
+	 */
+	public function getFormat() {
+		return $this->format;
+	}
+
+	/**
+	 * we'll require one of the following (in this order):
+	 * # a controller action
+	 * # a controller method
+	 * # a view file
 	 * @return boolean
 	 */
 	public function valid() {
-		// we'll require one of the following (in this order):
 		$valid = false;
 
-		// a route
-		// TODO: implement routes
-		if ($this->controller && $this->action) {
-			// a controller action
-			$valid = true;
-		} else if ($this->controller && $this->method) {
-			// a controller method
-			$valid = true;
-		} else if ($this->view_file) {
-			// a view file
-			$valid = true;
+		if ($this->format) {
+			if ($this->controller && $this->action) {
+				$valid = true;
+			} else if ($this->controller && $this->method) {
+				$valid = true;
+			} else if ($this->view_file) {
+				$valid = true;
+			}
 		}
 
 		return $valid;
