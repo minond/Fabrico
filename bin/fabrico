@@ -12,6 +12,29 @@ benchmark() {
 	ab -c 5 -n 1000 http://localhost/Fabrico/httpbench
 }
 
+reportsection() {
+	echo -e "\n\n---- ${1}:\n" >> bin/autogen/code/report.txt
+}
+
+codequality() {
+	# reset dir
+	mkdir -p bin/autogen/code
+	rm bin/autogen/code/*
+	date > bin/autogen/code/report.txt
+
+	# tools can be installing via:
+	# pear config-set auto_discover 1
+	# pear install pear.phpqatools.org/phpqatools
+	reportsection loc
+	phploc src/ | tee bin/autogen/code/loc.txt >> bin/autogen/code/report.txt
+
+	reportsection cpd
+	phpcpd src/ | tee bin/autogen/code/cpd.txt >> bin/autogen/code/report.txt
+
+	reportsection "code sniffer"
+	phpcs src/ | tee bin/autogen/code/codesniffer.txt >> bin/autogen/code/report.txt
+}
+
 for arg in "$@"
 do
 	case "$arg" in
@@ -23,6 +46,9 @@ do
 			;;
 		bench)
 			benchmark
+			;;
+		code)
+			codequality
 			;;
 		build)
 			tests
