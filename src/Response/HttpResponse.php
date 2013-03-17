@@ -111,12 +111,10 @@ class HttpResponse implements Response
         }
 
         // TODO: implement test
-        // @codeCoverageIgnoreStart
         foreach ($this->headers as $header => $val) {
             header(strlen($val) ? "{$header}: {$val}" : $header);
         }
     }
-    // @codeCoverageIgnoreEnd
 
     /**
      * @return boolean

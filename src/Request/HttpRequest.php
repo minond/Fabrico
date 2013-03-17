@@ -13,63 +13,10 @@ use Fabrico\Output\JsonOutput;
 class HttpRequest implements Request
 {
     /**
-     * .html - default
-     */
-    const HTML = 'html';
-
-    /**
-     * .json
-     */
-    const JSON = 'json';
-
-    /**
-     * .text
-     */
-    const TEXT = 'text';
-
-    /**
      * request parameters
      * @var array
      */
     private $data;
-
-    /**
-     * file requested
-     * @var string
-     */
-    private $file;
-
-    /**
-     * controller requested
-     * @var string
-     */
-    private $controller;
-
-    /**
-     * method requested
-     * @var string
-     */
-    private $method;
-
-    /**
-     * action requested
-     * @var string
-     */
-    private $action;
-
-    /**
-     * requested format
-     * @var string
-     */
-    private $format;
-
-    /**
-     * sets default format to HTML
-     */
-    public function __construct()
-    {
-        $this->format = self::HTML;
-    }
 
     /**
      * gives access to $data values
@@ -94,106 +41,6 @@ class HttpRequest implements Request
     }
 
     /**
-     * file setter
-     * @param string $file
-     */
-    public function setFile($file)
-    {
-        $parts = explode('.', $file);
-        $this->file = $parts[0];
-
-        if (isset($parts[1])) {
-            $this->setFormat($parts[1]);
-        }
-    }
-
-    /**
-     * file getter
-     * @return string
-     */
-    public function getFile()
-    {
-        return $this->file;
-    }
-
-    /**
-     * controller setter
-     * @param string $controller
-     */
-    public function setController($controller)
-    {
-        $this->controller = $controller;
-    }
-
-    /**
-     * controller getter
-     * @return string
-     */
-    public function getController()
-    {
-        return $this->controller;
-    }
-
-    /**
-     * method setter
-     * @param string $method
-     */
-    public function setMethod($method)
-    {
-        $this->method = $method;
-    }
-
-    /**
-     * method getter
-     * @return string
-     */
-    public function getMethod()
-    {
-        return $this->method;
-    }
-
-    /**
-     * action setter
-     * @param string $action
-     */
-    public function setAction($action)
-    {
-        $this->action = $action;
-    }
-
-    /**
-     * action getter
-     * @return string
-     */
-    public function getAction()
-    {
-        return $this->action;
-    }
-
-    /**
-     * format setter
-     * @param string $format
-     * @throws \Exception
-     */
-    public function setFormat($format)
-    {
-        if (!in_array($format, [ self::TEXT, self::JSON, self::HTML ])) {
-            throw new \Exception("Invalid format: {$format}");
-        }
-
-        $this->format = $format;
-    }
-
-    /**
-     * format getter
-     * @return string
-     */
-    public function getFormat()
-    {
-        return $this->format;
-    }
-
-    /**
      * we'll require one of the following (in this order):
      * # a controller action
      * # a controller method
@@ -202,19 +49,7 @@ class HttpRequest implements Request
      */
     public function valid()
     {
-        $valid = false;
-
-        if ($this->format) {
-            if ($this->controller && $this->action) {
-                $valid = true;
-            } else if ($this->controller && $this->method) {
-                $valid = true;
-            } else if ($this->file) {
-                $valid = true;
-            }
-        }
-
-        return $valid;
+        return true;
     }
 
     /**
@@ -241,23 +76,7 @@ class HttpRequest implements Request
     public function respondWith()
     {
         $res = new HttpResponse;
-        $out = null;
-
-        switch ($this->format) {
-            case self::JSON:
-                $out = new JsonOutput;
-                break;
-
-            case self::HTML:
-                $out = new HtmlOutput;
-                break;
-
-            case self::TEXT:
-            default:
-                $out = new TextOutput;
-                break;
-        }
-
+        $out = new TextOutput;
         $res->setOutput($out);
         return $res;
     }
