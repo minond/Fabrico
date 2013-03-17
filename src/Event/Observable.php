@@ -34,58 +34,62 @@ namespace Fabrico\Event;
  * ?>
  * </code>
  */
-trait Observable {
-	/**
-	 * instance basedlisteners
-	 * @var Listener[]
-	 */
-	protected $mylisteners = [];
+trait Observable
+{
+    /**
+     * instance basedlisteners
+     * @var Listener[]
+     */
+    protected $mylisteners = [];
 
-	/**
-	 * class based listeners
-	 * @var Listener[]
-	 */
-	protected static $listeners = [];
+    /**
+     * class based listeners
+     * @var Listener[]
+     */
+    protected static $listeners = [];
 
-	/**
-	 * add a class listener
-	 * @param string $name
-	 * @param string $type
-	 * @param mixed callable|Closure $func
-	 * @return boolean
-	 */
-	public static function observe($name, $type, $func) {
-		static::$listeners[] = new Listener($name, $type, $func);
-		return true;
-	}
+    /**
+     * add a class listener
+     * @param string $name
+     * @param string $type
+     * @param mixed callable|Closure $func
+     * @return boolean
+     */
+    public static function observe($name, $type, $func)
+    {
+        static::$listeners[] = new Listener($name, $type, $func);
+        return true;
+    }
 
-	/**
-	 * add a class listener
-	 * @param string $name
-	 * @param string $type
-	 * @param mixed callable|Closure $func
-	 * @return boolean
-	 */
-	public function subscribe($name, $type, $func) {
-		$this->mylisteners[] = new Listener($name, $type, $func);
-		return true;
-	}
+    /**
+     * add a class listener
+     * @param string $name
+     * @param string $type
+     * @param mixed callable|Closure $func
+     * @return boolean
+     */
+    public function subscribe($name, $type, $func)
+    {
+        $this->mylisteners[] = new Listener($name, $type, $func);
+        return true;
+    }
 
-	/**
-	 * trigger a signal
-	 * @param string $name
-	 * @param string $type
-	 * @param array $args
-	 */
-	private function signal($name, $type, array $args = array()) {
-		foreach ([ static::$listeners, $this->mylisteners ] as $group) {
-			foreach ($group as & $sub) {
-				if ($sub->is($name, $type)) {
-					$sub->trigger($args);
-				}
+    /**
+     * trigger a signal
+     * @param string $name
+     * @param string $type
+     * @param array $args
+     */
+    private function signal($name, $type, array $args = array())
+    {
+        foreach ([ static::$listeners, $this->mylisteners ] as $group) {
+            foreach ($group as & $sub) {
+                if ($sub->is($name, $type)) {
+                    $sub->trigger($args);
+                }
 
-				unset($sub);
-			}
-		}
-	}
+                unset($sub);
+            }
+        }
+    }
 }
