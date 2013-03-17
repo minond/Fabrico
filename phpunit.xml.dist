@@ -11,8 +11,23 @@
          syntaxCheck="false"
          bootstrap="src/scripts/test.php">
     <testsuites>
-        <testsuite name="Fabrico Test Suite">
+        <testsuite name="all">
             <directory>./tests</directory>
+        </testsuite>
+        <testsuite name="core">
+            <directory>./tests/Core</directory>
+        </testsuite>
+        <testsuite name="event">
+            <directory>./tests/Event</directory>
+        </testsuite>
+        <testsuite name="output">
+            <directory>./tests/Output</directory>
+        </testsuite>
+        <testsuite name="request">
+            <directory>./tests/Request</directory>
+        </testsuite>
+        <testsuite name="response">
+            <directory>./tests/Response</directory>
         </testsuite>
     </testsuites>
 

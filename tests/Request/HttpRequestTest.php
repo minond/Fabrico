@@ -46,10 +46,10 @@ class HttpRequestTest extends Test
         $this->assertEquals($data, $this->req->getData());
     }
 
-    public function testViewFileCanBeSetAndRetrieved()
+    public function testFileCanBeSetAndRetrieved()
     {
-        $this->req->setViewFile('hi');
-        $this->assertEquals('hi', $this->req->getViewFile());
+        $this->req->setFile('hi');
+        $this->assertEquals('hi', $this->req->getFile());
     }
 
     public function testControllerCanBeSetAndRetrieved()
@@ -97,24 +97,24 @@ class HttpRequestTest extends Test
         $this->assertFalse($this->req->valid());
     }
 
-    public function testHttpRequestsAreValidOnceTheyGetAViewFile()
+    public function testHttpRequestsAreValidOnceTheyGetAFile()
     {
-        $this->req->setViewFile('hi');
+        $this->req->setFile('hi');
         $this->assertTrue($this->req->valid());
     }
 
-    public function testHttpRequestsRemoveExtensionsFromViewFiles()
+    public function testHttpRequestsRemoveExtensionsFromFiles()
     {
-        $this->req->setViewFile('hi.html');
-        $this->assertEquals('hi', $this->req->getViewFile());
+        $this->req->setFile('hi.html');
+        $this->assertEquals('hi', $this->req->getFile());
     }
 
     /**
      * @dataProvider dataProviderAllFormatTypes
      */
-    public function testHttpRequestsUpdateTheFormatsAccordingToTheViewFileRequested($format)
+    public function testHttpRequestsUpdateTheFormatsAccordingToTheFileRequested($format)
     {
-        $this->req->setViewFile("hi.{$format}");
+        $this->req->setFile("hi.{$format}");
         $this->assertEquals($format, $this->req->getFormat());
     }
 

@@ -2,7 +2,6 @@
 
 namespace Fabrico\Response;
 
-use Fabrico\Output\Output;
 use Fabrico\Output\HttpOutput;
 
 /**
@@ -17,7 +16,7 @@ class HttpResponse implements Response
     private $content_sent = false;
 
     /**
-     * @var Output
+     * @var HttpOutput
      */
     private $output;
 
@@ -29,20 +28,17 @@ class HttpResponse implements Response
 
     /**
      * output setter
-     * @param Output $output
+     * @param HttpOutput $output
      */
-    public function setOutput(Output $output)
+    public function setOutput(HttpOutput $output)
     {
         $this->output = $output;
-
-        if ($output instanceof HttpOutput) {
-            $this->setHeaders($output->getHeaders());
-        }
+        $this->setHeaders($output->getHeaders());
     }
 
     /**
      * output getter
-     * @return Output
+     * @return HttpOutput
      */
     public function getOutput()
     {

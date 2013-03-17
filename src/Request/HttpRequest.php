@@ -34,10 +34,10 @@ class HttpRequest implements Request
     private $data;
 
     /**
-     * view file requested
+     * file requested
      * @var string
      */
-    private $view_file;
+    private $file;
 
     /**
      * controller requested
@@ -94,13 +94,13 @@ class HttpRequest implements Request
     }
 
     /**
-     * view file setter
+     * file setter
      * @param string $file
      */
-    public function setViewFile($file)
+    public function setFile($file)
     {
         $parts = explode('.', $file);
-        $this->view_file = $parts[0];
+        $this->file = $parts[0];
 
         if (isset($parts[1])) {
             $this->setFormat($parts[1]);
@@ -108,12 +108,12 @@ class HttpRequest implements Request
     }
 
     /**
-     * view file getter
+     * file getter
      * @return string
      */
-    public function getViewFile()
+    public function getFile()
     {
-        return $this->view_file;
+        return $this->file;
     }
 
     /**
@@ -197,7 +197,7 @@ class HttpRequest implements Request
      * we'll require one of the following (in this order):
      * # a controller action
      * # a controller method
-     * # a view file
+     * # a file
      * @return boolean
      */
     public function valid()
@@ -209,7 +209,7 @@ class HttpRequest implements Request
                 $valid = true;
             } else if ($this->controller && $this->method) {
                 $valid = true;
-            } else if ($this->view_file) {
+            } else if ($this->file) {
                 $valid = true;
             }
         }
@@ -258,10 +258,7 @@ class HttpRequest implements Request
                 break;
         }
 
-        if ($out) {
-            $res->setOutput($out);
-        }
-
+        $res->setOutput($out);
         return $res;
     }
 }

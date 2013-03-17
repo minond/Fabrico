@@ -23,13 +23,13 @@ call_user_func(function() {
         } else if (isset($par['_action'])) {
             $req->setAction($par['_action']);
         }
-    } else if (isset($par['_view'])) {
-        $req->setViewFile($par['_view']);
+    } else if (isset($par['_file'])) {
+        $req->setFile($par['_file']);
     }
 
     // clean up the parameters object
     unset($par['_project']);
-    unset($par['_view']);
+    unset($par['_file']);
     unset($par['_controller']);
     unset($par['_action']);
     unset($par['_method']);
@@ -39,9 +39,16 @@ call_user_func(function() {
     $app->setResponse($res);
 
     if ($req->valid()) {
-        $res->getOutput()->setContent('hi');
-        $res->getOutput()->output();
-        // print_r($app);
+        $json = new StdClass;
+        $json->inner = new StdClass;
+        $json->inner->text = 'hi';
+
+        $res->getOutput()->setContent($json);
+        $res->sendHeaders();
+        $res->send();
+
+        // $res->getOutput()->output();
+        // print_r($res->getOutput());
         // die("Routing request");
     } else {
         die("Invalid request");
