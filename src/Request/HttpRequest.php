@@ -2,15 +2,17 @@
 
 namespace Fabrico\Request;
 
+use Fabrico\Core\Application;
 use Fabrico\Response\HttpResponse;
 use Fabrico\Output\TextOutput;
 use Fabrico\Output\HtmlOutput;
 use Fabrico\Output\JsonOutput;
+use Fabrico\Response\Handler\Handler;
 
 /**
  * handles all http requests
  */
-class HttpRequest implements Request
+class HttpRequest extends Request
 {
     /**
      * request parameters
@@ -41,18 +43,6 @@ class HttpRequest implements Request
     }
 
     /**
-     * we'll require one of the following (in this order):
-     * # a controller action
-     * # a controller method
-     * # a file
-     * @return boolean
-     */
-    public function valid()
-    {
-        return true;
-    }
-
-    /**
      * data setter
      * @param array $data
      */
@@ -73,8 +63,9 @@ class HttpRequest implements Request
     /**
      * @inheritdoc
      */
-    public function respondWith()
+    public function generateResponse(Application $app)
     {
+        $this->prepareHandler($app);
         $res = new HttpResponse;
         $out = new TextOutput;
         $res->setOutput($out);

@@ -101,6 +101,14 @@ class HttpResponse implements Response
     }
 
     /**
+     * @return boolean
+     */
+    public function ready()
+    {
+        return isset($this->output);
+    }
+
+    /**
      * sends headers to brownser
      * @throws \Exception
      */
@@ -117,20 +125,21 @@ class HttpResponse implements Response
     }
 
     /**
-     * @return boolean
+     * outputs the content
      */
-    public function ready()
-    {
-        return isset($this->output);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function send()
+    public function sendContent()
     {
         // then output
         $this->output->output();
         $this->content_sent = true;
+    }
+
+    /**
+     * sends the headers and content
+     */
+    public function send()
+    {
+        $this->sendHeaders();
+        $this->sendContent();
     }
 }

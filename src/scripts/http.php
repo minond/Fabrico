@@ -9,19 +9,19 @@ use Fabrico\Request\HttpRequest;
 call_user_func(function() {
     $req = new HttpRequest;
     $req->setData($_REQUEST);
-    $res = $req->respondWith();
-    $out = $res->getOutput();
+    $req->addResponseHandler('Fabrico\Response\Handler\ControllerActionHandler');
 
     $app = new Application;
     $app->setRoot('/home/server/' . $_REQUEST['_project']);
     $app->setRequest($req);
-    $app->setResponse($res);
 
-    // $req->addHandler
+    $res = $req->generateResponse($app);
+    $out = $res->getOutput();
+    $app->setResponse($res);
 
     if ($req->valid()) {
         $out->setContent('hi');
-        $res->sendHeaders();
+        $req->handle($res);
         $res->send();
     } else {
         die("Invalid request");

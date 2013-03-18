@@ -20,8 +20,9 @@ class ControllerActionHandler extends Handler
     /**
      * @inheritdoc
      */
-    public function canHandle(Request $req)
+    public function canHandle(Request & $req)
     {
+        return true;
         return !!$req->getController() && !!$req->getAction();
     }
 
@@ -53,11 +54,11 @@ class ControllerActionHandler extends Handler
      * @param string $controller
      * @return Controller
      */
-    private function getController($controller)
+    private function & getController($controller)
     {
         $manager = new ControllerManager($this->app);
         $controller =& $manager->get($controller);
-        return & $controller;
+        return $controller;
     }
 
     /**

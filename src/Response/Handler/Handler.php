@@ -44,7 +44,7 @@ abstract class Handler
      * takes a Request object and generates a response
      * @param Request $req
      * @param Response $res
-     * @throws \Exeption
+     * @throws \Exception
      * @return boolean
      */
     abstract public function handle(Request & $req, Response & $res);
@@ -53,7 +53,7 @@ abstract class Handler
      * app setter
      * @param Application $app
      */
-    public function setApplication(Application & $app)
+    final public function setApplication(Application & $app)
     {
         $this->app = $app;
     }
@@ -62,8 +62,8 @@ abstract class Handler
      * level getter
      * @return double
      */
-    public static function getLevel()
+    final public static function getLevel()
     {
-        return $this->level;
+        return static::$level;
     }
 }

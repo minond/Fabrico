@@ -109,7 +109,7 @@ class HttpResponseTest extends Test
         $text = new TextOutput;
         $text->setContent('hi');
         $this->res->setOutput($text);
-        $this->res->send();
+        $this->res->sendContent();
     }
 
     /**
@@ -122,7 +122,7 @@ class HttpResponseTest extends Test
         $text->setContent('hi');
         $this->res->setOutput($text);
         ob_start();
-        $this->res->send();
+        $this->res->sendContent();
         ob_get_clean();
         $this->res->sendHeaders();
     }
