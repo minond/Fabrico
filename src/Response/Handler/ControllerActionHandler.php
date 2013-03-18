@@ -4,8 +4,9 @@ namespace Fabrico\Response\Handler;
 
 use Fabrico\Request\Request;
 use Fabrico\Response\Response;
-use Fabrico\Controller\Controller;
-use Fabrico\Controller\Manager as ControllerManager;
+use Fabrico\Output\TextOutput;
+use Fabrico\Output\HtmlOutput;
+use Fabrico\Output\JsonOutput;
 
 /**
  * routes a request though a controller's method matching the request
@@ -31,12 +32,17 @@ class ControllerActionHandler extends Handler
      */
     public function handle(Request & $req, Response & $res)
     {
-        $controller = $req->getController();
-        $action = $req->getAction();
+        print_r($this->app);
+        $text = new TextOutput;
+        $text->setContent('hi');
+        $res->setOutput($text);
 
-        $controller =& $this->getController($controller);
-        $ret = $this->callActionMethod($controller, $action, $req, $res);
-        $this->setResponseContent($res, $ret);
+        // $controller = $req->getController();
+        // $action = $req->getAction();
+
+        // $controller =& $this->getController($controller);
+        // $ret = $this->callActionMethod($controller, $action, $req, $res);
+        // $this->setResponseContent($res, $ret);
     }
 
     /**

@@ -4,9 +4,6 @@ namespace Fabrico\Request;
 
 use Fabrico\Core\Application;
 use Fabrico\Response\HttpResponse;
-use Fabrico\Output\TextOutput;
-use Fabrico\Output\HtmlOutput;
-use Fabrico\Output\JsonOutput;
 use Fabrico\Response\Handler\Handler;
 
 /**
@@ -58,17 +55,5 @@ class HttpRequest extends Request
     public function getData()
     {
         return $this->data;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function generateResponse(Application $app)
-    {
-        $this->prepareHandler($app);
-        $res = new HttpResponse;
-        $out = new TextOutput;
-        $res->setOutput($out);
-        return $res;
     }
 }

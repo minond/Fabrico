@@ -36,14 +36,6 @@ abstract class Request
     abstract public function getData();
 
     /**
-     * checks current state of request and returns a Response object that best
-     * fits the requested data
-     * @param Application $app
-     * @return Response
-     */
-    abstract public function generateResponse(Application $app);
-
-    /**
      * handler adder
      * @param string $handler
      */
@@ -53,12 +45,12 @@ abstract class Request
     }
 
     /**
-     * triggers Handler::handle
-     * @param Response $res
+     * handler getter
+     * @return Handler
      */
-    final public function handle(Response $res)
+    final public function getHandler()
     {
-        $this->handler->handle($this, $res);
+        return $this->handler;
     }
 
     /**
@@ -73,7 +65,7 @@ abstract class Request
      * @see getResponseHandler
      * @param Application $app
      */
-    protected function prepareHandler(Application $app)
+    public function prepareHandler(Application $app)
     {
         $this->handler = $this->getResponseHandler($app);
     }
