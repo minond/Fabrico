@@ -24,7 +24,7 @@ abstract class Handler
      * importance level of handler
      * @var double
      */
-    protected static $level = 0;
+    protected static $level = self::OFF;
 
     /**
      * reference to current application

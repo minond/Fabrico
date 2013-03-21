@@ -2,16 +2,25 @@
 
 namespace Fabrico\Test\Request;
 
-use Fabrico\Request\HttpRequest;
 use Fabrico\Test\Test;
+use Fabrico\Test\OvertClass;
+use Fabrico\Test\Mock\Request\DummyRequest;
 
-class HttpRequestTest extends Test
+require 'tests/mocks/Request/Request/DummyRequest.php';
+
+class RequestTest extends Test
 {
     public $req;
 
+    public $pub;
+
     public function setUp()
     {
-        $this->req = new HttpRequest;
+        $this->req = new DummyRequest;
+        $this->pub = new OvertClass(
+            $this->req,
+            'Fabrico\Request\Request'
+        );
     }
 
     public function testDataCanBeSetAndRetrieved()
@@ -35,5 +44,13 @@ class HttpRequestTest extends Test
         $this->req->setData($data);
         $this->req->hi = $val;
         $this->assertEquals($val, $this->req->hi);
+    }
+
+    public function testResponseHandlersCanBeAdded()
+    {
+        $this->req->addResponseHandler('one');
+        $this->req->addResponseHandler('two');
+        $this->req->addResponseHandler('three');
+        $this->assertEquals(['one', 'two', 'three'], $this->pub->handlers);
     }
 }

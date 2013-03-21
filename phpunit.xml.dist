@@ -36,6 +36,7 @@
             <directory>./src/*/</directory>
             <exclude>
                 <directory>./src/scripts</directory>
+                <directory>./src/Test</directory>
                 <directory>./vendor</directory>
                 <directory>./tests</directory>
             </exclude>

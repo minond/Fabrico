@@ -24,16 +24,32 @@ abstract class Request
     private $handler;
 
     /**
-     * data setter
-     * @param array $data
+     * request parameters
+     * @var array
      */
-    abstract public function setData(array & $data);
+    protected $data;
 
     /**
-     * data getter
-     * @return array
+     * gives access to $data values
+     * @param string $var
+     * @return mixed
      */
-    abstract public function getData();
+    public function __get($var)
+    {
+        return array_key_exists($var, $this->data) ?
+            $this->data[ $var ] : null;
+    }
+
+    /**
+     * gives access to $data values
+     * @param string $var
+     * @param mixed $val
+     */
+    public function __set($var, $val)
+    {
+        return array_key_exists($var, $this->data) ?
+            $this->data[ $var ] = $val : null;
+    }
 
     /**
      * handler adder
@@ -51,6 +67,24 @@ abstract class Request
     final public function getHandler()
     {
         return $this->handler;
+    }
+
+    /**
+     * data setter
+     * @param array $data
+     */
+    public function setData(array & $data)
+    {
+        $this->data = & $data;
+    }
+
+    /**
+     * data getter
+     * @return array
+     */
+    public function getData()
+    {
+        return $this->data;
     }
 
     /**
