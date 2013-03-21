@@ -126,4 +126,9 @@ class HttpResponseTest extends Test
         ob_get_clean();
         $this->res->sendHeaders();
     }
+
+    public function testHeadersAreSent()
+    {
+        $this->markTestIncomplete('Need to find way to send headers and check them');
+    }
 }

@@ -24,7 +24,7 @@ class ControllerActionHandler extends Handler
     public function canHandle(Request & $req)
     {
         return true;
-        return !!$req->getController() && !!$req->getAction();
+        return !!$req->_controller() && !!$req->_action();
     }
 
     /**
