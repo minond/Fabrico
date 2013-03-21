@@ -6,17 +6,10 @@ use Fabrico\Request\Request;
 use Fabrico\Response\Response;
 use Fabrico\Response\Handler\Handler;
 
-class DummyHandler extends Handler
+class NothingHandler extends DummyHandler
 {
-    protected static $level = self::HIGH;
-
     public function canHandle(Request & $req)
     {
-        return true;
-    }
-
-    public function handle(Request & $req, Response & $res)
-    {
-        return true;
+        return false;
     }
 }

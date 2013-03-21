@@ -5,8 +5,12 @@ namespace Fabrico\Test\Request;
 use Fabrico\Test\Test;
 use Fabrico\Test\OvertClass;
 use Fabrico\Test\Mock\Request\DummyRequest;
+use Fabrico\Test\Mock\Response\Handler\DummyHandler;
+use Fabrico\Core\Application;
 
 require 'tests/mocks/Request/Request/DummyRequest.php';
+require 'tests/mocks/Response/Handler/DummyHandler.php';
+require 'tests/mocks/Response/Handler/NothingHandler.php';
 
 class RequestTest extends Test
 {
@@ -52,5 +56,44 @@ class RequestTest extends Test
         $this->req->addResponseHandler('two');
         $this->req->addResponseHandler('three');
         $this->assertEquals(['one', 'two', 'three'], $this->pub->handlers);
+    }
+
+    public function testHandlerCanBeRetrieved()
+    {
+        $handler = new DummyHandler;
+        $this->pub->handler = $handler;
+        $this->assertTrue($this->req->valid());
+        $this->assertEquals($handler, $this->req->getHandler());
+    }
+
+    public function testBasicHandlersOnlyNeedAHandlerToBeValid()
+    {
+        $handler = new DummyHandler;
+        $this->pub->handler = $handler;
+        $this->assertTrue($this->pub->hasHandler());
+    }
+
+    public function testValidHandlerIsFoundByRequest()
+    {
+        $app = new Application;
+        $this->req->addResponseHandler('Fabrico\Test\Mock\Response\Handler\NothingHandler');
+        $this->req->addResponseHandler('Fabrico\Test\Mock\Response\Handler\DummyHandler');
+        $this->assertFalse($this->pub->hasHandler());
+        $this->req->prepareHandler($app);
+        $this->assertTrue($this->pub->hasHandler());
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testHandlerSearchFailsWhenNoHandlersAreFound()
+    {
+        $app = new Application;
+        $this->req->prepareHandler($app);
+    }
+
+    public function testBestHandlerIsActuallyFound()
+    {
+        $this->markTestIncomplete('Need to implement this in Request\Request');
     }
 }
