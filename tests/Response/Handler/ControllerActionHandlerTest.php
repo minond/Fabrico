@@ -31,7 +31,7 @@ class ControllerActionHandlerTest extends Test
 
     public function testCanHandleRequestsWithActionAndController()
     {
-        $data = [ '_controller' => 'd', '_action' => 'd' ];
+        $data = [ '_action' => 'd' ];
         $this->req->setData($data);
         $this->assertTrue($this->handler->canHandle($this->req));
     }

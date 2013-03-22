@@ -27,8 +27,8 @@ call_user_func(function() {
     $req->prepareHandler($app);
     $out = $res->getOutput();
 
-    if ($req->valid()) {
-        $req->getHandler()->handle($req, $res);
+    if ($req->valid() && $req->getHandler()->valid()) {
+        $req->getHandler()->handle();
         $res->send();
     } else {
         die("Invalid request");

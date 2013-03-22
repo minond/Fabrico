@@ -34,20 +34,26 @@ abstract class Handler
 
     /**
      * should check a Request object and return true if this handler knows
-     * how to generate a response.
+     * how to work with the given request data.
      * @param Request $req
      * @return boolean
      */
     abstract public function canHandle(Request & $req);
 
     /**
-     * takes a Request object and generates a response
-     * @param Request $req
-     * @param Response $res
-     * @throws \Exception
+     * after Handler::canHandle is called, a handler is instanciated and another
+     * check is made, this time the handler has access to the whole application
+     * instance and can better verify the validity of the request and if it can
+     * handle it or not.
      * @return boolean
      */
-    abstract public function handle(Request & $req, Response & $res);
+    abstract public function valid();
+
+    /**
+     * takes a Request object and generates a response
+     * @return boolean
+     */
+    abstract public function handle();
 
     /**
      * app setter

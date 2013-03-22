@@ -15,7 +15,12 @@ class DummyHandler extends Handler
         return true;
     }
 
-    public function handle(Request & $req, Response & $res)
+    public function valid()
+    {
+        return true;
+    }
+
+    public function handle()
     {
         return true;
     }

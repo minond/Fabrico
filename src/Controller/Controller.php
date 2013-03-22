@@ -16,17 +16,17 @@ abstract class Controller
     /**
      * @see Fabrico\Project\FileFilder
      */
-    private static $dir = 'controllers';
-
-    /**
-     * @see Fabrico\Project\FileFilder
-     */
     private static $ext = '.php';
 
     /**
      * @see Fabrico\Project\ClassGenerator
      */
     private static $namespace = 'Controller';
+
+    /**
+     * @see Fabrico\Project\FileFilder
+     */
+    private static $dir = 'Controller';
 
     /**
      * load and instanciate a controller
