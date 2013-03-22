@@ -20,10 +20,7 @@ call_user_func(function() {
     $app->setRequest($req);
     $app->setResponse($res);
 
-    // controller test start
     $app->setController(Controller::load('Users'));
-    // controller test end
-
     $req->prepareHandler($app);
     $out = $res->getOutput();
 

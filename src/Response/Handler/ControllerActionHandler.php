@@ -43,12 +43,12 @@ class ControllerActionHandler extends Handler
     {
         $res = $this->app->getResponse();
         $req = $this->app->getRequest();
-        $out = new TextOutput;
-        $res->setOutput($out);
         $ret = $this->app->getController()->{ $req->_action }($req, $res);
 
         if ($ret) {
+            $out = new TextOutput;
             $out->setContent($ret);
+            $res->setOutput($out);
         }
     }
 }
