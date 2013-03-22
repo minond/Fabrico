@@ -4,6 +4,7 @@ namespace Fabrico\Core;
 
 use Fabrico\Request\Request;
 use Fabrico\Response\Response;
+use Fabrico\Controller\Controller;
 
 /**
  * base Fabrico application class. stores the request and reposnse object along
@@ -12,10 +13,28 @@ use Fabrico\Response\Response;
 class Application
 {
     /**
+     * holds all instances of Application objects created
+     * @var Application[]
+     */
+    private static $cache = [];
+
+    /**
+     * holds the last Application created
+     * @var Application
+     */
+    private static $last;
+
+    /**
      * project root directory
      * @var string
      */
     private $root;
+
+    /**
+     * project root namespace
+     * @var string
+     */
+    private $namespace;
 
     /**
      * current request
@@ -28,6 +47,39 @@ class Application
      * @var Response
      */
     private $response;
+
+    /**
+     * @var Controller
+     */
+    private $controller;
+
+    /**
+     * retrieve an Application
+     * @param string $name
+     * @return Application
+     */
+    public static function getInstance($name = null)
+    {
+        if (!$name) {
+            return self::$last;
+        } else {
+            return array_key_exists($name, self::$cache) ?
+                self::$cache[ $name ] : null;
+        }
+    }
+
+    /**
+     * caches the new Application
+     * @param string $name - optional
+     */
+    public function __construct($name = null)
+    {
+        self::$last = $this;
+        
+        if ($name) {
+            self::$cache[ $name ] = $this;
+        }
+    }
 
     /**
      * project root setter
@@ -45,6 +97,24 @@ class Application
     public function getRoot()
     {
         return $this->root;
+    }
+
+    /**
+     * project namespace setter
+     * @param string $namespace
+     */
+    public function setNamespace($namespace)
+    {
+        $this->namespace = $namespace;
+    }
+
+    /**
+     * project namespace setter
+     * @return string
+     */
+    public function getNamespace()
+    {
+        return $this->namespace;
     }
 
     /**
@@ -81,5 +151,23 @@ class Application
     public function getResponse()
     {
         return $this->response;
+    }
+
+    /**
+     * controller setter
+     * @param Controller $controller
+     */
+    public function setController(Controller & $controller)
+    {
+        $this->controller = $controller;
+    }
+
+    /**
+     * controller getter
+     * @return Controller
+     */
+    public function getController()
+    {
+        return $this->controller;
     }
 }

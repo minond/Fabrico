@@ -32,9 +32,10 @@ class ControllerActionHandler extends Handler
      */
     public function handle(Request & $req, Response & $res)
     {
-        print_r($this->app);
+        // print_r($this->app);
+        $ret = $this->app->getController()->{ $req->_action }($req, $res);
         $text = new TextOutput;
-        $text->setContent('hi');
+        $text->setContent($ret);
         $res->setOutput($text);
 
         // $controller = $req->getController();

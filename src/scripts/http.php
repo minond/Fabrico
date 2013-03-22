@@ -5,6 +5,7 @@ require 'autoload.php';
 use Fabrico\Core\Application;
 use Fabrico\Response\HttpResponse;
 use Fabrico\Request\HttpRequest;
+use Fabrico\Controller\Controller;
 
 call_user_func(function() {
     $app = new Application;
@@ -14,9 +15,14 @@ call_user_func(function() {
     $req->setData($_REQUEST);
     $req->addResponseHandler('Fabrico\Response\Handler\ControllerActionHandler');
 
+    $app->setNamespace('Propositum');
     $app->setRoot('/home/server/' . $_REQUEST['_project']);
     $app->setRequest($req);
     $app->setResponse($res);
+
+    // controller test start
+    $app->setController(Controller::load('Users'));
+    // controller test end
 
     $req->prepareHandler($app);
     $out = $res->getOutput();
