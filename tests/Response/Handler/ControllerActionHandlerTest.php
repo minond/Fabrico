@@ -10,7 +10,7 @@ use Fabrico\Request\HttpRequest;
 use Fabrico\Response\HttpResponse;
 use Fabrico\Response\Handler\ControllerActionHandler;
 
-require 'tests/mocks/Controller/EmptyController.php';
+require_once 'tests/mocks/Controller/EmptyController.php';
 
 class ControllerActionHandlerTest extends Test
 {

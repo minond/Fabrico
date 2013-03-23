@@ -10,7 +10,7 @@ define('FABRICO_ROOT', FABRICO_SRC_ROOT . '../');
 chdir(FABRICO_ROOT);
 
 // request the vendor's autoload
-require 'vendor/autoload.php';
+// require 'vendor/autoload.php';
 
 // and create Fabrico's own autoload
 spl_autoload_register(function ($class) {

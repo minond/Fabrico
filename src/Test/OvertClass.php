@@ -11,29 +11,35 @@ class OvertClass
      * the actual object
      * @var mixed
      */
-    private $obj;
+    private $__obj;
 
     /**
      * reflection classes of object we're making accessible
      * @var ReflectionClass
      */
-    private $ref;
+    private $__ref;
 
     /**
      * used to treat class different
      * @var string
      */
-    private $mask;
+    private $__mask;
 
     /**
-     * @param mixed $obj
-     * @param mask $mask
+     * static functions overwriten
+     * @var array
      */
-    public function __construct($obj, $mask = null)
+    private static $__static_function_overwrites = [];
+
+    /**
+     * @param mixed $__obj
+     * @param string $__mask
+     */
+    public function __construct($__obj, $__mask = null)
     {
-        $this->mask = $mask ?: get_class($obj);
-        $this->ref = new \ReflectionClass($this->mask);
-        $this->obj = $obj;
+        $this->__mask = $__mask ?: get_class($__obj);
+        $this->__ref = new \ReflectionClass($this->__mask);
+        $this->__obj = $__obj;
     }
 
     /**
@@ -43,14 +49,14 @@ class OvertClass
      */
     public function __get($var)
     {
-        if ($this->ref->hasProperty($var)) {
-            $prop = $this->ref->getProperty($var);
+        if ($this->__ref->hasProperty($var)) {
+            $prop = $this->__ref->getProperty($var);
             $prop->setAccessible(true);
-            return $prop->getValue($this->obj);
+            return $prop->getValue($this->__obj);
         }
 
         throw new \Exception(
-            sprintf('%s class does not have a "%s" property', $this->mask, $var));
+            sprintf('%s class does not have a "%s" property', $this->__mask, $var));
     }
 
     /**
@@ -61,14 +67,14 @@ class OvertClass
      */
     public function __set($var, $val)
     {
-        if ($this->ref->hasProperty($var)) {
-            $prop = $this->ref->getProperty($var);
+        if ($this->__ref->hasProperty($var)) {
+            $prop = $this->__ref->getProperty($var);
             $prop->setAccessible(true);
-            return $prop->setValue($this->obj, $val);
+            return $prop->setValue($this->__obj, $val);
         }
 
         throw new \Exception(
-            sprintf('%s class does not have a "%s" property', $this->mask, $var));
+            sprintf('%s class does not have a "%s" property', $this->__mask, $var));
     }
 
     /**
@@ -78,9 +84,9 @@ class OvertClass
      */
     public function __call($func, $args)
     {
-        $func = $this->ref->getMethod($func);
+        $func = $this->__ref->getMethod($func);
         $func->setAccessible(true);
-        return $func->invokeArgs($this->obj, $args);
+        return $func->invokeArgs($this->__obj, $args);
     }
 
     /**
@@ -90,8 +96,27 @@ class OvertClass
      */
     public static function __callStatic($func, $args)
     {
-        $func = $this->ref->getMethod($func);
-        $func->setAccessible(true);
-        return $func->invokeArgs($this->obj, $args);
+        $ret = null;
+
+        if (array_key_exists($func, self::$__static_function_overwrites)) {
+            $ret = self::$__static_function_overwrites[ $func ];
+        } else {
+            $that = $args[ count($args) - 1 ];
+            $func = $that->__ref->getMethod($func);
+            $func->setAccessible(true);
+            $ret = $func->invokeArgs($that, $args);
+        }
+
+        return $ret;
+    }
+
+    /**
+     * overwrite a static function
+     * @param string $name
+     * @param mixed $ret
+     */
+    public function __overwriteStaticFunction($name, $ret)
+    {
+        self::$__static_function_overwrites[ $name ] = $ret;
     }
 }
