@@ -9,7 +9,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="src/scripts/test.php">
+         bootstrap="src/scripts/autoload.php">
     <testsuites>
         <testsuite name="all">
             <directory>./tests</directory>
