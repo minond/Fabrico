@@ -30,7 +30,7 @@ class ControllerActionHandler extends Handler
      */
     public function valid()
     {
-        return method_exists(
+        return !!$this->app->getController() && method_exists(
             $this->app->getController(),
             $this->app->getRequest()->_action
         );

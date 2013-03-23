@@ -35,4 +35,25 @@ class ApplicationTest extends Test
         $this->app->setResponse($res);
         $this->assertEquals($res, $this->app->getResponse());
     }
+
+    public function testNamespaceCanBeSetAndRetrieved()
+    {
+        $res = new HttpResponse;
+        $this->app->setNamespace('hi');
+        $this->assertEquals('hi', $this->app->getNamespace());
+    }
+
+    public function testLastIntanceIsReturnedByDefault()
+    {
+        $app1 = new Application;
+        $app2 = new Application;
+        $this->assertTrue($app2 === Application::getInstance());
+    }
+
+    public function testIntanceCanBeRetrievedByName()
+    {
+        $app1 = new Application('one');
+        $app2 = new Application('two');
+        $this->assertTrue($app1 === Application::getInstance('one'));
+    }
 }

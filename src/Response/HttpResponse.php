@@ -110,6 +110,7 @@ class HttpResponse implements Response
 
     /**
      * sends headers to brownser
+     * @codeCoverageIgnoreEnd
      * @throws \Exception
      */
     public function sendHeaders()
@@ -136,6 +137,7 @@ class HttpResponse implements Response
 
     /**
      * sends the headers and content
+     * @codeCoverageIgnoreEnd
      */
     public function send()
     {
