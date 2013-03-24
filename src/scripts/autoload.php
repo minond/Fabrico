@@ -1,10 +1,19 @@
 <?php
 
-// basic information about Fabrico's namespace and file structure
-define('FABRICO_NS_ROOT', 'Fabrico');
-define('FABRICO_DEF_EXT', '.php');
-define('FABRICO_SRC_ROOT', dirname(__FILE__) . '/../');
-define('FABRICO_ROOT', FABRICO_SRC_ROOT . '../');
+call_user_func(function() {
+    $here = explode(DIRECTORY_SEPARATOR, dirname(__FILE__));
+    array_pop($here); // scripts
+    array_pop($here); // src
+
+    define('FABRICO_NAMESPACE', 'Fabrico');
+    define('FABRICO_EXTENSION', '.php');
+    define('FABRICO_ROOT', implode(DIRECTORY_SEPARATOR, $here) .
+        DIRECTORY_SEPARATOR);
+    define('FABRICO_SRC', FABRICO_ROOT . 'src' . DIRECTORY_SEPARATOR);
+    define('FABRICO_BIN', FABRICO_ROOT . 'bin' . DIRECTORY_SEPARATOR);
+    define('FABRICO_BIN_SRC', FABRICO_ROOT . 'bin' . DIRECTORY_SEPARATOR . 'src' .
+        DIRECTORY_SEPARATOR);
+});
 
 // everything should always be triggered from Fabrico's root directory
 chdir(FABRICO_ROOT);
@@ -18,11 +27,15 @@ spl_autoload_register(function ($class) {
     $root = $parts[0];
     $rest = implode(DIRECTORY_SEPARATOR, array_slice($parts, 1));
 
-    if ($root = FABRICO_NS_ROOT) {
-        $file = FABRICO_SRC_ROOT . DIRECTORY_SEPARATOR . $rest . FABRICO_DEF_EXT;
+    if ($root = FABRICO_NAMESPACE) {
+        $file = $rest . FABRICO_EXTENSION;
+        $in_bin = FABRICO_BIN_SRC . $file;
+        $in_src = FABRICO_SRC . $file;
 
-        if (file_exists($file)) {
-            require $file;
+        if (file_exists($in_bin)) {
+            require $in_bin;
+        } else if (file_exists($in_src)) {
+            require $in_src;
         }
     }
-});
+}, true, true);
