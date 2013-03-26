@@ -121,7 +121,7 @@ abstract class Request
     private function getResponseHandler(Application $app)
     {
         $list = $this->groupHandlersList();
-        $handler = $this->findBestHandler($list);
+        $handler = $this->findBestHandler($app, $list);
         $handler->setApplication($app);
         return $handler;
     }
@@ -150,11 +150,12 @@ abstract class Request
     /**
      * takes a list of handler names, and returns the first one that can handle
      * this current request
+     * @param Application $app
      * @param array $list
      * @throws \Exception
      * @return Handler
      */
-    private function findBestHandler(array $list)
+    private function findBestHandler(Application $app, array $list)
     {
         foreach ($list as $level) {
             foreach ($level as $handler) {

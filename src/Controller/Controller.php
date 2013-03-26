@@ -33,12 +33,11 @@ abstract class Controller
      * @param string $name
      * @return Controller
      */
-    public static function & load($name)
+    public static function load($name)
     {
-        if (self::loadProjectFile($name) && self::canFileProjectClass($name)) {
+        if (self::loadProjectFile($name) && self::hasProjectClass($name)) {
             $class = self::generateFullClassNamespacePath($name);
-            $class = new $class;
-            return $class;
+            return new $class;
         }
     }
 }

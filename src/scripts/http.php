@@ -9,8 +9,8 @@ use Fabrico\Controller\Controller;
 
 call_user_func(function() {
     $app = new Application;
-    $res = new HttpResponse;
     $req = new HttpRequest;
+    $res = new HttpResponse;
 
     $req->setData($_REQUEST);
     $req->addResponseHandler('Fabrico\Response\Handler\ControllerActionHandler');
@@ -20,11 +20,10 @@ call_user_func(function() {
     $app->setRequest($req);
     $app->setResponse($res);
 
-    $app->setController(Controller::load('Users'));
     $req->prepareHandler($app);
     $out = $res->getOutput();
 
-    if ($req->valid() && $req->getHandler()->valid()) {
+    if ($req->valid()) {
         $req->getHandler()->handle();
         $res->send();
     } else {

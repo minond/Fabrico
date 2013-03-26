@@ -17,20 +17,20 @@ namespace Fabrico\Event;
  *         $this->signal(__FUNCTION__, Listener::POST, func_get_args());
  *     }
  * }
- * 
+ *
  * // example class listener
  * User::observe('greet', Listener::PRE, function($name) {
  *     // $this => instance
  *     // $name => $yourname
  * });
- * 
+ *
  * // example instance listener
  * $me = new User;
  * $me->subscribe('greet', Listener::PRE, function($name) {
  *     // $this => instance
  *     // $name => $yourname
  * });
- * 
+ *
  * ?>
  * </code>
  */

@@ -9,7 +9,7 @@ documentation() {
 }
 
 benchmark() {
-	ab -c 10 -n 2000 http://localhost/Fabrico/src/scripts/http.php?_project=Propositum&_action=index
+	ab -c 10 -n 2000 http://localhost/Propositum/Users/viewUsers
 }
 
 reportsection() {

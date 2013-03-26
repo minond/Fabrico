@@ -41,15 +41,6 @@ abstract class Handler
     abstract public function canHandle(Request & $req);
 
     /**
-     * after Handler::canHandle is called, a handler is instanciated and another
-     * check is made, this time the handler has access to the whole application
-     * instance and can better verify the validity of the request and if it can
-     * handle it or not.
-     * @return boolean
-     */
-    abstract public function valid();
-
-    /**
      * takes a Request object and generates a response
      * @return boolean
      */

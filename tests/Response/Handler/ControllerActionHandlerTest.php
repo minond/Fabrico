@@ -36,75 +36,39 @@ class ControllerActionHandlerTest extends Test
     public function testHanlderRequiresAnAction()
     {
         $data = [ '_invalid' => 'd' ];
+        $app = new Application;
+        $app->setRequest($this->req);
+        $this->handler->setApplication($app);
         $this->req->setData($data);
         $this->assertFalse($this->handler->canHandle($this->req));
     }
 
-    public function testCanHandleRequestsWithAction()
-    {
-        $data = [ '_action' => 'd' ];
-        $this->req->setData($data);
-        $this->assertTrue($this->handler->canHandle($this->req));
-    }
-
-    public function testHandlerRequiresAControllerToBeSet()
-    {
-        $data = [ '_action' => 'd' ];
-        $this->req->setData($data);
-        $app = new Application;
-        $app->setRequest($this->req);
-        $this->handler->setApplication($app);
-        $this->assertFalse($this->handler->valid());
-    }
-
-    public function testHandlerRequiresAValidControllerMethod()
-    {
-        $data = [ '_action' => 'd' ];
-        $this->req->setData($data);
-        $controller = new EmptyController;
-        $app = new Application;
-        $app->setRequest($this->req);
-        $app->setController($controller);
-        $this->handler->setApplication($app);
-        $this->assertFalse($this->handler->valid());
-    }
-
-    public function testHandlerKnowsAboutValidControllerMethods()
-    {
-        $data = [ '_action' => 'sets_output' ];
-        $this->req->setData($data);
-        $controller = new EmptyController;
-        $app = new Application;
-        $app->setRequest($this->req);
-        $app->setController($controller);
-        $this->handler->setApplication($app);
-        $this->assertTrue($this->handler->valid());
-    }
-
     public function testControllerMethodIsCalled()
     {
-        $data = [ '_action' => 'sets_output' ];
+        $data = [ '_view' => 'Ignore/sets_output' ];
         $this->req->setData($data);
         $controller = new EmptyController;
         $app = new Application;
         $app->setRequest($this->req);
         $app->setResponse($this->res);
-        $app->setController($controller);
+        $this->handler->setController($controller);
         $this->handler->setApplication($app);
+        $this->handler->canHandle($this->req);
         $this->handler->handle();
         $this->assertTrue(EmptyController::$function_called);
     }
 
     public function testControllerMethodCanSetResponseOutput()
     {
-        $data = [ '_action' => 'sets_output' ];
+        $data = [ '_view' => 'Ignore/sets_output' ];
         $this->req->setData($data);
         $controller = new EmptyController;
         $app = new Application;
         $app->setRequest($this->req);
         $app->setResponse($this->res);
-        $app->setController($controller);
+        $this->handler->setController($controller);
         $this->handler->setApplication($app);
+        $this->handler->canHandle($this->req);
         $this->handler->handle();
         $this->assertEquals(
             EmptyController::$expected_output,
@@ -114,14 +78,15 @@ class ControllerActionHandlerTest extends Test
 
     public function testControllerMethodCanReturnResponseOutput()
     {
-        $data = [ '_action' => 'returns_output' ];
+        $data = [ '_view' => 'Ignore/returns_output' ];
         $this->req->setData($data);
         $controller = new EmptyController;
         $app = new Application;
         $app->setRequest($this->req);
         $app->setResponse($this->res);
-        $app->setController($controller);
+        $this->handler->setController($controller);
         $this->handler->setApplication($app);
+        $this->handler->canHandle($this->req);
         $this->handler->handle();
         $this->assertEquals(
             EmptyController::$expected_output,

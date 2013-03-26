@@ -52,8 +52,7 @@ trait FileFinder
         if (self::hasProjectFile($filename)) {
             return require_once self::generateFileFilderFilePath($filename);
         } else {
-            throw new \Exception(sprintf('File not found. Checking for %s in %s',
-                $filename, self::generateFileFilderFilePath($filename)));
+            return false;
         }
     }
 }

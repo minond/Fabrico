@@ -49,11 +49,6 @@ class Application
     private $response;
 
     /**
-     * @var Controller
-     */
-    private $controller;
-
-    /**
      * retrieve an Application
      * @param string $name
      * @return Application
@@ -151,23 +146,5 @@ class Application
     public function getResponse()
     {
         return $this->response;
-    }
-
-    /**
-     * controller setter
-     * @param Controller $controller
-     */
-    public function setController(Controller & $controller)
-    {
-        $this->controller = $controller;
-    }
-
-    /**
-     * controller getter
-     * @return Controller
-     */
-    public function getController()
-    {
-        return $this->controller;
     }
 }

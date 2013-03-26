@@ -5,6 +5,7 @@ namespace Fabrico\Response\Handler;
 use Fabrico\Request\Request;
 use Fabrico\Response\Response;
 use Fabrico\Output\TextOutput;
+use Fabrico\Controller\Controller;
 
 /**
  * routes a request though a controller's method matching the request
@@ -17,23 +18,70 @@ class ControllerActionHandler extends Handler
     protected static $level = self::HIGH;
 
     /**
-     * @inheritdoc
+     * saved during validation
+     * @var Controller
      */
-    public function canHandle(Request & $req)
+    protected $controller;
+
+    /**
+     * controller method name
+     * @var string
+     */
+    protected $action;
+
+    /**
+     * force controller to be used
+     * @param Controller
+     */
+    public function setController(Controller $controller)
     {
-        return !!$req->_action;
+        $this->controller = $controller;
+    }
+
+    /**
+     * parsed controller getter
+     * @return Controller
+     */
+    public function getController()
+    {
+        return $this->controller;
+    }
+
+    /**
+     * force controller method to be used
+     * @string $action
+     */
+    public function setAction($action)
+    {
+        $this->action = $action;
+    }
+
+    /**
+     * parsed controller method getter
+     * @return string
+     */
+    public function getAction()
+    {
+        return $this->action;
     }
 
     /**
      * checks if the controller has the requested method
-     * @return boolean
+     * @return true
      */
-    public function valid()
+    public function canHandle(Request & $req)
     {
-        return !!$this->app->getController() && method_exists(
-            $this->app->getController(),
-            $this->app->getRequest()->_action
-        );
+        if ($req->_view) {
+            list($controller, $action) = explode('/', $req->_view);
+            $controller = Controller::load($controller);
+
+            // keep set data
+            $this->controller = $this->controller ?: $controller;
+            $this->action = $this->action ?: $action;
+        }
+
+        return !!$this->controller && method_exists(
+            $this->controller, $this->action);
     }
 
     /**
@@ -43,7 +91,7 @@ class ControllerActionHandler extends Handler
     {
         $res = $this->app->getResponse();
         $req = $this->app->getRequest();
-        $ret = $this->app->getController()->{ $req->_action }($req, $res);
+        $ret = $this->controller->{ $this->action }($req, $res);
 
         if ($ret) {
             $out = new TextOutput;

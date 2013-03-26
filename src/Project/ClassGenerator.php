@@ -35,7 +35,7 @@ trait ClassGenerator
      * @param string $classname
      * @return boolean
      */
-    private static function canFileProjectClass($classname)
+    private static function hasProjectClass($classname)
     {
         return class_exists(self::generateFullClassNamespacePath($classname));
     }
