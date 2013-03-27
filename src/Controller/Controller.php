@@ -26,7 +26,7 @@ abstract class Controller
     /**
      * @see Fabrico\Project\FileFilder
      */
-    private static $dir = 'Controller';
+    private static $dir = 'controller';
 
     /**
      * load and instanciate a controller

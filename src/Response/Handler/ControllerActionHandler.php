@@ -4,7 +4,7 @@ namespace Fabrico\Response\Handler;
 
 use Fabrico\Request\Request;
 use Fabrico\Response\Response;
-use Fabrico\Output\TextOutput;
+use Fabrico\Output\HtmlOutput;
 use Fabrico\Controller\Controller;
 
 /**
@@ -71,8 +71,8 @@ class ControllerActionHandler extends Handler
      */
     public function canHandle(Request & $req)
     {
-        if ($req->_view) {
-            list($controller, $action) = explode('/', $req->_view);
+        if ($req->_uri && strpos($req->_uri, '/') !== false) {
+            list($controller, $action) = explode('/', $req->_uri);
             $controller = Controller::load($controller);
 
             // keep set data
@@ -94,7 +94,7 @@ class ControllerActionHandler extends Handler
         $ret = $this->controller->{ $this->action }($req, $res);
 
         if ($ret) {
-            $out = new TextOutput;
+            $out = new HtmlOutput;
             $out->setContent($ret);
             $res->setOutput($out);
         }

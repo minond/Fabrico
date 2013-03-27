@@ -98,10 +98,11 @@ abstract class Request
     /**
      * @see getResponseHandler
      * @param Application $app
+     * @return Handler
      */
     public function prepareHandler(Application $app)
     {
-        $this->handler = $this->getResponseHandler($app);
+        return $this->handler = $this->getResponseHandler($app);
     }
 
     /**
@@ -122,7 +123,11 @@ abstract class Request
     {
         $list = $this->groupHandlersList();
         $handler = $this->findBestHandler($app, $list);
-        $handler->setApplication($app);
+
+        if ($handler) {
+            $handler->setApplication($app);
+        }
+
         return $handler;
     }
 
@@ -152,7 +157,6 @@ abstract class Request
      * this current request
      * @param Application $app
      * @param array $list
-     * @throws \Exception
      * @return Handler
      */
     private function findBestHandler(Application $app, array $list)
@@ -167,6 +171,6 @@ abstract class Request
             }
         }
 
-        throw new \Exception('No handler found');
+        return false;
     }
 }

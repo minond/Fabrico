@@ -13,6 +13,7 @@ call_user_func(function() {
     $res = new HttpResponse;
 
     $req->setData($_REQUEST);
+    $req->addResponseHandler('Fabrico\Response\Handler\ViewFileHandler');
     $req->addResponseHandler('Fabrico\Response\Handler\ControllerActionHandler');
 
     $app->setNamespace('Propositum');
@@ -20,10 +21,9 @@ call_user_func(function() {
     $app->setRequest($req);
     $app->setResponse($res);
 
-    $req->prepareHandler($app);
-    $out = $res->getOutput();
-
-    if ($req->valid()) {
+    if (!$req->prepareHandler($app)) {
+        die("Handler not found");
+    } else if ($req->valid()) {
         $req->getHandler()->handle();
         $res->send();
     } else {

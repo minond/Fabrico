@@ -45,7 +45,7 @@ class ControllerActionHandlerTest extends Test
 
     public function testControllerMethodIsCalled()
     {
-        $data = [ '_view' => 'Ignore/sets_output' ];
+        $data = [ '_uri' => 'Ignore/sets_output' ];
         $this->req->setData($data);
         $controller = new EmptyController;
         $app = new Application;
@@ -60,7 +60,7 @@ class ControllerActionHandlerTest extends Test
 
     public function testControllerMethodCanSetResponseOutput()
     {
-        $data = [ '_view' => 'Ignore/sets_output' ];
+        $data = [ '_uri' => 'Ignore/sets_output' ];
         $this->req->setData($data);
         $controller = new EmptyController;
         $app = new Application;
@@ -78,7 +78,7 @@ class ControllerActionHandlerTest extends Test
 
     public function testControllerMethodCanReturnResponseOutput()
     {
-        $data = [ '_view' => 'Ignore/returns_output' ];
+        $data = [ '_uri' => 'Ignore/returns_output' ];
         $this->req->setData($data);
         $controller = new EmptyController;
         $app = new Application;

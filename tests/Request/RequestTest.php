@@ -83,13 +83,10 @@ class RequestTest extends Test
         $this->assertTrue($this->pub->hasHandler());
     }
 
-    /**
-     * @expectedException Exception
-     */
     public function testHandlerSearchFailsWhenNoHandlersAreFound()
     {
         $app = new Application;
-        $this->req->prepareHandler($app);
+        $this->assertFalse($this->req->prepareHandler($app));
     }
 
     public function testBestHandlerIsActuallyFound()
