@@ -28,7 +28,15 @@ class HttpRequest extends Request
     public function __construct($method = null)
     {
         $this->method = $method ?: (isset($_SERVER['REQUEST_METHOD']) ?
-            $_SERVER['REQUEST_METHOD'] : ''
-        );
+            $_SERVER['REQUEST_METHOD'] : '');
+    }
+
+    /**
+     * method getter
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->method;
     }
 }

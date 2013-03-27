@@ -93,4 +93,18 @@ class ControllerActionHandlerTest extends Test
             $this->res->getOutput()->getContent()
         );
     }
+
+    public function testControllerGetterAndSetter()
+    {
+        $controller = new EmptyController;
+        $this->handler->setController($controller);
+        $this->assertEquals($controller, $this->handler->getController());
+    }
+
+    public function testActionGetterAndSetter()
+    {
+        $action = 'action_name';
+        $this->handler->setAction($action);
+        $this->assertEquals($action, $this->handler->getAction());
+    }
 }
