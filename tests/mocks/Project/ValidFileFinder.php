@@ -6,6 +6,6 @@ use Fabrico\Project\FileFinder;
 
 class ValidFileFinder extends InvalidFileFinder
 {
-    public static $dir = '/';
+    public static $dir = 'Project';
     public static $ext = '.php';
 }

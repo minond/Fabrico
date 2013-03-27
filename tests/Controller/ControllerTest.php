@@ -4,8 +4,9 @@ namespace Fabrico\Test\Controller;
 
 use Fabrico\Test\Test;
 use Fabrico\Test\OvertClass;
-use Fabrico\Controller\Controller;
 use Fabrico\Test\Mock\Controller\EmptyController;
+use Fabrico\Core\Application;
+use Fabrico\Controller\Controller;
 
 require_once 'tests/mocks/Controller/EmptyController.php';
 
@@ -22,6 +23,14 @@ class ControllerTest extends Test
         // );
         // $loaded_controller = $controller::load('ignore', $controller);
         // $this->assertTrue($loaded_controller instanceof EmptyController);
-        $this->markTestIncomplete('Problem with static methods');
+        $this->markTestIncomplete('Problem with static methods, ignoring code coverage');
+    }
+
+    public function testInvalidControllersAreNotLoaded()
+    {
+        $app = new Application;
+        $app->setRoot('/');
+        $app->setNamespace('Test');
+        $this->assertNull(Controller::load('fake'));
     }
 }

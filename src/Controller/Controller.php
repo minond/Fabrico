@@ -36,8 +36,10 @@ abstract class Controller
     public static function load($name)
     {
         if (self::loadProjectFile($name) && self::hasProjectClass($name)) {
+            // @codeCoverageIgnoreStart
             $class = self::generateFullClassNamespacePath($name);
             return new $class;
+            // @codeCoverageIgnoreEnd
         }
     }
 }
