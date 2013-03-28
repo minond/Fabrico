@@ -4,26 +4,25 @@ namespace Fabrico\Test\Controller;
 
 use Fabrico\Test\Test;
 use Fabrico\Test\OvertClass;
-use Fabrico\Test\Mock\Controller\EmptyController;
+use Fabrico\Test\Mock\Controller\ControllerFinder;
 use Fabrico\Core\Application;
 use Fabrico\Controller\Controller;
 
-require_once 'tests/mocks/Controller/EmptyController.php';
+require_once 'tests/mocks/Controller/ControllerFinder.php';
 
 class ControllerTest extends Test
 {
     public function testControllersCanBeFoundAndLoaded()
     {
-        // $controller = new OvertClass(new EmptyController);
-        // $controller->__overwriteStaticFunction('loadProjectFile', true);
-        // $controller->__overwriteStaticFunction('canFileProjectClass', true);
-        // $controller->__overwriteStaticFunction(
-        //     'generateFullClassNamespacePath',
-        //     'Fabrico\Test\Mock\Controller\EmptyController'
-        // );
-        // $loaded_controller = $controller::load('ignore', $controller);
-        // $this->assertTrue($loaded_controller instanceof EmptyController);
-        $this->markTestIncomplete('Problem with static methods, ignoring code coverage');
+        $app = new Application;
+        $app->setRoot(FABRICO_ROOT);
+        $app->setNamespace('Fabrico');
+
+        ControllerFinder::setDir('tests/mocks/Controller');
+        ControllerFinder::setNs('Test\Mock\Controller');
+
+        $con = ControllerFinder::load('ControllerFinder');
+        $this->assertTrue($con instanceof ControllerFinder);
     }
 
     public function testInvalidControllersAreNotLoaded()

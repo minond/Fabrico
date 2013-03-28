@@ -16,17 +16,17 @@ abstract class Controller
     /**
      * @see Fabrico\Project\FileFilder
      */
-    private static $ext = '.php';
+    protected static $ext = '.php';
 
     /**
      * @see Fabrico\Project\ClassGenerator
      */
-    private static $namespace = 'Controller';
+    protected static $namespace = 'Controller';
 
     /**
      * @see Fabrico\Project\FileFilder
      */
-    private static $dir = 'controller';
+    protected static $dir = 'controller';
 
     /**
      * load and instanciate a controller
@@ -36,10 +36,8 @@ abstract class Controller
     public static function load($name)
     {
         if (self::loadProjectFile($name) && self::hasProjectClass($name)) {
-            // @codeCoverageIgnoreStart
             $class = self::generateFullClassNamespacePath($name);
             return new $class;
-            // @codeCoverageIgnoreEnd
         }
     }
 }
