@@ -15,12 +15,12 @@ class View
     /**
      * @see Fabrico\Project\FileFilder
      */
-    private static $ext = '.php';
+    protected static $ext = '.php';
 
     /**
      * @see Fabrico\Project\FileFilder
      */
-    private static $dir = 'views';
+    protected static $dir = 'views';
 
     /**
      * view file name

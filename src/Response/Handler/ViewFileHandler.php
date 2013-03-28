@@ -22,6 +22,29 @@ class ViewFileHandler extends Handler
     private $view;
 
     /**
+     * view setter. requires view with a file set
+     * @param View $view
+     * @throws \InvalidArgumentException
+     */
+    public function setView(View $view)
+    {
+        if (!$view->getFile()) {
+            throw new \InvalidArgumentException('Empty view given');
+        }
+
+        $this->view = $view;
+    }
+
+    /**
+     * view getter
+     * @return View
+     */
+    public function getView()
+    {
+        return $this->view;
+    }
+
+    /**
      * checks if the controller has the requested method
      * @return true
      */
@@ -30,8 +53,8 @@ class ViewFileHandler extends Handler
         $ok = false;
         $view = null;
 
-        if ($req->_uri) {
-            $view = new View($req->_uri);
+        if ($req->_uri || $this->view) {
+            $view = $this->view ?: new View($req->_uri);
             $ok = $view->exists();
 
             if ($ok) {
@@ -48,9 +71,7 @@ class ViewFileHandler extends Handler
     public function handle()
     {
         $out = new HtmlOutput;
-        $data = new \StdClass;
-        $data->name = 'dddd';
-        $out->setContent($this->view->render([ 'name' => 'Marcos Minond' ], $data));
+        $out->setContent($this->view->render());
         $res = $this->app->getResponse()->setOutput($out);
     }
 }
