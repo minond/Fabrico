@@ -16,6 +16,12 @@ namespace Fabrico\Event;
  *         echo 'hi ' . $yourname;
  *         $this->signal(__FUNCTION__, Listener::POST, func_get_args());
  *     }
+ *
+ *     public function greetByRef($yourname) {
+ *         $this->signal(__FUNCTION__, Listener::PRE, [& $yourname]);
+ *         echo 'hi ' . $yourname;
+ *         $this->signal(__FUNCTION__, Listener::POST, [& $yourname]);
+ *     }
  * }
  *
  * // example class listener

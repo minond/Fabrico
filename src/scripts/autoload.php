@@ -1,5 +1,7 @@
 <?php
 
+use Fabrico\Event\Reporter;
+
 call_user_func(function() {
     $here = explode(DIRECTORY_SEPARATOR, dirname(__FILE__));
     array_pop($here); // scripts
@@ -31,11 +33,18 @@ spl_autoload_register(function ($class) {
         $file = $rest . FABRICO_EXTENSION;
         $in_bin = FABRICO_BIN_SRC . $file;
         $in_src = FABRICO_SRC . $file;
+        $src = null;
 
         if (file_exists($in_bin)) {
-            require $in_bin;
+            $src = $in_bin;
         } else if (file_exists($in_src)) {
-            require $in_src;
+            $src = $in_src;
+        }
+
+        require $src;
+
+        if (class_exists($class)) {
+            Reporter::greet($class);
         }
     }
 }, true, true);

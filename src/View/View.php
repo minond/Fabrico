@@ -4,13 +4,15 @@ namespace Fabrico\View;
 
 use Fabrico\Core\Application;
 use Fabrico\Project\FileFinder;
+use Fabrico\Event\Observable;
+use Fabrico\Event\Listener;
 
 /**
  * retrieves and renders view files
  */
 class View
 {
-    use FileFinder;
+    use FileFinder, Observable;
 
     /**
      * @see Fabrico\Project\FileFilder
@@ -71,15 +73,19 @@ class View
      */
     public function render($data = array(), $context = null)
     {
+        $this->signal(__FUNCTION__, Listener::PRE, [& $data, & $context]);
         $file = self::generateFileFilderFilePath($this->file);
 
         // so view files don't get access to the View object
-        return call_user_func(\Closure::bind(function() use (& $data, $file) {
+        $content = call_user_func(\Closure::bind(function() use (& $data, $file) {
             ob_start();
             extract($data);
             require($file);
             return ob_get_clean();
         }, $context));
+
+        $this->signal(__FUNCTION__, Listener::POST, [& $data, & $context]);
+        return $content;
     }
 
     /**

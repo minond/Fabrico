@@ -3,7 +3,8 @@
 namespace Fabrico\Event;
 
 /**
- * manages object subscriptions
+ * manages object subscriptions. should have no dependencies, as it's loaded
+ * immediately, and on every request.
  */
 class Reporter
 {
