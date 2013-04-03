@@ -15,28 +15,29 @@ use Fabrico\Event\Listeners;
 call_user_func(function() {
     $app = new Application;
     $res = new HttpResponse;
-
     $req = new HttpRequest;
-    $req->setData($_REQUEST);
-    $req->addResponseHandlers([
-        'Fabrico\Response\Handler\ViewFileHandler',
-        'Fabrico\Response\Handler\ControllerActionHandler',
-    ]);
+    $conf = new Configuration;
+    $listeners = new Listeners;
 
-    $app->setNamespace('Propositum');
-    $app->setRoot('/home/server/' . $_REQUEST['_project']);
+    $req->setData($_REQUEST);
     $app->setRequest($req);
     $app->setResponse($res);
+    $app->setConfiguration($conf);
+    $app->setRoot('/home/server/' . $_REQUEST['_project']);
+    $app->setNamespace($conf->get(Configuration::PROJECT,
+        'Project', 'namespace'));
 
-    $conf = new Configuration;
-    $listeners_info = $conf->loadProjectConfigurationFile(
-        Configuration::LISTENERS);
-    $listeners = new Listeners;
-    $listeners->setListeners($listeners_info['Listeners']);
+    // handlers
+    $req->addResponseHandlers(
+        $conf->get(Configuration::HANDLERS, 'Handlers'));
+
+    // listeners
+    $listeners->setListeners(
+        $conf->get(Configuration::LISTENERS, 'Listeners'));
     $listeners->loadListeners();
 
     if (!$req->prepareHandler($app)) {
-        die("Handler not found");
+        die('Handler not found');
     } else if ($req->valid()) {
         $req->getHandler()->handle();
         $res->send();

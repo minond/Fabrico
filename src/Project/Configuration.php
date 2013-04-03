@@ -13,6 +13,14 @@ class Configuration
      * configuration files:
      */
     const LISTENERS = 'listeners';
+    const HANDLERS = 'handlers';
+    const PROJECT = 'project';
+
+    /**
+     * configuration runtime cache
+     * @var array
+     */
+    private $cache = [];
 
     /**
      * configuration directory (@app/config/)
@@ -31,9 +39,38 @@ class Configuration
      * @param string $config_file
      * @return array
      */
-    public function loadProjectConfigurationFile($config_file)
+    public function load($config_file)
     {
-        return self::hasProjectFile($config_file) ? Yaml::parse(
-            self::generateFileFilderFilePath($config_file)) : null;
+        if (!array_key_exists($config_file, $this->cache)) {
+            $config = self::hasProjectFile($config_file) ? Yaml::parse(
+                self::generateFileFilderFilePath($config_file)) : null;
+
+            $this->cache[ $config_file ] = $config;
+        }
+
+        return $this->cache[ $config_file ];
+    }
+
+    /**
+     * loads a configuration file and returns a configuration property
+     * @param string $config_file
+     * @param string $prop*
+     * @return mixed
+     */
+    public function get($config_file, $prop)
+    {
+        $config = $this->load($config_file);
+        $props = func_get_args();
+        array_shift($props);
+
+        foreach ($props as $prop) {
+            if (isset($config[ $prop ])) {
+                $config = $config[ $prop ];
+            } else {
+                return null;
+            }
+        }
+
+        return $config;
     }
 }
