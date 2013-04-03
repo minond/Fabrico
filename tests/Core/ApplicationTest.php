@@ -5,6 +5,7 @@ namespace Fabrico\Test\Core;
 use Fabrico\Core\Application;
 use Fabrico\Response\HttpResponse;
 use Fabrico\Request\HttpRequest;
+use Fabrico\Project\Configuration;
 use Fabrico\Test\Test;
 
 class ApplicationTest extends Test
@@ -34,6 +35,13 @@ class ApplicationTest extends Test
         $res = new HttpResponse;
         $this->app->setResponse($res);
         $this->assertEquals($res, $this->app->getResponse());
+    }
+
+    public function testConfigurationCanBeSetAndRetrieved()
+    {
+        $conf = new Configuration;
+        $this->app->setConfiguration($conf);
+        $this->assertEquals($conf, $this->app->getConfiguration());
     }
 
     public function testNamespaceCanBeSetAndRetrieved()

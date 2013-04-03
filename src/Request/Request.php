@@ -61,6 +61,15 @@ abstract class Request
     }
 
     /**
+     * handlers adder
+     * @param string[] $handlers
+     */
+    final public function addResponseHandlers(array $handlers)
+    {
+        $this->handlers = array_unique(array_merge($handlers, $this->handlers));
+    }
+
+    /**
      * handler getter
      * @return Handler
      */

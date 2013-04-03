@@ -14,7 +14,7 @@ abstract class Controller
     use FileFinder, ClassGenerator;
 
     /**
-     * @see Fabrico\Project\FileFilder
+     * @see Fabrico\Project\FileFinder
      */
     protected static $ext = '.php';
 
@@ -24,7 +24,7 @@ abstract class Controller
     protected static $namespace = 'Controller';
 
     /**
-     * @see Fabrico\Project\FileFilder
+     * @see Fabrico\Project\FileFinder
      */
     protected static $dir = 'controller';
 

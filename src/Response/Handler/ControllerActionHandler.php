@@ -93,7 +93,7 @@ class ControllerActionHandler extends Handler
         $req = $this->app->getRequest();
         $ret = $this->controller->{ $this->action }($req, $res);
 
-        if ($ret) {
+        if (is_string($ret)) {
             $out = new HtmlOutput;
             $out->setContent($ret);
             $res->setOutput($out);

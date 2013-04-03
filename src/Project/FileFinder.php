@@ -23,7 +23,7 @@ trait FileFinder
             !static::$dir || !static::$ext
         ) {
             throw new \Exception(
-                'FileFilder trait requires directory and file extension information.');
+                'FileFinder trait requires directory and file extension information.');
         }
 
         return Application::getInstance()->getRoot() .

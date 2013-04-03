@@ -5,6 +5,7 @@ namespace Fabrico\Core;
 use Fabrico\Request\Request;
 use Fabrico\Response\Response;
 use Fabrico\Controller\Controller;
+use Fabrico\Project\Configuration;
 
 /**
  * base Fabrico application class. stores the request and reposnse object along
@@ -49,6 +50,12 @@ class Application
     private $response;
 
     /**
+     * project configuration file loader/manager
+     * @var Configuration
+     */
+    private $configuration;
+
+    /**
      * retrieve an Application
      * @param string $name
      * @return Application
@@ -70,7 +77,7 @@ class Application
     public function __construct($name = null)
     {
         self::$last = $this;
-        
+
         if ($name) {
             self::$cache[ $name ] = $this;
         }
@@ -146,5 +153,23 @@ class Application
     public function getResponse()
     {
         return $this->response;
+    }
+
+    /**
+     * configuration setter
+     * @param Configuration $conf
+     */
+    public function setConfiguration(Configuration & $conf)
+    {
+        $this->configuration = $conf;
+    }
+
+    /**
+     * configuration getter
+     * @return Configuration
+     */
+    public function getConfiguration()
+    {
+        return $this->configuration;
     }
 }

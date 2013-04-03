@@ -58,6 +58,12 @@ class RequestTest extends Test
         $this->assertEquals(['one', 'two', 'three'], $this->pub->handlers);
     }
 
+    public function testMultipleResponseHandlersCanBeAdded()
+    {
+        $this->req->addResponseHandlers(['one', 'two', 'three']);
+        $this->assertEquals(['one', 'two', 'three'], $this->pub->handlers);
+    }
+
     public function testHandlerCanBeRetrieved()
     {
         $handler = new DummyHandler;

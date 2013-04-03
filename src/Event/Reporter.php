@@ -55,7 +55,7 @@ class Reporter
      * @param string $type
      * @param mixed callable|Closure $action
      */
-    public function observe($class, $name, $type, $action)
+    public static function observe($class, $name, $type, $action)
     {
         if (!class_exists($class)) {
             self::$queue[] = (object) [

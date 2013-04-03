@@ -21,7 +21,7 @@ call_user_func(function() {
 chdir(FABRICO_ROOT);
 
 // request the vendor's autoload
-// require 'vendor/autoload.php';
+require 'vendor/autoload.php';
 
 // and create Fabrico's own autoload
 spl_autoload_register(function ($class) {
@@ -41,10 +41,12 @@ spl_autoload_register(function ($class) {
             $src = $in_src;
         }
 
-        require $src;
+        if (!is_null($src)) {
+            require $src;
 
-        if (class_exists($class)) {
-            Reporter::greet($class);
+            if (class_exists($class)) {
+                Reporter::greet($class);
+            }
         }
     }
 }, true, true);

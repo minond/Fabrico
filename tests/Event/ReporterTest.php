@@ -14,24 +14,17 @@ require_once 'tests/mocks/Event/Observable/UnusedObservable.php';
 
 class ReporterTest extends Test
 {
-    public $reporter;
     public $basic = '\Fabrico\Test\Mock\Event\BasicObservable';
     public $queue1 = '\Fabrico\Test\Mock\Event\QueuedObservable1';
     public $queue2 = '\Fabrico\Test\Mock\Event\QueuedObservable2';
     public $unused = '\Fabrico\Test\Mock\Event\UnusedObservable';
-
-    public function setUp()
-    {
-        $this->reporter = new Reporter;
-    }
 
     public function testSubscriptionsArePlaced()
     {
         $called = false;
         $basic = new BasicObservable;
 
-        $this->reporter->observe($this->basic, 'func', 'pre',
-        function() use (& $called) {
+        Reporter::observe($this->basic, 'func', 'pre', function() use (& $called) {
             $called = true;
         });
 
@@ -46,13 +39,11 @@ class ReporterTest extends Test
         $basic = new BasicObservable;
         $unused = new UnusedObservable;
 
-        $this->reporter->observe($this->basic, 'func', 'pre',
-        function() use (& $bcalled) {
+        Reporter::observe($this->basic, 'func', 'pre', function() use (& $bcalled) {
             $bcalled = true;
         });
 
-        $this->reporter->observe($this->unused, 'func', 'pre',
-        function() use (& $ucalled) {
+        Reporter::observe($this->unused, 'func', 'pre', function() use (& $ucalled) {
             $ucalled = true;
         });
 
@@ -64,8 +55,7 @@ class ReporterTest extends Test
 
     public function testSubscriptionsToObjectsNotLoadedAreNotBound()
     {
-        $this->reporter->observe($this->queue1, 'func', 'pre',
-        function() use (& $called) {
+        Reporter::observe($this->queue1, 'func', 'pre', function() use (& $called) {
             $called = true;
         });
 
@@ -79,8 +69,7 @@ class ReporterTest extends Test
 
     public function testSubscriptionsToObjectsNotLoadedAreBoundAfterGreeting()
     {
-        $this->reporter->observe($this->queue2, 'func', 'pre',
-        function() use (& $called) {
+        Reporter::observe($this->queue2, 'func', 'pre', function() use (& $called) {
             $called = true;
         });
 
