@@ -10,29 +10,20 @@ class Configuration
     use FileFinder;
 
     /**
-     * configuration files:
+     * @see Fabrico\Project\FileFinder
      */
-    const LISTENERS = 'listeners';
-    const HANDLERS = 'handlers';
-    const PROJECT = 'project';
+    protected static $dir = 'config';
+
+    /**
+     * @see Fabrico\Project\FileFinder
+     */
+    protected static $ext = '.yml';
 
     /**
      * configuration runtime cache
      * @var array
      */
-    private $cache = [];
-
-    /**
-     * configuration directory (@app/config/)
-     * @var string
-     */
-    protected static $dir = 'config';
-
-    /**
-     * configuration file extension (cofig.yml)
-     * @var string
-     */
-    protected static $ext = '.yml';
+    protected $cache = [];
 
     /**
      * load and parse a configuration file
@@ -53,17 +44,15 @@ class Configuration
 
     /**
      * loads a configuration file and returns a configuration property
-     * @param string $config_file
-     * @param string $prop*
+     * @param string $path
      * @return mixed
      */
-    public function get($config_file, $prop)
+    public function get($path)
     {
-        $config = $this->load($config_file);
-        $props = func_get_args();
-        array_shift($props);
+        $parts = explode(':', $path);
+        $config = $this->load(array_shift($parts));
 
-        foreach ($props as $prop) {
+        foreach ($parts as $prop) {
             if (isset($config[ $prop ])) {
                 $config = $config[ $prop ];
             } else {

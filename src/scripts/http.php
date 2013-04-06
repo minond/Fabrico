@@ -24,16 +24,13 @@ call_user_func(function() {
     $app->setResponse($res);
     $app->setConfiguration($conf);
     $app->setRoot('/home/server/' . $_REQUEST['_project']);
-    $app->setNamespace($conf->get(Configuration::PROJECT,
-        'Project', 'namespace'));
+    $app->setNamespace($conf->get('project:namespace'));
 
     // handlers
-    $req->addResponseHandlers(
-        $conf->get(Configuration::HANDLERS, 'Handlers'));
+    $req->addResponseHandlers($conf->get('handlers'));
 
     // listeners
-    $listeners->setListeners(
-        $conf->get(Configuration::LISTENERS, 'Listeners'));
+    $listeners->setListeners($conf->get('listeners'));
     $listeners->loadListeners();
 
     if (!$req->prepareHandler($app)) {
