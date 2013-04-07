@@ -27,7 +27,7 @@ abstract class Request
      * request parameters
      * @var array
      */
-    protected $data;
+    protected $data = [];
 
     /**
      * gives access to $data values
