@@ -5,7 +5,7 @@ namespace Fabrico\Event;
 use Fabrico\Project\FileFinder;
 
 /**
- * todo: add comment
+ * handles project's listeners
  */
 class Listeners
 {
@@ -25,19 +25,19 @@ class Listeners
      * required listener properties in configuration file
      * @var array
      */
-    private static $required_properties = ['name', 'active', 'tags'];
+    protected static $required_properties = ['name', 'active', 'tags'];
 
     /**
      * listeners to load
      * @var array
      */
-    private $listeners = [];
+    protected $listeners = [];
 
     /**
      * returns a list of listeners that are flagged as active
      * @return array
      */
-    private function getActiveListeners()
+    protected function getActiveListeners()
     {
         return array_filter($this->listeners, function($listener) {
             return (bool) $listener['active'];
