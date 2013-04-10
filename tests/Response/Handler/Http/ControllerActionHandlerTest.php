@@ -1,6 +1,6 @@
 <?php
 
-namespace Fabrico\Test\Response\Handler;
+namespace Fabrico\Test\Response\Handler\Http;
 
 use Fabrico\Test\Test;
 use Fabrico\Test\OvertClass;
@@ -8,7 +8,7 @@ use Fabrico\Test\Mock\Controller\EmptyController;
 use Fabrico\Core\Application;
 use Fabrico\Request\Http\Request;
 use Fabrico\Response\Http\Response;
-use Fabrico\Response\Handler\ControllerActionHandler;
+use Fabrico\Response\Handler\Http\ControllerActionHandler;
 
 require_once 'tests/mocks/Controller/EmptyController.php';
 
@@ -29,7 +29,7 @@ class ControllerActionHandlerTest extends Test
         $this->res = new Response;
         $this->pub = new OvertClass(
             $this->req,
-            'Fabrico\Response\Handler\ControllerActionHandler'
+            'Fabrico\Response\Handler\Http\ControllerActionHandler'
         );
     }
 

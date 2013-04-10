@@ -1,11 +1,12 @@
 <?php
 
-namespace Fabrico\Response\Handler;
+namespace Fabrico\Response\Handler\Http;
 
 use Fabrico\Request\Request;
 use Fabrico\Response\Response;
 use Fabrico\Output\Http\HtmlOutput;
 use Fabrico\Controller\Controller;
+use Fabrico\Response\Handler\Handler;
 
 /**
  * routes a request though a controller's method matching the request

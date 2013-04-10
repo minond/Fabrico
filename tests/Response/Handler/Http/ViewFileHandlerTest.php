@@ -1,10 +1,10 @@
 <?php
 
-namespace Fabrico\Test\Response\Handler;
+namespace Fabrico\Test\Response\Handler\Http;
 
 use Fabrico\Test\Test;
 use Fabrico\Test\Mock\View\HandlesAllView;
-use Fabrico\Response\Handler\ViewFileHandler;
+use Fabrico\Response\Handler\Http\ViewFileHandler;
 use Fabrico\Request\Http\Request;
 use Fabrico\Response\Http\Response;
 use Fabrico\Core\Application;

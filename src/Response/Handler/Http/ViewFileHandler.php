@@ -1,13 +1,15 @@
 <?php
 
-namespace Fabrico\Response\Handler;
+namespace Fabrico\Response\Handler\Http;
 
 use Fabrico\Request\Request;
 use Fabrico\Response\Response;
 use Fabrico\View\View;
 use Fabrico\Output\Http\HtmlOutput;
+use Fabrico\Response\Handler\Handler;
 
 /**
+ * outputs a view file
  */
 class ViewFileHandler extends Handler
 {
