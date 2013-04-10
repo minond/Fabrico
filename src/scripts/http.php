@@ -7,13 +7,14 @@ use Fabrico\Response\Http\Response;
 use Fabrico\Request\Http\Request;
 use Fabrico\Project\Configuration;
 use Fabrico\Event\Listeners;
+use Fabrico\Cache\RuntimeCache;
 
 call_user_func(function() {
     $app = new Application;
     $res = new Response;
     $req = new Request;
-    $conf = new Configuration;
     $listeners = new Listeners;
+    $conf = new Configuration(new RuntimeCache);
 
     $req->setData($_REQUEST);
     $app->setRequest($req);

@@ -5,7 +5,7 @@ namespace Fabrico\Cache;
 /**
  * base Cache class
  */
-abstract class Cache implements \ArrayAccess
+abstract class Cache implements \ArrayAccess, \Countable
 {
     /**
      * value setter. returns success

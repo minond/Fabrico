@@ -5,6 +5,7 @@ namespace Fabrico\Test\Controller;
 use Fabrico\Test\Test;
 use Fabrico\Test\Mock\Project\ConfigurationFinder;
 use Fabrico\Core\Application;
+use Fabrico\Cache\RuntimeCache;
 
 require_once 'tests/mocks/Project/ConfigurationFinder.php';
 
@@ -21,7 +22,7 @@ class ConfigurationTest extends Test
 
         $app = new Application;
         $app->setRoot(FABRICO_ROOT);
-        $this->conf = new ConfigurationFinder;
+        $this->conf = new ConfigurationFinder(new RuntimeCache);
     }
 
     public function testFilesCanBeFoundAndLoaded()
@@ -44,8 +45,7 @@ class ConfigurationTest extends Test
     {
         $data = $this->conf->load('test_configuration');
         $cache = $this->conf->getCache();
-        $this->assertTrue(is_array($cache));
-        $this->assertTrue(array_key_exists('test_configuration', $cache));
+        $this->assertTrue($cache->has('test_configuration'));
         $this->assertEquals($data, $cache['test_configuration']);
     }
 

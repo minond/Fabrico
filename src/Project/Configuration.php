@@ -3,6 +3,7 @@
 namespace Fabrico\Project;
 
 use Fabrico\Project\FileFinder;
+use Fabrico\Cache\Cache;
 use Symfony\Component\Yaml\Yaml;
 
 class Configuration
@@ -21,9 +22,17 @@ class Configuration
 
     /**
      * configuration runtime cache
-     * @var array
+     * @var Cache
      */
-    protected $cache = [];
+    protected $cache;
+
+    /**
+     * @param Cache $cache
+     */
+    public function __construct(Cache $cache)
+    {
+        $this->cache = $cache;
+    }
 
     /**
      * load and parse a configuration file
@@ -39,7 +48,8 @@ class Configuration
             $this->cache[ $config_file ] = $config;
         }
 
-        return $this->cache[ $config_file ];
+        return $this->cache->has($config_file) ?
+            $this->cache[ $config_file ] : null;
     }
 
     /**

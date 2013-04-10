@@ -6,6 +6,7 @@ use Fabrico\Core\Application;
 use Fabrico\Response\Http\Response;
 use Fabrico\Request\Http\Request;
 use Fabrico\Project\Configuration;
+use Fabrico\Cache\RuntimeCache;
 use Fabrico\Test\Test;
 
 class ApplicationTest extends Test
@@ -39,7 +40,7 @@ class ApplicationTest extends Test
 
     public function testConfigurationCanBeSetAndRetrieved()
     {
-        $conf = new Configuration;
+        $conf = new Configuration(new RuntimeCache);
         $this->app->setConfiguration($conf);
         $this->assertEquals($conf, $this->app->getConfiguration());
     }

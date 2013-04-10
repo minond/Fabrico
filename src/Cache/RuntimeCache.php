@@ -42,6 +42,15 @@ class RuntimeCache extends Cache
      */
     public function del($key)
     {
-        return unset($this->data[ $key ]);
+        unset($this->data[ $key ]);
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function count()
+    {
+        return count($this->data);
     }
 }
