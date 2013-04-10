@@ -5,11 +5,7 @@ require 'autoload.php';
 use Fabrico\Core\Application;
 use Fabrico\Response\Http\Response;
 use Fabrico\Request\Http\Request;
-use Fabrico\Controller\Controller;
 use Fabrico\Project\Configuration;
-
-use Fabrico\Request\Rule;
-use Fabrico\Request\Router;
 use Fabrico\Event\Listeners;
 
 call_user_func(function() {
@@ -27,7 +23,7 @@ call_user_func(function() {
     $app->setNamespace($conf->get('project:namespace'));
 
     // handlers
-    $req->addResponseHandlers($conf->get('handlers'));
+    $req->addResponseHandlers($conf->get('handlers:http'));
 
     // listeners
     $listeners->setListeners($conf->get('listeners'));
