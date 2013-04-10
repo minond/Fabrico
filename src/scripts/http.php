@@ -3,8 +3,8 @@
 require 'autoload.php';
 
 use Fabrico\Core\Application;
-use Fabrico\Response\HttpResponse;
-use Fabrico\Request\HttpRequest;
+use Fabrico\Response\Http\Response;
+use Fabrico\Request\Http\Request;
 use Fabrico\Controller\Controller;
 use Fabrico\Project\Configuration;
 
@@ -14,8 +14,8 @@ use Fabrico\Event\Listeners;
 
 call_user_func(function() {
     $app = new Application;
-    $res = new HttpResponse;
-    $req = new HttpRequest;
+    $res = new Response;
+    $req = new Request;
     $conf = new Configuration;
     $listeners = new Listeners;
 

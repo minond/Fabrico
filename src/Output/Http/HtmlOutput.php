@@ -1,6 +1,6 @@
 <?php
 
-namespace Fabrico\Output;
+namespace Fabrico\Output\Http;
 
 /**
  * handles html output

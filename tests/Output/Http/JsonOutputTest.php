@@ -1,8 +1,8 @@
 <?php
 
-namespace Fabrico\Test\Output;
+namespace Fabrico\Test\Output\Http;
 
-use Fabrico\Output\JsonOutput;
+use Fabrico\Output\Http\JsonOutput;
 use Fabrico\Test\Test;
 
 class JsonOutputTest extends Test

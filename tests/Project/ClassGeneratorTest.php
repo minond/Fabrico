@@ -1,6 +1,6 @@
 <?php
 
-namespace Fabrico\Test\Output;
+namespace Fabrico\Test\Project;
 
 use Fabrico\Test\Test;
 use Fabrico\Test\Mock\Project\InvalidClassGenerator;
@@ -36,7 +36,7 @@ class ClassGeneratorTest extends Test
     {
         $app = new Application;
         $app->setNamespace('Fabrico\Test');
-        ValidClassGenerator::$namespace = 'Output';
+        ValidClassGenerator::$namespace = 'Project';
         $valid = new ValidClassGenerator;
         $this->assertTrue($valid->callHasProjectClass('ClassGeneratorTest'));
     }

@@ -5,7 +5,7 @@ namespace Fabrico\Test\Mock\Controller;
 use Fabrico\Request\Request;
 use Fabrico\Response\Response;
 use Fabrico\Controller\Controller;
-use Fabrico\Output\TextOutput;
+use Fabrico\Output\Http\TextOutput;
 
 class EmptyController extends Controller
 {

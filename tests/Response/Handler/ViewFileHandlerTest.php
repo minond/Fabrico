@@ -5,8 +5,8 @@ namespace Fabrico\Test\Response\Handler;
 use Fabrico\Test\Test;
 use Fabrico\Test\Mock\View\HandlesAllView;
 use Fabrico\Response\Handler\ViewFileHandler;
-use Fabrico\Request\HttpRequest;
-use Fabrico\Response\HttpResponse;
+use Fabrico\Request\Http\Request;
+use Fabrico\Response\Http\Response;
 use Fabrico\Core\Application;
 
 require_once 'tests/mocks/View/HandlesAllView.php';
@@ -32,7 +32,7 @@ class ViewFileHandlerTest extends Test
     {
         $this->handler = new ViewFileHandler;
         $this->view = new HandlesAllView;
-        $this->request = new HttpRequest;
+        $this->request = new Request;
     }
 
     /**
@@ -72,7 +72,7 @@ class ViewFileHandlerTest extends Test
     public function testViewsAreRendered()
     {
         $app = new Application;
-        $response = new HttpResponse;
+        $response = new Response;
         $content = 'hi hi hi';
 
         $this->view->setFile('s');

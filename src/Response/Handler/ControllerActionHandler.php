@@ -4,7 +4,7 @@ namespace Fabrico\Response\Handler;
 
 use Fabrico\Request\Request;
 use Fabrico\Response\Response;
-use Fabrico\Output\HtmlOutput;
+use Fabrico\Output\Http\HtmlOutput;
 use Fabrico\Controller\Controller;
 
 /**

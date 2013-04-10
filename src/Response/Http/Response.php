@@ -1,13 +1,14 @@
 <?php
 
-namespace Fabrico\Response;
+namespace Fabrico\Response\Http;
 
-use Fabrico\Output\HttpOutput;
+use Fabrico\Output\Http\Output;
+use Fabrico\Response\Response as ResponseBase;
 
 /**
  * responds to a browser
  */
-class HttpResponse implements Response
+class Response implements ResponseBase
 {
     /**
      * checked before sending headers
@@ -16,7 +17,7 @@ class HttpResponse implements Response
     private $content_sent = false;
 
     /**
-     * @var HttpOutput
+     * @var Output
      */
     private $output;
 
@@ -28,9 +29,9 @@ class HttpResponse implements Response
 
     /**
      * output setter
-     * @param HttpOutput $output
+     * @param Output $output
      */
-    public function setOutput(HttpOutput $output)
+    public function setOutput(Output $output)
     {
         $this->output = $output;
         $this->setHeaders($output->getHeaders());
@@ -38,7 +39,7 @@ class HttpResponse implements Response
 
     /**
      * output getter
-     * @return HttpOutput
+     * @return Output
      */
     public function getOutput()
     {

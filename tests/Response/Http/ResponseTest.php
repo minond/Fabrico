@@ -2,8 +2,8 @@
 
 namespace Fabrico\Test\Response;
 
-use Fabrico\Response\HttpResponse;
-use Fabrico\Output\TextOutput;
+use Fabrico\Response\Http\Response;
+use Fabrico\Output\Http\TextOutput;
 use Fabrico\Test\Test;
 
 class HttpResponseTest extends Test
@@ -12,7 +12,7 @@ class HttpResponseTest extends Test
 
     public function setUp()
     {
-        $this->res = new HttpResponse;
+        $this->res = new Response;
     }
 
     public function testOutoutCanBeSetAndRetrieved()

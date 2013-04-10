@@ -1,8 +1,8 @@
 <?php
 
-namespace Fabrico\Test\Output;
+namespace Fabrico\Test\Output\Http;
 
-use Fabrico\Output\TextOutput;
+use Fabrico\Output\Http\TextOutput;
 use Fabrico\Test\Test;
 
 class TextOutputTest extends Test

@@ -1,11 +1,11 @@
 <?php
 
-namespace Fabrico\Output;
+namespace Fabrico\Output\Http;
 
 /**
  * defined getHeaders which is used by HttpResponse
  */
-interface HttpOutput
+interface Output
 {
     /**
      * returns an array of default headers for output type

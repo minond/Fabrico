@@ -1,11 +1,13 @@
 <?php
 
-namespace Fabrico\Request;
+namespace Fabrico\Request\Http;
+
+use Fabrico\Request\Request as RequestBase;
 
 /**
  * handles all http requests
  */
-class HttpRequest extends Request
+class Request extends RequestBase
 {
     /**
      * http methods

@@ -3,8 +3,8 @@
 namespace Fabrico\Test\Core;
 
 use Fabrico\Core\Application;
-use Fabrico\Response\HttpResponse;
-use Fabrico\Request\HttpRequest;
+use Fabrico\Response\Http\Response;
+use Fabrico\Request\Http\Request;
 use Fabrico\Project\Configuration;
 use Fabrico\Test\Test;
 
@@ -25,14 +25,14 @@ class ApplicationTest extends Test
 
     public function testRequestCanBeSetAndRetrieved()
     {
-        $req = new HttpRequest;
+        $req = new Request;
         $this->app->setRequest($req);
         $this->assertEquals($req, $this->app->getRequest());
     }
 
     public function testResponseCanBeSetAndRetrieved()
     {
-        $res = new HttpResponse;
+        $res = new Response;
         $this->app->setResponse($res);
         $this->assertEquals($res, $this->app->getResponse());
     }
@@ -46,7 +46,7 @@ class ApplicationTest extends Test
 
     public function testNamespaceCanBeSetAndRetrieved()
     {
-        $res = new HttpResponse;
+        $res = new Response;
         $this->app->setNamespace('hi');
         $this->assertEquals('hi', $this->app->getNamespace());
     }

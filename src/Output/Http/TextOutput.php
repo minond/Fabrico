@@ -1,11 +1,13 @@
 <?php
 
-namespace Fabrico\Output;
+namespace Fabrico\Output\Http;
+
+use Fabrico\Output\Output as OutputBase;
 
 /**
  * handles text output
  */
-class TextOutput implements Output, HttpOutput
+class TextOutput implements Output, OutputBase
 {
     protected $content;
 

@@ -25,8 +25,11 @@ codequality() {
 	# tools can be installing via:
 	# pear config-set auto_discover 1
 	# pear install pear.phpqatools.org/phpqatools
-	reportsection loc
-	phploc src/ | tee bin/autogen/code/loc.txt >> bin/autogen/code/report.txt
+	reportsection "loc (src)"
+	phploc src/ | tee bin/autogen/code/loc_src.txt >> bin/autogen/code/report.txt
+
+	reportsection "loc (tests)"
+	phploc tests/ | tee bin/autogen/code/loc_tests.txt >> bin/autogen/code/report.txt
 
 	reportsection cpd
 	phpcpd src/ | tee bin/autogen/code/cpd.txt >> bin/autogen/code/report.txt
