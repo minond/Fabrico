@@ -20,11 +20,11 @@ call_user_func(function() {
     $app->setRequest($req);
     $app->setResponse($res);
     $app->setConfiguration($conf);
-    $app->setRoot('/home/server/' . $_REQUEST['_project']);
+    $app->setRoot('/home/server/' . $req->_project);
     $app->setNamespace($conf->get('project:namespace'));
 
     // handlers
-    $req->addResponseHandlers($conf->get('handlers:http'));
+    $req->addResponseHandlers($conf->get('project:handlers:http'));
 
     // listeners
     $listeners->setListeners($conf->get('listeners'));
