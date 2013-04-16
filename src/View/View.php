@@ -73,18 +73,25 @@ class View
      */
     public function render($data = array(), $context = null)
     {
-        $this->signal(__FUNCTION__, Listener::PRE, [& $data, & $context]);
+        $self = $this;
+        $content = '';
         $file = self::generateFileFilderFilePath($this->file);
+        $this->signal(__FUNCTION__, Listener::PRE,
+            [& $data, & $context, & $content, & $file, & $self]);
 
         // so view files don't get access to the View object
-        $content = call_user_func(\Closure::bind(function() use (& $data, $file) {
-            ob_start();
-            extract($data);
-            require($file);
-            return ob_get_clean();
-        }, $context));
+        if (!$content) {
+            $content = call_user_func(\Closure::bind(function() use (& $data, $file) {
+                ob_start();
+                extract($data);
+                require($file);
+                return ob_get_clean();
+            }, $context));
+        }
 
-        $this->signal(__FUNCTION__, Listener::POST, [& $data, & $context]);
+        $this->signal(__FUNCTION__, Listener::POST,
+            [& $data, & $context, & $content, & $file, & $self]);
+
         return $content;
     }
 
