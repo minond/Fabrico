@@ -73,11 +73,18 @@ class View
      */
     public function render($data = array(), $context = null)
     {
-        $self = $this;
         $content = '';
         $file = self::generateFileFilderFilePath($this->file);
-        $this->signal(__FUNCTION__, Listener::PRE,
-            [& $data, & $context, & $content, & $file, & $self]);
+        $args = (object) [
+            'data' => & $data,
+            'context' => & $context,
+            'content' => & $content,
+            'filepath' => & $file,
+            'file' => & $this->file,
+            'view' => & $this,
+        ];
+
+        $this->signal(__FUNCTION__, Listener::PRE,[ & $args ]);
 
         // so view files don't get access to the View object
         if (!$content) {
@@ -89,9 +96,7 @@ class View
             }, $context));
         }
 
-        $this->signal(__FUNCTION__, Listener::POST,
-            [& $data, & $context, & $content, & $file, & $self]);
-
+        $this->signal(__FUNCTION__, Listener::POST, [ & $args ]);
         return $content;
     }
 
