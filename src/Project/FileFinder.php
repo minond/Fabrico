@@ -18,6 +18,17 @@ trait FileFinder
      */
     private static function generateFileFilderFilePath($filename)
     {
+        return self::generateFileFilderDirectoryPath() .
+            self::generateFileFilderFileName($filename);
+    }
+
+    /**
+     * generates an object's directory path
+     * @throws \Exception
+     * @return string
+     */
+    private static function generateFileFilderDirectoryPath()
+    {
         if (!property_exists(get_called_class(), 'dir') ||
             !property_exists(get_called_class(), 'ext') ||
             !static::$dir || !static::$ext
@@ -27,8 +38,17 @@ trait FileFinder
         }
 
         return Application::getInstance()->getRoot() .
-            \DIRECTORY_SEPARATOR . static::$dir .
-            \DIRECTORY_SEPARATOR . $filename .  static::$ext;
+            \DIRECTORY_SEPARATOR . static::$dir . \DIRECTORY_SEPARATOR;
+    }
+
+    /**
+     * appends the file format
+     * @param string $filename
+     * @return string
+     */
+    private static function generateFileFilderFileName($filename)
+    {
+        return $filename .  static::$ext;
     }
 
     /**

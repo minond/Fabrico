@@ -79,8 +79,10 @@ class View
             'data' => & $data,
             'context' => & $context,
             'content' => & $content,
-            'filepath' => & $file,
             'file' => & $this->file,
+            'filepath' => & $file,
+            'filename' => self::generateFileFilderFileName($this->file),
+            'dirpath' => self::generateFileFilderDirectoryPath(),
             'view' => & $this,
         ];
 
