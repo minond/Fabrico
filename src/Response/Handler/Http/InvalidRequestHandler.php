@@ -31,6 +31,11 @@ class InvalidRequestHandler extends Handler
     protected $file;
 
     /**
+     * @var View
+     */
+    protected $view;
+
+    /**
      * checks if the controller has the requested method
      * @return true
      */
@@ -44,7 +49,7 @@ class InvalidRequestHandler extends Handler
      */
     public function handle()
     {
-        $view = new View;
+        $view = $this->view ?: new View;
         $out = new HtmlOutput;
         $file = $this->getPropertyValue('file');
 
@@ -52,5 +57,23 @@ class InvalidRequestHandler extends Handler
         $out->setContent($view->render());
 
         $this->app->getResponse()->setOutput($out);
+    }
+
+    /**
+     * view setter
+     * @param View $view
+     */
+    public function setView(View $view)
+    {
+        $this->view = $view;
+    }
+
+    /**
+     * view getter
+     * @return View
+     */
+    public function getView()
+    {
+        return $this->view;
     }
 }
