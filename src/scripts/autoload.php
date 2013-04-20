@@ -7,6 +7,7 @@ call_user_func(function() {
     array_pop($here); // scripts
     array_pop($here); // src
 
+    define('FABRICO_PROJECTS_DIR', '/home/server/');
     define('FABRICO_NAMESPACE', 'Fabrico');
     define('FABRICO_EXTENSION', '.php');
     define('FABRICO_ROOT', implode(DIRECTORY_SEPARATOR, $here) .

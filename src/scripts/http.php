@@ -13,29 +13,28 @@ call_user_func(function() {
     $app = new Application;
     $res = new Response;
     $req = new Request;
-    $listeners = new Listeners;
     $conf = new Configuration(new RuntimeCache);
 
     $req->setData($_REQUEST);
     $app->setRequest($req);
     $app->setResponse($res);
     $app->setConfiguration($conf);
-    $app->setRoot('/home/server/' . $req->_project);
+    $app->setRoot(FABRICO_PROJECTS_DIR . $req->_project);
     $app->setNamespace($conf->get('project:namespace'));
 
     // handlers
     $req->addResponseHandlers($conf->get('project:handlers:http'));
 
     // listeners
-    $listeners->setListeners($conf->get('listeners'));
-    $listeners->loadListeners();
+    if (count($conf->get('listeners'))) {
+        $listeners = new Listeners;
+        $listeners->setListeners($conf->get('listeners'));
+        $listeners->loadListeners();
+    }
 
-    if (!$req->prepareHandler($app)) {
-        die('Handler not found');
-    } else if ($req->valid()) {
+    // pick best handler and send back response
+    if ($req->prepareHandler($app) && $req->valid()) {
         $req->getHandler()->handle();
         $res->send();
-    } else {
-        die("Invalid request");
     }
 });
