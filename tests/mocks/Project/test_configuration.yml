@@ -5,3 +5,6 @@ one:
     three:
       four:
         five: hi
+
+Fabrico\Test\Mock\Project\Configurable:
+  prop: hihihi
