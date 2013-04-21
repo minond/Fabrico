@@ -74,16 +74,20 @@ class View
     public function render($data = array(), $context = null)
     {
         $content = '';
+        $fparts = explode('.', $this->file);
+        $extension = count($fparts) !== 1 ? array_pop($fparts) : null;
         $file = self::generateFileFilderFilePath($this->file);
+
         $args = (object) [
+            'view' => & $this,
             'data' => & $data,
             'context' => & $context,
             'content' => & $content,
             'file' => & $this->file,
             'filepath' => & $file,
+            'extension' => $extension,
             'filename' => self::generateFileFilderFileName($this->file),
             'dirpath' => self::generateFileFilderDirectoryPath(),
-            'view' => & $this,
         ];
 
         $this->signal(__FUNCTION__, Listener::PRE,[ & $args ]);

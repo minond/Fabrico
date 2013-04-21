@@ -4,3 +4,5 @@ tags: [ view, template, twig ]
 files:
   - name: twig.php
     type: listener
+config:
+  extension: twig
