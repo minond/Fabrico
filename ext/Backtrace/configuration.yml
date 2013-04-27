@@ -1,0 +1,14 @@
+name: Backtrace
+description: View file error outputs
+tags: [ view, debugging, backtrace ]
+
+files:
+  - name: backtrace.php
+    type: listener
+
+  - name: backtrace.twig.php
+    type: view
+
+deps:
+  - name: Twig
+    type: extension

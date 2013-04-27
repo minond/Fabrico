@@ -90,7 +90,7 @@ class View
             'dirpath' => self::generateFileFilderDirectoryPath(),
         ];
 
-        $this->signal(__FUNCTION__, Listener::PRE,[ & $args ]);
+        $this->signal(__FUNCTION__, Listener::PRE, [ & $args ]);
 
         // so view files don't get access to the View object
         if (!$content) {

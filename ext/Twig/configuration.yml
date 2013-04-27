@@ -1,8 +1,7 @@
 name: Twig
 description: Twig is a modern template engine for PHP
 tags: [ view, template, twig ]
+
 files:
   - name: twig.php
     type: listener
-config:
-  extension: twig

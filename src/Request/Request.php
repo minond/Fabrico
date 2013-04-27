@@ -5,12 +5,16 @@ namespace Fabrico\Request;
 use Fabrico\Core\Application;
 use Fabrico\Response\Response;
 use Fabrico\Response\Handler\Handler;
+use Fabrico\Event\Observable;
+use Fabrico\Event\Listener;
 
 /**
  * base interface for all incoming request (ie. Http, Cli)
  */
 abstract class Request
 {
+    use Observable;
+
     /**
      * available response handlers
      * @var Handler[]
@@ -111,7 +115,15 @@ abstract class Request
      */
     public function prepareHandler(Application $app)
     {
-        return $this->handler = $this->getResponseHandler($app);
+        $args = [ 'app' => & $app ];
+        $this->signal(__FUNCTION__, Listener::PRE, [ & $args ]);
+
+        $handler = $this->handler = $this->getResponseHandler($app);
+
+        $args['handler'] =& $handler;
+        $this->signal(__FUNCTION__, Listener::POST, [ & $args ]);
+
+        return $handler;
     }
 
     /**
