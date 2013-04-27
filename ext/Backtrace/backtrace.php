@@ -28,7 +28,6 @@ Reporter::observe('Fabrico\Request\Http\Request', 'prepareHandler', Listener::PR
                 'backtrace' => debug_backtrace(),
                 'source' => getsource($file, $line),
             ]);
-            var_dump(debug_backtrace());
 
             die;
         });
