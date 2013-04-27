@@ -60,7 +60,10 @@ class ConfigurationTest extends Test
             $this->conf->get('test_configuration:one:two:three:four:five'));
     }
 
-    public function testInvalidConfigurationPathsReturnNull()
+    /**
+     * @expectedException Exception
+     */
+    public function testInvalidConfigurationPathsThrowExceptions()
     {
         $this->assertNull($this->conf->get('test_configuration:one:does_not_exist'));
     }

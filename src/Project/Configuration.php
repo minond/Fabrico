@@ -55,6 +55,7 @@ class Configuration
     /**
      * loads a configuration file and returns a configuration property
      * @param string $path
+     * @throws \Exception
      * @return mixed
      */
     public function get($path)
@@ -66,7 +67,7 @@ class Configuration
             if (isset($config[ $prop ])) {
                 $config = $config[ $prop ];
             } else {
-                return null;
+                throw new \Exception("Invalid configuration path: {$path}");
             }
         }
 
