@@ -25,6 +25,13 @@ call_user_func(function() {
     // handlers
     $req->addResponseHandlers($conf->get('project:handlers:http'));
 
+    // project bootstraps
+    if (count($conf->get('project:bootstrap'))) {
+        foreach ($conf->get('project:bootstrap') as $file) {
+            require_once FABRICO_PROJECT_ROOT . $file;
+        }
+    }
+
     // listeners
     if (count($conf->get('listeners'))) {
         $listeners = new Listeners;
