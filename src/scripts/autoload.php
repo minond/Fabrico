@@ -7,10 +7,12 @@ call_user_func(function() {
     array_pop($here); // scripts
     array_pop($here); // src
 
-    define('FABRICO_PROJECTS_DIR', '/home/server/');
     define('FABRICO_NAMESPACE', 'Fabrico');
     define('FABRICO_EXTENSION', '.php');
     define('FABRICO_ROOT', implode(DIRECTORY_SEPARATOR, $here) .
+        DIRECTORY_SEPARATOR);
+    array_pop($here); // Fabrico
+    define('FABRICO_PROJECT_ROOT', implode(DIRECTORY_SEPARATOR, $here) .
         DIRECTORY_SEPARATOR);
     define('FABRICO_SRC', FABRICO_ROOT . 'src' . DIRECTORY_SEPARATOR);
     define('FABRICO_BIN', FABRICO_ROOT . 'bin' . DIRECTORY_SEPARATOR);

@@ -19,7 +19,7 @@ call_user_func(function() {
     $app->setRequest($req);
     $app->setResponse($res);
     $app->setConfiguration($conf);
-    $app->setRoot(FABRICO_PROJECTS_DIR . $req->_project);
+    $app->setRoot(FABRICO_PROJECT_ROOT);
     $app->setNamespace($conf->get('project:namespace'));
 
     // handlers
