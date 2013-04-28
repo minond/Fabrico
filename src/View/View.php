@@ -31,11 +31,19 @@ class View
     private $file;
 
     /**
+     * file extension
+     * @var string
+     */
+    private $extension;
+
+    /**
      * @param string $file
      */
     public function __construct($file = null)
     {
-        $this->file = $file;
+        if ($file) {
+            $this->setFile($file);
+        }
     }
 
     /**
@@ -44,7 +52,15 @@ class View
      */
     public function setFile($file)
     {
-        $this->file = $file;
+        $ext = '';
+
+        if (strpos($file, '.')) {
+            $parts = explode('.', $file);
+            $this->extension = '.' . array_pop($parts);
+            $this->file = implode('.', $parts);
+        } else {
+            $this->file = $file;
+        }
     }
 
     /**
@@ -62,7 +78,7 @@ class View
      */
     public function exists()
     {
-        return self::hasProjectFile($this->file);
+        return self::hasProjectFile($this->file, $this->extension);
     }
 
     /**
@@ -74,9 +90,7 @@ class View
     public function render($data = array(), $context = null)
     {
         $content = '';
-        $fparts = explode('.', $this->file);
-        $extension = count($fparts) !== 1 ? array_pop($fparts) : null;
-        $file = self::generateFileFilderFilePath($this->file);
+        $file = self::generateFileFilderFilePath($this->file, $this->extension);
 
         $args = (object) [
             'view' => & $this,
@@ -85,8 +99,8 @@ class View
             'content' => & $content,
             'file' => & $this->file,
             'filepath' => & $file,
-            'extension' => $extension,
-            'filename' => self::generateFileFilderFileName($this->file),
+            'extension' => $this->extension,
+            'filename' => self::generateFileFilderFileName($this->file, $this->extension),
             'dirpath' => self::generateFileFilderDirectoryPath(),
         ];
 

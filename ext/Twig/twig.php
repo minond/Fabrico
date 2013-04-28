@@ -8,7 +8,7 @@ Reporter::observe('Fabrico\View\View', 'render', Listener::PRE,
         Twig_Autoloader::register();
 
         // todo: should check plugin configuration
-        if ($info->extension === 'twig') {
+        if ($info->extension === '.twig') {
             $load = new Twig_Loader_Filesystem($info->dirpath);
             $twig = new Twig_Environment($load);
 

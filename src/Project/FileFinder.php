@@ -13,13 +13,14 @@ trait FileFinder
     /**
      * generates a file's path
      * @param string $filename
+     * @param string $extension
      * @throws \Exception
      * @return string
      */
-    private static function generateFileFilderFilePath($filename)
+    private static function generateFileFilderFilePath($filename, $extension = '')
     {
         return self::generateFileFilderDirectoryPath() .
-            self::generateFileFilderFileName($filename);
+            self::generateFileFilderFileName($filename, $extension);
     }
 
     /**
@@ -29,12 +30,9 @@ trait FileFinder
      */
     private static function generateFileFilderDirectoryPath()
     {
-        if (!property_exists(get_called_class(), 'dir') ||
-            !property_exists(get_called_class(), 'ext') ||
-            !static::$dir || !static::$ext
-        ) {
+        if (!property_exists(get_called_class(), 'dir') || !static::$dir) {
             throw new \Exception(
-                'FileFinder trait requires directory and file extension information.');
+                'FileFinder trait requires directory information.');
         }
 
         return Application::getInstance()->getRoot() .
@@ -44,33 +42,36 @@ trait FileFinder
     /**
      * appends the file format
      * @param string $filename
+     * @param string $extension
      * @return string
      */
-    private static function generateFileFilderFileName($filename)
+    private static function generateFileFilderFileName($filename, $extension = '')
     {
-        return $filename .  static::$ext;
+        return $extension ? $filename . $extension : $filename . static::$ext;
     }
 
     /**
      * checks to see if project file exists
      * @param string $filename
+     * @param string $extension
      * @return boolean
      */
-    private static function hasProjectFile($filename)
+    private static function hasProjectFile($filename, $extension = '')
     {
-        return file_exists(self::generateFileFilderFilePath($filename));
+        return file_exists(self::generateFileFilderFilePath($filename, $extension));
     }
 
     /**
      * loads a project's file
      * @param string $filename
+     * @param string $extension
      * @throws \Exception
      * @return boolean
      */
-    private static function loadProjectFile($filename)
+    private static function loadProjectFile($filename, $extension = '')
     {
         if (self::hasProjectFile($filename)) {
-            return require_once self::generateFileFilderFilePath($filename);
+            return require_once self::generateFileFilderFilePath($filename, $extension);
         } else {
             return false;
         }
