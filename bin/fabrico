@@ -1,13 +1,24 @@
 #!/bin/bash
 
-cd "$(pwd -P $0)/../../"
+# find root of project
+while [ ! -d Fabrico ]; do
+	cd "$(pwd)/../"
+
+	if [ "$PWD" != "/" ]; then
+		echo "fatal: Not a Fabrico project"
+		exit
+	fi
+done
+
+# the move into fabrico directory
+cd Fabrico
 
 tests() {
 	./vendor/bin/phpunit
 }
 
 documentation() {
-	./vendor/bin/apigen.php --source src/ --destination bin/autogen/docs/ --todo 
+	./vendor/bin/apigen.php --source src/ --destination bin/autogen/docs/ --todo
 }
 
 benchmark() {
@@ -45,22 +56,22 @@ do
 	case "$arg" in
 		test)
 			tests
-            exit 1
+			exit 1
 			;;
 
 		doc)
 			documentation
-            exit 1
+			exit 1
 			;;
 
 		bench)
 			benchmark
-            exit 1
+			exit 1
 			;;
 
 		code)
 			codequality
-            exit 1
+			exit 1
 			;;
 
 		build)
@@ -77,7 +88,7 @@ do
 			echo "running basic benchmark..."
 			benchmark
 			echo "done"
-            exit 1
+			exit 1
 			;;
 	esac
 done
