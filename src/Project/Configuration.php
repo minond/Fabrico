@@ -68,9 +68,10 @@ class Configuration
     /**
      * load and parse a configuration file
      * @param string $config_file
+     * @param boolean $raw - optional, default = false
      * @return array
      */
-    public function load($config_file)
+    public function load($config_file, $raw = false)
     {
         if (!$this->cache->has($config_file)) {
             $config = null;
@@ -78,7 +79,11 @@ class Configuration
             if (self::hasProjectFile($config_file)) {
                 $str = file_get_contents(
                     self::generateFileFilderFilePath($config_file));
-                $str = $this->prepareRawConfigurationString($str);
+
+                if (!$raw) {
+                    $str = $this->prepareRawConfigurationString($str);
+                }
+
                 $config = Yaml::parse($str);
             }
 

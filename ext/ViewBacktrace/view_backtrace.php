@@ -11,14 +11,14 @@ if (Ext::enabled('view_backtrace')) {
         'prepareHandler',
         Listener::PRE,
         function($info) {
-            $view     = Ext::config('ViewBacktrace:view');
-            $errors   = Ext::config('ViewBacktrace:error:reporting');
-            $err_msg  = Ext::config('ViewBacktrace:error:label');
-            $err_kill = Ext::config('ViewBacktrace:error:kill');
-            $exc_kill = Ext::config('ViewBacktrace:exception:kill');
-            $bak_show = Ext::config('ViewBacktrace:backtrace:display');
-            $src_show = Ext::config('ViewBacktrace:source:display');
-            $src_line = Ext::config('ViewBacktrace:source:line_offset');
+            $view     = Ext::config('view_backtrace:view');
+            $errors   = Ext::config('view_backtrace:error:reporting');
+            $err_msg  = Ext::config('view_backtrace:error:label');
+            $err_kill = Ext::config('view_backtrace:error:kill');
+            $exc_kill = Ext::config('view_backtrace:exception:kill');
+            $bak_show = Ext::config('view_backtrace:backtrace:display');
+            $src_show = Ext::config('view_backtrace:source:display');
+            $src_line = Ext::config('view_backtrace:source:line_offset');
 
             error_reporting($errors);
 

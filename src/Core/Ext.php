@@ -34,7 +34,7 @@ class Ext
     {
         $conf = Application::getInstance()->getConfiguration();
         $parts = Configuration::parsePath($path);
-        array_unshift($parts->path, self::CONFIGURATION_BASE);
+        // array_unshift($parts->path, self::CONFIGURATION_BASE);
 
         $realbase = self::$dir . DIRECTORY_SEPARATOR . $parts->base;
         $realpath = $realbase . Configuration::PATH_DELIM .
