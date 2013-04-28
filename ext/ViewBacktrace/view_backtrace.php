@@ -9,7 +9,7 @@ Reporter::observe('Fabrico\Request\Http\Request', 'prepareHandler', Listener::PR
         error_reporting(E_ALL);
 
         set_error_handler(function($errnum, $message, $file, $line) {
-            echo View::generate('backtrace.twig', [
+            echo View::generate('view_backtrace.twig', [
                 'errtype' => $errnum,
                 'message' => $message,
                 'file' => $file,
@@ -22,7 +22,7 @@ Reporter::observe('Fabrico\Request\Http\Request', 'prepareHandler', Listener::PR
         }, E_ALL);
 
         set_exception_handler(function($exception) {
-            echo View::generate('backtrace.twig', [
+            echo View::generate('view_backtrace.twig', [
                 'errtype' => get_class($exception),
                 'message' => $exception->getMessage(),
                 'file' => $exception->getFile(),
