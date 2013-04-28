@@ -5,93 +5,113 @@ use Fabrico\Event\Reporter;
 use Fabrico\View\View;
 use Fabrico\Core\Ext;
 
-Reporter::observe('Fabrico\Request\Http\Request', 'prepareHandler', Listener::PRE,
-    function($info) {
-        $view     = Ext::config('ViewBacktrace:view');
-        $errors   = Ext::config('ViewBacktrace:error:reporting');
-        $err_msg  = Ext::config('ViewBacktrace:error:label');
-        $err_kill = Ext::config('ViewBacktrace:error:kill');
-        $exc_kill = Ext::config('ViewBacktrace:exception:kill');
-        $bak_show = Ext::config('ViewBacktrace:backtrace:display');
-        $src_show = Ext::config('ViewBacktrace:source:display');
-        $src_line = Ext::config('ViewBacktrace:source:line_offset');
+if (Ext::enabled('view_backtrace')) {
+    Reporter::observe(
+        'Fabrico\Request\Http\Request',
+        'prepareHandler',
+        Listener::PRE,
+        function($info) {
+            $view     = Ext::config('ViewBacktrace:view');
+            $errors   = Ext::config('ViewBacktrace:error:reporting');
+            $err_msg  = Ext::config('ViewBacktrace:error:label');
+            $err_kill = Ext::config('ViewBacktrace:error:kill');
+            $exc_kill = Ext::config('ViewBacktrace:exception:kill');
+            $bak_show = Ext::config('ViewBacktrace:backtrace:display');
+            $src_show = Ext::config('ViewBacktrace:source:display');
+            $src_line = Ext::config('ViewBacktrace:source:line_offset');
 
-        error_reporting($errors);
+            error_reporting($errors);
 
-        set_error_handler(function($errnum, $message, $file, $line) use ($view, $err_msg, $err_kill, $bak_show, $src_show, $src_line) {
-            $errtype = array_key_exists($errnum, $err_msg) ?
-                $err_msg[ $errnum ] : $errnum;
+            set_error_handler(function($errnum, $message, $file, $line) use (
+                $view,
+                $err_msg,
+                $err_kill,
+                $bak_show,
+                $src_show,
+                $src_line
+            ) {
+                $errtype = array_key_exists($errnum, $err_msg) ?
+                    $err_msg[ $errnum ] : $errnum;
 
-            echo View::generate($view, [
-                'errtype' => $errtype,
-                'message' => $message,
-                'file' => $file,
-                'line' => $line,
-                'backtrace' => debug_backtrace(),
-                'display_backtrace' => $bak_show,
-                'display_source' => $src_show,
-                'source' => getsource($file, $line, $src_line, $src_show),
-            ]);
+                echo View::generate($view, [
+                    'errtype' => $errtype,
+                    'message' => $message,
+                    'file' => $file,
+                    'line' => $line,
+                    'backtrace' => debug_backtrace(),
+                    'display_backtrace' => $bak_show,
+                    'display_source' => $src_show,
+                    'source' => getsource($file, $line, $src_line, $src_show),
+                ]);
 
-            if ($err_kill) {
-                die;
-            }
-        }, $errors);
+                if ($err_kill) {
+                    die;
+                }
+            }, $errors);
 
-        set_exception_handler(function($exception) use ($view, $exc_kill, $bak_show, $src_show, $src_line) {
-            $backtrace = $exception->getTrace();
-            $file = $backtrace[0]['file'];
-            $line = $backtrace[0]['line'];
+            set_exception_handler(function($exception) use (
+                $view,
+                $exc_kill,
+                $bak_show,
+                $src_show,
+                $src_line
+            ) {
+                $backtrace = $exception->getTrace();
+                $file = $backtrace[0]['file'];
+                $line = $backtrace[0]['line'];
 
-            // prepend exception thrown location
-            array_unshift($backtrace, [
-                'file' => $exception->getFile(),
-                'line' => $exception->getLine(),
-            ]);
+                // prepend exception thrown location
+                array_unshift($backtrace, [
+                    'file' => $exception->getFile(),
+                    'line' => $exception->getLine(),
+                ]);
 
-            echo View::generate($view, [
-                'errtype' => get_class($exception),
-                'message' => $exception->getMessage(),
-                'file' => $file,
-                'line' => $line,
-                'backtrace' => $backtrace,
-                'display_backtrace' => $bak_show,
-                'display_source' => $src_show,
-                'source' => getsource($file, $line, $src_line, $src_show),
-            ]);
+                echo View::generate($view, [
+                    'errtype' => get_class($exception),
+                    'message' => $exception->getMessage(),
+                    'file' => $file,
+                    'line' => $line,
+                    'backtrace' => $backtrace,
+                    'display_backtrace' => $bak_show,
+                    'display_source' => $src_show,
+                    'source' => getsource($file, $line, $src_line, $src_show),
+                ]);
 
-            if ($exc_kill) {
-                die;
-            }
-        });
+                if ($exc_kill) {
+                    die;
+                }
+            });
 
-        /**
-         * source contents getter
-         * @param string file
-         * @param int $line
-         * @param int $offset - optional, default = 10
-         * @param int $show - optional, default = true
-         * @return string
-         */
-        function getsource($file, $line, $offset = 10, $show = true)
-        {
-            $source = [];
-            $lines = null;
+            /**
+             * source contents getter
+             * @param string file
+             * @param int $line
+             * @param int $offset - optional, default = 10
+             * @param int $show - optional, default = true
+             * @return string
+             */
+            function getsource($file, $line, $offset = 10, $show = true)
+            {
+                $source = [];
+                $lines = null;
 
-            if ($show) {
-                $lines = explode(PHP_EOL, file_get_contents($file));
+                if ($show) {
+                    $lines = explode(PHP_EOL, file_get_contents($file));
+                    $i = $line - $offset;
+                    $max = $line + $offset + 1;
 
-                for ($i = $line - $offset, $max = $line + $offset + 1; $i < $max; $i++) {
-                    if (isset($lines[ $i - 1 ])) {
-                        $source[] = [
-                            'text' => $lines[ $i - 1 ],
-                            'num' => $i,
-                        ];
+                    for (; $i < $max; $i++) {
+                        if (isset($lines[ $i - 1 ])) {
+                            $source[] = [
+                                'text' => $lines[ $i - 1 ],
+                                'num' => $i,
+                            ];
+                        }
                     }
                 }
-            }
 
-            return $source;
+                return $source;
+            }
         }
-    }
-);
+    );
+}

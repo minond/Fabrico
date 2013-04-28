@@ -17,7 +17,7 @@ trait FileFinder
      * @throws \Exception
      * @return string
      */
-    private static function generateFileFilderFilePath($filename, $extension = '')
+    public static function generateFileFilderFilePath($filename, $extension = '')
     {
         return self::generateFileFilderDirectoryPath() .
             self::generateFileFilderFileName($filename, $extension);
@@ -28,7 +28,7 @@ trait FileFinder
      * @throws \Exception
      * @return string
      */
-    private static function generateFileFilderDirectoryPath()
+    public static function generateFileFilderDirectoryPath()
     {
         if (!property_exists(get_called_class(), 'dir') || !static::$dir) {
             throw new \Exception(
@@ -45,7 +45,7 @@ trait FileFinder
      * @param string $extension
      * @return string
      */
-    private static function generateFileFilderFileName($filename, $extension = '')
+    public static function generateFileFilderFileName($filename, $extension = '')
     {
         return $extension ? $filename . $extension : $filename . static::$ext;
     }
@@ -56,7 +56,7 @@ trait FileFinder
      * @param string $extension
      * @return boolean
      */
-    private static function hasProjectFile($filename, $extension = '')
+    public static function hasProjectFile($filename, $extension = '')
     {
         return file_exists(self::generateFileFilderFilePath($filename, $extension));
     }
@@ -68,7 +68,7 @@ trait FileFinder
      * @throws \Exception
      * @return boolean
      */
-    private static function loadProjectFile($filename, $extension = '')
+    public static function loadProjectFile($filename, $extension = '')
     {
         if (self::hasProjectFile($filename)) {
             return require_once self::generateFileFilderFilePath($filename, $extension);
