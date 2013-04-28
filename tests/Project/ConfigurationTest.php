@@ -67,4 +67,11 @@ class ConfigurationTest extends Test
     {
         $this->assertNull($this->conf->get('test_configuration:one:does_not_exist'));
     }
+
+    public function testConstantsAreMergedIntoConfigurationStrings()
+    {
+        $this->assertEquals('1 s 2 1', $this->conf->prepareRawConfigurationString(
+            '%E_ERROR s %E_WARNING %E_ERROR'
+        ));
+    }
 }

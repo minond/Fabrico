@@ -73,6 +73,15 @@ class View
     }
 
     /**
+     * extension getter
+     * @return string
+     */
+    public function getExtension()
+    {
+        return $this->extension;
+    }
+
+    /**
      * checks if the view file exists in the project
      * @return boolead
      */

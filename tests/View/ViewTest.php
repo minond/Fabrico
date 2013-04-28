@@ -172,4 +172,11 @@ class ViewTest extends Test
     {
         View::generate('junkfile');
     }
+
+    public function testFileExtensionAreFound()
+    {
+        $this->view->setFile('file.extension');
+        $this->assertEquals('file', $this->view->getFile());
+        $this->assertEquals('.extension', $this->view->getExtension());
+    }
 }

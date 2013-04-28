@@ -4,7 +4,7 @@
 while [ ! -d Fabrico ]; do
 	cd "$(pwd)/../"
 
-	if [ "$PWD" != "/" ]; then
+	if [ "$PWD" == "/" ]; then
 		echo "fatal: Not a Fabrico project"
 		exit
 	fi
@@ -51,9 +51,26 @@ codequality() {
 	phpcs src/ | tee bin/autogen/code/codesniffer.txt >> bin/autogen/code/report.txt
 }
 
+view() {
+	case "$1" in
+		test)
+			xdg-open bin/autogen/tests/report/index.html
+			;;
+
+		doc)
+			xdg-open bin/autogen/code/report.txt
+			;;
+	esac
+}
+
 for arg in "$@"
 do
 	case "$arg" in
+		view)
+			view $2
+			exit 1
+			;;
+
 		test)
 			tests
 			exit 1
