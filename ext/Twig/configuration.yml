@@ -1,7 +1,11 @@
-name: Twig
+name: twig
+human_name: Twig
 description: Twig is a modern template engine for PHP
-tags: [ view, template, twig ]
+tags:
+  - view
+  - template
+  - twig
 
-files:
+source:
   - name: twig.php
     type: listener

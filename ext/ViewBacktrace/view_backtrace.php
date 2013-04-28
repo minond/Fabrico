@@ -6,18 +6,7 @@ use Fabrico\View\View;
 
 Reporter::observe('Fabrico\Request\Http\Request', 'prepareHandler', Listener::PRE,
     function($info) {
-        set_exception_handler(function($exception) {
-            echo View::generate('backtrace.twig', [
-                'errtype' => get_class($exception),
-                'message' => $exception->getMessage(),
-                'file' => $exception->getFile(),
-                'line' => $exception->getLine(),
-                'backtrace' => $exception->getTrace(),
-                'source' => getsource($exception->getFile(), $exception->getLine()),
-            ]);
-
-            die;
-        });
+        error_reporting(E_ALL);
 
         set_error_handler(function($errnum, $message, $file, $line) {
             echo View::generate('backtrace.twig', [
@@ -27,6 +16,19 @@ Reporter::observe('Fabrico\Request\Http\Request', 'prepareHandler', Listener::PR
                 'line' => $line,
                 'backtrace' => debug_backtrace(),
                 'source' => getsource($file, $line),
+            ]);
+
+            die;
+        }, E_ALL);
+
+        set_exception_handler(function($exception) {
+            echo View::generate('backtrace.twig', [
+                'errtype' => get_class($exception),
+                'message' => $exception->getMessage(),
+                'file' => $exception->getFile(),
+                'line' => $exception->getLine(),
+                'backtrace' => $exception->getTrace(),
+                'source' => getsource($exception->getFile(), $exception->getLine()),
             ]);
 
             die;

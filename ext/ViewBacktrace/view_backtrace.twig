@@ -6,6 +6,7 @@
     padding: 10px;
     font: 13px Arial;
     cursor: default;
+    min-width: 750px;
 }
 
 .fabrico-error .header {
@@ -46,6 +47,12 @@
     padding-right: 10px;
     text-align: right;
     color: gray;
+    vertical-align: top;
+}
+
+.fabrico-error .source table td.source-text pre {
+    word-break: break-word;
+    width: 620px;
 }
 
 .fabrico-error .source table tr.error-line td.source-text {
@@ -57,7 +64,6 @@
 
     <div class="section-header">Description</div>
     <div class="desc">
-        <div>{{ file }}, line number {{ line }}</div>
         <div>{{ message }}</div>
     </div>
     <div class="source">
@@ -81,7 +87,7 @@
     <div class="backtrace">
         <ol>
         {% for trace in backtrace %}
-            {% if trace.file and loop.index != 1 %}
+            {% if trace.file and loop.index != 10 %}
             <li>
                 <span>[{{ trace.file }}:{{ trace.line }}]</span>
                 <span>- <b>{% if trace.class %}{{ trace.class }}::{% endif %}{{ trace.function }}</b></span>
