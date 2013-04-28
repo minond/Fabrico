@@ -11,6 +11,12 @@ class Configuration
     use FileFinder;
 
     /**
+     * configuration path delimeter. ie: project:handlers
+     * @var string
+     */
+    const PATH_DELIM = ':';
+
+    /**
      * @see Fabrico\Project\FileFinder
      */
     protected static $dir = 'config';
@@ -27,6 +33,31 @@ class Configuration
     protected $cache;
 
     /**
+     * configuration place holders and patterns
+     * @var array
+     */
+    public $placeholders = [
+        'constants' => '/%([A-Z0-9_]+)/',
+    ];
+
+    /**
+     * configuration path parser. ie: project:handlers:http
+     * - base: project
+     * - path: [ handlers, http ]
+     * @param string $path
+     * @return \StdClass
+     */
+    public static function parsePath($path)
+    {
+        $parts = explode(self::PATH_DELIM, $path);
+        $parsed = new \StdClass;
+        $parsed->base = array_shift($parts);
+        $parsed->path = $parts;
+
+        return $parsed;
+    }
+
+    /**
      * @param Cache $cache
      */
     public function __construct(Cache $cache)
@@ -41,9 +72,15 @@ class Configuration
      */
     public function load($config_file)
     {
-        if (!array_key_exists($config_file, $this->cache)) {
-            $config = self::hasProjectFile($config_file) ? Yaml::parse(
-                self::generateFileFilderFilePath($config_file)) : null;
+        if (!$this->cache->has($config_file)) {
+            $config = null;
+
+            if (self::hasProjectFile($config_file)) {
+                $str = file_get_contents(
+                    self::generateFileFilderFilePath($config_file));
+                $str = $this->prepareRawConfigurationString($str);
+                $config = Yaml::parse($str);
+            }
 
             $this->cache[ $config_file ] = $config;
         }
@@ -60,10 +97,10 @@ class Configuration
      */
     public function get($path)
     {
-        $parts = explode(':', $path);
-        $config = $this->load(array_shift($parts));
+        $parts = self::parsePath($path);
+        $config = $this->load($parts->base);
 
-        foreach ($parts as $prop) {
+        foreach ($parts->path as $prop) {
             if (isset($config[ $prop ])) {
                 $config = $config[ $prop ];
             } else {
@@ -72,5 +109,24 @@ class Configuration
         }
 
         return $config;
+    }
+
+    /**
+     * @param string $str
+     * @return string
+     */
+    public function prepareRawConfigurationString($str)
+    {
+        preg_match_all($this->placeholders['constants'], $str, $constants);
+
+        if (count($constants) && count($constants[1])) {
+            foreach (array_unique($constants[1]) as $i => $const) {
+                if (defined($const)) {
+                    $str = str_replace($constants[0][ $i ], constant($const), $str);
+                }
+            }
+        }
+
+        return $str;
     }
 }

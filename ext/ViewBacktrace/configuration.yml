@@ -18,24 +18,30 @@ deps:
     type: extension
 
 config:
+  view: view_backtrace.twig
+  source:
+    display: true
+    line_offset: 10
+  backtrace:
+    display: true
   exception:
     kill: true
   error:
     kill: true
-    reporting: E_ALL
+    reporting: %E_ALL
     label:
-      E_ERROR: Fatal run-time error
-      E_WARNING: Run-time warning
-      E_PARSE: Compile-time parse error
-      E_NOTICE: Run-time notice
-      E_CORE_ERROR: Initial startup fatal error
-      E_CORE_WARNING: Warning
-      E_COMPILE_ERROR: Fatal compile-time error
-      E_COMPILE_WARNING: Compile-time warning
-      E_USER_ERROR: User-generated error
-      E_USER_WARNING: User-generated warning
-      E_USER_NOTICE: User-generated notice
-      E_STRICT: Strict mode warning
-      E_RECOVERABLE_ERROR: Catchable fatal error
-      E_DEPRECATED: Run-time notice
-      E_USER_DEPRECATED: User-generated warning
+      %E_ERROR: Fatal run-time error
+      %E_WARNING: Run-time warning
+      %E_PARSE: Compile-time parse error
+      %E_NOTICE: Run-time notice
+      %E_CORE_ERROR: Initial startup fatal error
+      %E_CORE_WARNING: Warning
+      %E_COMPILE_ERROR: Fatal compile-time error
+      %E_COMPILE_WARNING: Compile-time warning
+      %E_USER_ERROR: User-generated error
+      %E_USER_WARNING: User-generated warning
+      %E_USER_NOTICE: User-generated notice
+      %E_STRICT: Strict mode warning
+      %E_RECOVERABLE_ERROR: Catchable fatal error
+      %E_DEPRECATED: Run-time notice
+      %E_USER_DEPRECATED: User-generated warning

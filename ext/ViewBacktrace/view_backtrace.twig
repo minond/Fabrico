@@ -57,15 +57,17 @@
 
 .fabrico-error .source table tr.error-line td.source-text {
     color: rgb(235, 7, 7);
+    font-weight: bold;
 }
 </style>
 <div class="fabrico-error">
-    <div class="header">Application error ({{ errtype }})</div>
+    <div class="header">Application error - {{ errtype }}</div>
 
     <div class="section-header">Description</div>
     <div class="desc">
         <div>{{ message }}</div>
     </div>
+    {% if display_source %}
     <div class="source">
         <table>
             {% for s_line in source %}
@@ -82,18 +84,23 @@
             {% endfor %}
         </table>
     </div>
+    {% endif %}
 
+    {% if display_backtrace %}
     <div class="section-header">Backtrace</div>
     <div class="backtrace">
         <ol>
         {% for trace in backtrace %}
-            {% if trace.file and loop.index != 10 %}
+            {% if trace.file %}
             <li>
-                <span>[{{ trace.file }}:{{ trace.line }}]</span>
-                <span>- <b>{% if trace.class %}{{ trace.class }}::{% endif %}{{ trace.function }}</b></span>
+                <span>{{ trace.file }}:{{ trace.line }}</span>
+                {% if trace.function %}
+                <span>- <b>{% if trace.class %}{{ trace.class }}{{ trace.type }}{% endif %}{{ trace.function }}</b></span>
+                {% endif %}
             </li>
             {% endif %}
         {% endfor %}
         </ol>
     </div>
+    {% endif %}
 </div>
