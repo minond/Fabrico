@@ -64,6 +64,75 @@ class Ext
     }
 
     /**
+     * enable an extension
+     * @param string $ext
+     * @return boolean
+     */
+    public static function enable($ext)
+    {
+        $out = new Output;
+        $conf = Application::getInstance()->getConfiguration();
+        $project_ext = $conf->load('ext');
+        $project_ext['enabled'][] = $ext;
+        $project_ext['enabled'] = array_unique($project_ext['enabled']);
+        natcasesort($project_ext['enabled']);
+
+        $ok = file_put_contents(
+            Configuration::generateFileFilderFilePath('ext'),
+            Yaml::dump($project_ext)
+        );
+
+        if ($ok) {
+            $out->coutln('Successfully enabled {{ bold }}{{ purple }}%s{{ end }}', $ext);
+        } else {
+            $out->coutln('There war an error enabling {{ bold }}{{ purple }}%s{{ end }}', $ext);
+        }
+
+        return $ok;
+    }
+
+    /**
+     * disable an extension
+     * @param string $ext
+     * @return boolean
+     */
+    public static function disable($ext)
+    {
+        $out = new Output;
+        $conf = Application::getInstance()->getConfiguration();
+        $project_ext = $conf->load('ext');
+        $temp = [];
+
+        foreach ($project_ext['enabled'] as $pext) {
+            if ($pext !== $ext) {
+                $temp[] = $pext;
+            }
+        }
+
+        $project_ext['enabled'] = array_unique($temp);
+        natcasesort($project_ext['enabled']);
+
+        if (count($project_ext['enabled'])) {
+            $project_ext = Yaml::dump($project_ext);
+        } else {
+            $project_ext = 'enabled: []';
+        }
+
+        $ok = file_put_contents(
+            Configuration::generateFileFilderFilePath('ext'),
+            $project_ext
+        );
+
+        if ($ok) {
+            $out->coutln('Successfully disabled {{ bold }}{{ purple }}%s{{ end }}', $ext);
+        } else {
+            $out->coutln('There war an error disabling {{ bold }}{{ purple }}%s{{ end }}', $ext);
+        }
+
+        return $ok;
+    }
+
+    /**
      * install an extension
      * @param string $ext
      * @return boolean

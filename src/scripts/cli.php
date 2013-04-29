@@ -41,7 +41,9 @@ call_user_func(function() {
 
 
 
-Ext::install('view_backtrace');
+// Ext::disable('view_backtrace');
+// Ext::enable('view_backtrace');
+// Ext::install('view_backtrace');
 
 
 
