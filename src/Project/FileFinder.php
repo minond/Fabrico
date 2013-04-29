@@ -36,7 +36,7 @@ trait FileFinder
         }
 
         return Application::getInstance()->getRoot() .
-            \DIRECTORY_SEPARATOR . static::$dir . \DIRECTORY_SEPARATOR;
+            static::$dir . \DIRECTORY_SEPARATOR;
     }
 
     /**
@@ -47,6 +47,13 @@ trait FileFinder
      */
     public static function generateFileFilderFileName($filename, $extension = '')
     {
+        // extension in filename?
+        if (strpos($filename, '.') !== false) {
+            $parts = explode('.', $filename);
+            $extension = '.' . array_pop($parts);
+            $filename = implode('.', $parts);
+        }
+
         return $extension ? $filename . $extension : $filename . static::$ext;
     }
 
@@ -75,5 +82,17 @@ trait FileFinder
         } else {
             return false;
         }
+    }
+
+    /**
+     * cleans up a file and returns its name
+     * @param string $file
+     * @param string $extension - optional
+     * @return string
+     */
+    public static function getFileFinderFileName($file, $extension = null)
+    {
+        $ext = $extension ?: static::$ext;
+        return preg_replace("/{$ext}$/", '', $file);
     }
 }

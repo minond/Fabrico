@@ -9,6 +9,8 @@ use Fabrico\Project\Configuration;
 use Fabrico\Event\Listeners;
 use Fabrico\Cache\RuntimeCache;
 
+use Fabrico\Core\Ext;
+
 call_user_func(function() {
     $app = new Application;
     $res = new Response;
@@ -39,7 +41,7 @@ call_user_func(function() {
 
 
 
-
+Ext::install('view_backtrace');
 
 
 

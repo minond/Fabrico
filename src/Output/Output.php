@@ -12,4 +12,16 @@ interface Output
      * @return void
      */
     public function output();
+
+    /**
+     * append output
+     * @param string $text
+     */
+    public function append($text);
+
+    /**
+     * prepend output
+     * @param string $text
+     */
+    public function prepend($text);
 }

@@ -54,7 +54,7 @@ class View
     {
         $ext = '';
 
-        if (strpos($file, '.')) {
+        if (strpos($file, '.') !== false) {
             $parts = explode('.', $file);
             $this->extension = '.' . array_pop($parts);
             $this->file = implode('.', $parts);

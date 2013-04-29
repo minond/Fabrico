@@ -9,7 +9,10 @@ use Fabrico\Output\Output as OutputBase;
  */
 class TextOutput implements Output, OutputBase
 {
-    protected $content;
+    /**
+     * @var string
+     */
+    protected $content = '';
 
     /**
      * content setter
@@ -30,12 +33,27 @@ class TextOutput implements Output, OutputBase
     }
 
     /**
-     * handles output data
-     * @return void
+     * @inheritdoc
      */
     public function output()
     {
         echo $this->content;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function append($text)
+    {
+        $this->content = $this->content . $text;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function prepend($text)
+    {
+        $this->content = $text . $this->content;
     }
 
     /**
