@@ -50,6 +50,52 @@ class Ext
     }
 
     /**
+     * modify an extension's configuration
+     * @param string $path
+     * @param string $value - must be an string (yaml format)
+     * @throws \Exception
+     * @return boolean
+     */
+    public static function configure($path, $value)
+    {
+        $out = new Output;
+        $value = Yaml::parse($value);
+        $conf = Application::getInstance()->getConfiguration();
+        $parts = Configuration::parsePath($path);
+        $last = count($parts->path) - 1;
+
+        $file = self::$dir . DIRECTORY_SEPARATOR . $parts->base;
+        $config = $conf->load($file, true);
+        $config =& $config;
+        $finder =& $config;
+
+        foreach ($parts->path as $i => $prop) {
+            if (isset($finder[ $prop ])) {
+                if ($i !== $last) {
+                    $finder =& $finder[ $prop ];
+                } else {
+                    $finder[ $prop ] = $value;
+                }
+            } else {
+                throw new \Exception("Invalid configuration path: {$path}");
+            }
+        }
+
+        $ok = file_put_contents(
+            Configuration::generateFileFilderFilePath($file),
+            Yaml::dump($config, 100, 2)
+        );
+
+        if ($ok) {
+            $out->coutln('Successfully updates {{ bold }}{{ purple }}%s{{ end }}', $parts->base);
+        } else {
+            $out->coutln('There war an error updating {{ bold }}{{ purple }}%s{{ end }}', $parts->base);
+        }
+
+        return $ok;
+    }
+
+    /**
      * returns true if project has enabled this extension
      * @param string $ext
      * @return boolean
@@ -112,15 +158,9 @@ class Ext
         $project_ext['enabled'] = array_unique($temp);
         natcasesort($project_ext['enabled']);
 
-        if (count($project_ext['enabled'])) {
-            $project_ext = Yaml::dump($project_ext);
-        } else {
-            $project_ext = 'enabled: []';
-        }
-
         $ok = file_put_contents(
             Configuration::generateFileFilderFilePath('ext'),
-            $project_ext
+            Yaml::dump($project_ext)
         );
 
         if ($ok) {

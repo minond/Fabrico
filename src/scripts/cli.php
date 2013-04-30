@@ -44,6 +44,7 @@ call_user_func(function() {
 // Ext::disable('view_backtrace');
 // Ext::enable('view_backtrace');
 // Ext::install('view_backtrace');
+// Ext::configure('view_backtrace:source:line_offset', '10');
 
 
 
