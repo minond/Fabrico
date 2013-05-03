@@ -142,6 +142,10 @@ class Configuration
             }
         }
 
+        // update cache
+        $this->cache[ $parts->base ] = $config;
+
+        // update file
         return file_put_contents(
             self::generateFileFilderFilePath($parts->base),
             Yaml::dump($config, PHP_INT_MAX, 2)

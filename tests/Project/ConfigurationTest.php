@@ -60,10 +60,34 @@ class ConfigurationTest extends Test
             $this->conf->get('test_configuration:one:two:three:four:five'));
     }
 
+    public function testConfigurationValuesCanBeUpdated()
+    {
+        $this->assertTrue(
+            $this->conf->set('test_updates:value', 2));
+        $this->assertEquals(2,
+            $this->conf->get('test_updates:value'));
+    }
+
+    public function testNestedConfigurationValuesCanBeUpdated()
+    {
+        $this->assertTrue(
+            $this->conf->set('test_updates:values:value', 2));
+        $this->assertEquals(2,
+            $this->conf->get('test_updates:values:value'));
+    }
+
     /**
      * @expectedException Exception
      */
-    public function testInvalidConfigurationPathsThrowExceptions()
+    public function testSettingsInvalidConfigurationPathsThrowExceptions()
+    {
+        $this->assertNull($this->conf->set('test_updates:values:does_not_exist', 1));
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testGettingInvalidConfigurationPathsThrowExceptions()
     {
         $this->assertNull($this->conf->get('test_configuration:one:does_not_exist'));
     }

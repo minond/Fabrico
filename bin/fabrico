@@ -53,7 +53,7 @@ codequality() {
 
 view() {
 	case "$1" in
-		test)
+		tests)
 			xdg-open bin/autogen/tests/report/index.html
 			;;
 

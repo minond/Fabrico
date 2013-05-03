@@ -2,12 +2,13 @@
 
 namespace Fabrico\Output\Cli;
 
+use Fabrico\Output\BasicOutput;
 use Fabrico\Output\Output as OutputBase;
 
 /**
  * terminal output
  */
-class Output implements OutputBase
+class Output extends BasicOutput implements OutputBase
 {
     /**
      * merge fields already loaded flag
@@ -22,6 +23,12 @@ class Output implements OutputBase
     protected static $mergefields = [];
 
     /**
+     * merge fields for this instance
+     * @var array
+     */
+    protected $instance_mergefields = [];
+
+    /**
      * merge field format
      * @var string
      */
@@ -34,13 +41,56 @@ class Output implements OutputBase
     protected $content;
 
     /**
+     * sets standard merge fields
+     */
+    private static function loadMergeFields()
+    {
+        self::$mergefields['red'] = `tput setaf 1`;
+        self::$mergefields['green'] = `tput setaf 2`;
+        self::$mergefields['yellow'] = `tput setaf 3`;
+        self::$mergefields['blue'] = `tput setaf 4`;
+        self::$mergefields['purple'] = `tput setaf 5`;
+        self::$mergefields['teal'] = `tput setaf 6`;
+        self::$mergefields['white'] = `tput setaf 7`;
+        self::$mergefields['error'] = `tput bold && tput setaf 1`;
+        self::$mergefields['pass'] = `tput bold && tput setaf 2`;
+        self::$mergefields['warn'] = `tput bold && tput setaf 3`;
+        self::$mergefields['info'] = `tput bold && tput setaf 7`;
+        self::$mergefields['notice'] = `tput sgr 0 1 && tput bold`;
+        self::$mergefields['bold'] = `tput bold`;
+        self::$mergefields['underline'] = `tput sgr 0 1`;
+        self::$mergefields['end'] = `tput sgr0`;
+        self::$mergefields['eol'] = PHP_EOL;
+        self::$mergefields['backspace'] = chr(0x08);
+        self::$mergefields['section'] = "\n    - " . `tput sgr 0 1 && tput bold`;
+        self::$mergefields['space'] = '    ';
+        self::$mergefields['tab'] = "\t";
+        self::$mergefields['nl'] = "\n";
+        self::$mergefields['ok'] = '[' . `tput bold && tput setaf 2` . 'ok' . `tput sgr0` . ']';
+        self::$mergefields['fail'] = '[' . `tput bold && tput setaf 1` . 'fail' . `tput sgr0` . ']';
+
+        self::$mergefields['time'] = function() {
+            return (string) time();
+        };
+
+        self::$mergefields['rand'] = function() {
+            return (string) rand();
+        };
+
+        self::$mergefields['clear'] = function() {
+            passthru('clear');
+            return '';
+        };
+    }
+
+    /**
      * merge field adder
      * @param string $name
      * @param string $value
      */
-    public static function mergefield($name, $value)
+    public function mergefield($name, $value)
     {
-        self::$mergefields[ $name ] = $value;
+        $this->instance_mergefields[ $name ] = $value;
     }
 
     /**
@@ -50,12 +100,12 @@ class Output implements OutputBase
     public function output()
     {
         if (!self::$mergefields_loaded) {
-            self::$mergefields_loaded = require_once __DIR__ .
-                DIRECTORY_SEPARATOR . 'mergefields.php';
+            self::loadMergeFields();
+            self::$mergefields_loaded = true;
         }
 
         // prepare string
-        foreach (static::$mergefields as $name => $val) {
+        foreach (array_merge(static::$mergefields, $this->instance_mergefields) as $name => $val) {
             $field = sprintf($this->mergefield_template, $name);
 
             if (strpos($this->content, $field) === false) {
@@ -72,22 +122,6 @@ class Output implements OutputBase
         // output it and reset it
         echo $this->content;
         $this->content = '';
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function append($text)
-    {
-        $this->content = $this->content . $text;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function prepend($text)
-    {
-        $this->content = $text . $this->content;
     }
 
     /**

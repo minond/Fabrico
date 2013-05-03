@@ -71,7 +71,7 @@ class ExtensionManager
     public static function enabled($ext)
     {
         return in_array(
-            $ext, 
+            $ext,
             $this->configuration->get('ext:enabled')
         );
     }
