@@ -32,6 +32,32 @@ class ReporterTest extends Test
         $this->assertTrue($called);
     }
 
+    public function testSubscriptionsArePlacedUsingHelperBeforeFunction()
+    {
+        $called = false;
+        $basic = new BasicObservable;
+
+        Reporter::before('fabrico.test.mock.event.basicobservable:func', function() use (& $called) {
+            $called = true;
+        });
+
+        $basic->func();
+        $this->assertTrue($called);
+    }
+
+    public function testSubscriptionsArePlacedUsingHelperAfterFunction()
+    {
+        $called = false;
+        $basic = new BasicObservable;
+
+        Reporter::after('fabrico.test.mock.event.basicobservable:func', function() use (& $called) {
+            $called = true;
+        });
+
+        $basic->func();
+        $this->assertTrue($called);
+    }
+
     public function testSubscriptionsArePlacedOnCorrectObject()
     {
         $bcalled = false;
