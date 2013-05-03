@@ -62,18 +62,28 @@ class ConfigurationTest extends Test
 
     public function testConfigurationValuesCanBeUpdated()
     {
+        $orig = $this->conf->get('test_updates:value');
+        $val = mt_rand();
+
         $this->assertTrue(
-            $this->conf->set('test_updates:value', 2));
-        $this->assertEquals(2,
+            $this->conf->set('test_updates:value', $val));
+        $this->assertEquals($val,
             $this->conf->get('test_updates:value'));
+
+        $this->conf->set('test_updates:value', $orig);
     }
 
     public function testNestedConfigurationValuesCanBeUpdated()
     {
+        $orig = $this->conf->get('test_updates:values:value');
+        $val = mt_rand();
+
         $this->assertTrue(
-            $this->conf->set('test_updates:values:value', 2));
-        $this->assertEquals(2,
+            $this->conf->set('test_updates:values:value', $val));
+        $this->assertEquals($val,
             $this->conf->get('test_updates:values:value'));
+
+        $this->conf->set('test_updates:values:value', $orig);
     }
 
     /**
