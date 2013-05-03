@@ -55,6 +55,17 @@ trait Observable
     protected static $listeners = [];
 
     /**
+     * convert Namespace\__CLASS__::Method into: namespace.__class__:method
+     * @param string $method
+     * @return string
+     */
+    protected static function fullEventName($method)
+    {
+        return Reporter::cleanClassName(get_called_class()) .
+            ':' . strtolower($method);
+    }
+
+    /**
      * add a class listener
      * @param string $name
      * @param string $type
@@ -63,7 +74,9 @@ trait Observable
      */
     public static function observe($name, $type, $func)
     {
-        static::$listeners[] = new Listener($name, $type, $func);
+        static::$listeners[] = new Listener(
+            self::fullEventName($name),
+            $type, $func);
         return true;
     }
 
@@ -76,7 +89,9 @@ trait Observable
      */
     public function subscribe($name, $type, $func)
     {
-        $this->mylisteners[] = new Listener($name, $type, $func);
+        $this->mylisteners[] = new Listener(
+            self::fullEventName($name),
+            $type, $func);
         return true;
     }
 
@@ -88,6 +103,8 @@ trait Observable
      */
     private function signal($name, $type, array $args = array())
     {
+        $name = self::fullEventName($name);
+
         foreach ([ static::$listeners, $this->mylisteners ] as $group) {
             foreach ($group as & $sub) {
                 if ($sub->is($name, $type)) {

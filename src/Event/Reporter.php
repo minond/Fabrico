@@ -19,9 +19,21 @@ class Reporter
      * @param string $class
      * @return string
      */
-    private static function cleanClassName($class)
+    public static function cleanClassName($class)
     {
-        return preg_replace('/^\\\/', '', $class);
+        return strtolower(
+            str_replace('\\', '.',
+                preg_replace('/^\\\/', '', $class)));
+    }
+
+    /**
+     * reverts updates from cleanClassName
+     * @param string $class
+     * @return string
+     */
+    private static function realClassName($class)
+    {
+        return str_replace('.', '\\', $class);
     }
 
     /**
@@ -57,6 +69,9 @@ class Reporter
      */
     public static function observe($class, $name, $type, $action)
     {
+        $name = strtolower($name);
+        $class = self::realClassName($class);
+
         if (!class_exists($class)) {
             self::$queue[] = (object) [
                 'class' => self::cleanClassName($class),
@@ -66,5 +81,29 @@ class Reporter
         } else {
             $class::observe($name, $type, $action);
         }
+    }
+
+    /**
+     * helper for Reporter::observe(Listener::PRE)
+     * @see Reporter::observe
+     * @param string $event
+     * @param callable|Closure $action
+     */
+    public static function before($event, $action)
+    {
+        list($class, $name) = explode(':', $event);
+        self::observe($class, $name, Listener::PRE, $action);
+    }
+
+    /**
+     * helper for Reporter::observe(Listener::POST)
+     * @see Reporter::observe
+     * @param string $event
+     * @param callable|Closure $action
+     */
+    public static function after($event, $action)
+    {
+        list($class, $name) = explode(':', $event);
+        self::observe($class, $name, Listener::POST, $action);
     }
 }
