@@ -42,6 +42,14 @@ class Ext
     }
 
     /**
+     * unsets $em
+     */
+    public static function hardreset()
+    {
+        self::$em = null;
+    }
+
+    /**
      * extension configuration getter/setter.
      * @param string $path
      * @param mixed $value - optional

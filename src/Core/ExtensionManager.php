@@ -81,7 +81,7 @@ class ExtensionManager
      * @param string $ext
      * @return boolean
      */
-    public static function enable($ext)
+    public function enable($ext)
     {
         $enabled = $this->configuration->get('ext:enabled');
 
