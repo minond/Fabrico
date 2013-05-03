@@ -110,5 +110,5 @@ do
 	esac
 done
 
-php ./src/scripts/cli.php
+php ./src/scripts/cli.php "$@"
 exit 1

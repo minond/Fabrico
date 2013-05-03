@@ -117,6 +117,38 @@ class Configuration
     }
 
     /**
+     * configuration update
+     * @param string $path
+     * @param mixed $value
+     * @return boolean - update success
+     */
+    public function set($path, $value)
+    {
+        $parts = self::parsePath($path);
+        $config = $this->load($parts->base);
+        $config =& $config;
+        $finder =& $config;
+        $last = count($parts->path) - 1;
+
+        foreach ($parts->path as $i => $prop) {
+            if (isset($finder[ $prop ])) {
+                if ($i !== $last) {
+                    $finder =& $finder[ $prop ];
+                } else {
+                    $finder[ $prop ] = $value;
+                }
+            } else {
+                throw new \Exception("Invalid configuration path: {$path}");
+            }
+        }
+
+        return file_put_contents(
+            self::generateFileFilderFilePath($parts->base),
+            Yaml::dump($config, PHP_INT_MAX, 2)
+        ) !== false;
+    }
+
+    /**
      * @param string $str
      * @return string
      */

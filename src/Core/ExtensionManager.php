@@ -12,7 +12,7 @@ use Symfony\Component\Yaml\Yaml;
 /**
  * extension helper. installs and manages framework extensions
  */
-class Ext
+class ExtensionManager
 {
     use FileFinder;
 
@@ -23,30 +23,41 @@ class Ext
     const CONFIGURATION_BASE = 'config';
 
     /**
+     * @var Configuration
+     */
+    protected $configuration;
+
+    /**
      * @see Fabrico\Project\FileFinder
      */
     protected static $dir = 'ext';
 
     /**
+     * @param Configuration $conf
+     */
+    public function __construct(Configuration $conf)
+    {
+        $this->configuration = $conf;
+    }
+
+    /**
      * extension configuration getter/setter.
      * @param string $path
      * @param mixed $value - optional
-     * @param boolean $parse_value - optional, default =  false. for setter
      * @throws \Exception
      * @return mixed
      */
-    public static function config($path, $value = null, $parse_value = false)
+    public function config($path, $value = null)
     {
-        $conf = Application::getInstance()->getConfiguration();
         $parts = Configuration::parsePath($path);
         $realbase = self::$dir . DIRECTORY_SEPARATOR . $parts->base;
         $realpath = $realbase . Configuration::PATH_DELIM .
             implode(Configuration::PATH_DELIM, $parts->path);
 
         try {
-            $conf->load($realbase);
-            return !isset($value) ? $conf->get($realpath) :
-                $conf->set($realpath, $value, $parse_value);
+            $this->configuration->load($realbase);
+            return !isset($value) ? $this->configuration->get($realpath) :
+                $this->configuration->set($realpath, $value);
         } catch (\Exception $error) {
             throw new \Exception("Invalid extension configuration path: {$path}");
         }
@@ -59,11 +70,10 @@ class Ext
      */
     public static function enabled($ext)
     {
-        $conf = Application::getInstance()->getConfiguration();
-        $enabled = $conf->get('ext:enabled');
-
-        return $enabled && is_array($enabled) ?
-            in_array($ext, $conf->get('ext:enabled')) : false;
+        return in_array(
+            $ext, 
+            $this->configuration->get('ext:enabled')
+        );
     }
 
     /**
@@ -73,18 +83,13 @@ class Ext
      */
     public static function enable($ext)
     {
-        $conf = Application::getInstance()->getConfiguration();
-        $exts = $conf->get('ext:enabled');
+        $enabled = $this->configuration->get('ext:enabled');
 
-        if (!is_array($exts)) {
-            $exts = [];
+        if (!in_array($ext, $enabled)) {
+            $enabled[] = $ext;
         }
 
-        if (!in_array($ext, $exts)) {
-            $exts[] = $ext;
-        }
-
-        return $conf->set('ext:enabled', $exts);
+        return $this->configuration->set('ext:enabled', $enabled);
     }
 
     /**
@@ -92,34 +97,13 @@ class Ext
      * @param string $ext
      * @return boolean
      */
-    public static function disable($ext)
+    public function disable($ext)
     {
-        $out = new Output;
-        $conf = Application::getInstance()->getConfiguration();
-        $project_ext = $conf->load('ext');
-        $temp = [];
-
-        foreach ($project_ext['enabled'] as $pext) {
-            if ($pext !== $ext) {
-                $temp[] = $pext;
-            }
-        }
-
-        $project_ext['enabled'] = array_unique($temp);
-        natcasesort($project_ext['enabled']);
-
-        $ok = file_put_contents(
-            Configuration::generateFileFilderFilePath('ext'),
-            Yaml::dump($project_ext)
+        return $this->configuration->set('ext:enabled', array_filter(
+            $this->configuration->get('ext:enabled'), function($ex) use($ext) {
+                return $ex !== $ext;
+            })
         );
-
-        if ($ok) {
-            $out->coutln('Successfully disabled {{ bold }}{{ purple }}%s{{ end }}', $ext);
-        } else {
-            $out->coutln('There war an error disabling {{ bold }}{{ purple }}%s{{ end }}', $ext);
-        }
-
-        return $ok;
     }
 
     /**
@@ -127,7 +111,7 @@ class Ext
      * @param string $ext
      * @return boolean
      */
-    public static function install($ext)
+    public function install($ext)
     {
         $out = new Output;
         $listeners = [];

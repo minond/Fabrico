@@ -43,13 +43,13 @@ class ViewTest extends Test
         $dir = implode(DIRECTORY_SEPARATOR, $dirs);
 
         $app = new Application;
-        $app->setRoot('');
+        $app->setRoot(DIRECTORY_SEPARATOR);
 
         AnyView::setExt('.php');
         AnyView::setDir($dir);
 
         $view = new AnyView($filename);
-        $this->assertTrue($view->exists());
+        $this->assertTrue($view->exists(true));
     }
 
     public function testViewsCanBeRendered()

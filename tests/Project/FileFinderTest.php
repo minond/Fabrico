@@ -28,7 +28,7 @@ class FileFinderTest extends Test
         $dir = implode(DIRECTORY_SEPARATOR, $dir);
 
         $app = new Application;
-        $app->setRoot($dir);
+        $app->setRoot($dir . DIRECTORY_SEPARATOR);
 
         $parts = explode(DIRECTORY_SEPARATOR, __FILE__);
         list($file) = explode('.', array_pop($parts));
@@ -43,12 +43,32 @@ class FileFinderTest extends Test
         $dir = implode(DIRECTORY_SEPARATOR, $dir);
 
         $app = new Application;
-        $app->setRoot($dir);
+        $app->setRoot($dir . DIRECTORY_SEPARATOR);
 
         $parts = explode(DIRECTORY_SEPARATOR, __FILE__);
         list($file) = explode('.', array_pop($parts));
         $valid = new ValidFileFinder;
         $this->assertTrue($valid->callHasProjectFile($file));
+    }
+
+    public function testFilesCanBeFoundUsingExtension()
+    {
+        $dir = explode(DIRECTORY_SEPARATOR, __DIR__);
+        array_pop($dir);
+        $dir = implode(DIRECTORY_SEPARATOR, $dir);
+
+        $app = new Application;
+        $app->setRoot($dir . DIRECTORY_SEPARATOR);
+
+        $parts = explode(DIRECTORY_SEPARATOR, __FILE__);
+        list($file) = explode('.', array_pop($parts));
+
+        $this->assertTrue(ValidFileFinder::hasProjectFile($file . '.php'));
+    }
+
+    public function testFilesNamesCanBeParsed()
+    {
+        $this->assertEquals('myfile', ValidFileFinder::getFileFinderFileName('myfile.php'));
     }
 
     public function testFilesCanBeLoaded()
@@ -58,7 +78,7 @@ class FileFinderTest extends Test
         $dir = implode(DIRECTORY_SEPARATOR, $dir);
 
         $app = new Application;
-        $app->setRoot($dir);
+        $app->setRoot($dir . DIRECTORY_SEPARATOR);
 
         $parts = explode(DIRECTORY_SEPARATOR, __FILE__);
         list($file) = explode('.', array_pop($parts));
@@ -73,7 +93,7 @@ class FileFinderTest extends Test
         $dir = implode(DIRECTORY_SEPARATOR, $dir);
 
         $app = new Application;
-        $app->setRoot($dir);
+        $app->setRoot($dir . DIRECTORY_SEPARATOR);
 
         $parts = explode(DIRECTORY_SEPARATOR, __FILE__);
         list($file) = explode('.', array_pop($parts));
@@ -88,7 +108,7 @@ class FileFinderTest extends Test
         $dir = implode(DIRECTORY_SEPARATOR, $dir);
 
         $app = new Application;
-        $app->setRoot($dir);
+        $app->setRoot($dir . DIRECTORY_SEPARATOR);
 
         $parts = explode(DIRECTORY_SEPARATOR, __FILE__);
         list($file) = explode('.', array_pop($parts));

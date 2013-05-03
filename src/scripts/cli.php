@@ -10,6 +10,41 @@ use Fabrico\Event\Listeners;
 use Fabrico\Cache\RuntimeCache;
 
 use Fabrico\Core\Ext;
+use Fabrico\Core\ExtensionManager;
+
+use Symfony\Component\Console\Application as Terminal;
+
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+
+
+class TestCommand extends Command
+{
+    protected function configure()
+    {
+        $this
+            ->setName('test:cmd')
+            ->setDescription('Nisi nascetur non magna ultrices augue et ac, amet massa aliquam sociis. Proin nascetur. Elit ut eu pellentesque? Magna, nunc, vel tempor placerat est? Augue etiam mus lorem dapibus dis dis et lorem! Porta sed enim scelerisque sagittis turpis placerat auctor mattis, in, montes in dictumst lacus mattis, in, scelerisque, nec risus est sit arcu ridiculus nec sociis phasellus turpis! Magnis placerat, augue eros! Turpis placerat lundium! Tristique dignissim tempor aenean massa.')
+            ->addArgument(
+                'name',
+                InputArgument::OPTIONAL,
+                'Name of person'
+            );
+    }
+
+    protected function execute(InputInterface $input, OutputInterface $output)
+    {
+        $dialog = $this->getHelperSet()->get('dialog');
+        $name = $dialog->ask(
+            $output, 'Name? ', 'Marcos'
+        );
+        $output->writeln("<question>{$name}</question>");
+    }
+}
+
 
 call_user_func(function() {
     $app = new Application;
@@ -40,14 +75,12 @@ call_user_func(function() {
 
 
 
+$ext = new ExtensionManager($conf);
 
-// Ext::disable('view_backtrace');
-// Ext::enable('view_backtrace');
-// Ext::install('view_backtrace');
-// Ext::configure('view_backtrace:source:line_offset', '10');
-
-
-
+// var_dump($ext->disable('view_backtrace')); die;
+// var_dump(Ext::enable('view_backtrace'));die;
+$ext->install('view_backtrace');die;
+// var_dump($ext->config('view_backtrace:source:line_offset', 10));die;
 
 
 
@@ -63,3 +96,7 @@ call_user_func(function() {
 
 
 });
+
+$term = new Terminal;
+$term->add(new TestCommand);
+$term->run();
