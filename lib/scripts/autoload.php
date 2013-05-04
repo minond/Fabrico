@@ -14,9 +14,9 @@ call_user_func(function() {
     array_pop($here); // Fabrico
     define('FABRICO_PROJECT_ROOT', implode(DIRECTORY_SEPARATOR, $here) .
         DIRECTORY_SEPARATOR);
-    define('FABRICO_SRC', FABRICO_ROOT . 'src' . DIRECTORY_SEPARATOR);
+    define('FABRICO_SRC', FABRICO_ROOT . 'lib' . DIRECTORY_SEPARATOR);
     define('FABRICO_BIN', FABRICO_ROOT . 'bin' . DIRECTORY_SEPARATOR);
-    define('FABRICO_BIN_SRC', FABRICO_ROOT . 'bin' . DIRECTORY_SEPARATOR . 'src' .
+    define('FABRICO_BIN_SRC', FABRICO_ROOT . 'bin' . DIRECTORY_SEPARATOR . 'lib' .
         DIRECTORY_SEPARATOR);
 });
 

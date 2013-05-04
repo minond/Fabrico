@@ -18,11 +18,11 @@ tests() {
 }
 
 documentation() {
-	./vendor/bin/apigen.php --source src/ --destination bin/autogen/docs/ --todo \
+	./vendor/bin/apigen.php --source lib/ --destination bin/autogen/docs/ --todo \
 		# can't seem to pass a relative path to --exclude
-		--exclude "$PWD/src/scripts/autoload.php" \
-		--exclude "$PWD/src/scripts/cli.php" \
-		--exclude "$PWD/src/scripts/http.php"
+		--exclude "$PWD/lib/scripts/autoload.php" \
+		--exclude "$PWD/lib/scripts/cli.php" \
+		--exclude "$PWD/lib/scripts/http.php"
 }
 
 benchmark() {
@@ -42,17 +42,17 @@ codequality() {
 	# tools can be installing via:
 	# pear config-set auto_discover 1
 	# pear install pear.phpqatools.org/phpqatools
-	reportsection "loc (src)"
-	phploc src/ | tee bin/autogen/code/loc_src.txt >> bin/autogen/code/report.txt
+	reportsection "loc (lib)"
+	phploc lib/ | tee bin/autogen/code/loc_lib >> bin/autogen/code/report.txt
 
 	reportsection "loc (tests)"
 	phploc tests/ | tee bin/autogen/code/loc_tests.txt >> bin/autogen/code/report.txt
 
 	reportsection cpd
-	phpcpd src/ | tee bin/autogen/code/cpd.txt >> bin/autogen/code/report.txt
+	phpcpd lib/ | tee bin/autogen/code/cpd.txt >> bin/autogen/code/report.txt
 
 	reportsection "code sniffer"
-	phpcs src/ | tee bin/autogen/code/codesniffer.txt >> bin/autogen/code/report.txt
+	phpcs lib/ | tee bin/autogen/code/codesniffer.txt >> bin/autogen/code/report.txt
 }
 
 view() {
@@ -118,5 +118,5 @@ do
 	esac
 done
 
-php ./src/scripts/cli.php "$@"
+php ./lib/scripts/cli.php "$@"
 exit 1
