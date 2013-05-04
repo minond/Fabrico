@@ -26,6 +26,7 @@ config:
     display: true
   exception:
     kill: true
+    from_throw: false
   error:
     kill: true
     reporting: %E_ALL

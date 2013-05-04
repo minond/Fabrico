@@ -12,6 +12,7 @@ if (Ext::enabled('view_backtrace')) {
         $err_msg  = Ext::config('view_backtrace:error:label');
         $err_kill = Ext::config('view_backtrace:error:kill');
         $exc_kill = Ext::config('view_backtrace:exception:kill');
+        $at_throw = Ext::config('view_backtrace:exception:from_throw');
         $bak_show = Ext::config('view_backtrace:backtrace:display');
         $src_show = Ext::config('view_backtrace:source:display');
         $src_line = Ext::config('view_backtrace:source:line_offset');
@@ -50,11 +51,18 @@ if (Ext::enabled('view_backtrace')) {
             $exc_kill,
             $bak_show,
             $src_show,
-            $src_line
+            $src_line,
+            $at_throw
         ) {
             $backtrace = $exception->getTrace();
-            $file = $backtrace[0]['file'];
-            $line = $backtrace[0]['line'];
+
+            if ($at_throw) {
+                $file = $exception->getFile();
+                $line = $exception->getLine();
+            } else {
+                $file = $backtrace[0]['file'];
+                $line = $backtrace[0]['line'];
+            }
 
             // prepend exception thrown location
             array_unshift($backtrace, [

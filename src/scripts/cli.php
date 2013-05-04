@@ -79,7 +79,7 @@ $ext = new ExtensionManager($conf);
 
 // var_dump($ext->disable('view_backtrace')); die;
 // var_dump(Ext::enable('view_backtrace'));die;
-$ext->install('view_backtrace');die;
+// Ext::install('view_backtrace');die;
 // var_dump($ext->config('view_backtrace:source:line_offset', 10));die;
 
 
