@@ -53,12 +53,16 @@ codequality() {
 
 view() {
 	case "$1" in
-		tests)
+		test|tests)
 			xdg-open bin/autogen/tests/report/index.html
 			;;
 
-		doc)
-			xdg-open bin/autogen/code/report.txt
+		code)
+			sensible-browser bin/autogen/code/report.txt
+			;;
+
+		doc|docs)
+			xdg-open bin/autogen/docs/index.html
 			;;
 	esac
 }
