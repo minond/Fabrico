@@ -17,12 +17,6 @@ class ExtensionManager
     use FileFinder;
 
     /**
-     * path base
-     * @var string
-     */
-    const CONFIGURATION_BASE = 'config';
-
-    /**
      * @var Configuration
      */
     protected $configuration;

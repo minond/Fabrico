@@ -9,7 +9,7 @@
          processIsolation="false"
          stopOnFailure="false"
          syntaxCheck="false"
-         bootstrap="src/scripts/autoload.php">
+         bootstrap="lib/scripts/autoload.php">
     <testsuites>
         <testsuite name="all">
             <directory>./tests</directory>
@@ -18,10 +18,10 @@
 
     <filter>
         <whitelist>
-            <directory>./src/*/</directory>
+            <directory>./lib/*/</directory>
             <exclude>
-                <directory>./src/scripts</directory>
-                <directory>./src/Test</directory>
+                <directory>./lib/scripts</directory>
+                <directory>./lib/Test</directory>
                 <directory>./vendor</directory>
                 <directory>./tests</directory>
             </exclude>

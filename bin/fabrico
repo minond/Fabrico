@@ -19,10 +19,10 @@ tests() {
 
 documentation() {
 	./vendor/bin/apigen.php --source lib/ --destination bin/autogen/docs/ --todo \
-		# can't seem to pass a relative path to --exclude
 		--exclude "$PWD/lib/scripts/autoload.php" \
 		--exclude "$PWD/lib/scripts/cli.php" \
-		--exclude "$PWD/lib/scripts/http.php"
+		--exclude "$PWD/lib/scripts/http.php" \
+		--exclude "$PWD/lib/scripts/extension.php"
 }
 
 benchmark() {
@@ -31,6 +31,10 @@ benchmark() {
 
 reportsection() {
 	echo -e "\n\n---- ${1}:\n" >> bin/autogen/code/report.txt
+}
+
+extension() {
+	php ./lib/scripts/extension.php "$@"
 }
 
 codequality() {
@@ -96,6 +100,11 @@ do
 
 		code)
 			codequality
+			exit 1
+			;;
+
+		ext|extension)
+			extension $2 $3
 			exit 1
 			;;
 
