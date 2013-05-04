@@ -18,7 +18,11 @@ tests() {
 }
 
 documentation() {
-	./vendor/bin/apigen.php --source src/ --destination bin/autogen/docs/ --todo
+	./vendor/bin/apigen.php --source src/ --destination bin/autogen/docs/ --todo \
+		# can't seem to pass a relative path to --exclude
+		--exclude "$PWD/src/scripts/autoload.php" \
+		--exclude "$PWD/src/scripts/cli.php" \
+		--exclude "$PWD/src/scripts/http.php"
 }
 
 benchmark() {
@@ -75,12 +79,12 @@ do
 			exit 1
 			;;
 
-		test)
+		test|tests)
 			tests
 			exit 1
 			;;
 
-		doc)
+		doc|docs)
 			documentation
 			exit 1
 			;;
