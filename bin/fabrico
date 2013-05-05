@@ -6,7 +6,7 @@ goto_fabrico() {
 		cd "$(pwd)/../"
 
 		if [ "$PWD" == "/" ]; then
-			echo "fatal: Not a Fabrico project"
+			echo "fatal: Fabrico module not found"
 			exit
 		fi
 	done
@@ -36,11 +36,6 @@ benchmark() {
 reportsection() {
 	goto_fabrico
 	echo -e "\n\n---- ${1}:\n" >> bin/autogen/code/report.txt
-}
-
-extension() {
-	goto_fabrico
-	php ./lib/scripts/extension.php "$@"
 }
 
 codequality() {
@@ -116,8 +111,24 @@ do
 			exit 1
 			;;
 
+		init|initialize)
+			goto_fabrico
+
+			# project structure
+			cp -r ./bin/project/* ../
+
+			# namespace
+			echo -n 'Base namespace: '
+			read namespace
+			sed "s/%Namespace%/$namespace/g" ./bin/project/config/project.yml > ../config/project.yml
+
+			echo "Initialed new Fabrico project -> config/project.yml:$namespace"
+			exit 1
+			;;
+
 		ext|extension)
-			extension $2 $3
+			goto_fabrico
+			php ./lib/scripts/extension.php $2 $3
 			exit 1
 			;;
 
