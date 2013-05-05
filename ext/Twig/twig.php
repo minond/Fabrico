@@ -1,14 +1,13 @@
 <?php
 
-use Fabrico\Event\Listener;
 use Fabrico\Event\Reporter;
+use Fabrico\Core\Ext;
 
-Reporter::observe('Fabrico\View\View', 'render', Listener::PRE,
-    function($info) {
+if (Ext::enabled('twig')) {
+    Reporter::before('fabrico.view.view:render', function($info) {
         Twig_Autoloader::register();
 
-        // todo: should check plugin configuration
-        if ($info->extension === '.twig') {
+        if ($info->extension === Ext::config('twig:extension')) {
             $load = new Twig_Loader_Filesystem($info->dirpath);
             $twig = new Twig_Environment($load);
 
@@ -18,5 +17,5 @@ Reporter::observe('Fabrico\View\View', 'render', Listener::PRE,
 
             unset($twig);
         }
-    }
-);
+    });
+}

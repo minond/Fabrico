@@ -9,3 +9,6 @@ tags:
 source:
   - name: twig.php
     type: listener
+
+config:
+  extension: .twig

@@ -1,6 +1,5 @@
 <?php
 
-use Fabrico\Event\Listener;
 use Fabrico\Event\Reporter;
 use Fabrico\View\View;
 use Fabrico\Core\Ext;

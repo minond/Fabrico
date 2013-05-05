@@ -111,18 +111,20 @@ function install($ext, $out, $conf)
             }
 
             // add configuration
-            $out->coutln('{{ section }}Saving extension configuration{{ end }}');
-            $project_config = $config['config'];
-            $project_config = Yaml::dump($project_config, 100, 2);
-            $project_file = Configuration::generateFileFilderFilePath("ext/{$ext}");
+            if (isset($config['config'])) {
+                $out->coutln('{{ section }}Saving extension configuration{{ end }}');
+                $project_config = $config['config'];
+                $project_config = Yaml::dump($project_config, 100, 2);
+                $project_file = Configuration::generateFileFilderFilePath("ext/{$ext}");
 
-            if (file_put_contents($project_file, $project_config) !== false) {
+                if (file_put_contents($project_file, $project_config) !== false) {
                 $out->cout('{{ space }}{{ ok }}');
-            } else {
+                } else {
                 $out->cout('{{ space }}{{ fail }}');
-            }
+                }
 
-            $out->coutln(' Created %s', $project_file);
+                $out->coutln(' Created %s', $project_file);
+            }
 
             // enable extension
             $out->coutln('{{ section }}Enabling extension{{ end }}');
