@@ -22,8 +22,6 @@ call_user_func(function() {
 
 // everything should always be triggered from Fabrico's root directory
 chdir(FABRICO_ROOT);
-
-// request the vendor's autoload
 require 'vendor/autoload.php';
 
 // and create Fabrico's own autoload
@@ -32,7 +30,7 @@ spl_autoload_register(function ($class) {
     $root = $parts[0];
     $rest = implode(DIRECTORY_SEPARATOR, array_slice($parts, 1));
 
-    if ($root = FABRICO_NAMESPACE) {
+    if ($root === FABRICO_NAMESPACE) {
         $file = $rest . FABRICO_EXTENSION;
         $in_bin = FABRICO_BIN_SRC . $file;
         $in_src = FABRICO_SRC . $file;
