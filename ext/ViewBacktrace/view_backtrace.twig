@@ -55,7 +55,7 @@
     width: 620px;
 }
 
-.fabrico-error .source table tr.error-line td.source-text {
+.fabrico-error .source table tr.error-line td.source-num {
     color: rgb(235, 7, 7);
     font-weight: bold;
 }
@@ -104,3 +104,125 @@
     </div>
     {% endif %}
 </div>
+
+<style type="text/css">
+.hi-sl_comment,
+.hi-ml_comment_start,
+.hi-ml_comment_end,
+.hi-ml_comment_body {
+    color: gray;
+}
+
+.hi-annotations {
+    font-weight: bold;
+}
+
+.hi-keywords {
+    color: rgb(7, 7, 111);
+    font-weight: bold;
+}
+
+.hi-variables,
+.hi-properties {
+    color: rgb(14, 117, 143);
+}
+
+.hi-class_names {
+    font-weight: bold;
+}
+
+.hi-func_names {
+    font-weight: bold;
+    color: rgb(153, 9, 9);
+}
+
+.hi-func_calls .hi-keywords,
+.hi-func_calls .hi-constant,
+.hi-func_calls {
+    color: rgb(14, 117, 143);
+    font-weight: normal;
+}
+
+.hi-characters {
+    font-weight: bold;
+}
+
+.hi-constant {
+    color: rgb(241, 12, 12);
+    font-weight: bold;
+}
+
+.hi-strings,
+.hi-strings .hi {
+    color: rgb(240, 113, 99);
+    font-weight: normal;
+}
+
+.hi-numbers {
+    color: rgb(192, 30, 30);
+    font-weight: bold;
+}
+</style>
+<script>
+var matchers = {
+    ml_comment_start: { r: /^\s{0,}(\/\*\*)/, o: false },
+    ml_comment_body:  { r: /^\s{0,}(\*.+)/, o: ["annotations"] },
+    ml_comment_end:   { r: /^\s{0,}(\*\/)/, o: false },
+    sl_comment:       { r: /^\s{0,}(\/\/.+)/, o: ["annotations"] },
+    func_calls:       { r: /([a-zA-Z_]+?)\(/, o: false },
+    func_names:       { r: /function\s+([a-zA-Z_]+)/, o: false },
+    strings:          { r: /('.+?'|".+?")/, o: false },
+    keywords:         { r: /(public|protected|static|function|use |namespace |new |if|do|while|for|foreach| as |return|class | extends | implements |throw |echo|abstract |final |interface |self|null|try|catch|case|default|switch|endif|endwhile|endfor|endforeach|else|elseif|trait |require|require_once|include|include_once|list)/, o: false },
+    constant:         { r: /(true|false|array|object|bool|boolean|int|integer|string|double|float|__METHOD__|__DIR__|__NAMESPACE__|__FUNCTION__|__CLASS__|__FILE__|__LINE__)/, o: false },
+    annotations:      { r: /^\s{0,}\*\s+(\@\w+)/, o: false },
+    characters:       { r: /(\{|\}|\(|\))/, o: false },
+    variables:        { r: /(\$[a-zA-Z\$_]+)/, o: false },
+    properties:       { r: /\-\>([a-zA-Z_]+)/, o: false },
+    class_names:      { r: /class\s+|new\s+([a-zA-Z_]+)[::]{0}/, o: false },
+    numbers:          { r: /([0-9]+)/, o: false }
+};
+
+
+var a=1;
+var highlight = function(node) {
+    var ma, mat, str, child, here, n = document.createElement("div");
+
+    for (var ma in matchers) {
+        str = node.innerText;
+
+        if (child && child.indexOf(ma) === -1) {
+            continue;
+        }
+
+        (function replace(str) {
+            if (mat = str.match(matchers[ ma ].r)) {
+                if (!mat[1]) return;
+                here = mat.index + mat[1].length;
+                n.innerHTML = mat[1];
+                mat[1]=n.innerHTML//.replace(/\>/g, "&gt").replace(/\</g, "&lt");
+                node.innerHTML = node.innerHTML.replace(mat[1]
+                /*.replace(/\>/g, "&gt").replace(/\</g, "&lt")*/
+                , "<span class='hi hi-" + ma + "'>" + mat[1] + "</span>");
+                node.innerHTML = node.innerHTML.replace(new RegExp(mat[1]
+                /*.replace(/\>/g, "&gt").replace(/\</g, "&lt")*/
+                .replace(/(\W)/g, '\\$1'), "g"), "<span class='hi hi-" + ma + "'>" + mat[1] + "</span>");
+                /*if(n.innerHTML=="'<i>hello, from <b>%s</b></i>'")debugger;*/
+                console.log(n.innerHTML)
+                console.log(node.innerHTML)
+
+                if (matchers[ ma ].o)
+                    child = matchers[ ma ].o;
+
+                // more matches?
+                replace(str.substr(here));
+            }
+        })(str);
+    }
+};
+
+
+
+var nodes = document.querySelectorAll("table td pre");
+for (var i = 0, len = nodes.length; i < len; i++)
+    highlight(nodes[i]);
+</script>
