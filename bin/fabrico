@@ -1,23 +1,27 @@
 #!/bin/bash
 
-# find root of project
-while [ ! -d Fabrico ]; do
-	cd "$(pwd)/../"
+goto_fabrico() {
+	# find root of project
+	while [ ! -d Fabrico ]; do
+		cd "$(pwd)/../"
 
-	if [ "$PWD" == "/" ]; then
-		echo "fatal: Not a Fabrico project"
-		exit
-	fi
-done
+		if [ "$PWD" == "/" ]; then
+			echo "fatal: Not a Fabrico project"
+			exit
+		fi
+	done
 
-# the move into fabrico directory
-cd Fabrico
+	# the move into fabrico directory
+	cd Fabrico
+}
 
 tests() {
+	goto_fabrico
 	./vendor/bin/phpunit
 }
 
 documentation() {
+	goto_fabrico
 	./vendor/bin/apigen.php --source lib/ --destination bin/autogen/docs/ --todo \
 		--exclude "$PWD/lib/scripts/autoload.php" \
 		--exclude "$PWD/lib/scripts/cli.php" \
@@ -30,17 +34,24 @@ benchmark() {
 }
 
 reportsection() {
+	goto_fabrico
 	echo -e "\n\n---- ${1}:\n" >> bin/autogen/code/report.txt
 }
 
 extension() {
+	goto_fabrico
 	php ./lib/scripts/extension.php "$@"
 }
 
 codequality() {
+	goto_fabrico
+
 	# reset dir
+	if [ -d bin/autogen/code ]; then
+		rm -r  bin/autogen/code
+	fi
+
 	mkdir -p bin/autogen/code
-	rm bin/autogen/code/*
 	date > bin/autogen/code/report.txt
 
 	# tools can be installing via:
@@ -60,6 +71,8 @@ codequality() {
 }
 
 view() {
+	goto_fabrico
+
 	case "$1" in
 		test|tests)
 			xdg-open bin/autogen/tests/report/index.html
@@ -109,23 +122,25 @@ do
 			;;
 
 		build)
-			clear
 			echo "running tests..."
 			tests
 			echo "done"
+
 			echo "generating code quality..."
 			codequality
 			echo "done"
+
 			echo "generating documentation..."
 			documentation
 			echo "done"
-			echo "running basic benchmark..."
-			benchmark
-			echo "done"
+
+			exit 1
+			;;
+
+		*)
+			goto_fabrico
+			php ./lib/scripts/cli.php "$@"
 			exit 1
 			;;
 	esac
 done
-
-php ./lib/scripts/cli.php "$@"
-exit 1
