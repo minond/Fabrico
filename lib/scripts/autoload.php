@@ -3,47 +3,35 @@
 use Fabrico\Event\Reporter;
 
 call_user_func(function() {
-    $here = explode(DIRECTORY_SEPARATOR, dirname(__FILE__));
+    $ds = DIRECTORY_SEPARATOR;
+    $here = explode($ds, dirname(__FILE__));
     array_pop($here); // scripts
     array_pop($here); // src
 
+    // Fabrico directories
     define('FABRICO_NAMESPACE', 'Fabrico');
     define('FABRICO_EXTENSION', '.php');
-    define('FABRICO_ROOT', implode(DIRECTORY_SEPARATOR, $here) .
-        DIRECTORY_SEPARATOR);
+    define('FABRICO_ROOT', implode($ds, $here) . $ds);
+    define('FABRICO_SRC', FABRICO_ROOT . 'lib' . $ds);
     array_pop($here); // Fabrico
-    define('FABRICO_PROJECT_ROOT', implode(DIRECTORY_SEPARATOR, $here) .
-        DIRECTORY_SEPARATOR);
-    define('FABRICO_SRC', FABRICO_ROOT . 'lib' . DIRECTORY_SEPARATOR);
-    define('FABRICO_BIN', FABRICO_ROOT . 'bin' . DIRECTORY_SEPARATOR);
-    define('FABRICO_BIN_SRC', FABRICO_ROOT . 'bin' . DIRECTORY_SEPARATOR . 'lib' .
-        DIRECTORY_SEPARATOR);
+
+    // project directories
+    define('FABRICO_PROJECT_ROOT', implode($ds, $here) . $ds);
+
+    // everything should always be triggered from the root directory
+    chdir(FABRICO_ROOT);
+    require 'vendor/autoload.php';
 });
 
-// everything should always be triggered from Fabrico's root directory
-chdir(FABRICO_ROOT);
-require 'vendor/autoload.php';
-
-// and create Fabrico's own autoload
+// Fabrico's own autoloader
 spl_autoload_register(function ($class) {
-    $parts = explode('\\', $class);
-    $root = $parts[0];
-    $rest = implode(DIRECTORY_SEPARATOR, array_slice($parts, 1));
+    if (strpos($class, FABRICO_NAMESPACE) === 0) {
+        $part = explode('\\', $class);
+        $rest = implode(DIRECTORY_SEPARATOR, array_slice($part, 1));
+        $file = FABRICO_SRC . $rest . FABRICO_EXTENSION;
 
-    if ($root === FABRICO_NAMESPACE) {
-        $file = $rest . FABRICO_EXTENSION;
-        $in_bin = FABRICO_BIN_SRC . $file;
-        $in_src = FABRICO_SRC . $file;
-        $src = null;
-
-        if (file_exists($in_bin)) {
-            $src = $in_bin;
-        } else if (file_exists($in_src)) {
-            $src = $in_src;
-        }
-
-        if (!is_null($src)) {
-            require $src;
+        if (file_exists($file)) {
+            require_once $file;
 
             if (class_exists($class)) {
                 Reporter::greet($class);
