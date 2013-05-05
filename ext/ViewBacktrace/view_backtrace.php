@@ -38,6 +38,7 @@ if (Ext::enabled('view_backtrace')) {
                 'display_backtrace' => $bak_show,
                 'display_source' => $src_show,
                 'source' => getsource($file, $line, $src_line, $src_show),
+                'fullhtml' => $err_kill,
             ]);
 
             if ($err_kill) {
@@ -78,6 +79,7 @@ if (Ext::enabled('view_backtrace')) {
                 'display_backtrace' => $bak_show,
                 'display_source' => $src_show,
                 'source' => getsource($file, $line, $src_line, $src_show),
+                'fullhtml' => $exc_kill,
             ]);
 
             if ($exc_kill) {
