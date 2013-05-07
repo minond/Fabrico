@@ -115,10 +115,17 @@ do
 			mkdir $2
 			cd $2
 
+			echo "Downloading Fabrico..."
 			git init
 			git submodule add git@github.com:minond/Fabrico
 			git submodule init
 
+			echo -e "\nInstalling Fabrico..."
+			cd Fabrico
+			composer install
+
+			echo -e "\n"
+			cd ..
 			$0 init
 
 			exit 1
