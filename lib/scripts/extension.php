@@ -128,12 +128,33 @@ function install($ext, $out, $conf)
 
             // enable extension
             $out->coutln('{{ section }}Enabling extension{{ end }}');
-            $enabled = $conf->load('ext');
-            $enabled['enabled'][] = $ext;
-            $enabled['enabled'] = array_unique($enabled['enabled']);
+            $ext_config = $conf->load('ext');
+
+            if (!isset($ext_config['installed'])) {
+                $ext_config['installed'] = [];
+            }
+
+            if (!isset($ext_config['enabled'])) {
+                $ext_config['enabled'] = [];
+            }
+
+            $ext_config['installed'][] = $ext;
+            $tmp = array_unique($ext_config['installed']);
+            $ext_config['installed'] = [];
+            foreach ($tmp as $e) {
+                $ext_config['installed'][] = $e;
+            }
+
+            $ext_config['enabled'][] = $ext;
+            $tmp = array_unique($ext_config['enabled']);
+            $ext_config['enabled'] = [];
+            foreach ($tmp as $e) {
+                $ext_config['enabled'][] = $e;
+            }
+
             $extfile = Configuration::generateFileFilderFilePath('ext');
 
-            if (file_put_contents($extfile, Yaml::dump($enabled)) !== false) {
+            if (file_put_contents($extfile, Yaml::dump($ext_config, 100, 2)) !== false) {
                 $out->cout('{{ space }}{{ ok }}');
             } else {
                 $out->cout('{{ space }}{{ fail }}');
