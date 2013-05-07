@@ -120,9 +120,9 @@ do
 			# namespace
 			echo -n 'Base namespace: '
 			read namespace
-			sed "s/%Namespace%/$namespace/g" ./bin/project/config/project.yml > ../config/project.yml
+			sed "s/%Namespace%/$namespace/g" ./bin/project/config/project.yaml > ../config/project.yaml
 
-			echo "Initialed new Fabrico project -> config/project.yml:$namespace"
+			echo "Initialed new Fabrico project -> config/project.yaml:$namespace"
 			exit 1
 			;;
 

@@ -24,7 +24,7 @@ class Configuration
     /**
      * @see Fabrico\Project\FileFinder
      */
-    protected static $ext = '.yml';
+    protected static $ext = '.yaml';
 
     /**
      * configuration runtime cache

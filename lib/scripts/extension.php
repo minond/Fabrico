@@ -24,7 +24,7 @@ function install($ext, $out, $conf)
     $found_ext = false;
     $listeners = [];
     $pattern = FABRICO_ROOT . 'ext' . DIRECTORY_SEPARATOR .
-        '*/configuration.yml';
+        '*/configuration.yaml';
 
     foreach (glob($pattern) as $conffile) {
         $config = Yaml::parse($conffile);
