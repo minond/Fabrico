@@ -111,6 +111,19 @@ do
 			exit 1
 			;;
 
+		create)
+			mkdir $2
+			cd $2
+
+			git init
+			git submodule add git@github.com:minond/Fabrico
+			git submodule init
+
+			$0 init
+
+			exit 1
+			;;
+
 		init|initialize)
 			goto_fabrico
 
