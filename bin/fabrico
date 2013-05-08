@@ -139,7 +139,9 @@ do
 			# namespace
 			echo -n 'Base namespace: '
 			read namespace
+
 			sed "s/%Namespace%/$namespace/g" ./bin/project/config/project.yaml > ../config/project.yaml
+			sed "s/%Namespace%/$namespace/g" ./bin/project/controller/Sample.php > ../controller/Sample.php
 
 			echo "Initialed new Fabrico project -> config/project.yaml:$namespace"
 			exit 1
