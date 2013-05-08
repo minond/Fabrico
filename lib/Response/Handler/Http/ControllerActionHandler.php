@@ -4,6 +4,7 @@ namespace Fabrico\Response\Handler\Http;
 
 use Fabrico\Request\Request;
 use Fabrico\Response\Response;
+use Fabrico\Output\Output;
 use Fabrico\Output\Http\HtmlOutput;
 use Fabrico\Controller\Controller;
 use Fabrico\Response\Handler\Handler;
@@ -94,10 +95,18 @@ class ControllerActionHandler extends Handler
         $req = $this->app->getRequest();
         $ret = $this->controller->{ $this->action }($req, $res);
 
-        if (is_string($ret)) {
+        if (is_scalar($ret)) {
             $out = new HtmlOutput;
             $out->setContent($ret);
-            $res->setOutput($out);
+            $ret =& $out;
+        }
+
+        if (!$res->getOutput()) {
+            if (!is_object($ret) || !($ret instanceof Output)) {
+                $ret = new HtmlOutput;
+            }
+
+            $res->setOutput($ret);
         }
     }
 }
