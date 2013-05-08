@@ -1,6 +1,6 @@
 <?php
 
-namespace %Namespace\Controller;
+namespace %Namespace%\Controller;
 
 use Fabrico\Request\Request;
 use Fabrico\Response\Response;
