@@ -73,7 +73,7 @@ function install($ext, $out, $conf)
                     $project_listeners = $conf->load('listeners');
                     $in_project = false;
 
-                    if (is_array($project_listeners)) {
+                    if (!is_array($project_listeners)) {
                         $project_listeners = [];
                     }
 

@@ -83,96 +83,97 @@ view() {
 	esac
 }
 
-for arg in "$@"
-do
-	case "$arg" in
-		view)
-			view $2
-			exit 1
-			;;
+case "$1" in
+	view)
+		view $2
+		exit 1
+		;;
 
-		test|tests)
-			tests
-			exit 1
-			;;
+	test|tests)
+		tests
+		exit 1
+		;;
 
-		doc|docs)
-			documentation
-			exit 1
-			;;
+	doc|docs)
+		documentation
+		exit 1
+		;;
 
-		bench)
-			benchmark
-			exit 1
-			;;
+	bench)
+		benchmark
+		exit 1
+		;;
 
-		code)
-			codequality
-			exit 1
-			;;
+	code)
+		codequality
+		exit 1
+		;;
 
-		create)
-			mkdir $2
-			cd $2
+	create)
+		mkdir $2
+		cd $2
 
-			echo "Downloading Fabrico..."
-			git init
-			git submodule add git@github.com:minond/Fabrico
-			git submodule init
+		echo "Downloading Fabrico..."
+		git init
+		git submodule add git@github.com:minond/Fabrico
+		git submodule init
 
-			echo -e "\nInstalling Fabrico..."
-			cd Fabrico
-			composer install --no-ansi
+		echo -e "\nInstalling Fabrico..."
+		cd Fabrico
+		composer install --no-ansi
 
-			cd ..
-			$0 init
+		cd ..
+		$0 init $2
 
-			exit 1
-			;;
+		exit 1
+		;;
 
-		init|initialize)
-			goto_fabrico
+	init|initialize)
+		goto_fabrico
 
-			# project structure
-			cp -r ./bin/project/* ../
+		# project structure
+		cp -r ./bin/project/* ../
 
-			# namespace
+		# namespace
+		if [ ! "$2" ]; then
 			echo -n 'Base namespace: '
 			read namespace
+		else
+			namespace=$2
+		fi
 
-			sed "s/%Namespace%/$namespace/g" ./bin/project/config/project.yaml > ../config/project.yaml
-			sed "s/%Namespace%/$namespace/g" ./bin/project/controller/Sample.php > ../controller/Sample.php
+		sed "s/%Namespace%/$namespace/g" ./bin/project/config/project.yaml > ../config/project.yaml
+		sed "s/%Namespace%/$namespace/g" ./bin/project/controller/Sample.php > ../controller/Sample.php
 
-			echo "Initialed new Fabrico project -> config/project.yaml:$namespace"
-			exit 1
-			;;
+		echo "Initialized new Fabrico project -> config/project.yaml:$namespace"
+		exit 1
+		;;
 
-		ext|extension)
-			goto_fabrico
-			php ./lib/scripts/extension.php $2 $3
-			exit 1
-			;;
+	ext|extension)
+		goto_fabrico
+		php ./lib/scripts/extension.php $2 $3
+		exit 1
+		;;
 
-		build)
-			echo "running tests..."
-			tests
-			echo "done"
+	build)
+		echo "running tests..."
+		tests
+		echo "done"
 
-			echo "generating code quality..."
-			codequality
-			echo "done"
+		echo "generating code quality..."
+		codequality
+		echo "done"
 
-			echo "generating documentation..."
-			documentation
-			echo "done"
+		echo "generating documentation..."
+		documentation
+		echo "done"
 
-			exit 1
-			;;
+		exit 1
+		;;
 
-		*)
-			goto_fabrico
-			php ./lib/scripts/cli.php "$@"
-			exit 1
-			;;
-	esac
-done
+	*)
+		goto_fabrico
+		php ./lib/scripts/cli.php "$@"
+		exit 1
+		;;
+esac
