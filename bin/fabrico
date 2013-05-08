@@ -122,9 +122,8 @@ do
 
 			echo -e "\nInstalling Fabrico..."
 			cd Fabrico
-			composer install
+			composer install --no-ansi
 
-			echo -e "\n"
 			cd ..
 			$0 init
 
