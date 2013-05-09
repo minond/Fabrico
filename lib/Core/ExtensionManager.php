@@ -6,7 +6,6 @@ use Fabrico\Core\Application;
 use Fabrico\Project\FileFinder;
 use Fabrico\Project\Configuration;
 use Fabrico\Event\Listeners;
-use Symfony\Component\Yaml\Yaml;
 
 /**
  * extension helper. installs and manages framework extensions

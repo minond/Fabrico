@@ -4,7 +4,7 @@ namespace Fabrico\Project;
 
 use Fabrico\Project\FileFinder;
 use Fabrico\Cache\Cache;
-use Symfony\Component\Yaml\Yaml;
+use Fabrico\Reader\Yaml;
 
 class Configuration
 {
@@ -148,7 +148,7 @@ class Configuration
         // update file
         return file_put_contents(
             self::generateFileFilderFilePath($parts->base),
-            Yaml::dump($config, PHP_INT_MAX, 2)
+            Yaml::dump($config)
         ) !== false;
     }
 

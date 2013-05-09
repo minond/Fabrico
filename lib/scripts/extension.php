@@ -7,7 +7,7 @@ use Fabrico\Project\Configuration;
 use Fabrico\Cache\RuntimeCache;
 use Fabrico\Core\ExtensionManager;
 use Fabrico\Event\Listeners;
-use Symfony\Component\Yaml\Yaml;
+use Fabrico\Reader\Yaml;
 use Fabrico\Output\BasicOutput;
 use Fabrico\Output\Output as OutputBase;
 
@@ -257,7 +257,7 @@ function install($ext, $out, $conf)
                     }
 
                     $listeners_file = Configuration::generateFileFilderFilePath('listeners');
-                    $project_listeners = Yaml::dump($project_listeners, 100, 2);
+                    $project_listeners = Yaml::dump($project_listeners);
 
                     if (file_put_contents($listeners_file, $project_listeners) !== false) {
                         $out->cout('{{ space }}{{ ok }}');
@@ -273,7 +273,7 @@ function install($ext, $out, $conf)
             if (isset($config['config'])) {
                 $out->coutln('{{ section }}Saving extension configuration{{ end }}');
                 $project_config = $config['config'];
-                $project_config = Yaml::dump($project_config, 100, 2);
+                $project_config = Yaml::dump($project_config);
                 $project_file = Configuration::generateFileFilderFilePath("ext/{$ext}");
 
                 if (file_put_contents($project_file, $project_config) !== false) {
@@ -313,7 +313,7 @@ function install($ext, $out, $conf)
 
             $extfile = Configuration::generateFileFilderFilePath('ext');
 
-            if (file_put_contents($extfile, Yaml::dump($ext_config, 100, 2)) !== false) {
+            if (file_put_contents($extfile, Yaml::dump($ext_config)) !== false) {
                 $out->cout('{{ space }}{{ ok }}');
             } else {
                 $out->cout('{{ space }}{{ fail }}');
