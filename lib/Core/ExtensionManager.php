@@ -5,7 +5,6 @@ namespace Fabrico\Core;
 use Fabrico\Core\Application;
 use Fabrico\Project\FileFinder;
 use Fabrico\Project\Configuration;
-use Fabrico\Output\Cli\Output;
 use Fabrico\Event\Listeners;
 use Symfony\Component\Yaml\Yaml;
 

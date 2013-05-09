@@ -9,6 +9,7 @@ use Fabrico\Core\Application;
 use Fabrico\Request\Http\Request;
 use Fabrico\Response\Http\Response;
 use Fabrico\Response\Handler\Http\ControllerActionHandler;
+use Fabrico\Output\Http\HtmlOutput;
 
 require_once 'tests/mocks/Controller/EmptyController.php';
 
@@ -81,17 +82,38 @@ class ControllerActionHandlerTest extends Test
         $data = [ '_uri' => 'Ignore/returns_output' ];
         $this->req->setData($data);
         $controller = new EmptyController;
+
         $app = new Application;
         $app->setRequest($this->req);
         $app->setResponse($this->res);
+
         $this->handler->setController($controller);
         $this->handler->setApplication($app);
         $this->handler->canHandle($this->req);
         $this->handler->handle();
+
         $this->assertEquals(
             EmptyController::$expected_output,
             $this->res->getOutput()->getContent()
         );
+    }
+
+    public function testControllerMethodThatReturnNothingGetABlankHtmlOutputObject()
+    {
+        $data = [ '_uri' => 'Ignore/returns_nothing' ];
+        $this->req->setData($data);
+        $controller = new EmptyController;
+
+        $app = new Application;
+        $app->setRequest($this->req);
+        $app->setResponse($this->res);
+
+        $this->handler->setController($controller);
+        $this->handler->setApplication($app);
+        $this->handler->canHandle($this->req);
+        $this->handler->handle();
+
+        $this->assertTrue($this->res->getOutput() instanceof HtmlOutput);
     }
 
     public function testControllerGetterAndSetter()

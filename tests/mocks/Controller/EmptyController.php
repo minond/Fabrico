@@ -26,4 +26,9 @@ class EmptyController extends Controller
         self::$function_called = true;
         return self::$expected_output;
     }
+
+    public function returns_nothing(Request $req, Response $res)
+    {
+        self::$function_called = true;
+    }
 }
