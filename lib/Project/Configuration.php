@@ -4,7 +4,7 @@ namespace Fabrico\Project;
 
 use Fabrico\Project\FileFinder;
 use Fabrico\Cache\Cache;
-use Fabrico\Reader\Yaml;
+use Symfony\Component\Yaml\Yaml;
 
 class Configuration
 {
@@ -39,6 +39,24 @@ class Configuration
     public $placeholders = [
         'constants' => '/%([A-Z0-9_]+)/',
     ];
+
+    /**
+     * @param string $str
+     * @return object
+     */
+    public static function parse($str)
+    {
+        return Yaml::parse($str);
+    }
+
+    /**
+     * @param object $obj
+     * @return string
+     */
+    public static function dump($obj)
+    {
+        return Yaml::dump($obj, 100, 2);
+    }
 
     /**
      * configuration path parser. ie: project:handlers:http
@@ -84,7 +102,7 @@ class Configuration
                     $str = $this->prepareRawConfigurationString($str);
                 }
 
-                $config = Yaml::parse($str);
+                $config = self::parse($str);
             }
 
             $this->cache[ $config_file ] = $config;
@@ -148,7 +166,7 @@ class Configuration
         // update file
         return file_put_contents(
             self::generateFileFilderFilePath($parts->base),
-            Yaml::dump($config)
+            self::dump($config)
         ) !== false;
     }
 
