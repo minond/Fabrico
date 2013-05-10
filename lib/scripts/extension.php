@@ -8,7 +8,6 @@ use Fabrico\Cache\RuntimeCache;
 use Fabrico\Core\ExtensionManager;
 use Fabrico\Event\Listeners;
 use Fabrico\Output\BasicOutput;
-use Fabrico\Project\Configuration;
 use Fabrico\Output\Output as OutputBase;
 
 /**
@@ -157,6 +156,53 @@ class Output extends BasicOutput implements OutputBase
     }
 
     /**
+     * ask a question
+     * @param array|string $msg
+     * @param array $answer_map
+     * @param callable $formatter
+     * @return mixed
+     */
+    public function ask($msg, array $answer_map, $formatter = null)
+    {
+        if (is_array($msg)) {
+            $msg = call_user_func_array('sprintf', $msg);
+        }
+
+        do {
+            $this->cout("{$msg} ");
+            $in = trim(fgets(STDIN));
+
+            if (is_callable($formatter)) {
+                $in = call_user_func($formatter, $in);
+            }
+        } while (!isset($answer_map[ $in ]));
+
+        return $answer_map[ $in ];
+    }
+
+    /**
+     * ask a yes/no question
+     * @param array|string $msg
+     * @return boolean
+     */
+    public function yesno($msg)
+    {
+        $options = ' [yes/no]';
+        if (is_array($msg)) {
+            $msg[0] = $msg[0] . $options;
+        } else {
+            $msg = $msg . $options;
+        }
+
+        return $this->ask($msg, [
+            'y' => true,
+            'yes' => true,
+            'n' => false,
+            'no' => false,
+        ], 'strtolower');
+    }
+
+    /**
      * append a backspace character
      */
     public function backspace()
@@ -174,7 +220,7 @@ function mklink($local, $newloc)
     return symlink($local, $newloc);
 }
 
-function install($ext, $out, $conf)
+function install($ext, $out, $em, $conf)
 {
     $found_ext = false;
     $listeners = [];
@@ -186,6 +232,30 @@ function install($ext, $out, $conf)
 
         // found it
         if ($config['name'] === $ext) {
+            // check deps
+            if (isset($config['deps'])) {
+                foreach ($config['deps'] as $dep) {
+                    switch ($dep['type']) {
+                        case 'extension':
+                            $dname = $dep['name'];
+
+                            if (!$em->enabled($dname)) {
+                                if ($out->yesno(['Extension {{ bold }}{{ purple }}%s{{ end }} is a dependency, should I install it now?', $dname]) === true) {
+                                    if (!install($dname, $out, $em, $conf)) {
+                                        $out->coutln('Error installing {{ bold }}{{ purple }}%s{{ end }}', $dname);
+                                        return false;
+                                    }
+                                } else {
+                                    $out->coutln('Stopping installation');
+                                    return false;
+                                }
+                            }
+
+                            break;
+                    }
+                }
+            }
+
             $out->coutln('Installing {{ bold }}{{ purple }}%s{{ end }} extension', $ext);
             $dir = dirname($conffile) . DIRECTORY_SEPARATOR;
 
@@ -287,38 +357,13 @@ function install($ext, $out, $conf)
 
             // enable extension
             $out->coutln('{{ section }}Enabling extension{{ end }}');
-            $ext_config = $conf->load('ext');
-
-            if (!isset($ext_config['installed'])) {
-                $ext_config['installed'] = [];
-            }
-
-            if (!isset($ext_config['enabled'])) {
-                $ext_config['enabled'] = [];
-            }
-
-            $ext_config['installed'][] = $ext;
-            $tmp = array_unique($ext_config['installed']);
-            $ext_config['installed'] = [];
-            foreach ($tmp as $e) {
-                $ext_config['installed'][] = $e;
-            }
-
-            $ext_config['enabled'][] = $ext;
-            $tmp = array_unique($ext_config['enabled']);
-            $ext_config['enabled'] = [];
-            foreach ($tmp as $e) {
-                $ext_config['enabled'][] = $e;
-            }
-
-            $extfile = Configuration::generateFileFilderFilePath('ext');
-
-            if (file_put_contents($extfile, Configuration::dump($ext_config)) !== false) {
+            if ($em->enable($ext)) {
                 $out->cout('{{ space }}{{ ok }}');
             } else {
                 $out->cout('{{ space }}{{ fail }}');
             }
 
+            $extfile = Configuration::generateFileFilderFilePath('ext');
             $out->coutln(' Adding %s', $extfile);
 
             $out->coutln('{{ eol }}Successfully installed {{ bold }}{{ purple }}%s{{ end }} extension!', $ext);
@@ -376,7 +421,7 @@ call_user_func(function() {
 
     switch ($action) {
         case 'install':
-            install($ext, $out, $conf);
+            install($ext, $out, $em, $conf);
             break;
 
         case 'disable':

@@ -14,7 +14,7 @@ source:
     type: view
 
 deps:
-  - name: Twig
+  - name: twig
     type: extension
 
 config:
