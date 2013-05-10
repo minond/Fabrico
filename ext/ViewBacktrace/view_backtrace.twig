@@ -162,10 +162,15 @@
 				{% if trace.function %}
 				<span>- <span>
 				<b>
-					{% if trace.class %}
-						{{ trace.class }}{{ trace.type }}
-					{% endif %}
-					{{ trace.function }}
+					{% spaceless %}
+						{% if trace.class %}
+							<span>{{ trace.class }}</span>
+							<span>{{ trace.type }}</span>
+							<span>{{ trace.function }}</span>
+						{% else %}
+							<span>{{ trace.function }}</span>
+						{% endif %}
+					{% endspaceless %}
 				</b>
 				{% endif %}
 			</li>
