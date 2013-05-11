@@ -23,9 +23,11 @@ tests() {
 documentation() {
 	goto_fabrico
 	./vendor/bin/apigen.php --source lib/ --destination bin/autogen/docs/ --todo \
+		--exclude "$PWD/lib/scripts/app.php" \
 		--exclude "$PWD/lib/scripts/autoload.php" \
-		--exclude "$PWD/lib/scripts/http.php" \
-		--exclude "$PWD/lib/scripts/extension.php"
+		--exclude "$PWD/lib/scripts/extension.php" \
+		--exclude "$PWD/lib/scripts/help.php" \
+		--exclude "$PWD/lib/scripts/http.php"
 }
 
 benchmark() {
