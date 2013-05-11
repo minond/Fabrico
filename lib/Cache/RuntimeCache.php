@@ -3,14 +3,14 @@
 namespace Fabrico\Cache;
 
 /**
- * base Cache class
+ * save everything in an array
  */
 class RuntimeCache extends Cache
 {
     /**
      * internal cache
      */
-    private $data = [];
+    protected $data = [];
 
     /**
      * @inheritdoc
