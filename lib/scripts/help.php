@@ -2,6 +2,8 @@
 
 use Fabrico\Output\BasicOutput;
 use Fabrico\Output\Output;
+use Fabrico\Project\Configuration;
+use Fabrico\Event\Listeners;
 
 /**
  * terminal output
