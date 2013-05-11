@@ -1,8 +1,41 @@
 <?php
 
+namespace Fabrico\Extension\ViewBacktrace;
+
 use Fabrico\Event\Reporter;
 use Fabrico\View\View;
 use Fabrico\Core\Ext;
+
+/**
+ * source contents getter
+ * @param string file
+ * @param int $line
+ * @param int $offset - optional, default = 10
+ * @param int $show - optional, default = true
+ * @return string
+ */
+function getsource($file, $line, $offset = 10, $show = true)
+{
+    $source = [];
+    $lines = null;
+
+    if ($show) {
+        $lines = explode(PHP_EOL, file_get_contents($file));
+        $i = $line - $offset;
+        $max = $line + $offset + 1;
+
+        for (; $i < $max; $i++) {
+            if (isset($lines[ $i - 1 ])) {
+                $source[] = [
+                    'text' => $lines[ $i - 1 ],
+                    'num' => $i,
+                ];
+            }
+        }
+    }
+
+    return $source;
+}
 
 if (Ext::enabled('view_backtrace')) {
     Reporter::before('fabrico.request.http.request:preparehandler', function($info) {
@@ -17,6 +50,7 @@ if (Ext::enabled('view_backtrace')) {
         $src_line = Ext::config('view_backtrace:source:line_offset');
 
         error_reporting($errors);
+        ini_set('display_errors', 'off');
 
         set_error_handler(function($errnum, $message, $file, $line) use (
             $view,
@@ -45,6 +79,36 @@ if (Ext::enabled('view_backtrace')) {
                 die;
             }
         }, $errors);
+
+        register_shutdown_function(function() use (
+            $view,
+            $err_msg,
+            $src_show,
+            $src_line
+        ) {
+            $error = error_get_last();
+
+            if (!is_null($error)) {
+                extract($error);
+                $errtype = array_key_exists($type, $err_msg) ?
+                    $err_msg[ $type ] : $type;
+
+                if ($type !== E_ERROR) {
+                    return;
+                }
+
+                echo View::generate($view, [
+                    'errtype' => $errtype,
+                    'message' => $message,
+                    'file' => $file,
+                    'line' => $line,
+                    'display_backtrace' => false,
+                    'display_source' => $src_show,
+                    'source' => getsource($file, $line, $src_line, $src_show),
+                    'fullhtml' => true,
+                ]);
+            }
+        });
 
         set_exception_handler(function($exception) use (
             $view,
@@ -86,36 +150,5 @@ if (Ext::enabled('view_backtrace')) {
                 die;
             }
         });
-
-        /**
-         * source contents getter
-         * @param string file
-         * @param int $line
-         * @param int $offset - optional, default = 10
-         * @param int $show - optional, default = true
-         * @return string
-         */
-        function getsource($file, $line, $offset = 10, $show = true)
-        {
-            $source = [];
-            $lines = null;
-
-            if ($show) {
-                $lines = explode(PHP_EOL, file_get_contents($file));
-                $i = $line - $offset;
-                $max = $line + $offset + 1;
-
-                for (; $i < $max; $i++) {
-                    if (isset($lines[ $i - 1 ])) {
-                        $source[] = [
-                            'text' => $lines[ $i - 1 ],
-                            'num' => $i,
-                        ];
-                    }
-                }
-            }
-
-            return $source;
-        }
     });
 }
