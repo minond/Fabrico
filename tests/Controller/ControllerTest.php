@@ -25,6 +25,19 @@ class ControllerTest extends Test
         $this->assertTrue($con instanceof ControllerFinder);
     }
 
+    public function testControllersCanBeFoundAndLoadedWithACaseInsensitiveSearch()
+    {
+        $app = new Application;
+        $app->setRoot(FABRICO_ROOT);
+        $app->setNamespace('Fabrico');
+
+        ControllerFinder::setDir('tests/mocks/Controller');
+        ControllerFinder::setNs('Test\Mock\Controller');
+
+        $con = ControllerFinder::load('controllerfinder');
+        $this->assertTrue($con instanceof ControllerFinder);
+    }
+
     public function testInvalidControllersAreNotLoaded()
     {
         $app = new Application;

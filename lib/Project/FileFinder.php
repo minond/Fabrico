@@ -27,13 +27,17 @@ trait FileFinder
             return static::$filefindercache[ $hash ];
         }
 
-        $dirpath = self::generateFileFilderDirectoryPath();
         $caseinsensitive = property_exists(
             get_called_class(), 'caseinsensitive') &&
             static::$caseinsensitive;
 
+        // incase we don't find it
+        $dirpath = self::generateFileFilderDirectoryPath();
+        $path = $dirpath . self::generateFileFilderFileName(
+            $filename, $extension);
+
         // case insensitive search
-        if ($caseinsensitive) {
+        if ($caseinsensitive && !file_exists($path)) {
             $filename = strtolower($filename);
             $pattern = $dirpath . '*' . static::$ext;
 
@@ -46,9 +50,6 @@ trait FileFinder
                     break;
                 }
             }
-        } else {
-            $path = $dirpath .
-                self::generateFileFilderFileName($filename, $extension);
         }
 
         static::$filefindercache[ $hash ] = $path;
