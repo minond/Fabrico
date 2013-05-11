@@ -15,14 +15,4 @@ class ConfigurationFinder extends Configuration
     {
         self::$dir = $dir;
     }
-
-    public function getCache()
-    {
-        return $this->cache;
-    }
-
-    public function setCache(array $cache)
-    {
-        $this->cache = $cache;
-    }
 }
