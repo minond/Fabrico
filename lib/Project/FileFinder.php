@@ -10,6 +10,8 @@ use Fabrico\Core\Application;
  */
 trait FileFinder
 {
+    protected static $filefindercache = [];
+
     /**
      * generates a file's path
      * @param string $filename
@@ -19,8 +21,38 @@ trait FileFinder
      */
     public static function generateFileFilderFilePath($filename, $extension = '')
     {
-        return self::generateFileFilderDirectoryPath() .
-            self::generateFileFilderFileName($filename, $extension);
+        $hash = $filename . $extension;
+
+        if (array_key_exists($hash, static::$filefindercache)) {
+            return static::$filefindercache[ $hash ];
+        }
+
+        $dirpath = self::generateFileFilderDirectoryPath();
+        $caseinsensitive = property_exists(
+            get_called_class(), 'caseinsensitive') &&
+            static::$caseinsensitive;
+
+        // case insensitive search
+        if ($caseinsensitive) {
+            $filename = strtolower($filename);
+            $pattern = $dirpath . '*' . static::$ext;
+
+            foreach (glob($pattern) as $fsfile) {
+                $fname = self::getFileFinderFileName($fsfile);
+
+                if ($filename === strtolower($fname)) {
+                    $path = $dirpath .
+                        self::generateFileFilderFileName($fname, $extension);
+                    break;
+                }
+            }
+        } else {
+            $path = $dirpath .
+                self::generateFileFilderFileName($filename, $extension);
+        }
+
+        static::$filefindercache[ $hash ] = $path;
+        return $path;
     }
 
     /**
@@ -93,6 +125,8 @@ trait FileFinder
     public static function getFileFinderFileName($file, $extension = null)
     {
         $ext = $extension ?: static::$ext;
+        $parts = explode(DIRECTORY_SEPARATOR, $file);
+        $file = array_pop($parts);
         return preg_replace("/{$ext}$/", '', $file);
     }
 }

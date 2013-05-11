@@ -29,6 +29,11 @@ abstract class Controller
     protected static $dir = 'controller';
 
     /**
+     * @see Fabrico\Project\FileFinder
+     */
+    protected static $caseinsensitive = true;
+
+    /**
      * load and instanciate a controller
      * @param string $name
      * @return Controller
