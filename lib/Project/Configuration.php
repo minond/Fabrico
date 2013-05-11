@@ -84,6 +84,24 @@ class Configuration
     }
 
     /**
+     * cache getter
+     * @return Cache
+     */
+    public function getCache()
+    {
+        return $this->cache;
+    }
+
+    /**
+     * cache setter
+     * @param Cache $cache
+     */
+    public function setCache(Cache $cache)
+    {
+        $this->cache = $cache;
+    }
+
+    /**
      * load and parse a configuration file
      * @param string $config_file
      * @param boolean $raw - optional, default = false

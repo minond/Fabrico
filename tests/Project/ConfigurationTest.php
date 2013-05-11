@@ -6,6 +6,7 @@ use Fabrico\Test\Test;
 use Fabrico\Test\Mock\Project\ConfigurationFinder;
 use Fabrico\Core\Application;
 use Fabrico\Cache\RuntimeCache;
+use Fabrico\Cache\ReadOnceCache;
 
 require_once 'tests/mocks/Project/ConfigurationFinder.php';
 
@@ -107,5 +108,12 @@ class ConfigurationTest extends Test
         $this->assertEquals('1 s 2 1', $this->conf->prepareRawConfigurationString(
             '%E_ERROR s %E_WARNING %E_ERROR'
         ));
+    }
+
+    public function testCacheCanBeReset()
+    {
+        $cache = new ReadOnceCache;
+        $this->conf->setCache($cache);
+        $this->assertEquals($cache, $this->conf->getCache());
     }
 }

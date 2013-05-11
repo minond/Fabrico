@@ -1,5 +1,7 @@
 <?php
 
+use Fabrico\Cache\ReadOnceCache;
+
 require 'app.php';
 require 'help.php';
 
@@ -7,6 +9,7 @@ $out = new TerminalOutput;
 $em = new Fabrico\Core\ExtensionManager($conf);
 $action = $argv[1];
 $ext = $argv[2];
+$conf->setCache(new ReadOnceCache);
 
 switch ($action) {
     case 'install':
