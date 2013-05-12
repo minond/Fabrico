@@ -1,4 +1,4 @@
 <?php
 
-return class_exists('twig_autoloader', true) ||
-       class_exists('twig_environment', true);
+return class_exists('Twig_Autoloader', true) ||
+       class_exists('Twig_Environment', true);
