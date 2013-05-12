@@ -73,6 +73,8 @@ class ControllerActionHandler extends Handler
      */
     public function canHandle(Request & $req)
     {
+        $ok = false;
+
         if ($req->_uri && strpos($req->_uri, '/') !== false) {
             list($controller, $action) = explode('/', $req->_uri);
             $controller = Controller::load($controller);
@@ -82,8 +84,8 @@ class ControllerActionHandler extends Handler
             $this->action = $this->action ?: $action;
         }
 
-        return !!$this->controller && method_exists(
-            $this->controller, $this->action);
+        return $this->controller &&
+            Controller::isCallable($this->controller, $this->action);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace Fabrico\Controller;
 use Fabrico\Core\Application;
 use Fabrico\Project\FileFinder;
 use Fabrico\Project\ClassGenerator;
+use ReflectionMethod;
 
 /**
  * base controller class
@@ -44,5 +45,28 @@ abstract class Controller
             $class = self::generateFullClassNamespacePath($name);
             return new $class;
         }
+    }
+
+    /**
+     * @param mixed $controller
+     * @param string $method
+     * @return string
+     */
+    public static function isCallable($controller, $method)
+    {
+        $callable = false;
+
+        if (
+            is_object($controller) &&
+            method_exists($controller, $method) &&
+            is_callable([$controller, $method])
+        ) {
+            // check annotation
+            $reflection = new ReflectionMethod($controller, $method);
+            $comment = $reflection->getDocComment();
+            $callable = strpos($comment, '* @public ') !== false;
+        }
+
+        return $callable;
     }
 }
