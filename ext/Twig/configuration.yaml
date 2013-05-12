@@ -8,7 +8,6 @@ env:
     messages:
       pass: Twig found
       fail: Twig was not found
-      test: Checking for Twig source...
 
 tags:
   - view
