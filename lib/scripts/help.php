@@ -227,6 +227,32 @@ function install($ext, $out, $em, $conf)
 
         // found it
         if ($config['name'] === $ext) {
+            $confdir = dirname($conffile) . DIRECTORY_SEPARATOR;
+            $out->coutln('Installing {{ bold }}{{ purple }}%s{{ end }} extension', $ext);
+
+            // check enviroment requirements
+            if (isset($config['env'])) {
+                foreach ($config['env'] as $check) {
+                    $ok = false;
+
+                    // php source file
+                    if (isset($check['source'])) {
+                        $ok = require $confdir . $check['source'];
+                    }
+
+                    if ($ok) {
+                        $out->coutln('{{ ok }} ' . $check['messages']['pass']);
+                    } else {
+                        $out->coutln('{{ fail }} ' . $check['messages']['fail']);
+                    }
+
+                    if (!$ok && isset($check['required']) && $check['required']) {
+                        $out->coutln('Stoping installation');
+                        return false;
+                    }
+                }
+            }
+
             // check deps
             if (isset($config['deps'])) {
                 foreach ($config['deps'] as $dep) {
@@ -251,11 +277,9 @@ function install($ext, $out, $em, $conf)
                 }
             }
 
-            $out->coutln('Installing {{ bold }}{{ purple }}%s{{ end }} extension', $ext);
             $dir = dirname($conffile) . DIRECTORY_SEPARATOR;
 
             // move source files
-            $out->coutln('{{ section }}Moving source files into project{{ end }}');
             foreach ($config['source'] as $fileinfo) {
                 $file = $fileinfo['name'];
                 $local = $dir . $file;
@@ -276,9 +300,9 @@ function install($ext, $out, $em, $conf)
                     $newloc = $baseclass::generateFileFilderFilePath($file);
 
                     if (mklink($local, $newloc)) {
-                        $out->cout('{{ space }}{{ ok }}');
+                        $out->cout('{{ ok }}');
                     } else {
-                        $out->cout('{{ space }}{{ fail }}');
+                        $out->cout('{{ fail }}');
                     }
 
                     $out->coutln(' Moving %s -> %s ', $file, $newloc);
@@ -287,8 +311,6 @@ function install($ext, $out, $em, $conf)
 
             // enable listeners, if any
             if (count($listeners)) {
-                $out->coutln('{{ section }}Enabling listeners{{ end }}');
-
                 foreach ($listeners as $listener) {
                     $project_listeners = $conf->load('listeners');
                     $in_project = false;
@@ -325,9 +347,9 @@ function install($ext, $out, $em, $conf)
                     $project_listeners = Configuration::dump($project_listeners);
 
                     if (file_put_contents($listeners_file, $project_listeners) !== false) {
-                        $out->cout('{{ space }}{{ ok }}');
+                        $out->cout('{{ ok }}');
                     } else {
-                        $out->cout('{{ space }}{{ fail }}');
+                        $out->cout('{{ fail }}');
                     }
 
                     $out->coutln(' Enabling %s', $listener);
@@ -336,26 +358,24 @@ function install($ext, $out, $em, $conf)
 
             // add configuration
             if (isset($config['config'])) {
-                $out->coutln('{{ section }}Saving extension configuration{{ end }}');
                 $project_config = $config['config'];
                 $project_config = Configuration::dump($project_config);
                 $project_file = Configuration::generateFileFilderFilePath("ext/{$ext}");
 
                 if (file_put_contents($project_file, $project_config) !== false) {
-                $out->cout('{{ space }}{{ ok }}');
+                $out->cout('{{ ok }}');
                 } else {
-                $out->cout('{{ space }}{{ fail }}');
+                $out->cout('{{ fail }}');
                 }
 
                 $out->coutln(' Created %s', $project_file);
             }
 
             // enable extension
-            $out->coutln('{{ section }}Enabling extension{{ end }}');
             if ($em->enable($ext)) {
-                $out->cout('{{ space }}{{ ok }}');
+                $out->cout('{{ ok }}');
             } else {
-                $out->cout('{{ space }}{{ fail }}');
+                $out->cout('{{ fail }}');
             }
 
             $extfile = Configuration::generateFileFilderFilePath('ext');

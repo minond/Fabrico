@@ -1,6 +1,15 @@
 name: twig
 human_name: Twig
 description: Twig is a modern template engine for PHP
+
+env:
+  - source: twig_check.php
+    required: true
+    messages:
+      pass: Twig found
+      fail: Twig was not found
+      test: Checking for Twig source...
+
 tags:
   - view
   - template
