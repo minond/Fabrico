@@ -10,17 +10,18 @@ call_user_func(function() {
 
     // Fabrico directories
     define('FABRICO_NAMESPACE', 'Fabrico');
+    define('FABRICO_DIRECTORY', '.fabrico');
     define('FABRICO_EXTENSION', '.php');
     define('FABRICO_ROOT', implode($ds, $here) . $ds);
-    define('FABRICO_SRC', FABRICO_ROOT . 'lib' . $ds);
+    define('FABRICO_SRC', FABRICO_DIRECTORY . $ds . 'lib' . $ds);
     array_pop($here); // Fabrico
 
     // project directories
     define('FABRICO_PROJECT_ROOT', implode($ds, $here) . $ds);
 
     // everything should always be triggered from the root directory
-    chdir(FABRICO_ROOT);
-    require 'vendor/autoload.php';
+    chdir(FABRICO_PROJECT_ROOT);
+    require FABRICO_ROOT . 'vendor/autoload.php';
 });
 
 // Fabrico's own autoloader

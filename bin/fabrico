@@ -2,7 +2,7 @@
 
 goto_fabrico() {
 	# find root of project
-	while [ ! -d Fabrico ]; do
+	while [ ! -d .fabrico ]; do
 		cd "$(pwd)/../"
 
 		if [ "$PWD" == "/" ]; then
@@ -12,7 +12,7 @@ goto_fabrico() {
 	done
 
 	# the move into fabrico directory
-	cd Fabrico
+	cd .fabrico
 }
 
 tests() {
@@ -116,11 +116,11 @@ case "$1" in
 
 		echo "Downloading Fabrico..."
 		git init
-		git submodule add git@github.com:minond/Fabrico
+		git submodule add git@github.com:minond/Fabrico .fabrico
 		git submodule init
 
 		echo -e "\nInstalling Fabrico..."
-		cd Fabrico
+		cd .fabrico
 		composer install --no-ansi
 
 		cd ..
