@@ -37,7 +37,7 @@ function getsource($file, $line, $offset = 10, $show = true)
     return $source;
 }
 
-if (Ext::enabled('view_backtrace')) {
+if (Ext::enabled('view_backtrace') && Ext::enabled('twig')) {
     Reporter::before('fabrico.request.http.request:preparehandler', function($info) {
         $view     = Ext::config('view_backtrace:view');
         $errors   = Ext::config('view_backtrace:error:reporting');
@@ -120,7 +120,11 @@ if (Ext::enabled('view_backtrace')) {
         ) {
             $backtrace = $exception->getTrace();
 
-            if ($at_throw) {
+            if ($exception instanceof \Twig_Error) {
+                $line = $exception->getTemplateLine();
+                $file = $exception->getTemplateFile();
+                $file = View::generateFileFilderFilePath($file);
+            } else if ($at_throw) {
                 $file = $exception->getFile();
                 $line = $exception->getLine();
             } else {
