@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "e5712d8af9ca7b6280e921090bd0cac9",
+    "hash": "8d94c62171a0ef7c7ac89cbc1b06aa2f",
     "packages": [
         {
             "name": "symfony/yaml",
@@ -261,12 +261,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Profiler.git",
-                "reference": "3a347e9b8f14815c7e45c173e581cf6129b9b237"
+                "reference": "ca02c4d370a5181e9edca5bb75b7988c7303d547"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Profiler/zipball/3a347e9b8f14815c7e45c173e581cf6129b9b237",
-                "reference": "3a347e9b8f14815c7e45c173e581cf6129b9b237",
+                "url": "https://api.github.com/repos/minond/Profiler/zipball/ca02c4d370a5181e9edca5bb75b7988c7303d547",
+                "reference": "ca02c4d370a5181e9edca5bb75b7988c7303d547",
                 "shasum": ""
             },
             "require": {
@@ -275,7 +275,7 @@
             "type": "library",
             "autoload": {
                 "psr-0": {
-                    "util": ""
+                    "util": "src/"
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -286,7 +286,7 @@
                 }
             ],
             "description": "PHP profiler",
-            "time": "2013-05-16 03:10:51"
+            "time": "2013-05-16 03:49:38"
         },
         {
             "name": "nette/nette",
