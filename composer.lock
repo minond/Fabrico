@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "0081274e6f7665e0a4e76b89396224b5",
+    "hash": "e5712d8af9ca7b6280e921090bd0cac9",
     "packages": [
         {
             "name": "symfony/yaml",
@@ -256,6 +256,39 @@
             "time": "2012-09-08 12:00:07"
         },
         {
+            "name": "minond/profiler",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/minond/Profiler.git",
+                "reference": "3a347e9b8f14815c7e45c173e581cf6129b9b237"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/minond/Profiler/zipball/3a347e9b8f14815c7e45c173e581cf6129b9b237",
+                "reference": "3a347e9b8f14815c7e45c173e581cf6129b9b237",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "util": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Marcos Minond",
+                    "email": "minond.marcos@gmail.com"
+                }
+            ],
+            "description": "PHP profiler",
+            "time": "2013-05-16 03:10:51"
+        },
+        {
             "name": "nette/nette",
             "version": "v2.0.10",
             "source": {
@@ -331,16 +364,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "1.2.9",
+            "version": "1.2.10",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "1.2.9"
+                "reference": "1.2.10"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/1.2.9",
-                "reference": "1.2.9",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/1.2.10",
+                "reference": "1.2.10",
                 "shasum": ""
             },
             "require": {
@@ -380,7 +413,7 @@
                 "testing",
                 "xunit"
             ],
-            "time": "2013-02-26 18:55:56"
+            "time": "2013-05-13 05:49:10"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -687,7 +720,8 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "symfony/yaml": 20,
-        "apigen/apigen": 20
+        "apigen/apigen": 20,
+        "minond/profiler": 20
     },
     "platform": {
         "php": ">=5.4"
