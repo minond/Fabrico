@@ -22,7 +22,15 @@ $app->setNamespace($conf->get('project:namespace'));
 // project bootstraps
 if (count($conf->get('project:bootstrap'))) {
     foreach ($conf->get('project:bootstrap') as $file) {
-        require_once FABRICO_PROJECT_ROOT . $file;
+        if (substr($file, -1) === '?') {
+            $file = substr($file, 0, -1);
+
+            if (file_exists($file)) {
+                require_once $file;
+            }
+        } else {
+            require_once $file;
+        }
     }
 }
 
