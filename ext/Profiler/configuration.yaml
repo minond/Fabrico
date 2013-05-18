@@ -1,0 +1,18 @@
+name: profiler
+human_name: Profiler
+description: Script profiler
+tags:
+  - debugging
+  - profiler
+  - profiling
+
+env:
+  - source: profiler_check.php
+    required: true
+    messages:
+      pass: Profiler was found
+      fail: No profiler was found
+
+source:
+  - name: profiler.php
+    type: bootstrap

@@ -157,7 +157,7 @@ class TerminalOutput extends BasicOutput implements Output
      * @param callable $formatter
      * @return mixed
      */
-    public function ask($msg, array $answer_map, $formatter = null)
+    public function ask($msg, array $answer_map = null, $formatter = null)
     {
         if (is_array($msg)) {
             $msg = call_user_func_array('sprintf', $msg);
@@ -170,9 +170,9 @@ class TerminalOutput extends BasicOutput implements Output
             if (is_callable($formatter)) {
                 $in = call_user_func($formatter, $in);
             }
-        } while (!isset($answer_map[ $in ]));
+        } while (is_array($answer_map) && !isset($answer_map[ $in ]));
 
-        return $answer_map[ $in ];
+        return is_array($answer_map) ? $answer_map[ $in ] : $in;
     }
 
     /**
@@ -219,6 +219,7 @@ function install($ext, $out, $em, $conf)
 {
     $found_ext = false;
     $listeners = [];
+    $bootstraps = [];
     $pattern = FABRICO_ROOT . 'ext' . DIRECTORY_SEPARATOR .
         '*/configuration.yaml';
 
@@ -284,6 +285,8 @@ function install($ext, $out, $em, $conf)
                 $file = $fileinfo['name'];
                 $local = $dir . $file;
                 $baseclass = null;
+                $newloc = null;
+                $newdirok = false;
 
                 switch ($fileinfo['type']) {
                     case 'view':
@@ -294,19 +297,58 @@ function install($ext, $out, $em, $conf)
                         $listeners[] = Listeners::getFileFinderFileName($file);
                         $baseclass = 'Fabrico\Event\Listeners';
                         break;
+
+                    case 'bootstrap':
+                        do {
+                            $newloc = $out->ask(['[{{ bold }}{{ blue }}file{{ end }}] Where should {{ info }}%s{{ end }} be stored:', $file]);
+
+                            if (substr($newloc, -1) !== DIRECTORY_SEPARATOR) {
+                                $newloc .= DIRECTORY_SEPARATOR;
+                            }
+
+                            $newloc .= $file;
+                            $newdirok = $out->yesno(['[{{ bold }}{{ blue }}file{{ end }}] Is %s ok?', $newloc]);
+                        } while (!$newdirok);
+
+                        $bootstraps[] = $newloc;
+                        break;
                 }
 
                 if (is_string($baseclass)) {
                     $newloc = $baseclass::generateFileFilderFilePath($file);
+                }
 
+                if ($newloc) {
                     if (mklink($local, $newloc)) {
                         $out->cout('{{ ok }}');
                     } else {
                         $out->cout('{{ fail }}');
                     }
 
-                    $out->coutln(' Moving %s -> %s ', $file, $newloc);
+                    $out->coutln(' Moving %s > %s ', $file, $newloc);
                 }
+            }
+
+            // add new bootstraps, if any
+            if (count($bootstraps)) {
+                $pbootstraps = $conf->get('project:bootstrap');
+                $newstraps = [];
+
+                foreach ($bootstraps as $strapfile) {
+                    if (!in_array($strapfile, $pbootstraps)) {
+                        $pbootstraps[] = $strapfile;
+                        $newstraps[] = $strapfile;
+                    }
+                }
+
+                if ($conf->set('project:bootstrap', $pbootstraps)) {
+                    $out->cout('{{ ok }}');
+                } else {
+                    $out->cout('{{ fail }}');
+                }
+
+                $out->coutln(' Enabled following bootstrap files [%s]',
+                    implode(', ', $newstraps));
             }
 
             // enable listeners, if any
