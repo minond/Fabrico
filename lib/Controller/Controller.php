@@ -3,9 +3,9 @@
 namespace Fabrico\Controller;
 
 use Fabrico\Core\Application;
+use Fabrico\Core\Annotation;
 use Fabrico\Project\FileFinder;
 use Fabrico\Project\ClassGenerator;
-use ReflectionMethod;
 
 /**
  * base controller class
@@ -61,10 +61,8 @@ abstract class Controller
             method_exists($controller, $method) &&
             is_callable([$controller, $method])
         ) {
-            // check annotation
-            $reflection = new ReflectionMethod($controller, $method);
-            $comment = $reflection->getDocComment();
-            $callable = strpos($comment, '* @public ') !== false;
+            // check @public annotation
+            $callable = !is_null(Annotation::value($controller, $method, 'public'));
         }
 
         return $callable;
