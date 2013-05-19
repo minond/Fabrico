@@ -261,12 +261,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Profiler.git",
-                "reference": "a6c77542802737cc0f95a4e961c18d9d0a693d8c"
+                "reference": "06fc0c3a2f74d964fc7ff205e4d50393f19d68b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Profiler/zipball/a6c77542802737cc0f95a4e961c18d9d0a693d8c",
-                "reference": "a6c77542802737cc0f95a4e961c18d9d0a693d8c",
+                "url": "https://api.github.com/repos/minond/Profiler/zipball/06fc0c3a2f74d964fc7ff205e4d50393f19d68b6",
+                "reference": "06fc0c3a2f74d964fc7ff205e4d50393f19d68b6",
                 "shasum": ""
             },
             "require": {
@@ -286,7 +286,7 @@
                 }
             ],
             "description": "PHP profiler",
-            "time": "2013-05-19 04:49:55"
+            "time": "2013-05-19 04:56:38"
         },
         {
             "name": "nette/nette",
