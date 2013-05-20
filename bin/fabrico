@@ -172,6 +172,11 @@ case "$1" in
 		exit 1
 		;;
 
+	server|run)
+		php -S localhost:8080 -t .. lib/scripts/server.php
+		exit 1
+		;;
+
 	*)
 		echo "invalid argument"
 		exit 1
