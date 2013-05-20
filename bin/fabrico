@@ -173,6 +173,7 @@ case "$1" in
 		;;
 
 	server|run)
+		goto_fabrico
 		php -S localhost:8080 -t .. lib/scripts/server.php
 		exit 1
 		;;
