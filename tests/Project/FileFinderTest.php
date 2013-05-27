@@ -7,9 +7,6 @@ use Fabrico\Test\Mock\Project\InvalidFileFinder;
 use Fabrico\Test\Mock\Project\ValidFileFinder;
 use Fabrico\Core\Application;
 
-require_once 'tests/mocks/Project/InvalidFileFinder.php';
-require_once 'tests/mocks/Project/ValidFileFinder.php';
-
 class FileFinderTest extends Test
 {
     /**

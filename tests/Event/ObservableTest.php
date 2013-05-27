@@ -2,11 +2,9 @@
 
 namespace Fabrico\Test\Event;
 
-use Fabrico\Test\Mock\Event\BasicObservable;
+use Fabrico\Test\Mock\Event\Observable\BasicObservable;
 use Fabrico\Test\Test;
 use Fabrico\Event\Listener;
-
-require_once 'tests/mocks/Event/Observable/BasicObservable.php';
 
 class ObservableTest extends Test
 {

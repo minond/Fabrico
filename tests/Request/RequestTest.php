@@ -8,10 +8,6 @@ use Fabrico\Test\Mock\Request\DummyRequest;
 use Fabrico\Test\Mock\Response\Handler\DummyHandler;
 use Fabrico\Core\Application;
 
-require_once 'tests/mocks/Request/Request/DummyRequest.php';
-require_once 'tests/mocks/Response/Handler/DummyHandler.php';
-require_once 'tests/mocks/Response/Handler/NothingHandler.php';
-
 class RequestTest extends Test
 {
     public $req;

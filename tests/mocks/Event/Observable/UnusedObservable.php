@@ -1,6 +1,6 @@
 <?php
 
-namespace Fabrico\Test\Mock\Event;
+namespace Fabrico\Test\Mock\Event\Observable;
 
 use Fabrico\Event\Observable;
 use Fabrico\Event\Listener;

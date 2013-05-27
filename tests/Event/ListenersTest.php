@@ -7,8 +7,6 @@ use Fabrico\Test\Mock\Event\PublicListeners;
 use Fabrico\Event\Listeners;
 use Fabrico\Core\Application;
 
-require_once 'tests/mocks/Event/PublicListeners.php';
-
 class ListenersTest extends Test
 {
     /**

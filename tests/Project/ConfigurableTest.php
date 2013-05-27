@@ -8,9 +8,6 @@ use Fabrico\Test\Mock\Project\ConfigurationFinder;
 use Fabrico\Core\Application;
 use Fabrico\Cache\RuntimeCache;
 
-require_once 'tests/mocks/Project/ConfigurationFinder.php';
-require_once 'tests/mocks/Project/Configurable.php';
-
 class ConfigurableTest extends Test
 {
     /**

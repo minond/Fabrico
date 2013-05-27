@@ -8,8 +8,6 @@ use Fabrico\Test\Mock\Controller\ControllerFinder;
 use Fabrico\Core\Application;
 use Fabrico\Controller\Controller;
 
-require_once 'tests/mocks/Controller/ControllerFinder.php';
-
 class ControllerTest extends Test
 {
     public function testControllersCanBeFoundAndLoaded()

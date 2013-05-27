@@ -7,9 +7,6 @@ use Fabrico\Test\Mock\Project\InvalidClassGenerator;
 use Fabrico\Test\Mock\Project\ValidClassGenerator;
 use Fabrico\Core\Application;
 
-require_once 'tests/mocks/Project/InvalidClassGenerator.php';
-require_once 'tests/mocks/Project/ValidClassGenerator.php';
-
 class ClassGeneratorTest extends Test
 {
     /**

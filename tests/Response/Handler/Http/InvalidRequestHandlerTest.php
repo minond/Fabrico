@@ -9,9 +9,6 @@ use Fabrico\Core\Application;
 use Fabrico\Request\Http\Request;
 use Fabrico\Response\Http\Response;
 
-require_once 'tests/mocks/Response/Handler/Http/PulicConfigurationHandler.php';
-require_once 'tests/mocks/View/HandlesAllView.php';
-
 class ViewFileHandlerTest extends Test
 {
     /**

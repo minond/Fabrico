@@ -11,8 +11,6 @@ use Fabrico\Response\Http\Response;
 use Fabrico\Response\Handler\Http\ControllerActionHandler;
 use Fabrico\Output\Http\HtmlOutput;
 
-require_once 'tests/mocks/Controller/EmptyController.php';
-
 class ControllerActionHandlerTest extends Test
 {
     public $handler;

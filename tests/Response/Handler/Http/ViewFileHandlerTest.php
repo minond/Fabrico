@@ -9,8 +9,6 @@ use Fabrico\Request\Http\Request;
 use Fabrico\Response\Http\Response;
 use Fabrico\Core\Application;
 
-require_once 'tests/mocks/View/HandlesAllView.php';
-
 class ViewFileHandlerTest extends Test
 {
     /**

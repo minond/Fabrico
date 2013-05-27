@@ -3,21 +3,18 @@
 namespace Fabrico\Test\Event;
 
 use Fabrico\Event\Reporter;
-use Fabrico\Test\Mock\Event\BasicObservable;
-use Fabrico\Test\Mock\Event\UnusedObservable;
-use Fabrico\Test\Mock\Event\QueuedObservable1;
-use Fabrico\Test\Mock\Event\QueuedObservable2;
+use Fabrico\Test\Mock\Event\Observable\BasicObservable;
+use Fabrico\Test\Mock\Event\Observable\UnusedObservable;
+use Fabrico\Test\Mock\Event\Observable\QueuedObservable1;
+use Fabrico\Test\Mock\Event\Observable\QueuedObservable2;
 use Fabrico\Test\Test;
-
-require_once 'tests/mocks/Event/Observable/BasicObservable.php';
-require_once 'tests/mocks/Event/Observable/UnusedObservable.php';
 
 class ReporterTest extends Test
 {
-    public $basic = '\Fabrico\Test\Mock\Event\BasicObservable';
-    public $queue1 = '\Fabrico\Test\Mock\Event\QueuedObservable1';
-    public $queue2 = '\Fabrico\Test\Mock\Event\QueuedObservable2';
-    public $unused = '\Fabrico\Test\Mock\Event\UnusedObservable';
+    public $basic  = '\Fabrico\Test\Mock\Event\Observable\BasicObservable';
+    public $queue1 = '\Fabrico\Test\Mock\Event\Observable\QueuedObservable1';
+    public $queue2 = '\Fabrico\Test\Mock\Event\Observable\QueuedObservable2';
+    public $unused = '\Fabrico\Test\Mock\Event\Observable\UnusedObservable';
 
     public function testSubscriptionsArePlaced()
     {
@@ -37,7 +34,7 @@ class ReporterTest extends Test
         $called = false;
         $basic = new BasicObservable;
 
-        Reporter::before('fabrico.test.mock.event.basicobservable:func', function() use (& $called) {
+        Reporter::before('fabrico.test.mock.event.observable.basicobservable:func', function() use (& $called) {
             $called = true;
         });
 
@@ -50,7 +47,7 @@ class ReporterTest extends Test
         $called = false;
         $basic = new BasicObservable;
 
-        Reporter::after('fabrico.test.mock.event.basicobservable:func', function() use (& $called) {
+        Reporter::after('fabrico.test.mock.event.observable.basicobservable:func', function() use (& $called) {
             $called = true;
         });
 
@@ -79,13 +76,12 @@ class ReporterTest extends Test
         $this->assertTrue($ucalled);
     }
 
-    public function testSubscriptionsToObjectsNotLoadedAreNotBound()
+    public function testSubscriptionsToObjectsNotLoadedAreNotBoundWhenNotGreetedByTheReporter()
     {
         Reporter::observe($this->queue1, 'func', 'pre', function() use (& $called) {
             $called = true;
         });
 
-        require 'tests/mocks/Event/Observable/QueuedObservable1.php';
         $called = false;
         $queue = new QueuedObservable1;
 
@@ -99,7 +95,6 @@ class ReporterTest extends Test
             $called = true;
         });
 
-        require 'tests/mocks/Event/Observable/QueuedObservable2.php';
         $called = false;
         $queue = new QueuedObservable2;
 

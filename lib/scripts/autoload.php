@@ -12,6 +12,7 @@ call_user_func(function() {
     define('FABRICO_NAMESPACE', 'Fabrico');
     define('FABRICO_DIRECTORY', '.fabrico');
     define('FABRICO_EXTENSION', '.php');
+    define('FABRICO_MOCKS', 'Fabrico\Test\Mock');
     define('FABRICO_ROOT', implode($ds, $here) . $ds);
     define('FABRICO_SRC', FABRICO_DIRECTORY . $ds . 'lib' . $ds);
     array_pop($here); // Fabrico
@@ -36,6 +37,17 @@ spl_autoload_register(function ($class) {
 
             if (class_exists($class)) {
                 Reporter::greet($class);
+            }
+        } else if (strpos($class, FABRICO_MOCKS) === 0) {
+            // mock?
+            $mock = str_replace(FABRICO_MOCKS, '', $class);
+            $mock = explode('\\', $mock);
+            $mock = implode(DIRECTORY_SEPARATOR, $mock);
+            $mock = FABRICO_ROOT . 'tests/mocks' .
+                $mock . FABRICO_EXTENSION;
+
+            if (file_exists($mock)) {
+                require_once $mock;
             }
         }
     }

@@ -9,8 +9,6 @@ use Fabrico\Core\ExtensionManager;
 use Fabrico\Cache\RuntimeCache;
 use Fabrico\Test\Mock\Project\NoWriteConfiguration;
 
-require_once 'tests/mocks/Project/NoWriteConfiguration.php';
-
 class ExtensionManagerTest extends Test
 {
     public $cache;

@@ -7,8 +7,6 @@ use Fabrico\Test\Mock\View\AnyView;
 use Fabrico\Core\Application;
 use Fabrico\View\View;
 
-require_once 'tests/mocks/View/AnyView.php';
-
 class ViewTest extends Test
 {
     /**
