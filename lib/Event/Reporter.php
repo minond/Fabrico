@@ -72,7 +72,7 @@ class Reporter
         $name = strtolower($name);
         $class = self::realClassName($class);
 
-        if (!class_exists($class)) {
+        if (!class_exists($class, false)) {
             self::$queue[] = (object) [
                 'class' => self::cleanClassName($class),
                 'name' => $name,
