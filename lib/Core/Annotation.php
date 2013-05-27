@@ -29,6 +29,27 @@ abstract class Annotation
     }
 
     /**
+     * @param string $val
+     * @return mixed
+     */
+    public static function convertStringValue($val)
+    {
+        if ($val === 'true') {
+            return true;
+        } else if ($val === 'false') {
+            return false;
+        } else if (is_numeric($val)) {
+            if (strpos($val, '.') === false) {
+                return (int) $val;
+            } else {
+                return (double) $val;
+            }
+        } else {
+            return $val;
+        }
+    }
+
+    /**
      * parse a doc comment
      *
      * TODO: should handle non-annotated and multi-line values
@@ -53,8 +74,14 @@ abstract class Annotation
 
             if (strpos($line, '@') === 0) {
                 $split = strpos($line, ' ');
-                $annotation = substr($line, 1, $split - 1);
-                $value = substr($line, $split + 1);
+
+                if ($split === false) {
+                    $annotation = substr($line, 1);
+                    $value = true;
+                } else {
+                    $annotation = substr($line, 1, $split - 1);
+                    $value = self::convertStringValue(substr($line, $split + 1));
+                }
 
                 // add to parsed list
                 if (isset($parsed[ $annotation ])) {
