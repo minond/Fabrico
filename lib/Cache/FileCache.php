@@ -16,6 +16,12 @@ class FileCache extends RuntimeCache
     private static $locks = [];
 
     /**
+     * name of tmp file
+     * @var string
+     */
+    private $filename;
+
+    /**
      * @var resource (file)
      */
     protected $file;
@@ -51,6 +57,7 @@ class FileCache extends RuntimeCache
             $file = $path . $conf->get('project:namespace') . $ds . $file;
         }
 
+        $this->filename = $file;
         if (array_key_exists($file, self::$locks)) {
             throw new \Exception("{$file} is already in use.");
         }
@@ -83,25 +90,12 @@ class FileCache extends RuntimeCache
      */
     public function __destruct()
     {
-        $this->dump();
-    }
-
-    /**
-     * saves $data to $file
-     * @return boolean
-     */
-    public function dump()
-    {
-        $ok = false;
-
         if ($this->changed) {
-            $ok = is_resource($this->file) && fwrite($this->file,
+            is_resource($this->file) && fwrite($this->file,
                 json_encode($this->data));
-        } else {
-            $ok = true;
         }
 
-        return $ok;
+        unset(self::$locks[ $this->filename ]);
     }
 
     /**
@@ -122,5 +116,14 @@ class FileCache extends RuntimeCache
         unset($this->data[ $key ]);
         $this->changed = true;
         return true;
+    }
+
+    /**
+     * cache file name getter
+     * @return string
+     */
+    public function getFileName()
+    {
+        return $this->filename;
     }
 }
