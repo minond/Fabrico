@@ -17,28 +17,21 @@ class AnnotationTest extends Test
      */
     public function testParser()
     {
-        ob_start();
-        var_dump(Annotation::parse(__CLASS__, __FUNCTION__));
-        $dump = ob_get_clean();
-
+        $dump = print_r(Annotation::parse(__CLASS__, __FUNCTION__), true);
         $expected = <<<TEXT
-array(4) {
-  'annotation' =>
-  bool(true)
-  'test' =>
-  string(2) "hi"
-  'set' =>
-  bool(true)
-  'array' =>
-  array(3) {
-    [0] =>
-    int(1)
-    [1] =>
-    int(2)
-    [2] =>
-    int(3)
-  }
-}
+Array
+(
+    [annotation] => 1
+    [test] => hi
+    [set] => 1
+    [array] => Array
+        (
+            [0] => 1
+            [1] => 2
+            [2] => 3
+        )
+
+)
 TEXT;
 
         $this->assertEquals(trim($expected), trim($dump));
