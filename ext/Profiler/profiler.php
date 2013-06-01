@@ -6,12 +6,24 @@ use util\profile\Snapshot;
 use util\profile\reports\Chart;
 
 if (Ext::enabled('profiler') && Profiler::enabled()) {
-    $profiler = new Profiler('Project Profiler');
-    $profiler->start();
+    $profiler = new Profiler(
+        Ext::config('profiler:label'),
+        Ext::config('profiler:mode')
+    );
+
     $profiler->on('stop', function(Snapshot $snapshot) {
-        $chart = new Chart;
-        $chart->prepare($snapshot);
-        $chart->configure(['chart_type' => 'LineChart']);
-        echo $chart->output();
+        $class = Ext::config('profiler:output:class');
+        $confi = Ext::config('profiler:output:settings');
+
+        $out = new $class;
+        $out->prepare($snapshot);
+
+        if (is_array($confi) && count($confi)) {
+            $out->configure($confi);
+        }
+
+        echo $out->output();
     });
+
+    $profiler->start();
 }

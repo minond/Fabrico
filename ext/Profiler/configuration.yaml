@@ -16,3 +16,10 @@ env:
 source:
   - name: profiler.php
     type: bootstrap
+
+config:
+  label: Project Profiler
+  mode: 1
+  output:
+    class: util\profile\reports\Chart
+    settings: []
