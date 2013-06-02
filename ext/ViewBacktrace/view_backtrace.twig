@@ -109,6 +109,11 @@
 	font-weight: bold;
 }
 
+.hi-specials {
+	font-style: italic;
+	color: rgb(90, 35, 35);
+}
+
 .hi-constant {
 	color: rgb(241, 12, 12);
 	font-weight: bold;
@@ -196,13 +201,14 @@
 		func_calls: { r: /([a-zA-Z_]+?)\(/ },
 		func_names: { r: /function\s+([a-zA-Z_]+)/ },
 		strings: { r: /('.+?'|".+?")/ },
-		keywords: { r: /(public|protected|static|function|use |namespace |new |if|do|while|for|foreach| as |return|class | extends | implements |throw |echo|abstract |final |interface |self|null|try|catch|case|default|switch|endif|endwhile|endfor|endforeach|else|elseif|trait |require|require_once|include|include_once|list)/ },
+		keywords: { r: /(public|protected|static|function|use |namespace |new |if|do|while|foreach|for| as |break|return|class | extends | implements |throw |echo|abstract |final |interface |self|null|try|catch|case|default|switch|endif|endwhile|endfor|endforeach|else|elseif|trait |require|require_once|include|include_once|list)/ },
 		constant: { r: /(true|false|array|object|bool|boolean|int|integer|string|double|float|__METHOD__|__DIR__|__NAMESPACE__|__FUNCTION__|__CLASS__|__FILE__|__LINE__)/ },
 		annotations: { r: /^\s{0,}\*\s+(\@\w+)/ },
-		characters: { r: /(\{|\}|\(|\))/ },
+		characters: { r: /(\{|\}|\(|\)|\[|\])/ },
 		variables: { r: /(\$[a-zA-Z\$_]+)/ },
 		properties: { r: /\-\>([a-zA-Z_]+)/ },
 		class_names: { r: /class\s+|new\s+([a-zA-Z_]+)[::]{0}/ },
+		specials: { r: /(\@|\&)/ },
 		numbers: { r: /([0-9]+)/ }
 	};
 
