@@ -5,7 +5,7 @@ use util\profile\Profiler;
 use util\profile\Snapshot;
 use util\profile\reports\Chart;
 
-if (Ext::enabled('profiler') && Profiler::enabled()) {
+if (class_exists('Profiler') && Ext::enabled('profiler') && Profiler::enabled()) {
     $profiler = new Profiler(
         Ext::config('profiler:label'),
         Ext::config('profiler:mode')
