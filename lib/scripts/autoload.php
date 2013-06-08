@@ -9,8 +9,8 @@ call_user_func(function() {
     array_pop($here); // src
 
     // Fabrico directories
+    define('FABRICO_DIRECTORY', $here[ count($here) - 1 ]);
     define('FABRICO_NAMESPACE', 'Fabrico');
-    define('FABRICO_DIRECTORY', '.fabrico');
     define('FABRICO_EXTENSION', '.php');
     define('FABRICO_MOCKS', 'Fabrico\Test\Mock');
     define('FABRICO_ROOT', implode($ds, $here) . $ds);
