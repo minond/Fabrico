@@ -9,20 +9,20 @@ call_user_func(function() {
     array_pop($here); // src
 
     // Fabrico directories
-    define('FABRICO_DIRECTORY', $here[ count($here) - 1 ]);
-    define('FABRICO_NAMESPACE', 'Fabrico');
-    define('FABRICO_EXTENSION', '.php');
-    define('FABRICO_MOCKS', 'Fabrico\Test\Mock');
-    define('FABRICO_ROOT', implode($ds, $here) . $ds);
-    define('FABRICO_SRC', FABRICO_DIRECTORY . $ds . 'lib' . $ds);
+    defined('FABRICO_DIRECTORY') or define('FABRICO_DIRECTORY', $here[ count($here) - 1 ]);
+    defined('FABRICO_NAMESPACE') or define('FABRICO_NAMESPACE', 'Fabrico');
+    defined('FABRICO_EXTENSION') or define('FABRICO_EXTENSION', '.php');
+    defined('FABRICO_MOCKS') or define('FABRICO_MOCKS', 'Fabrico\Test\Mock');
+    defined('FABRICO_ROOT') or define('FABRICO_ROOT', implode($ds, $here) . $ds);
+    defined('FABRICO_SRC') or define('FABRICO_SRC', FABRICO_DIRECTORY . $ds . 'lib' . $ds);
     array_pop($here); // Fabrico
 
     // project directories
-    define('FABRICO_PROJECT_ROOT', implode($ds, $here) . $ds);
+    defined('FABRICO_PROJECT_ROOT') or define('FABRICO_PROJECT_ROOT', implode($ds, $here) . $ds);
 
     // everything should always be triggered from the root directory
     chdir(FABRICO_PROJECT_ROOT);
-    require FABRICO_ROOT . 'vendor/autoload.php';
+    require_once FABRICO_ROOT . 'vendor/autoload.php';
 });
 
 // Fabrico's own autoloader
