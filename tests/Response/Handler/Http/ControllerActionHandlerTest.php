@@ -32,14 +32,37 @@ class ControllerActionHandlerTest extends Test
         );
     }
 
-    public function testHanlderRequiresAnAction()
+    public function testRequestedActionIsParsedFromUrl()
     {
-        $data = [ '_invalid' => 'd' ];
+        $data = [ '_uri' => 'controller/view' ];
         $app = new Application;
         $app->setRequest($this->req);
         $this->handler->setApplication($app);
         $this->req->setData($data);
-        $this->assertFalse($this->handler->canHandle($this->req));
+        $this->handler->canHandle($this->req);
+        $this->assertEquals('view', $this->handler->getAction());
+    }
+
+    public function testIndexActionIsParsedFromUrl()
+    {
+        $data = [ '_uri' => 'controller' ];
+        $app = new Application;
+        $app->setRequest($this->req);
+        $this->handler->setApplication($app);
+        $this->req->setData($data);
+        $this->handler->canHandle($this->req);
+        $this->assertEquals('index', $this->handler->getAction());
+    }
+
+    public function testIndexActionIsParsedFromUrlWithSlash()
+    {
+        $data = [ '_uri' => 'controller/' ];
+        $app = new Application;
+        $app->setRequest($this->req);
+        $this->handler->setApplication($app);
+        $this->req->setData($data);
+        $this->handler->canHandle($this->req);
+        $this->assertEquals('index', $this->handler->getAction());
     }
 
     public function testControllerMethodIsCalled()

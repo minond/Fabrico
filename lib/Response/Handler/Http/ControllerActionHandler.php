@@ -74,9 +74,20 @@ class ControllerActionHandler extends Handler
     public function canHandle(Request & $req)
     {
         $ok = false;
+        $action = '';
+        $controller = '';
 
-        if ($req->_uri && strpos($req->_uri, '/') !== false) {
-            list($controller, $action) = explode('/', $req->_uri);
+        if ($req->_uri) {
+            if (strpos($req->_uri, '/') !== false) {
+                list($controller, $action) = explode('/', $req->_uri);
+            } else {
+                $controller = $req->_uri;
+            }
+
+            if (!$action) {
+                $action = 'index';
+            }
+
             $controller = Controller::load($controller);
 
             // keep set data
