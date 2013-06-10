@@ -10,6 +10,30 @@ use Fabrico\Core\Application;
 class FileCache extends RuntimeCache
 {
     /**
+     * for fs system failure testing
+     * @var string
+     */
+    protected static $file_exists = 'file_exists';
+
+    /**
+     * for fs system failure testing
+     * @var string
+     */
+    protected static $is_resource = 'is_resource';
+
+    /**
+     * for fs system failure testing
+     * @var string
+     */
+    protected static $mkdir = 'mkdir';
+
+    /**
+     * for fs system failure testing
+     * @var string
+     */
+    protected static $touch = 'touch';
+
+    /**
      * files in use
      * @var array
      */
@@ -49,6 +73,12 @@ class FileCache extends RuntimeCache
      */
     public function __construct($file, $tmp = false)
     {
+        // functions
+        $file_exists = static::$file_exists;
+        $is_resource = static::$is_resource;
+        $touch = static::$touch;
+        $mkdir = static::$mkdir;
+
         if ($tmp) {
             $ds = DIRECTORY_SEPARATOR;
             $app = Application::getInstance();
@@ -64,14 +94,14 @@ class FileCache extends RuntimeCache
 
         $dir = dirname($file);
 
-        if (!file_exists($dir) && !mkdir($dir, 0777, true)) {
+        if (!$file_exists($dir) && !$mkdir($dir, 0777, true)) {
             throw new \Exception("Error creating cache file directory: {$dir}");
-        } else if (file_exists($file) || touch($file)) {
+        } else if ($file_exists($file) || $touch($file)) {
             self::$locks[ $file ] =& $this;
             $content = file_get_contents($file);
             $file = fopen($file, 'r+');
 
-            if (is_resource($file)) {
+            if ($is_resource($file)) {
                 $this->file = $file;
 
                 if ($content) {
@@ -116,6 +146,15 @@ class FileCache extends RuntimeCache
         unset($this->data[ $key ]);
         $this->changed = true;
         return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function clear()
+    {
+        $this->data = [];
+        $this->changed = true;
     }
 
     /**

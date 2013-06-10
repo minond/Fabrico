@@ -58,4 +58,14 @@ class RuntimeCacheTest extends Test
         $this->cache->set('name 3', 'Marcos');
         $this->assertEquals(3, count($this->cache));
     }
+
+    public function testCacheCanBeCleared()
+    {
+        $this->cache->set('name 1', 'Marcos');
+        $this->cache->set('name 2', 'Marcos');
+        $this->cache->set('name 3', 'Marcos');
+        $this->assertEquals(3, count($this->cache));
+        $this->cache->clear();
+        $this->assertEquals(0, count($this->cache));
+    }
 }

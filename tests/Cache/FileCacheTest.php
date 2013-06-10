@@ -7,6 +7,9 @@ use Fabrico\Cache\RuntimeCache;
 use Fabrico\Project\Configuration;
 use Fabrico\Core\Application;
 use Fabrico\Test\Test;
+use Fabrico\Test\Mock\Cache\NoFileExistsOrMkdirCache;
+use Fabrico\Test\Mock\Cache\NoIsResourceCache;
+use Fabrico\Test\Mock\Cache\NoTouchCache;
 
 class FileCacheTest extends Test
 {
@@ -79,15 +82,30 @@ class FileCacheTest extends Test
         $this->assertEquals($this->cache, FileCache::create($this->filename));
     }
 
-    // /**
-    //  * @expectedException Exception
-    //  */
-    // public function testInvalidPathNamesThrowErros()
-    // {
-    //     $ds = DIRECTORY_SEPARATOR;
-    //     $wd = __DIR__;
-    //     new FileCache($wd . "{$ds}does{$ds}not{$ds}exists${ds}" . uniqid());
-    // }
+    /**
+     * @expectedException Exception
+     * @expectedExceptionMessage Error creating cache file directory: /tmp/Fabrico/FabricoUnitTest
+     */
+    public function testCreatingDirectoryErrors()
+    {
+        $cache = new NoFileExistsOrMkdirCache(uniqid() . mt_rand(1, 10000) . 'testing.cache', true);
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testCreatingFileErrors()
+    {
+        $cache = new NoTouchCache(uniqid() . mt_rand(1, 10000) . 'testing.cache', true);
+    }
+
+    /**
+     * @expectedException Exception
+     */
+    public function testReadingFileErrors()
+    {
+        $cache = new NoIsResourceCache(uniqid() . mt_rand(1, 10000) . 'testing.cache', true);
+    }
 
     public function testKeySetter()
     {
@@ -128,5 +146,15 @@ class FileCacheTest extends Test
 
         $cache = new FileCache($this->filename);
         $this->assertEquals($cache->get('fname'), 'Marcos');
+    }
+
+    public function testCacheCanBeCleared()
+    {
+        $this->cache->set('name 1', 'Marcos');
+        $this->cache->set('name 2', 'Marcos');
+        $this->cache->set('name 3', 'Marcos');
+        $this->assertEquals(3, count($this->cache));
+        $this->cache->clear();
+        $this->assertEquals(0, count($this->cache));
     }
 }

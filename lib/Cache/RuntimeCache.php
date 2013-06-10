@@ -49,6 +49,14 @@ class RuntimeCache extends Cache
     /**
      * @inheritdoc
      */
+    public function clear()
+    {
+        $this->data = [];
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function count()
     {
         return count($this->data);

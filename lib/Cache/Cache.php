@@ -37,6 +37,11 @@ abstract class Cache implements \ArrayAccess, \Countable
     abstract public function del($key);
 
     /**
+     * clear the whole cache
+     */
+    abstract public function clear();
+
+    /**
      * setter shortcut: $cache->key = $val;
      * @param string $key
      * @param mixed $val
