@@ -48,6 +48,7 @@ if (Ext::enabled('view_backtrace') && Ext::enabled('twig')) {
         $bak_show = Ext::config('view_backtrace:backtrace:display');
         $src_show = Ext::config('view_backtrace:source:display');
         $src_line = Ext::config('view_backtrace:source:line_offset');
+        $shutdown = Ext::config('view_backtrace:shutdown:reports');
 
         error_reporting($errors);
         ini_set('display_errors', 'off');
@@ -84,7 +85,8 @@ if (Ext::enabled('view_backtrace') && Ext::enabled('twig')) {
             $view,
             $err_msg,
             $src_show,
-            $src_line
+            $src_line,
+            $shutdown
         ) {
             $error = error_get_last();
 
@@ -93,7 +95,7 @@ if (Ext::enabled('view_backtrace') && Ext::enabled('twig')) {
                 $errtype = array_key_exists($type, $err_msg) ?
                     $err_msg[ $type ] : $type;
 
-                if ($type !== E_ERROR) {
+                if (!in_array($type, $shutdown)) {
                     return;
                 }
 

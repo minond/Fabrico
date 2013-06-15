@@ -1,5 +1,6 @@
 namespace: %Namespace%
-bootstrap: []
+bootstrap:
+  - vendor/autoload.php?
 
 handlers:
   config:
