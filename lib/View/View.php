@@ -4,7 +4,7 @@ namespace Fabrico\View;
 
 use Fabrico\Core\Application;
 use Fabrico\Project\FileFinder;
-use Fabrico\Event\Observable;
+use Fabrico\Event\Signal;
 use Fabrico\Event\Listener;
 
 /**
@@ -12,7 +12,7 @@ use Fabrico\Event\Listener;
  */
 class View
 {
-    use FileFinder, Observable;
+    use FileFinder, Signal;
 
     /**
      * @see Fabrico\Project\FileFilder

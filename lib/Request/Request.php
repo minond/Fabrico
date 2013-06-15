@@ -5,7 +5,7 @@ namespace Fabrico\Request;
 use Fabrico\Core\Application;
 use Fabrico\Response\Response;
 use Fabrico\Response\Handler\Handler;
-use Fabrico\Event\Observable;
+use Fabrico\Event\Signal;
 use Fabrico\Event\Listener;
 
 /**
@@ -13,7 +13,7 @@ use Fabrico\Event\Listener;
  */
 abstract class Request
 {
-    use Observable;
+    use Signal;
 
     /**
      * available response handlers

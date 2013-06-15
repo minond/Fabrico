@@ -3,23 +3,23 @@
 namespace Fabrico\Test\Event;
 
 use Fabrico\Event\Reporter;
-use Fabrico\Test\Mock\Event\Observable\BasicObservable;
-use Fabrico\Test\Mock\Event\Observable\UnusedObservable;
-use Fabrico\Test\Mock\Event\Observable\QueuedObservable1;
-use Fabrico\Test\Mock\Event\Observable\QueuedObservable2;
+use Fabrico\Test\Mock\Event\Signal\BasicSignal;
+use Fabrico\Test\Mock\Event\Signal\UnusedSignal;
+use Fabrico\Test\Mock\Event\Signal\QueuedSignal1;
+use Fabrico\Test\Mock\Event\Signal\QueuedSignal2;
 use Fabrico\Test\Test;
 
 class ReporterTest extends Test
 {
-    public $basic  = '\Fabrico\Test\Mock\Event\Observable\BasicObservable';
-    public $queue1 = '\Fabrico\Test\Mock\Event\Observable\QueuedObservable1';
-    public $queue2 = '\Fabrico\Test\Mock\Event\Observable\QueuedObservable2';
-    public $unused = '\Fabrico\Test\Mock\Event\Observable\UnusedObservable';
+    public $basic  = '\Fabrico\Test\Mock\Event\Signal\BasicSignal';
+    public $queue1 = '\Fabrico\Test\Mock\Event\Signal\QueuedSignal1';
+    public $queue2 = '\Fabrico\Test\Mock\Event\Signal\QueuedSignal2';
+    public $unused = '\Fabrico\Test\Mock\Event\Signal\UnusedSignal';
 
     public function testSubscriptionsArePlaced()
     {
         $called = false;
-        $basic = new BasicObservable;
+        $basic = new BasicSignal;
 
         Reporter::observe($this->basic, 'func', 'pre', function() use (& $called) {
             $called = true;
@@ -32,9 +32,9 @@ class ReporterTest extends Test
     public function testSubscriptionsArePlacedUsingHelperBeforeFunction()
     {
         $called = false;
-        $basic = new BasicObservable;
+        $basic = new BasicSignal;
 
-        Reporter::before('fabrico.test.mock.event.observable.basicobservable:func', function() use (& $called) {
+        Reporter::before('fabrico.test.mock.event.signal.basicsignal:func', function() use (& $called) {
             $called = true;
         });
 
@@ -45,9 +45,9 @@ class ReporterTest extends Test
     public function testSubscriptionsArePlacedUsingHelperAfterFunction()
     {
         $called = false;
-        $basic = new BasicObservable;
+        $basic = new BasicSignal;
 
-        Reporter::after('fabrico.test.mock.event.observable.basicobservable:func', function() use (& $called) {
+        Reporter::after('fabrico.test.mock.event.signal.basicsignal:func', function() use (& $called) {
             $called = true;
         });
 
@@ -59,8 +59,8 @@ class ReporterTest extends Test
     {
         $bcalled = false;
         $ucalled = false;
-        $basic = new BasicObservable;
-        $unused = new UnusedObservable;
+        $basic = new BasicSignal;
+        $unused = new UnusedSignal;
 
         Reporter::observe($this->basic, 'func', 'pre', function() use (& $bcalled) {
             $bcalled = true;
@@ -83,7 +83,7 @@ class ReporterTest extends Test
         });
 
         $called = false;
-        $queue = new QueuedObservable1;
+        $queue = new QueuedSignal1;
 
         $queue->func();
         $this->assertFalse($called);
@@ -96,7 +96,7 @@ class ReporterTest extends Test
         });
 
         $called = false;
-        $queue = new QueuedObservable2;
+        $queue = new QueuedSignal2;
 
         $queue->func();
         $this->assertFalse($called);

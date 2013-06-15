@@ -3,13 +3,13 @@
 namespace Fabrico\Event;
 
 /**
- * makes any class an observable object
+ * makes any class an signal-enabled object
  * <code>
  * <?php
  *
- * // example observable class
+ * // example Signal class
  * class User {
- *     use Observable;
+ *     use Signal;
  *
  *     public function greet($yourname) {
  *         $this->signal(__FUNCTION__, Listener::PRE, func_get_args());
@@ -40,7 +40,7 @@ namespace Fabrico\Event;
  * ?>
  * </code>
  */
-trait Observable
+trait Signal
 {
     /**
      * instance basedlisteners

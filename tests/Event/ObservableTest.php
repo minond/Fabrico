@@ -2,21 +2,21 @@
 
 namespace Fabrico\Test\Event;
 
-use Fabrico\Test\Mock\Event\Observable\BasicObservable;
+use Fabrico\Test\Mock\Event\Signal\BasicSignal;
 use Fabrico\Test\Test;
 use Fabrico\Event\Listener;
 
-class ObservableTest extends Test
+class SignalTest extends Test
 {
     public function testClassListenersCanBeSaved()
     {
-        $this->assertTrue(BasicObservable::observe(
+        $this->assertTrue(BasicSignal::observe(
             'rand', Listener::PRE, function() {}));
     }
 
     public function testInstanceListenersCanBeSaved()
     {
-        $obj = new BasicObservable;
+        $obj = new BasicSignal;
         $this->assertTrue($obj->subscribe(
             'rand', Listener::PRE, function() {}));
     }
@@ -24,9 +24,9 @@ class ObservableTest extends Test
     public function testPreSignalsGoToAClassListener()
     {
         $called = false;
-        $obj = new BasicObservable;
+        $obj = new BasicSignal;
 
-        BasicObservable::observe('func', Listener::PRE, function() use (& $called) {
+        BasicSignal::observe('func', Listener::PRE, function() use (& $called) {
             $called = true;
         });
 
@@ -37,9 +37,9 @@ class ObservableTest extends Test
     public function testPostSignalsGoToAClassListener()
     {
         $called = false;
-        $obj = new BasicObservable;
+        $obj = new BasicSignal;
 
-        BasicObservable::observe('func', Listener::POST, function() use (& $called) {
+        BasicSignal::observe('func', Listener::POST, function() use (& $called) {
             $called = true;
         });
 
@@ -50,7 +50,7 @@ class ObservableTest extends Test
     public function testPreSignalsGoToAnInstanceListener()
     {
         $called = false;
-        $obj = new BasicObservable;
+        $obj = new BasicSignal;
 
         $obj->subscribe('func', Listener::PRE, function() use (& $called) {
             $called = true;
@@ -63,7 +63,7 @@ class ObservableTest extends Test
     public function testPostSignalsGoToAnInstanceListener()
     {
         $called = false;
-        $obj = new BasicObservable;
+        $obj = new BasicSignal;
 
         $obj->subscribe('func', Listener::POST, function() use (& $called) {
             $called = true;
@@ -76,8 +76,8 @@ class ObservableTest extends Test
     public function testInstanceListenersAreNotTriggeredUnderDifferentObjects()
     {
         $called = false;
-        $obj = new BasicObservable;
-        $you = new BasicObservable;
+        $obj = new BasicSignal;
+        $you = new BasicSignal;
 
         $obj->subscribe('func', Listener::POST, function() use (& $called) {
             $called = true;

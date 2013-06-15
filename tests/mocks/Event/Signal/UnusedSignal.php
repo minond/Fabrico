@@ -1,13 +1,13 @@
 <?php
 
-namespace Fabrico\Test\Mock\Event\Observable;
+namespace Fabrico\Test\Mock\Event\Signal;
 
-use Fabrico\Event\Observable;
+use Fabrico\Event\Signal;
 use Fabrico\Event\Listener;
 
-class BasicObservable
+class UnusedSignal
 {
-    use Observable;
+    use Signal;
 
     public $func_called = false;
 
