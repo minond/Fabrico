@@ -144,7 +144,7 @@ case "$1" in
 		fi
 
 		sed "s/%Namespace%/$namespace/g" ./bin/project/config/project.yaml > ../config/project.yaml
-		sed "s/%Namespace%/$namespace/g" ./bin/project/controller/Sample.php > ../controller/Sample.php
+		sed "s/%Namespace%/$namespace/g" ./bin/project/controller/Hello.php > ../controller/Hello.php
 
 		echo "Initialized new Fabrico project -> config/project.yaml:$namespace"
 		exit 1
