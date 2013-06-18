@@ -6,8 +6,8 @@ use Fabrico\Test\Test;
 use Fabrico\Core\Application;
 use Fabrico\Core\Ext;
 use Fabrico\Core\ExtensionManager;
-use Fabrico\Cache\RuntimeCache;
 use Fabrico\Test\Mock\Project\NoWriteConfiguration;
+use Efficio\Cache\RuntimeCache;
 
 class ExtensionManagerTest extends Test
 {

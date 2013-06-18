@@ -5,8 +5,8 @@ namespace Fabrico\Test\Controller;
 use Fabrico\Test\Test;
 use Fabrico\Test\Mock\Project\ConfigurationFinder;
 use Fabrico\Core\Application;
-use Fabrico\Cache\RuntimeCache;
-use Fabrico\Cache\ReadOnceCache;
+use Efficio\Cache\RuntimeCache;
+use Efficio\Cache\ReadOnceCache;
 
 class ConfigurationTest extends Test
 {

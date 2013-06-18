@@ -3,7 +3,7 @@
 namespace Fabrico\Project;
 
 use Fabrico\Project\FileFinder;
-use Fabrico\Cache\Cache;
+use Efficio\Cache;
 use Symfony\Component\Yaml\Yaml;
 
 class Configuration

@@ -6,8 +6,8 @@ use Fabrico\Core\Application;
 use Fabrico\Response\Http\Response;
 use Fabrico\Request\Http\Request;
 use Fabrico\Project\Configuration;
-use Fabrico\Cache\RuntimeCache;
 use Fabrico\Test\Test;
+use Efficio\Cache\RuntimeCache;
 
 class ApplicationTest extends Test
 {

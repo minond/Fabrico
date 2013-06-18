@@ -6,7 +6,7 @@ use Fabrico\Test\Test;
 use Fabrico\Test\Mock\Project\Configurable;
 use Fabrico\Test\Mock\Project\ConfigurationFinder;
 use Fabrico\Core\Application;
-use Fabrico\Cache\RuntimeCache;
+use Efficio\Cache\RuntimeCache;
 
 class ConfigurableTest extends Test
 {

@@ -10,7 +10,7 @@ require 'autoload.php';
 use Fabrico\Core\Application;
 use Fabrico\Project\Configuration;
 use Fabrico\Event\Listeners;
-use Fabrico\Cache\RuntimeCache;
+use Efficio\Cache\RuntimeCache;
 
 $app = new Application;
 $conf = new Configuration(new RuntimeCache);

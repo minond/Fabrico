@@ -1,6 +1,6 @@
 <?php
 
-use Fabrico\Cache\ReadOnceCache;
+use Efficio\Cache\ReadOnceCache;
 
 require 'app.php';
 require 'help.php';
