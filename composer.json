@@ -2,7 +2,8 @@
 	"require": {
 		"php": ">=5.4",
 		"symfony/yaml": "2.1.*@dev",
-		"minond/cache": "dev-master"
+		"minond/cache": "dev-master",
+		"minond/http": "dev-master"
 	},
 
 	"require-dev": {

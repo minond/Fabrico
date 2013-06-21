@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "35f03ae9905203d8b01f12dd6aa6c697",
+    "hash": "83ce1e71bcf71389c1b4776ce6088392",
     "packages": [
         {
             "name": "minond/cache",
@@ -37,6 +37,39 @@
             ],
             "description": "Cache",
             "time": "2013-06-18 03:52:03"
+        },
+        {
+            "name": "minond/http",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/minond/Http.git",
+                "reference": "627987efcbd26b4e437fd6d5feb4851f6739fd05"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/minond/Http/zipball/627987efcbd26b4e437fd6d5feb4851f6739fd05",
+                "reference": "627987efcbd26b4e437fd6d5feb4851f6739fd05",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Efficio": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Marcos Minond",
+                    "email": "minond.marcos@gmail.com"
+                }
+            ],
+            "description": "Http helpers",
+            "time": "2013-06-21 04:54:25"
         },
         {
             "name": "symfony/yaml",
@@ -757,6 +790,7 @@
     "stability-flags": {
         "symfony/yaml": 20,
         "minond/cache": 20,
+        "minond/http": 20,
         "apigen/apigen": 20,
         "minond/profiler": 20
     },
