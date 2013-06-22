@@ -51,8 +51,9 @@ abstract class Request
      */
     public function __set($var, $val)
     {
-        return array_key_exists($var, $this->data) ?
-            $this->data[ $var ] = $val : null;
+        // return array_key_exists($var, $this->data) ?
+        //     $this->data[ $var ] = $val : null;
+        return $this->data[ $var ] = $val;
     }
 
     /**

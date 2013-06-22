@@ -77,15 +77,21 @@ class ControllerActionHandler extends Handler
         $action = '';
         $controller = '';
 
-        if ($req->_uri) {
-            if (strpos($req->_uri, '/') !== false) {
+        if ($req->_uri || $req->_controller) {
+            if ($req->_controller) {
+                $controller = $req->_controller;
+            } else if (strpos($req->_uri, '/') !== false) {
                 list($controller, $action) = explode('/', $req->_uri);
             } else {
                 $controller = $req->_uri;
             }
 
             if (!$action) {
-                $action = 'index';
+                if ($req->_action) {
+                    $action = $req->_action;
+                } else {
+                    $action = 'index';
+                }
             }
 
             $controller = Controller::load($controller);
