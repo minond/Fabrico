@@ -65,6 +65,31 @@ class ControllerActionHandlerTest extends Test
         $this->assertEquals('index', $this->handler->getAction());
     }
 
+    public function testActionCanBeReadFromRequest()
+    {
+        $data = [ '_uri' => 'controller/', '_action' => 'myaction' ];
+        $app = new Application;
+        $app->setRequest($this->req);
+        $this->handler->setApplication($app);
+        $this->req->setData($data);
+        $this->handler->canHandle($this->req);
+        $this->assertEquals('myaction', $this->handler->getAction());
+    }
+
+    public function testControllerCanBeReadFromRequest()
+    {
+        $data = [ '_uri' => 'controller/', '_controller' => 'EmptyController' ];
+        $app = new Application;
+        $app->setRoot(FABRICO_ROOT);
+        $app->setNamespace('Fabrico');
+        $app->setRequest($this->req);
+        $this->handler->setApplication($app);
+        $this->req->setData($data);
+        $this->handler->canHandle($this->req);
+        $base = get_class(new EmptyController);
+        $this->assertEquals($base, get_class($this->handler->getController()));
+    }
+
     public function testControllerMethodIsCalled()
     {
         $data = [ '_uri' => 'Ignore/sets_output' ];

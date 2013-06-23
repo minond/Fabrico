@@ -7,6 +7,7 @@ use Fabrico\Response\Response;
 use Fabrico\Response\Handler\Handler;
 use Fabrico\Event\Signal;
 use Fabrico\Event\Listener;
+use Efficio\Http\Rule;
 
 /**
  * base interface for all incoming request (ie. Http, Cli)
@@ -51,9 +52,34 @@ abstract class Request
      */
     public function __set($var, $val)
     {
-        // return array_key_exists($var, $this->data) ?
-        //     $this->data[ $var ] = $val : null;
         return $this->data[ $var ] = $val;
+    }
+
+    /**
+     * add routing rules
+     * @param array $rules
+     */
+    final public function addRules(array $rules)
+    {
+        if (!count($rules)) {
+            return;
+        }
+
+        foreach ($rules as $pattern => $info) {
+            Rule::create([Rule::transpile($pattern)], $info);
+        }
+
+        $route = Rule::matching($this->data['_uri']);
+
+        if ($route) {
+            foreach ($route as $key => $value) {
+                if (in_array($key, ['controller', 'action'])) {
+                    $key = '_' . $key;
+                }
+
+                $this->__set($key, $value);
+            }
+        }
     }
 
     /**
