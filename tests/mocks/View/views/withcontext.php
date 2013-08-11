@@ -1,1 +1,0 @@
-hi <?= $this->name ?> hi
