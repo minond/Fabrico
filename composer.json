@@ -1,16 +1,18 @@
 {
-	"require": {
-		"php": ">=5.4.0",
-		"minond/utilitatis": "dev-master",
-		"minond/model": "dev-master",
-		"minond/http": "dev-master",
-		"minond/event": "dev-master",
-		"minond/configurare": "dev-master",
-		"minond/cache": "dev-master"
-	},
+    "name": "minond/fabrico",
+    "description": "Small PHP framework",
+    "require": {
+        "php": ">=5.4.0",
+        "minond/utilitatis": "dev-master",
+        "minond/model": "dev-master",
+        "minond/http": "dev-master",
+        "minond/event": "dev-master",
+        "minond/configurare": "dev-master",
+        "minond/cache": "dev-master"
+    },
 
     "require-dev": {
-		"minond/nice_error": "dev-master",
-		"minond/profiler": "dev-master"
+        "minond/nice_error": "dev-master",
+        "minond/profiler": "dev-master"
     }
 }
