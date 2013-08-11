@@ -1,0 +1,346 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "d666947a1eb4a5c1c5c8565c2bb29dff",
+    "packages": [
+        {
+            "name": "minond/cache",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/minond/Cache.git",
+                "reference": "fb74a14c3e0d697c5dd15cd3c0cd428fd8fc4875"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/minond/Cache/zipball/fb74a14c3e0d697c5dd15cd3c0cd428fd8fc4875",
+                "reference": "fb74a14c3e0d697c5dd15cd3c0cd428fd8fc4875",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Efficio": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Marcos Minond",
+                    "email": "minond.marcos@gmail.com"
+                }
+            ],
+            "description": "Cache",
+            "time": "2013-06-24 07:09:51"
+        },
+        {
+            "name": "minond/configurare",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/minond/Configurare.git",
+                "reference": "4a2e59c345343d4c926adecdce8648fd7a8d1416"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/minond/Configurare/zipball/4a2e59c345343d4c926adecdce8648fd7a8d1416",
+                "reference": "4a2e59c345343d4c926adecdce8648fd7a8d1416",
+                "shasum": ""
+            },
+            "require": {
+                "minond/cache": "dev-master",
+                "php": ">=5.3.0",
+                "symfony/yaml": "2.1.*@dev"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Efficio": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Marcos Minond",
+                    "email": "minond.marcos@gmail.com"
+                }
+            ],
+            "description": "Configuration management",
+            "time": "2013-07-27 03:51:07"
+        },
+        {
+            "name": "minond/event",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/minond/Event.git",
+                "reference": "6a65e7c9d7b290c7e8ab470e1f08896620f37a24"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/minond/Event/zipball/6a65e7c9d7b290c7e8ab470e1f08896620f37a24",
+                "reference": "6a65e7c9d7b290c7e8ab470e1f08896620f37a24",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Efficio": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Marcos Minond",
+                    "email": "minond.marcos@gmail.com"
+                }
+            ],
+            "description": "Events and signals",
+            "time": "2013-07-22 00:56:16"
+        },
+        {
+            "name": "minond/http",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/minond/Http.git",
+                "reference": "002c02c2501d24a929bc656e34addee1b4c5f526"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/minond/Http/zipball/002c02c2501d24a929bc656e34addee1b4c5f526",
+                "reference": "002c02c2501d24a929bc656e34addee1b4c5f526",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Efficio": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Marcos Minond",
+                    "email": "minond.marcos@gmail.com"
+                }
+            ],
+            "description": "Http helpers",
+            "time": "2013-08-11 03:30:25"
+        },
+        {
+            "name": "minond/model",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/minond/Model.git",
+                "reference": "603a8b7fb674fc5d16c1bd88709ee457281f04cd"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/minond/Model/zipball/603a8b7fb674fc5d16c1bd88709ee457281f04cd",
+                "reference": "603a8b7fb674fc5d16c1bd88709ee457281f04cd",
+                "shasum": ""
+            },
+            "require": {
+                "minond/utilitatis": "dev-master",
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Efficio": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Marcos Minond",
+                    "email": "minond.marcos@gmail.com"
+                }
+            ],
+            "description": "Object models",
+            "time": "2013-07-26 03:12:13"
+        },
+        {
+            "name": "minond/utilitatis",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/minond/Utilitatis.git",
+                "reference": "be2c72638110184627ae740f80e6dcbb0c02912e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/minond/Utilitatis/zipball/be2c72638110184627ae740f80e6dcbb0c02912e",
+                "reference": "be2c72638110184627ae740f80e6dcbb0c02912e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Efficio": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Marcos Minond",
+                    "email": "minond.marcos@gmail.com"
+                }
+            ],
+            "description": "Helper functions and classes",
+            "time": "2013-07-26 02:55:45"
+        },
+        {
+            "name": "symfony/yaml",
+            "version": "v2.1.12",
+            "target-dir": "Symfony/Component/Yaml",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Yaml.git",
+                "reference": "v2.1.12"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.1.12",
+                "reference": "v2.1.12",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Yaml": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Yaml Component",
+            "homepage": "http://symfony.com",
+            "time": "2013-05-10 00:09:46"
+        }
+    ],
+    "packages-dev": [
+        {
+            "name": "minond/nice_error",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/minond/NiceError.git",
+                "reference": "d664a32321a2241267316c1aae9f831caf42215e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/minond/NiceError/zipball/d664a32321a2241267316c1aae9f831caf42215e",
+                "reference": "d664a32321a2241267316c1aae9f831caf42215e",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "util": "src/"
+                },
+                "files": [
+                    "autorun.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Marcos Minond",
+                    "email": "minond.marcos@gmail.com"
+                }
+            ],
+            "description": "Nicer error output",
+            "time": "2013-08-08 04:22:59"
+        },
+        {
+            "name": "minond/profiler",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/minond/Profiler.git",
+                "reference": "7b0c24c5f8214f5199f84a355de1d2d4817c3cbf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/minond/Profiler/zipball/7b0c24c5f8214f5199f84a355de1d2d4817c3cbf",
+                "reference": "7b0c24c5f8214f5199f84a355de1d2d4817c3cbf",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "util": "src/"
+                },
+                "files": [
+                    "profiler.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "authors": [
+                {
+                    "name": "Marcos Minond",
+                    "email": "minond.marcos@gmail.com"
+                }
+            ],
+            "description": "PHP profiler",
+            "time": "2013-08-04 19:28:59"
+        }
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "minond/utilitatis": 20,
+        "minond/model": 20,
+        "minond/http": 20,
+        "minond/event": 20,
+        "minond/configurare": 20,
+        "minond/cache": 20,
+        "minond/nice_error": 20,
+        "minond/profiler": 20
+    },
+    "platform": {
+        "php": ">=5.4.0"
+    },
+    "platform-dev": [
+
+    ]
+}
