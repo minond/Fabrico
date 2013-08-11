@@ -8,7 +8,6 @@ use Efficio\Http\RuleBook;
 use Efficio\Configurare\Configuration;
 use Efficio\Cache\RuntimeCache;
 
-chdir('..');
 require 'vendor/autoload.php';
 
 $req = Request::create();
