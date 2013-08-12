@@ -1,6 +1,6 @@
 <?php
 
-namespace Facilis;
+namespace fabrico;
 
 use Efficio\Http\Request;
 use Efficio\Http\Rule;
@@ -13,7 +13,7 @@ require 'vendor/autoload.php';
 $req = Request::create();
 $req->setUri($_SERVER['REDIRECT_URI']);
 
-$conf = new Configuration;
+$conf = configuration();
 $conf->setCache(new RuntimeCache);
 $conf->setFormat(Configuration::YAML);
 $conf->setDirectory('configuration');
@@ -41,9 +41,20 @@ if ($route = $rules->matching($req, true)) {
             $controller = new $controller;
 
             if (method_exists($controller, $action)) {
-                call_user_func([ $controller, $action ], $req);
+                echo json_encode(call_user_func([ $controller, $action ], $req));
             }
         }
     }
+}
+
+function configuration()
+{
+    static $conf;
+
+    if (!$conf) {
+        $conf = new Configuration;
+    }
+
+    return $conf;
 }
 
