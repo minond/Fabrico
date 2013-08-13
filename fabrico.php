@@ -13,8 +13,6 @@ use Efficio\Cache\RuntimeCache;
 require 'vendor/autoload.php';
 
 $res = new Response;
-$res->setStatusCode(Status::NOT_FOUND);
-
 $req = new Request(true);
 $req->setUri($_SERVER['REDIRECT_URI']);
 
@@ -56,7 +54,10 @@ if ($route = $rules->matching($req, true)) {
             }
         }
     }
+} else {
+    $res->setStatusCode(Status::NOT_FOUND);
 }
+
 
 $res->sendHeaders();
 $res->sendContent();
