@@ -3,6 +3,8 @@
 namespace fabrico;
 
 use Efficio\Http\Request;
+use Efficio\Http\Response;
+use Efficio\Http\Status;
 use Efficio\Http\Rule;
 use Efficio\Http\RuleBook;
 use Efficio\Configurare\Configuration;
@@ -10,10 +12,13 @@ use Efficio\Cache\RuntimeCache;
 
 require 'vendor/autoload.php';
 
-$req = Request::create();
+$res = new Response;
+$res->setStatusCode(Status::NOT_FOUND);
+
+$req = new Request(true);
 $req->setUri($_SERVER['REDIRECT_URI']);
 
-$conf = configuration();
+$conf = new Configuration;
 $conf->setCache(new RuntimeCache);
 $conf->setFormat(Configuration::YAML);
 $conf->setDirectory('configuration');
@@ -41,20 +46,18 @@ if ($route = $rules->matching($req, true)) {
             $controller = new $controller;
 
             if (method_exists($controller, $action)) {
-                echo json_encode(call_user_func([ $controller, $action ], $req));
+                $out = call_user_func([ $controller, $action ], $req);
+                $res->setContent($out);
+                $res->setStatusCode(Status::OK);
+
+                if (is_object($out) || is_array($out)) {
+                    $res->setContentType(Response::JSON);
+                }
             }
         }
     }
 }
 
-function configuration()
-{
-    static $conf;
-
-    if (!$conf) {
-        $conf = new Configuration;
-    }
-
-    return $conf;
-}
+$res->sendHeaders();
+$res->sendContent();
 
