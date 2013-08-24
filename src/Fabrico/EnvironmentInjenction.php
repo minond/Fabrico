@@ -2,9 +2,12 @@
 
 namespace Fabrico;
 
+use Efficio\Http\Request;
 use Efficio\Http\Response;
 use Efficio\Http\Status;
-use Efficio\Http\RuleBook;
+use Efficio\Http\Rule;
+use Efficio\Configurare\Configuration;
+use Efficio\Cache\RuntimeCache;
 
 trait EnvironmentInjenction
 {
