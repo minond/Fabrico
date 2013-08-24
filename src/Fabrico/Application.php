@@ -60,7 +60,7 @@ class Application
             if (class_exists($controller)) {
                 $controller = new $controller;
 
-                if (method_exists($controller, $action_name)) {
+                if (method_exists($controller, $action_name) && is_callable([ $controller, $action_name ])) {
                     $out = $controller->{ $action_name }($req, $res);
                     $res->setStatusCode(Status::OK);
 
