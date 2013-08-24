@@ -1,6 +1,8 @@
 {
     "name": "minond/fabrico",
     "description": "Small PHP framework",
+    "minimum-stability": "dev",
+
     "require": {
         "php": ">=5.4.0",
         "minond/utilitatis": "dev-master",
