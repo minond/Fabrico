@@ -14,5 +14,11 @@
     "require-dev": {
         "minond/nice_error": "dev-master",
         "minond/profiler": "dev-master"
+    },
+
+    "autoload": {
+        "psr-0": {
+            "Fabrico": "src/"
+        }
     }
 }
