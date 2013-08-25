@@ -83,14 +83,15 @@ class Application
 
     /**
      * @param string $controller_name
+     * @param string $namespace_name
      * @return string
      */
-    protected function getControllerName($controller_name)
+    protected function getControllerName($controller_name, $namespace_name)
     {
         $conf = $this->getConfiguration();
         return sprintf(
             '%s\\Controller\\%sController',
-            $conf->get('app:namespace'),
+            $namespace_name,
             ucwords($controller_name)
         );
     }
@@ -121,7 +122,8 @@ class Application
         if ($route = $rules->matching($req, true)) {
             $action_name = $route['action'];
             $controller_name = $route['controller'];
-            $controller = $this->getControllerName($controller_name);
+            $namespace_name = $route['namespace'];
+            $controller = $this->getControllerName($controller_name, $namespace_name);
             $view_file = $this->getViewFile($controller_name, $action_name);
 
             if (class_exists($controller)) {
