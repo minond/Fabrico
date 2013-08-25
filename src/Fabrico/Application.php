@@ -20,6 +20,32 @@ class Application
     private static $app;
 
     /**
+     * @param Request
+     */
+    protected $req;
+
+    /**
+     * @param Response
+     */
+    protected $res;
+
+    /**
+     * @param Configuration
+     */
+    protected $conf;
+
+    /**
+     * sets up some application properties
+     * @param Application $app
+     */
+    public static function wire(Application $app)
+    {
+        $app->req = $app->getRequest();
+        $app->res = $app->getResponse();
+        $app->conf = $app->getConfiguration();
+    }
+
+    /**
      * bind the application that should be used by Application::call
      * @param Application $app
      */
