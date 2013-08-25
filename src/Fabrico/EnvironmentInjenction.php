@@ -11,6 +11,9 @@ use Efficio\Cache\RuntimeCache;
 
 trait EnvironmentInjenction
 {
+    /**
+     * @return Configuration
+     */
     protected function getConfiguration()
     {
         static $conf;
@@ -25,6 +28,9 @@ trait EnvironmentInjenction
         return $conf;
     }
 
+    /**
+     * @return Response
+     */
     protected function getResponse()
     {
         static $res;
@@ -37,6 +43,9 @@ trait EnvironmentInjenction
         return $res;
     }
 
+    /**
+     * @return Request
+     */
     protected function getRequest()
     {
         static $req;

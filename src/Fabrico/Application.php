@@ -2,6 +2,7 @@
 
 namespace Fabrico;
 
+use Closure;
 use Efficio\Http\Request;
 use Efficio\Http\Response;
 use Efficio\Http\Status;
@@ -13,6 +14,34 @@ class Application
 {
     use EnvironmentInjenction;
 
+    /**
+     * @param Application
+     */
+    private static $app;
+
+    /**
+     * bind the application that should be used by Application::call
+     * @param Application $app
+     */
+    public static function bind(Application $app)
+    {
+        self::$app = $app;
+    }
+
+    /**
+     * bind a function the Application::$app and call it
+     * @param Closure $action
+     * @return mixed
+     */
+    public static function call(Closure $action)
+    {
+        $action = Closure::bind($action, self::$app, get_class(self::$app));
+        return $action();
+    }
+
+    /**
+     * @return RuleBook
+     */
     protected function getRuleBook()
     {
         static $rules;
@@ -26,6 +55,10 @@ class Application
         return $rules;
     }
 
+    /**
+     * @param string $controller_name
+     * @return string
+     */
     protected function getControllerName($controller_name)
     {
         $conf = $this->getConfiguration();
@@ -36,6 +69,11 @@ class Application
         );
     }
 
+    /**
+     * @param string $controller_name
+     * @param string $action_name
+     * @return string
+     */
     protected function getViewFile($controller_name, $action_name)
     {
         return sprintf(
@@ -45,6 +83,9 @@ class Application
         );
     }
 
+    /**
+     * handle a request
+     */
     public function handle()
     {
         $req = $this->getRequest();
@@ -76,6 +117,9 @@ class Application
         }
     }
 
+    /**
+     * send the request to the client
+     */
     public function send()
     {
         $req = $this->getRequest();
