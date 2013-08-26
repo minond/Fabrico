@@ -114,7 +114,7 @@ class Application
                     $out = $controller->{ $action_name }($req, $res);
                     $res->setStatusCode(Status::OK);
 
-                    if (!$res->getContent()) {
+                    if (!$res->getContent() && isset($controller->responds_to)) {
                         if (/* $controller->internalRespondsTo($req) */ true) {
                             // $controller->internalBuildResponse($res, $out);
                             $res->setContent($out);
