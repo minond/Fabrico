@@ -20,21 +20,6 @@ class Application
     private static $app;
 
     /**
-     * @param Request
-     */
-    protected $req;
-
-    /**
-     * @param Response
-     */
-    protected $res;
-
-    /**
-     * @param Configuration
-     */
-    protected $conf;
-
-    /**
      * sets up some application properties
      * @param Application $app
      */
@@ -70,13 +55,9 @@ class Application
      */
     protected function getRuleBook()
     {
-        static $rules;
-
-        if (!$rules) {
-            $conf = $this->getConfiguration();
-            $rules = new RuleBook;
-            $rules->load($conf->get('routes'));
-        }
+        $conf = $this->getConfiguration();
+        $rules = new RuleBook;
+        $rules->load($conf->get('routes'));
 
         return $rules;
     }
@@ -90,7 +71,7 @@ class Application
     {
         $conf = $this->getConfiguration();
         return sprintf(
-            '%s\\Controller\\%sController',
+            '%s\\Controller\\%s',
             $namespace_name,
             ucwords($controller_name)
         );

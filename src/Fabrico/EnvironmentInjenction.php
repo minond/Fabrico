@@ -12,20 +12,33 @@ use Efficio\Cache\RuntimeCache;
 trait EnvironmentInjenction
 {
     /**
+     * @param Configuration
+     */
+    protected $conf;
+
+    /**
+     * @param Response
+     */
+    protected $res;
+
+    /**
+     * @param Request
+     */
+    protected $req;
+
+    /**
      * @return Configuration
      */
     protected function getConfiguration()
     {
-        static $conf;
-
-        if (!$conf) {
-            $conf = new Configuration;
+        if (!$this->conf) {
+            $this->conf = $conf = new Configuration;
             $conf->setCache(new RuntimeCache);
             $conf->setFormat(Configuration::YAML);
             $conf->setDirectory('configuration');
         }
 
-        return $conf;
+        return $this->conf;
     }
 
     /**
@@ -33,14 +46,12 @@ trait EnvironmentInjenction
      */
     protected function getResponse()
     {
-        static $res;
-
-        if (!$res) {
-            $res = new Response;
+        if (!$this->res) {
+            $this->res = $res = new Response;
             $res->setStatusCode(Status::NOT_FOUND);
         }
 
-        return $res;
+        return $this->res;
     }
 
     /**
@@ -48,14 +59,12 @@ trait EnvironmentInjenction
      */
     protected function getRequest()
     {
-        static $req;
-
-        if (!$req) {
-            $req = new Request(true);
+        if (!$this->req) {
+            $this->req = $req = new Request(true);
             $req->setUri($_SERVER['REDIRECT_URI']);
         }
 
-        return $req;
+        return $this->req;
     }
 }
 
