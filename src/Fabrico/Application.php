@@ -3,6 +3,8 @@
 namespace Fabrico;
 
 use Closure;
+use StdClass;
+use Exception;
 use Efficio\Http\Request;
 use Efficio\Http\Response;
 use Efficio\Http\Status;
@@ -63,11 +65,11 @@ class Application
     }
 
     /**
-     * @param string $controller_name
      * @param string $namespace_name
+     * @param string $controller_name
      * @return string
      */
-    protected function getControllerName($controller_name, $namespace_name)
+    protected function getControllerName($namespace_name, $controller_name)
     {
         $conf = $this->getConfiguration();
         return sprintf(
@@ -78,17 +80,63 @@ class Application
     }
 
     /**
+     * @param string $namespace_name
      * @param string $controller_name
-     * @param string $action_name
      * @return string
      */
-    protected function getViewFile($controller_name, $action_name)
+    protected function getViewFileDirectory($namespace_name, $controller_name)
     {
         return sprintf(
-            'views/%s/%s',
-            $controller_name,
-            $action_name
+            'src/%s/views/%s/',
+            $namespace_name,
+            strtolower($controller_name)
         );
+    }
+
+    /**
+     * @param string $dir
+     * @param string $name
+     * @param StdClass $data, default = null
+     * @return string
+     */
+    protected function getViewFile($dir, $name, StdClass $data = null)
+    {
+        $files = glob("{$dir}{$name}.{html,phtml,twig}", GLOB_BRACE);
+        $content = '';
+
+        switch (count($files)) {
+            case 1:
+                $file = $files[0];
+                $extension = substr($file, strrpos($file, '.') + 1);
+
+                switch ($extension) {
+                    case 'phtml':
+                        $content = call_user_func(Closure::bind(function() use ($file) {
+                            ob_start();
+                            require $file;
+                            return ob_get_clean();
+                        }, $data ?: new StdClass));
+                        break;
+
+                    case 'twig':
+                        break;
+
+                    case 'html':
+                    default:
+                        $content = file_get_contents($file);
+                        break;
+                }
+                break;
+
+            case 0:
+                break;
+
+            default:
+                throw new Exception('Multiple view files found: ' .
+                    implode(', ', $files));
+        }
+
+        return $content;
     }
 
     /**
@@ -104,8 +152,9 @@ class Application
             $action_name = $route['action'];
             $controller_name = $route['controller'];
             $namespace_name = $route['namespace'];
-            $controller = $this->getControllerName($controller_name, $namespace_name);
-            $view_file = $this->getViewFile($controller_name, $action_name);
+
+            $controller = $this->getControllerName($namespace_name, $controller_name);
+            $view_dir = $this->getViewFileDirectory($namespace_name, $controller_name);
 
             if (class_exists($controller)) {
                 $controller = new $controller;
@@ -114,12 +163,17 @@ class Application
                     $out = $controller->{ $action_name }($req, $res);
                     $res->setStatusCode(Status::OK);
 
-                    if (!$res->getContent() && isset($controller->responds_to)) {
-                        if (/* $controller->internalRespondsTo($req) */ true) {
-                            // $controller->internalBuildResponse($res, $out);
-                            $res->setContent($out);
-                            $res->setContentType($controller->responds_to[0]);
-                        }
+                    if (!$res->getContent()) {
+                        $out = is_array($out) ? (object) $out : $out;
+                        $res->setContent($this->getViewFile($view_dir, $action_name, $out));
+
+                        // if (isset($controller->responds_to)) {
+                        //     $res->setContent($out);
+                        //     $res->setContentType($controller->responds_to[0]);
+                        // } else {
+                        //     $out = is_array($out) ? (object) $out : $out;
+                        //     $res->setContent($this->getViewFile($view_dir, $action_name, $out));
+                        // }
                     }
                 }
             }
