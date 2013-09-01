@@ -84,7 +84,7 @@ class Application
      * @param string $controller_name
      * @return string
      */
-    protected function getViewFileDirectory($namespace_name, $controller_name)
+    protected function getViewFileDirectory($namespace_name, $controller_name = '')
     {
         return sprintf(
             'src/%s/views/%s/',
@@ -129,6 +129,7 @@ class Application
                 break;
 
             case 0:
+                $content = false;
                 break;
 
             default:
@@ -155,6 +156,7 @@ class Application
 
             $controller = $this->getControllerName($namespace_name, $controller_name);
             $view_dir = $this->getViewFileDirectory($namespace_name, $controller_name);
+            $view_base = $this->getViewFileDirectory($namespace_name);
 
             if (class_exists($controller)) {
                 $controller = new $controller;
@@ -165,7 +167,13 @@ class Application
 
                     if (!$res->getContent()) {
                         $out = is_array($out) ? (object) $out : $out;
-                        $res->setContent($this->getViewFile($view_dir, $action_name, $out));
+                        $str = $this->getViewFile($view_dir, $action_name, $out);
+
+                        if ($str === false) {
+                            $str = $this->getViewFile($view_base, 'default', $out);
+                        }
+
+                        $res->setContent($str);
 
                         // if (isset($controller->responds_to)) {
                         //     $res->setContent($out);
