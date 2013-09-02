@@ -53,6 +53,26 @@ class Application
     }
 
     /**
+     * retrieve a base object or a property value from a core component:
+     * req.id => Request->id
+     * @param string $path
+     * @return mixed
+     */
+    public static function get($path)
+    {
+        $path = explode('.', $path);
+        $root = array_shift($path);
+        $base = self::$app->{ $root };
+        $rval = $base;
+
+        foreach ($path as $prop) {
+            $rval = is_array($rval) ? $rval[ $prop ] : $rval->{ $prop };
+        }
+
+        return $rval;
+    }
+
+    /**
      * @return RuleBook
      */
     protected function getRuleBook()
