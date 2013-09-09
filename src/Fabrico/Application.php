@@ -91,7 +91,6 @@ class Application
      */
     protected function getControllerName($namespace_name, $controller_name)
     {
-        $conf = $this->getConfiguration();
         return sprintf(
             '%s\\Controller\\%s',
             $namespace_name,
