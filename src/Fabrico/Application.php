@@ -73,6 +73,40 @@ class Application
     }
 
     /**
+     * @param string $namespace_name
+     * @param string $file
+     * @return string
+     */
+    public static function getNamespaceFile($namespace_name, $file)
+    {
+        return sprintf(
+            'src/%s/%s',
+            $namespace_name,
+            $file
+        );
+    }
+
+    /**
+     * @param string $namespace_name
+     * @param string $file
+     * @return string
+     */
+    public static function getCssFile($namespace_name, $file)
+    {
+        return self::getNamespaceFile($namespace_name, 'resources/css/' . $file);
+    }
+
+    /**
+     * @param string $namespace_name
+     * @param string $file
+     * @return string
+     */
+    public static function getImageFile($namespace_name, $file)
+    {
+        return self::getNamespaceFile($namespace_name, 'resources/images/' . $file);
+    }
+
+    /**
      * @return RuleBook
      */
     protected function getRuleBook()

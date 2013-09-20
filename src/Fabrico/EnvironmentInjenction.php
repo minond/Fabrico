@@ -37,8 +37,8 @@ trait EnvironmentInjenction
             $conf->setFormat(Configuration::YAML);
             $conf->setDirectory('configuration');
 
-            if (file_exists('configuration/config.php')) {
-                require_once 'configuration/config.php';
+            if (file_exists('initializer/config.php')) {
+                require_once 'initializer/config.php';
             }
         }
 
