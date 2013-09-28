@@ -35,10 +35,10 @@ trait EnvironmentInjenction
             $this->conf = $conf = new Configuration;
             $conf->setCache(new RuntimeCache);
             $conf->setFormat(Configuration::YAML);
-            $conf->setDirectory('configuration');
+            $conf->setDirectory('config');
 
-            if (file_exists('initializer/config.php')) {
-                require_once 'initializer/config.php';
+            if (file_exists('init/config.php')) {
+                require_once 'init/config.php';
             }
         }
 

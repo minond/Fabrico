@@ -80,7 +80,7 @@ class Application
     public static function getNamespaceFile($namespace_name, $file)
     {
         return sprintf(
-            'src/%s/%s',
+            'lib/%s/%s',
             $namespace_name,
             $file
         );
@@ -140,7 +140,7 @@ class Application
     protected function getViewFileDirectory($namespace_name, $controller_name = '')
     {
         return sprintf(
-            'src/%s/views/%s/',
+            'lib/%s/views/%s/',
             $namespace_name,
             strtolower($controller_name)
         );
@@ -224,6 +224,15 @@ class Application
 
                         if ($str === false) {
                             $str = $this->getViewFile($view_base, 'default', $out);
+                        }
+
+                        if ($str === false) {
+                            $res->setContentType(Response::TEXT);
+                            $str = "view not found." .
+                                   "\nbase: $view_base" .
+                                   "\ncontroller: " . get_class($controller) .
+                                   "\naction: $action_name" .
+                                   "\nrequest: " . print_r($req, true);
                         }
 
                         $res->setContent($str);
