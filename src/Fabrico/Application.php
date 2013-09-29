@@ -11,6 +11,8 @@ use Efficio\Http\Status;
 use Efficio\Http\RuleBook;
 use Efficio\Configurare\Configuration;
 use Efficio\Cache\RuntimeCache;
+use Twig_Environment as TwigEnv;
+use Twig_Loader_Filesystem as TwigFs;
 
 class Application
 {
@@ -154,7 +156,7 @@ class Application
      */
     protected function getViewFile($dir, $name, StdClass $data = null)
     {
-        $files = glob("{$dir}{$name}.{html,phtml,twig}", GLOB_BRACE);
+        $files = glob("{$dir}{$name}.html{,.php,.twig}", GLOB_BRACE);
         $content = '';
 
         switch (count($files)) {
@@ -163,7 +165,7 @@ class Application
                 $extension = substr($file, strrpos($file, '.') + 1);
 
                 switch ($extension) {
-                    case 'phtml':
+                    case 'php':
                         $content = call_user_func(Closure::bind(function() use ($file) {
                             ob_start();
                             require $file;
@@ -172,6 +174,10 @@ class Application
                         break;
 
                     case 'twig':
+                        $dir = dirname($dir);
+                        $twig = new TwigEnv(new TwigFs($dir));
+                        $template = $twig->loadTemplate(str_replace($dir, '', $file));
+                        $content = $template->render((array) $data);
                         break;
 
                     case 'html':
