@@ -115,7 +115,7 @@ class Application
     {
         $conf = $this->getConfiguration();
         $rules = new RuleBook;
-        $rules->load($conf->get('routes'));
+        $rules->load($conf->get('routes'), true);
 
         return $rules;
     }
