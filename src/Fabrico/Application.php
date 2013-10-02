@@ -141,11 +141,10 @@ class Application
      */
     protected function getViewFileDirectory($namespace_name, $controller_name = '')
     {
-        return sprintf(
-            'lib/%s/views/%s/',
-            $namespace_name,
-            strtolower($controller_name)
-        );
+        $conf = $this->getConfiguration();
+        return $conf->get('app:namespace') === $namespace_name ?
+            sprintf('views/%s/', strtolower($controller_name)) :
+            sprintf('lib/%s/views/%s/', $namespace_name, strtolower($controller_name));
     }
 
     /**
@@ -215,7 +214,7 @@ class Application
 
             $controller = $this->getControllerName($namespace_name, $controller_name);
             $view_dir = $this->getViewFileDirectory($namespace_name, $controller_name);
-            $view_base = $this->getViewFileDirectory($namespace_name);
+            $view_base = str_replace('//', '/', $this->getViewFileDirectory($namespace_name));
 
             if (class_exists($controller)) {
                 $controller = new $controller;
@@ -236,6 +235,7 @@ class Application
                             $res->setContentType(Response::TEXT);
                             $str = "view not found." .
                                    "\nbase: $view_base" .
+                                   "\ndir: $view_dir" .
                                    "\ncontroller: " . get_class($controller) .
                                    "\naction: $action_name" .
                                    "\nrequest: " . print_r($req, true);
