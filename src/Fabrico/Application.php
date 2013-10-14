@@ -174,7 +174,16 @@ class Application
 
                     case 'twig':
                         $dir = dirname($dir);
-                        $twig = new TwigEnv(new TwigFs($dir));
+                        $fs = new TwigFs($dir);
+                        $fs->addPath($dir, 'app');
+                        $twig = new TwigEnv($fs);
+
+                        if (file_exists('init/twig.php')) {
+                            call_user_func(function() use(& $twig, & $fs) {
+                                require_once 'init/twig.php';
+                            });
+                        }
+
                         $template = $twig->loadTemplate(str_replace($dir, '', $file));
                         $content = $template->render((array) $data);
                         break;
