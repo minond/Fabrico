@@ -31,6 +31,11 @@ class Application
      */
     protected $req;
 
+    /**
+     * @var RuleBook
+     */
+    protected $rules;
+
 
     /**
      * @param Application
@@ -86,52 +91,6 @@ class Application
         }
 
         return $rval;
-    }
-
-    /**
-     * @param string $namespace_name
-     * @param string $file
-     * @return string
-     */
-    public static function getNamespaceFile($namespace_name, $file)
-    {
-        return sprintf(
-            'lib/%s/%s',
-            $namespace_name,
-            $file
-        );
-    }
-
-    /**
-     * @param string $namespace_name
-     * @param string $file
-     * @return string
-     */
-    public static function getCssFile($namespace_name, $file)
-    {
-        return self::getNamespaceFile($namespace_name, 'resources/css/' . $file);
-    }
-
-    /**
-     * @param string $namespace_name
-     * @param string $file
-     * @return string
-     */
-    public static function getImageFile($namespace_name, $file)
-    {
-        return self::getNamespaceFile($namespace_name, 'resources/images/' . $file);
-    }
-
-    /**
-     * @return RuleBook
-     */
-    protected function getRuleBook()
-    {
-        $conf = $this->getConfiguration();
-        $rules = new RuleBook;
-        $rules->load($conf->get('routes'), true);
-
-        return $rules;
     }
 
     /**
@@ -299,33 +258,33 @@ class Application
     /**
      * @return Configuration
      */
-    protected function getConfiguration()
+    public function getConfiguration()
     {
-        if (!$this->conf) {
-            $this->conf = $conf = new Configuration;
-            $conf->setCache(new RuntimeCache);
-            $conf->setFormat(Configuration::YAML);
-            $conf->setDirectory('config');
-
-            if (file_exists('init/config.php')) {
-                require_once 'init/config.php';
-            }
-        }
-
         return $this->conf;
+    }
+
+    /**
+     * @param Configuration $conf
+     */
+    public function setConfiguration(Configuration $conf)
+    {
+        $this->conf = $conf;
     }
 
     /**
      * @return Response
      */
-    protected function getResponse()
+    public function getResponse()
     {
-        if (!$this->res) {
-            $this->res = $res = new Response;
-            $res->setStatusCode(Status::NOT_FOUND);
-        }
-
         return $this->res;
+    }
+
+    /**
+     * @param Response $res
+     */
+    public function setResponse(Response $res)
+    {
+        $this->res = $res;
     }
 
     /**
@@ -333,12 +292,31 @@ class Application
      */
     protected function getRequest()
     {
-        if (!$this->req) {
-            $this->req = $req = new Request(true);
-            $req->setUri($_SERVER['REDIRECT_URI']);
-        }
-
         return $this->req;
+    }
+
+    /**
+     * @param Request $req
+     */
+    public function setRequest(Request $req)
+    {
+        $this->req = $req;
+    }
+
+    /**
+     * @return RuleBook
+     */
+    public function getRuleBook()
+    {
+        return $this->rules;
+    }
+
+    /**
+     * @param RuleBook $rules
+     */
+    public function setRuleBook(RuleBook $rules)
+    {
+        $this->rules = $rules;
     }
 }
 
