@@ -3,10 +3,7 @@
 namespace Fabrico;
 
 use Closure;
-use StdClass;
-use Exception;
-use Twig_Environment as TwigEnv;
-use Twig_Loader_Filesystem as TwigFs;
+use Fabrico\Renderer\Handler;
 use Fabrico\Error\Renderer\InvalidExtentionException;
 use Fabrico\Error\Renderer\NoViewsFoundException;
 use Fabrico\Error\Renderer\MultipleViewsFoundException;
@@ -22,7 +19,7 @@ class Renderer
 
     /**
      * @param string $ext
-     * @param Callable|Closure $handler
+     * @param Callable|Closure|Handler $handler
      * @throws ExtensionAlreadyHandledException
      */
     public function handler($ext, $handler, $overwrite = false)
@@ -55,8 +52,13 @@ class Renderer
             $ext = $this->parseFileExtension($file);
 
             if (isset($this->extension_map[ $ext ])) {
-                $content = call_user_func($this->extension_map[ $ext ],
-                    $file, $data);
+                $handler = $this->extension_map[ $ext ];
+
+                if ($handler instanceof Handler) {
+                    $content = $handler->render($file, $data);
+                } else {
+                    $content = call_user_func($handler, $file, $data);
+                }
             } else {
                 throw new InvalidExtentionException($ext);
             }
@@ -88,56 +90,6 @@ class Renderer
     protected function parseFileExtension($file)
     {
         return substr($file, strrpos($file, '.') + 1);
-    }
-
-    /**
-     * php file handler
-     * @param string $file
-     * @param array $data
-     */
-    public function stdPhpHandler($file, array $data = [])
-    {
-        return call_user_func(Closure::bind(function() use ($file) {
-            ob_start();
-            require $file;
-            return ob_get_clean();
-        }, (object) $data ?: new StdClass));
-    }
-
-    /**
-     * html file handler
-     * @param string $file
-     * @param array $data
-     */
-    public function stdHtmlHander($file, array $data = [])
-    {
-        return file_get_contents($file);
-    }
-
-    /**
-     * twig file handler
-     * @param string $file
-     * @param array $data
-     */
-    public function stdTwigHander($file, array $data = [])
-    {
-        // $dir = dirname(dirname($file));
-        $fs = new TwigFs(getcwd());
-        $twig = new TwigEnv($fs);
-
-        if (file_exists('init/twig.php')) {
-            call_user_func(function() use(& $twig, & $fs) {
-                require_once 'init/twig.php';
-            });
-        }
-
-        // Application::init('twig', [
-        //     'twig' => & $twig,
-        //     'fs' => & $fs,
-        // ]);
-
-        $template = $twig->loadTemplate($file);
-        return $template->render($data);
     }
 }
 

@@ -42,7 +42,6 @@ class Application
      */
     protected $renderer;
 
-
     /**
      * @param Application
      */
