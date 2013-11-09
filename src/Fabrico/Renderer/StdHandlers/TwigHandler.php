@@ -20,8 +20,8 @@ class TwigHandler implements Handler
         $cdir = getcwd();
         $twig = new Twig;
         $twig->setLoader(new Loader($cdir));
-
-        Application::init('twig', [ 'twig' => & $twig ]);
+        $app = new Application;
+        $app->initialize('twig', [ 'twig' => & $twig ]);
 
         $template = $twig->loadTemplate($file);
         return $template->render($data);

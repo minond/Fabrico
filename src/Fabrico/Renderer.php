@@ -54,6 +54,11 @@ class Renderer
             if (isset($this->extension_map[ $ext ])) {
                 $handler = $this->extension_map[ $ext ];
 
+                if (is_string($handler) && class_exists($handler)) {
+                    $handler = new $handler;
+                    $this->extension_map[ $ext ] = $handler;
+                }
+
                 if ($handler instanceof Handler) {
                     $content = $handler->render($file, $data);
                 } else {

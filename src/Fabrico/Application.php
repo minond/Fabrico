@@ -13,6 +13,7 @@ use Efficio\Configurare\Configuration;
 use Efficio\Cache\RuntimeCache;
 use Twig_Environment as TwigEnv;
 use Twig_Loader_Filesystem as TwigFs;
+use Fabrico\Conventions;
 use Fabrico\Error\Renderer\NoViewsFoundException;
 
 class Application
@@ -227,22 +228,7 @@ class Application
      */
     public function initialize($name, array $args = [])
     {
-        $file = sprintf('init/%s.php', $name);
-
-        if (file_exists($file)) {
-            extract($args);
-            require_once $file;
-        }
-    }
-
-    /**
-     * load an initializer file
-     * @param string $name
-     * @param array $args, default: array
-     */
-    public static function init($name, array $args = [])
-    {
-        $file = sprintf('init/%s.php', $name);
+        $file = sprintf('%s/%s.php', Conventions::DIR_INIT, $name);
 
         if (file_exists($file)) {
             extract($args);
