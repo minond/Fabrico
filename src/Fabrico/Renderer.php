@@ -64,7 +64,7 @@ class Renderer
                 if ($handler instanceof Handler) {
                     $content = $handler->render($app, $file, $data);
                 } else {
-                    $content = call_user_func($handler, $file, $data);
+                    $content = call_user_func($handler, $app, $file, $data);
                 }
             } else {
                 throw new InvalidExtentionException($ext);
