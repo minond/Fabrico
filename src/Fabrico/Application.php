@@ -19,6 +19,12 @@ use Fabrico\Error\Renderer\NoViewsFoundException;
 class Application
 {
     /**
+     * tracks which initalizer files have already been loaded
+     * @var string[]
+     */
+    protected $initialized = [];
+
+    /**
      * @param Configuration
      */
     protected $conf;
@@ -124,11 +130,13 @@ class Application
 
                     try {
                         $str = $this->renderer->render(
+                            $this,
                             sprintf('%s%s.%s', $view_dir, $action_name, 'html'),
                             $out
                         );
                     } catch (NoViewsFoundException $no_view_found) {
                         $str = $this->renderer->render(
+                            $this,
                             sprintf('%s%s.%s', $view_dir, 'default', 'html'),
                             $out
                         );
@@ -228,11 +236,14 @@ class Application
      */
     public function initialize($name, array $args = [])
     {
-        $file = sprintf('%s/%s.php', Conventions::DIR_INIT, $name);
+        if (!in_array($name, $this->initialized)) {
+            $file = sprintf('%s/%s.php', Conventions::DIR_INIT, $name);
+            $this->initialized[] = $name;
 
-        if (file_exists($file)) {
-            extract($args);
-            require_once $file;
+            if (file_exists($file)) {
+                extract($args);
+                require_once $file;
+            }
         }
     }
 }

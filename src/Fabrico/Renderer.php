@@ -3,6 +3,7 @@
 namespace Fabrico;
 
 use Closure;
+use Fabrico\Application;
 use Fabrico\Renderer\Handler;
 use Fabrico\Error\Renderer\InvalidExtentionException;
 use Fabrico\Error\Renderer\NoViewsFoundException;
@@ -33,6 +34,7 @@ class Renderer
 
     /**
      * render a view file
+     * @param Application $app
      * @param string $file
      * @param arary $data, default: empty array
      * @throws InvalidExtentionException
@@ -40,7 +42,7 @@ class Renderer
      * @throws MultipleViewsFoundException
      * @return string
      */
-    public function render($file, array $data = [])
+    public function render(Application $app, $file, array $data = [])
     {
         $template = $this->generateFileSearchString($file, array_keys($this->extension_map));
         $files = glob($template, GLOB_BRACE);
@@ -60,7 +62,7 @@ class Renderer
                 }
 
                 if ($handler instanceof Handler) {
-                    $content = $handler->render($file, $data);
+                    $content = $handler->render($app, $file, $data);
                 } else {
                     $content = call_user_func($handler, $file, $data);
                 }

@@ -4,6 +4,7 @@ namespace Fabrico\Renderer\StdHandlers;
 
 use StdClass;
 use Closure;
+use Fabrico\Application;
 use Fabrico\Renderer\Handler;
 
 /**
@@ -14,7 +15,7 @@ class PhpHandler implements Handler
     /**
      * {@inheritDoc}
      */
-    public function render($file, array $data = [])
+    public function render(Application & $app, $file, array $data = [])
     {
         return call_user_func(Closure::bind(function() use ($file) {
             ob_start();

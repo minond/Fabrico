@@ -15,12 +15,11 @@ class TwigHandler implements Handler
     /**
      * {@inheritDoc}
      */
-    public function render($file, array $data = [])
+    public function render(Application & $app, $file, array $data = [])
     {
         $cdir = getcwd();
         $twig = new Twig;
         $twig->setLoader(new Loader($cdir));
-        $app = new Application;
         $app->initialize('twig', [ 'twig' => & $twig ]);
 
         $template = $twig->loadTemplate($file);
