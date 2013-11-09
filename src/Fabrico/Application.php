@@ -220,6 +220,22 @@ class Application
     }
 
     /**
+     * I hate php. need non-static for closure binding
+     * load an initializer file
+     * @param string $name
+     * @param array $args, default: array
+     */
+    public function initialize($name, array $args = [])
+    {
+        $file = sprintf('init/%s.php', $name);
+
+        if (file_exists($file)) {
+            extract($args);
+            require_once $file;
+        }
+    }
+
+    /**
      * load an initializer file
      * @param string $name
      * @param array $args, default: array
@@ -229,10 +245,8 @@ class Application
         $file = sprintf('init/%s.php', $name);
 
         if (file_exists($file)) {
-            call_user_func(function() use($file, & $args) {
-                extract($args);
-                require_once $file;
-            });
+            extract($args);
+            require_once $file;
         }
     }
 }
