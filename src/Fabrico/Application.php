@@ -218,5 +218,22 @@ class Application
     {
         return $this->renderer;
     }
+
+    /**
+     * load an initializer file
+     * @param string $name
+     * @param array $args, default: array
+     */
+    public static function init($name, array $args = [])
+    {
+        $file = sprintf('init/%s.php', $name);
+
+        if (file_exists($file)) {
+            call_user_func(function() use($file, & $args) {
+                extract($args);
+                require_once $file;
+            });
+        }
+    }
 }
 

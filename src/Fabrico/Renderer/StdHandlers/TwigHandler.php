@@ -2,9 +2,10 @@
 
 namespace Fabrico\Renderer\StdHandlers;
 
+use Fabrico\Application;
 use Fabrico\Renderer\Handler;
-use Twig_Environment as TwigEnv;
-use Twig_Loader_Filesystem as TwigFs;
+use Twig_Environment as Twig;
+use Twig_Loader_Filesystem as Loader;
 
 /**
  * twig file handler
@@ -16,14 +17,11 @@ class TwigHandler implements Handler
      */
     public function render($file, array $data = [])
     {
-        $fs = new TwigFs(getcwd());
-        $twig = new TwigEnv($fs);
+        $cdir = getcwd();
+        $twig = new Twig;
+        $twig->setLoader(new Loader($cdir));
 
-        if (file_exists('init/twig.php')) {
-            call_user_func(function() use(& $twig, & $fs) {
-                require_once 'init/twig.php';
-            });
-        }
+        Application::init('twig', [ 'twig' => & $twig ]);
 
         $template = $twig->loadTemplate($file);
         return $template->render($data);
