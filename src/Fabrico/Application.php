@@ -5,6 +5,7 @@ namespace Fabrico;
 use Closure;
 use StdClass;
 use Exception;
+use RuntimeException;
 use Efficio\Http\Request;
 use Efficio\Http\Response;
 use Efficio\Http\Status;
@@ -13,13 +14,13 @@ use Efficio\Configurare\Configuration;
 use Efficio\Cache\RuntimeCache;
 use Twig_Environment as TwigEnv;
 use Twig_Loader_Filesystem as TwigFs;
-use Fabrico\Conventions;
+use Fabrico\Initializer\JitInitializer;
 use Fabrico\Error\Renderer\NoViewsFoundException;
 
 class Application
 {
     /**
-     * tracks which initalizer files have already been loaded
+     * tracks which initializer files have already been loaded
      * @var string[]
      */
     protected $initialized = [];
@@ -101,8 +102,7 @@ class Application
      */
     protected function getViewFileDirectory($namespace_name, $controller_name = '')
     {
-        $conf = $this->getConfiguration();
-        return $conf->get('app:namespace') === $namespace_name ?
+        return $this->conf->get('app:namespace') === $namespace_name ?
             sprintf('views/%s/', strtolower($controller_name)) :
             sprintf('lib/%s/views/%s/', $namespace_name, strtolower($controller_name));
     }
@@ -115,7 +115,8 @@ class Application
         if ($route = $this->rules->matching($this->req, true)) {
             $action_name = $route['action'];
             $controller_name = $route['controller'];
-            $namespace_name = $route['namespace'];
+            $namespace_name = isset($route['namespace']) ? $route['namespace'] :
+                $this->conf->get('app:namespace');
 
             $controller = sprintf('%s\\Controller\\%s', $namespace_name, ucwords($controller_name));
             $view_dir = $this->getViewFileDirectory($namespace_name, $controller_name);
@@ -236,13 +237,22 @@ class Application
      */
     public function initialize($name, array $args = [])
     {
+        $init = sprintf('%s\Initializer\%s', $this->conf->get('app:namespace'),
+            ucwords($name));
+
         if (!in_array($name, $this->initialized)) {
-            $file = sprintf('%s/%s.php', Conventions::DIR_INIT, $name);
             $this->initialized[] = $name;
 
-            if (file_exists($file)) {
-                extract($args);
-                require_once $file;
+            if (class_exists($init)) {
+                $initializer = new $init;
+
+                if ($initializer instanceof JitInitializer) {
+                    $initializer->setConfiguration($this->conf);
+                    $initializer->setProperties($args);
+                    return $initializer->initialize();
+                } else {
+                    throw new RuntimeException(sprintf(''));
+                }
             }
         }
     }
