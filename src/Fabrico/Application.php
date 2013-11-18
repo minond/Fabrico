@@ -12,6 +12,7 @@ use Efficio\Http\Status;
 use Efficio\Http\RuleBook;
 use Efficio\Configurare\Configuration;
 use Efficio\Cache\RuntimeCache;
+use Efficio\Utilitatis\Word;
 use Twig_Environment as TwigEnv;
 use Twig_Loader_Filesystem as TwigFs;
 use Fabrico\Initializer\JitInitializer;
@@ -61,7 +62,7 @@ class Application
      */
     public static function bind(Application $app)
     {
-        self::$app = $app;
+        return self::$app = $app;
     }
 
     /**
@@ -237,8 +238,9 @@ class Application
      */
     public function initialize($name, array $args = [])
     {
+        $word = new Word;
         $init = sprintf('%s\Initializer\%s', $this->conf->get('app:namespace'),
-            ucwords($name));
+            $word->classicalCase($name));
 
         if (!in_array($name, $this->initialized)) {
             $this->initialized[] = $name;
