@@ -118,6 +118,7 @@ class Application
             $controller_name = $route['controller'];
             $namespace_name = isset($route['namespace']) ? $route['namespace'] :
                 $this->conf->get('app:namespace');
+            $format = isset($route['format']) ? $route['format'] : 'html';
 
             $controller = sprintf('%s\\Controller\\%s', $namespace_name, ucwords($controller_name));
             $view_dir = $this->getViewFileDirectory($namespace_name, $controller_name);
@@ -133,15 +134,19 @@ class Application
                     try {
                         $str = $this->renderer->render(
                             $this,
-                            sprintf('%s%s.%s', $view_dir, $action_name, 'html'),
+                            sprintf('%s%s.%s', $view_dir, $action_name, $format),
                             $out
                         );
                     } catch (NoViewsFoundException $no_view_found) {
-                        $str = $this->renderer->render(
-                            $this,
-                            sprintf('%s%s.%s', $view_dir, 'default', 'html'),
-                            $out
-                        );
+                        try {
+                            $str = $this->renderer->render(
+                                $this,
+                                sprintf('%s%s.%s', $view_dir, 'default', $format),
+                                $out
+                            );
+                        } catch (NoViewsFoundException $ignore) {
+                            throw $no_view_found;
+                        }
                     }
 
                     $this->res->setContent($str);
