@@ -29,16 +29,22 @@ class RoutesCommand extends Command
 
         foreach ($this->conf->get('routes') as $url => $params) {
             $method = '*';
+            $resource = '';
 
             if (isset($params['method'])) {
                 $method = $params['method'];
                 unset($params['method']);
             }
 
-            $table->addRow([ $method, $url, json_encode($params) ]);
+            if (isset($params['_resource'])) {
+                $resource = $params['_resource'];
+                unset($params['_resource']);
+            }
+
+            $table->addRow([ $method, $resource, $url, json_encode($params) ]);
         }
 
-        $table->setHeaders([ 'method', 'url', 'params' ]);
+        $table->setHeaders([ 'method', 'resource', 'url', 'params' ]);
         $table->render($output);
     }
 }
