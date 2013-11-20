@@ -5,6 +5,7 @@
 
     "require": {
         "php": ">=5.4.0",
+        "symfony/yaml": "2.3.3",
         "minond/utilitatis": "dev-master",
         "minond/model": "dev-master",
         "minond/http": "dev-master",
