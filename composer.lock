@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "d666947a1eb4a5c1c5c8565c2bb29dff",
+    "hash": "6d419254cfda613bd91d4c797be73aee",
     "packages": [
         {
             "name": "minond/cache",
@@ -11,16 +11,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Cache.git",
-                "reference": "fb74a14c3e0d697c5dd15cd3c0cd428fd8fc4875"
+                "reference": "4af714a6ff0caf9f06d2d867a2cbdae87fd84af7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Cache/zipball/fb74a14c3e0d697c5dd15cd3c0cd428fd8fc4875",
-                "reference": "fb74a14c3e0d697c5dd15cd3c0cd428fd8fc4875",
+                "url": "https://api.github.com/repos/minond/Cache/zipball/4af714a6ff0caf9f06d2d867a2cbdae87fd84af7",
+                "reference": "4af714a6ff0caf9f06d2d867a2cbdae87fd84af7",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "satooshi/php-coveralls": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -36,7 +39,7 @@
                 }
             ],
             "description": "Cache",
-            "time": "2013-06-24 07:09:51"
+            "time": "2013-08-18 00:27:59"
         },
         {
             "name": "minond/configurare",
@@ -44,18 +47,22 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Configurare.git",
-                "reference": "4a2e59c345343d4c926adecdce8648fd7a8d1416"
+                "reference": "2447ff8c7739fa14269d385c72192608566b9c64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Configurare/zipball/4a2e59c345343d4c926adecdce8648fd7a8d1416",
-                "reference": "4a2e59c345343d4c926adecdce8648fd7a8d1416",
+                "url": "https://api.github.com/repos/minond/Configurare/zipball/2447ff8c7739fa14269d385c72192608566b9c64",
+                "reference": "2447ff8c7739fa14269d385c72192608566b9c64",
                 "shasum": ""
             },
             "require": {
                 "minond/cache": "dev-master",
-                "php": ">=5.3.0",
-                "symfony/yaml": "2.1.*@dev"
+                "minond/utilitatis": "dev-master",
+                "php": ">=5.4.0",
+                "symfony/yaml": "2.3.3"
+            },
+            "require-dev": {
+                "satooshi/php-coveralls": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -71,7 +78,7 @@
                 }
             ],
             "description": "Configuration management",
-            "time": "2013-07-27 03:51:07"
+            "time": "2013-11-20 04:20:45"
         },
         {
             "name": "minond/event",
@@ -79,16 +86,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Event.git",
-                "reference": "6a65e7c9d7b290c7e8ab470e1f08896620f37a24"
+                "reference": "f77ecabd36f0ab215536fe1ac76d12c3becf0743"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Event/zipball/6a65e7c9d7b290c7e8ab470e1f08896620f37a24",
-                "reference": "6a65e7c9d7b290c7e8ab470e1f08896620f37a24",
+                "url": "https://api.github.com/repos/minond/Event/zipball/f77ecabd36f0ab215536fe1ac76d12c3becf0743",
+                "reference": "f77ecabd36f0ab215536fe1ac76d12c3becf0743",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.0"
+            },
+            "require-dev": {
+                "satooshi/php-coveralls": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -104,7 +114,7 @@
                 }
             ],
             "description": "Events and signals",
-            "time": "2013-07-22 00:56:16"
+            "time": "2013-08-18 00:23:44"
         },
         {
             "name": "minond/http",
@@ -112,16 +122,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Http.git",
-                "reference": "002c02c2501d24a929bc656e34addee1b4c5f526"
+                "reference": "661789ac248cc845afdff53c9a628ed8f7aef230"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Http/zipball/002c02c2501d24a929bc656e34addee1b4c5f526",
-                "reference": "002c02c2501d24a929bc656e34addee1b4c5f526",
+                "url": "https://api.github.com/repos/minond/Http/zipball/661789ac248cc845afdff53c9a628ed8f7aef230",
+                "reference": "661789ac248cc845afdff53c9a628ed8f7aef230",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "satooshi/php-coveralls": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -137,7 +150,7 @@
                 }
             ],
             "description": "Http helpers",
-            "time": "2013-08-11 03:30:25"
+            "time": "2013-10-02 01:14:12"
         },
         {
             "name": "minond/model",
@@ -145,17 +158,20 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Model.git",
-                "reference": "603a8b7fb674fc5d16c1bd88709ee457281f04cd"
+                "reference": "f85bdf0258919680405dc635c235fc619ced6259"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Model/zipball/603a8b7fb674fc5d16c1bd88709ee457281f04cd",
-                "reference": "603a8b7fb674fc5d16c1bd88709ee457281f04cd",
+                "url": "https://api.github.com/repos/minond/Model/zipball/f85bdf0258919680405dc635c235fc619ced6259",
+                "reference": "f85bdf0258919680405dc635c235fc619ced6259",
                 "shasum": ""
             },
             "require": {
                 "minond/utilitatis": "dev-master",
-                "php": ">=5.3.0"
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "satooshi/php-coveralls": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -171,7 +187,7 @@
                 }
             ],
             "description": "Object models",
-            "time": "2013-07-26 03:12:13"
+            "time": "2013-11-17 22:03:29"
         },
         {
             "name": "minond/utilitatis",
@@ -179,16 +195,19 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Utilitatis.git",
-                "reference": "be2c72638110184627ae740f80e6dcbb0c02912e"
+                "reference": "ccaace599fa2e80a113276bf6d059fe7dddc7c05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Utilitatis/zipball/be2c72638110184627ae740f80e6dcbb0c02912e",
-                "reference": "be2c72638110184627ae740f80e6dcbb0c02912e",
+                "url": "https://api.github.com/repos/minond/Utilitatis/zipball/ccaace599fa2e80a113276bf6d059fe7dddc7c05",
+                "reference": "ccaace599fa2e80a113276bf6d059fe7dddc7c05",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "satooshi/php-coveralls": "dev-master"
             },
             "type": "library",
             "autoload": {
@@ -204,30 +223,35 @@
                 }
             ],
             "description": "Helper functions and classes",
-            "time": "2013-07-26 02:55:45"
+            "time": "2013-11-12 03:12:25"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.1.12",
+            "version": "v2.3.3",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "v2.1.12"
+                "reference": "3837ccd0830ef44ed5c5844403bf6f69f7998758"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/v2.1.12",
-                "reference": "v2.1.12",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/3837ccd0830ef44ed5c5844403bf6f69f7998758",
+                "reference": "3837ccd0830ef44ed5c5844403bf6f69f7998758",
                 "shasum": ""
             },
             "require": {
                 "php": ">=5.3.3"
             },
             "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3-dev"
+                }
+            },
             "autoload": {
                 "psr-0": {
-                    "Symfony\\Component\\Yaml": ""
+                    "Symfony\\Component\\Yaml\\": ""
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -246,7 +270,7 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2013-05-10 00:09:46"
+            "time": "2013-07-21 12:12:18"
         }
     ],
     "packages-dev": [
@@ -256,12 +280,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/NiceError.git",
-                "reference": "d664a32321a2241267316c1aae9f831caf42215e"
+                "reference": "5d3228468c95a20f7ed2f0e2712f9746011fd70b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/NiceError/zipball/d664a32321a2241267316c1aae9f831caf42215e",
-                "reference": "d664a32321a2241267316c1aae9f831caf42215e",
+                "url": "https://api.github.com/repos/minond/NiceError/zipball/5d3228468c95a20f7ed2f0e2712f9746011fd70b",
+                "reference": "5d3228468c95a20f7ed2f0e2712f9746011fd70b",
                 "shasum": ""
             },
             "require": {
@@ -284,7 +308,7 @@
                 }
             ],
             "description": "Nicer error output",
-            "time": "2013-08-08 04:22:59"
+            "time": "2013-08-26 02:01:58"
         },
         {
             "name": "minond/profiler",
@@ -326,7 +350,7 @@
     "aliases": [
 
     ],
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "stability-flags": {
         "minond/utilitatis": 20,
         "minond/model": 20,
