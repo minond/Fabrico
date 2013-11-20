@@ -33,6 +33,16 @@ class Renderer
     }
 
     /**
+     * @param array $handlers
+     * @param boolean $overwrite
+     */
+    public function handlers(array $handlers, $overwrite = false)
+    {
+        foreach ($handlers as $ext => $handler)
+            $this->handler($ext, $handler, $overwrite);
+    }
+
+    /**
      * render a view file
      * @param Application $app
      * @param string $file
