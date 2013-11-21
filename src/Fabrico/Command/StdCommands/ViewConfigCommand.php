@@ -4,6 +4,7 @@ namespace Fabrico\Command\StdCommands;
 
 use Fabrico\Command\Command;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\TableHelper;
@@ -19,9 +20,9 @@ class ViewConfigCommand extends Command
         $this->setName('config');
         $this->setDescription('View application configuration');
 
-        $this->addOption(
-            'get', 'g',
-            InputOption::VALUE_OPTIONAL,
+        $this->addArgument(
+            'get',
+            InputArgument::OPTIONAL,
             'Retrive a configuration value'
         );
 
@@ -44,7 +45,7 @@ class ViewConfigCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $get = $input->getOption('get');
+        $get = $input->getArgument('get');
 
         if ($get) {
             $val = $this->conf->get($get);
