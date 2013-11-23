@@ -23,11 +23,5 @@
         "psr-0": {
             "Fabrico": "src/"
         }
-    },
-
-    "bin": [
-        "bin/app.php",
-        "bin/console",
-        "bin/http.php"
-    ]
+    }
 }
