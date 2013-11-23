@@ -3,7 +3,7 @@
 namespace Fabrico\Command\StdCommands;
 
 use Fabrico\Information;
-use Fabrico\Command\Command;
+use Fabrico\Command\GeneratorCommand;
 use Efficio\Utilitatis\Merger;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputInterface;
@@ -12,7 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * enviroment configuration scaffold generator
  */
-class EnvScaffoldingCommand extends Command
+class EnvScaffoldingCommand extends GeneratorCommand
 {
     protected function configure()
     {
@@ -37,7 +37,7 @@ class EnvScaffoldingCommand extends Command
 
         if ($apache) {
             $output->write($config = $merger->merge(
-                $this->getTemplate('apache.conf'),
+                $this->getTemplate('env/apache.conf'),
                 [
                     'directory' => basename(getcwd()),
                     'version' => Information::VERSION,
@@ -46,16 +46,6 @@ class EnvScaffoldingCommand extends Command
                 false
             ));
         }
-    }
-
-    /**
-     * return a template file's content
-     * @param string $file
-     * @return string
-     */
-    protected function getTemplate($file)
-    {
-        return file_get_contents(sprintf('%s/templates/%s', __dir__, $file));
     }
 }
 
