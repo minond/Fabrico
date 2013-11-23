@@ -11,8 +11,8 @@ getenv('FABRICO_APP_CONFIG') ?: putenv('FABRICO_APP_CONFIG=development');
 getenv('FABRICO_APP_ENV') ?: putenv('FABRICO_APP_ENV=development');
 
 // from scripts to root of project
-if (getcwd() === __dir__) {
-    chdir('..');
+if (getenv('FABRICO_APP_ROOT')) {
+    chdir(getenv('FABRICO_APP_ROOT'));
 }
 
 // environment overwrites
