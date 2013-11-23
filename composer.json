@@ -25,13 +25,9 @@
         }
     },
 
-    "config": {
-        "bin-dir": "bin"
-    },
-
     "bin": [
-        "scripts/app.php",
-        "scripts/console",
-        "scripts/http.php"
+        "bin/app.php",
+        "bin/console",
+        "bin/http.php"
     ]
 }
