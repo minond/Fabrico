@@ -244,13 +244,29 @@ class Application
     public function initialize($name, array $args = [])
     {
         $word = new Word;
-        $init = sprintf('%s\Initializer\%s', $this->conf->get('app:namespace'),
-            $word->classicalCase($name));
+        $init = false;
+
+        $project_init = sprintf(
+            '%s\Initializer\%s',
+            $this->conf->get('app:namespace'),
+            $word->classicalCase($name)
+        );
+
+        $standard_init = sprintf(
+            'Fabrico\Initializer\StdInitializers\%s',
+            $word->classicalCase($name)
+        );
 
         if (!in_array($name, $this->initialized)) {
             $this->initialized[] = $name;
 
-            if (class_exists($init)) {
+            if (class_exists($project_init)) {
+                $init = $project_init;
+            } else if (class_exists($standard_init)) {
+                $init = $standard_init;
+            }
+
+            if ($init) {
                 $initializer = new $init;
 
                 if ($initializer instanceof JitInitializer) {
