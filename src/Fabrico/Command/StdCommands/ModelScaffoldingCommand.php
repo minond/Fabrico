@@ -57,7 +57,6 @@ class ModelScaffoldingCommand extends GeneratorCommand
         $clazzes = $this->word->pluralize($clazz);
 
         // controller class file
-        $output->writeln('Generating controller');
         $this->createFile(
             sprintf('src/%s/Controller/%s.php', $ns, $clazzes),
             $this->generateController($ns, $clazzes, $clazz, $single, $plural),
@@ -65,21 +64,14 @@ class ModelScaffoldingCommand extends GeneratorCommand
         );
 
         // model class file
-        $output->writeln('');
-        $output->writeln('Generating model');
         $this->createFile(
             sprintf('src/%s/Model/%s.php', $ns, $clazz),
             $this->generateModel($ns, $clazz, $fields),
             $output
         );
 
-        // model class file
-        $output->writeln('');
-        $output->writeln('Generating views');
-        $this->createDirectory(
-            sprintf('views/%s', $plural),
-            $output
-        );
+        // views
+        $this->createDirectory(sprintf('views/%s', $plural), $output);
 
         // index page
         $this->createFile(

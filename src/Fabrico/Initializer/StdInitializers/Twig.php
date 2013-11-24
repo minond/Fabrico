@@ -41,11 +41,32 @@ class Twig extends JitInitializer
             $model = strtolower(array_pop($model));
             $models = $this->word->pluralize($model);
 
-            $this->twig->addFunction($this->urlGenerator(Crud::ADD_ACTION, $model, $models));
-            $this->twig->addFunction($this->urlGenerator(Crud::EDIT_ACTION, $model, $models, true));
-            $this->twig->addFunction($this->urlGenerator(Crud::CREATE_ACTION, $model, $models));
-            $this->twig->addFunction($this->urlGenerator(Crud::UPDATE_ACTION, $model, $models, true));
-            $this->twig->addFunction($this->urlGenerator(Crud::DELETE_ACTION, $model, $models, true));
+            // add_task_path()
+            $this->twig->addFunction(
+                $this->urlGenerator(Crud::ADD_ACTION, $model, $models));
+
+            // edit_task_path(task)
+            $this->twig->addFunction(
+                $this->urlGenerator(Crud::EDIT_ACTION, $model, $models, true));
+
+            // create_task_path
+            $this->twig->addFunction(
+                $this->urlGenerator(Crud::CREATE_ACTION, $model, $models));
+
+            // update_task_path(task)
+            $this->twig->addFunction(
+                $this->urlGenerator(Crud::UPDATE_ACTION, $model, $models, true));
+
+            // delete_task_path(task)
+            $this->twig->addFunction(
+                $this->urlGenerator(Crud::DELETE_ACTION, $model, $models, true));
+
+            // tasks_path
+            $this->twig->addFunction(new Twig_SimpleFunction(
+                sprintf('%s_path', $models), function() use ($models) {
+                    return sprintf('/%s', $models);
+                }
+            ));
         }
     }
 

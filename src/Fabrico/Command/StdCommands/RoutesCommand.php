@@ -26,6 +26,7 @@ class RoutesCommand extends Command
     {
         $app = $this->getApplication();
         $table = $app->getHelperSet()->get('table');
+        $table->setLayout(TableHelper::LAYOUT_BORDERLESS);
 
         foreach ($this->conf->get('routes') as $url => $params) {
             $method = '*';
@@ -41,6 +42,11 @@ class RoutesCommand extends Command
                 unset($params['_resource']);
             }
 
+            if (isset($params['_generator'])) {
+                $generator = $params['_generator'];
+                unset($params['_generator']);
+            }
+
             // json string clean up
             $info = str_replace(
                 [ '":"', '","', '{"', '"}' ],
@@ -48,10 +54,9 @@ class RoutesCommand extends Command
                 json_encode($params)
             );
 
-            $table->addRow([ $method, $resource, $url, $info ]);
+            $table->addRow([ $generator, strtolower($method), $url, $info ]);
         }
 
-        $table->setHeaders([ 'method', 'resource', 'template', 'params' ]);
         $table->render($output);
     }
 }

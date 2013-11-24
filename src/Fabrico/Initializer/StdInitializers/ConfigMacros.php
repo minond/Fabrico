@@ -33,34 +33,40 @@ class ConfigMacros extends JitInitializer
   action: index
   method: GET
   _resource: $resource
+  _generator: {$model}_path
 
 /$model/add:
   controller: $clazz
   action: add
   method: GET
   _resource: $resource
+  _generator: add_{$model}_path
 
 /$model/edit/{id}:
   controller: $clazz
   action: edit
   method: GET
   _resource: $resource
+  _generator: edit_{$model}_path
 
 /$model/create:
   controller: $clazz
   action: create
   method: POST
   _resource: $resource
+  _generator: create_{$model}_path
 
 /$model/update/{id}:
   controller: $clazz
   action: update
   _resource: $resource
+  _generator: update_{$model}_path
 
 /$model/delete/{id}:
   controller: $clazz
   action: delete
   _resource: $resource
+  _generator: delete_{$model}_path
 ROUTE;
 
 

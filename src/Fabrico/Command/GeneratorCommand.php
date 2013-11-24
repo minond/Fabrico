@@ -15,11 +15,6 @@ class GeneratorCommand extends Command
     /**
      * output templates
      */
-    const TMPL_GEN_FILE = '   <fg=green>file</fg=green>      <fg=yellow>%s</fg=yellow>';
-    const TMPL_ERR_GEN_FILE = '  <fg=red>error</fg=red>      <fg=yellow>%s</fg=yellow>';
-    const TMPL_ERR_WRITE_FILE = '  <fg=red>error</fg=red>      <fg=yellow>%s</fg=yellow>';
-    const TMPL_GEN_DIR = '    <fg=green>dir</fg=green>      <fg=yellow>%s</fg=yellow>';
-    const TMPL_ERR_GEN_DIR = '  <fg=red>error</fg=red>      <fg=yellow>%s</fg=yellow>';
 
     /**
      * @var Word
@@ -60,12 +55,12 @@ class GeneratorCommand extends Command
     {
         if (touch($path)) {
             if (file_put_contents($path, $data) !== false) {
-                $output && $output->writeln(sprintf(static::TMPL_GEN_FILE, $path));
+                $this->ok($path, $output);
             } else {
-                $output && $output->writeln(sprintf(static::TMPL_ERR_WRITE_FILE, $path));
+                $this->err("writing to $path", $output);
             }
         } else {
-            $output && $output->writeln(sprintf(static::TMPL_ERR_GEN_FILE, $path));
+            $this->err("creating $path", $output);
         }
     }
 
@@ -76,11 +71,39 @@ class GeneratorCommand extends Command
     public function createDirectory($path, OutputInterface $output = null)
     {
         if (is_dir($path)) {
-            $output && $output->writeln(sprintf(static::TMPL_GEN_DIR, $path));
+            $this->ok($path, $output);
         } else if (mkdir($path, 0777, true)) {
-            $output && $output->writeln(sprintf(static::TMPL_GEN_DIR, $path));
+            $this->ok($path, $output);
         } else {
-            $output && $output->writeln(sprintf(static::TMPL_ERR_GEN_DIR, $path));
+            $this->err("creating $path", $output);
+        }
+    }
+
+    /**
+     * @param string $msg
+     * @param OutputInterface $output
+     */
+    protected function ok($msg, OutputInterface $output = null)
+    {
+        if ($output) {
+            $output->writeln(sprintf(
+                '   [<fg=green;options=bold>ok</fg=green;options=bold>]  <fg=yellow>%s</fg=yellow>',
+                $msg
+            ));
+        }
+    }
+
+    /**
+     * @param string $msg
+     * @param OutputInterface $output
+     */
+    protected function err($msg, OutputInterface $output = null)
+    {
+        if ($output) {
+            $output->writeln(sprintf(
+                '  [<fg=red;options=bold>err</fg=red;options=bold>]  <fg=yellow>%s</fg=yellow>',
+                $msg
+            ));
         }
     }
 }
