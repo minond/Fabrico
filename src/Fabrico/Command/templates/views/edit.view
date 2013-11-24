@@ -5,6 +5,7 @@
 
     <form action="{{ update_{single}_path({single}) }}" method="POST">
         <input type="submit" value="Update {single}" />
+        <input type="button" value="Cancel" onclick="window.location = '{{ {plural}_path() }}'" />
     </form>
 {% endblock %}
 
