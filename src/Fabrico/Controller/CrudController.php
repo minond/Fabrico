@@ -5,11 +5,28 @@ namespace Fabrico\Controller;
 abstract class CrudController extends BaseController
 {
     /**
-     * crud actions
+     * add model page
+     */
+    const ADD_ACTION = 'add';
+
+    /**
+     * view model page or request
+     */
+    const EDIT_ACTION = 'edit';
+
+    /**
+     * save model request
      */
     const CREATE_ACTION = 'create';
-    const RETRIEVE_ACTION = 'retrieve';
+
+    /**
+     * update model request
+     */
     const UPDATE_ACTION = 'update';
+
+    /**
+     * delete model request
+     */
     const DELETE_ACTION = 'delete';
 }
 

@@ -1,0 +1,9 @@
+<?php
+
+namespace {package}\Model;
+
+class {clazz} extends Model
+{
+    {properties}
+}
+

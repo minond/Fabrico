@@ -41,10 +41,17 @@ class RoutesCommand extends Command
                 unset($params['_resource']);
             }
 
-            $table->addRow([ $method, $resource, $url, json_encode($params) ]);
+            // json string clean up
+            $info = str_replace(
+                [ '":"', '","', '{"', '"}' ],
+                [ ': ', ', ', '', '' ],
+                json_encode($params)
+            );
+
+            $table->addRow([ $method, $resource, $url, $info ]);
         }
 
-        $table->setHeaders([ 'method', 'resource', 'url', 'params' ]);
+        $table->setHeaders([ 'method', 'resource', 'template', 'params' ]);
         $table->render($output);
     }
 }

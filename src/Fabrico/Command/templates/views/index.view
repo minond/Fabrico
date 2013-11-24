@@ -1,0 +1,18 @@
+{% extends "views/layouts/base.html.twig" %}
+
+{% block body %}
+    <h2>{title}</h2>
+
+    <a href="{{ add_{single}_path({single}) }}">Add new {single}</a>
+
+    <ul>
+    {% for {single} in {plural} %}
+        <li>
+            <span>{{ {single} }}</span>
+            <a href="{{ edit_{single}_path({single}) }}">edit</a>
+            <a href="{{ delete_{single}_path({single}) }}">delete</a>
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}
+

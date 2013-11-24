@@ -1,0 +1,10 @@
+{% extends "views/layouts/base.html.twig" %}
+
+{% block body %}
+    <h2>New {single}</h2>
+
+    <form action="{{ create_{single}_path() }}" method="POST">
+        <input type="submit" value="Save {single}" />
+    </form>
+{% endblock %}
+
