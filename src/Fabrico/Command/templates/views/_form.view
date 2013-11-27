@@ -1,0 +1,6 @@
+<form action="{{ create_{single}_path() }}" method="POST">
+    {fields}
+    <br>
+    <input type="submit" value="Save {single}" />
+    <input type="button" value="Cancel" onclick="window.location = '{{ {plural}_path() }}'" />
+</form>

@@ -100,6 +100,15 @@ class ModelScaffoldingCommand extends GeneratorCommand
             $this->generateView('edit', $clazzes, $name, $plural),
             $output
         );
+
+        // add page
+        $this->createFile(
+            sprintf('views/%s/_form.html.twig', $plural),
+            $this->generateView('_form', $clazzes, $name, $plural, [
+                'fields' => $this->generateFormFields($name, $fields),
+            ]),
+            $output
+        );
     }
 
     /**
@@ -107,14 +116,15 @@ class ModelScaffoldingCommand extends GeneratorCommand
      * @param string $title, ie: Posts
      * @param string $single, ie: post
      * @param string $plural, ie: posts
+     * @param array $extra
      */
-    protected function generateView($view, $title, $single, $plural)
+    protected function generateView($view, $title, $single, $plural, array $extra = [])
     {
-        return $this->merger->merge($this->getTemplate("views/$view.view"), [
+        return $this->merger->merge($this->getTemplate("views/$view.view"), array_merge([
             'title' => $title,
             'single' => $single,
             'plural' => $plural,
-        ]);
+        ], $extra));
     }
 
     /**
@@ -138,10 +148,65 @@ class ModelScaffoldingCommand extends GeneratorCommand
     }
 
     /**
+     * @param array $single
+     * @param array $fields
+     * @return string
+     */
+    protected function generateFormFields($single, array $fields)
+    {
+        $html = [];
+        $labels = [];
+        $inputs = [];
+
+        foreach ($fields as $field) {
+            $info = explode(':', $field);
+            $field = array_shift($info);
+            $type = count($info) ? array_shift($info) : static::DEFAULT_TYPE;
+
+            $info = [
+                'single' => $single,
+                'name' => $field,
+                'label' => $this->word->humanCase($field),
+            ];
+
+            // field
+            switch ($type) {
+                default:
+                    $fhtml = $this->getTemplate('fields/text.field');
+                    break;
+            }
+
+            // label
+            $lhtml = $this->getTemplate('fields/label.field');
+            $lhtml = $this->merger->merge($lhtml, $info);
+            $fhtml = $this->merger->merge($fhtml, $info);
+
+            $labels[] = $lhtml;
+            $inputs[] = $fhtml;
+        }
+
+        $html[] = '<table>';
+        foreach ($fields as $index => $field) {
+            $html[] = '<tr>';
+            $html[] = '<td>';
+            $html[] = $labels[ $index ];
+            $html[] = '</td>';
+            $html[] = '<td>';
+            $html[] = $inputs[ $index ];
+            $html[] = '</td>';
+            $html[] = '</tr>';
+        }
+        $html[] = '</table>';
+
+        return implode('', $html);
+    }
+
+    /**
+     * @param string $namespace
      * @param string $name
      * @param array $fields
      */
-    protected function generateModel($namespace, $name, $fields)
+    protected function generateModel($namespace, $name, array $fields)
     {
         $properties = array_map(function($field) {
             $info = explode(':', $field);

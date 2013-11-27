@@ -1,0 +1,1 @@
+<input type="text" name="{single}[{name}]" id="{single}_{name}" value="{{ {single}.{name} }}" />

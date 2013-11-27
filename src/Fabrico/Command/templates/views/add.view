@@ -2,10 +2,6 @@
 
 {% block body %}
     <h2>New {single}</h2>
-
-    <form action="{{ create_{single}_path() }}" method="POST">
-        <input type="submit" value="Save {single}" />
-        <input type="button" value="Cancel" onclick="window.location = '{{ {plural}_path() }}'" />
-    </form>
+    {% include "views/{plural}/_form.html.twig" %}
 {% endblock %}
 
