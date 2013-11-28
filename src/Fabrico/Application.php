@@ -210,10 +210,10 @@ class Application
 
         if ($route = $this->rules->matching($this->req, true)) {
             // defaults
-            $route = array_merge($route, [
+            $route = array_merge([
                 'format' => 'html',
                 'namespace' => $this->conf->get('app:namespace'),
-            ]);
+            ], $route);
 
             // route info
             $format = $route['format'];

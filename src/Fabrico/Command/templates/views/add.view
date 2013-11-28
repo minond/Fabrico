@@ -1,7 +1,7 @@
 {% extends "views/layouts/base.html.twig" %}
 
 {% block body %}
-    <h2>New {single}</h2>
+    <h2>Add {single}</h2>
     {% include "views/{plural}/_form.html.twig" %}
 {% endblock %}
 

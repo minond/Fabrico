@@ -101,7 +101,7 @@ class ModelScaffoldingCommand extends GeneratorCommand
             $output
         );
 
-        // add page
+        // form template for add and edit pages
         $this->createFile(
             sprintf('views/%s/_form.html.twig', $plural),
             $this->generateView('_form', $clazzes, $name, $plural, [
@@ -158,18 +158,20 @@ class ModelScaffoldingCommand extends GeneratorCommand
         $labels = [];
         $inputs = [];
 
+        // model fields
         foreach ($fields as $field) {
             $info = explode(':', $field);
             $field = array_shift($info);
             $type = count($info) ? array_shift($info) : static::DEFAULT_TYPE;
 
             $info = [
+                'type' => 'text',
                 'single' => $single,
                 'name' => $field,
-                'label' => $this->word->humanCase($field),
+                'label' => ucwords($this->word->humanCase($field)),
             ];
 
-            // field
+            // field html
             switch ($type) {
                 default:
                     $fhtml = $this->getTemplate('fields/text.field');
@@ -181,22 +183,31 @@ class ModelScaffoldingCommand extends GeneratorCommand
             $lhtml = $this->merger->merge($lhtml, $info);
             $fhtml = $this->merger->merge($fhtml, $info);
 
-            $labels[] = $lhtml;
-            $inputs[] = $fhtml;
+            $labels[] = trim($lhtml);
+            $inputs[] = trim($fhtml);
         }
 
         $html[] = '<table>';
         foreach ($fields as $index => $field) {
-            $html[] = '<tr>';
-            $html[] = '<td>';
-            $html[] = $labels[ $index ];
-            $html[] = '</td>';
-            $html[] = '<td>';
-            $html[] = $inputs[ $index ];
-            $html[] = '</td>';
-            $html[] = '</tr>';
+            $html[] = "\n    <tr>";
+            $html[] = "\n        <td>";
+            $html[] = "\n            {$labels[ $index ]}";
+            $html[] = "\n        </td>";
+            $html[] = "\n        <td>";
+            $html[] = "\n            {$inputs[ $index ]}";
+            $html[] = "\n        </td>";
+            $html[] = "\n    </tr>";
         }
-        $html[] = '</table>';
+        $html[] = "\n</table>\n";
+
+        // id field
+        $html[] = $this->merger->merge(
+            $this->getTemplate('fields/text.field'),
+            array_merge($info, [
+                'type' => 'hidden',
+                'name' => 'id',
+            ])
+        );
 
         return implode('', $html);
     }
