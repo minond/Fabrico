@@ -77,85 +77,6 @@ class Application
     }
 
     /**
-     * retrieve a base object or a property value from a core component:
-     * req.id => Request->id
-     * @param string $path
-     * @return mixed
-     */
-    public static function get($path)
-    {
-        $path = explode('.', $path);
-        $root = array_shift($path);
-        $base = self::$app->{ $root };
-        $rval = $base;
-
-        foreach ($path as $prop) {
-            $rval = is_array($rval) ? $rval[ $prop ] : $rval->{ $prop };
-        }
-
-        return $rval;
-    }
-
-    /**
-     * @param string $namespace_name
-     * @param string $controller_name
-     * @return string
-     */
-    protected function getViewFileDirectory($namespace_name, $controller_name = '')
-    {
-        return $this->conf->get('app:namespace') === $namespace_name ?
-            sprintf('views/%s/', strtolower($controller_name)) :
-            sprintf('lib/%s/views/%s/', $namespace_name, strtolower($controller_name));
-    }
-
-    /**
-     * handle a request
-     */
-    public function handle()
-    {
-        if ($route = $this->rules->matching($this->req, true)) {
-            $action_name = $route['action'];
-            $controller_name = $route['controller'];
-            $namespace_name = isset($route['namespace']) ? $route['namespace'] :
-                $this->conf->get('app:namespace');
-            $format = isset($route['format']) ? $route['format'] : 'html';
-
-            $controller = sprintf('%s\\Controller\\%s', $namespace_name, ucwords($controller_name));
-            $view_dir = $this->getViewFileDirectory($namespace_name, $controller_name);
-            $view_base = str_replace('//', '/', $this->getViewFileDirectory($namespace_name));
-
-            if (class_exists($controller)) {
-                $controller = new $controller;
-
-                if (method_exists($controller, $action_name) && is_callable([ $controller, $action_name ])) {
-                    $out = $controller->{ $action_name }($this->req, $this->res);
-                    $this->res->setStatusCode(Status::OK);
-
-                    try {
-                        $str = $this->renderer->render(
-                            $this,
-                            sprintf('%s%s.%s', $view_dir, $action_name, $format),
-                            $out
-                        );
-                    } catch (NoViewsFoundException $no_view_found) {
-                        try {
-                            $str = $this->renderer->render(
-                                $this,
-                                sprintf('%s%s.%s', $view_dir, 'default', $format),
-                                $out
-                            );
-                        } catch (NoViewsFoundException $ignore) {
-                            throw $no_view_found;
-                        }
-                    }
-
-                    $this->res->setContent($str);
-                }
-            }
-        }
-    }
-
-    /**
      * @return Configuration
      */
     public function getConfiguration()
@@ -278,6 +199,49 @@ class Application
                 }
             }
         }
+    }
+
+    /**
+     * handle a request
+     */
+    public function route()
+    {
+        $found = false;
+
+        if ($route = $this->rules->matching($this->req, true)) {
+            // defaults
+            $route = array_merge($route, [
+                'format' => 'html',
+                'namespace' => $this->conf->get('app:namespace'),
+            ]);
+
+            // route info
+            $format = $route['format'];
+            $action = $route['action'];
+            $namespace = $route['namespace'];
+            $controller = $route['controller'];
+
+            // views holder and controller name
+            $views = sprintf('views/%s/', strtolower($controller));
+            $controller = sprintf('%s\Controller\%s', $namespace, $controller);
+
+            // valid controller and action?
+            $found = class_exists($controller) &&
+                method_exists($controller, $action) &&
+                is_callable([ $controller, $action ]);
+
+            if ($found) {
+                $controller = new $controller;
+                $this->res->setStatusCode(Status::OK);
+                $this->res->setContent($this->renderer->render(
+                    $this,
+                    sprintf('%s%s.%s', $views, $action, $format),
+                    $controller->{ $action }($this->req, $this->res)
+                ));
+            }
+        }
+
+        return $found;
     }
 }
 
