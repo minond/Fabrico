@@ -232,12 +232,19 @@ class Application
 
             if ($found) {
                 $controller = new $controller;
-                $this->res->setStatusCode(Status::OK);
-                $this->res->setContent($this->renderer->render(
-                    $this,
-                    sprintf('%s%s.%s', $views, $action, $format),
-                    $controller->{ $action }($this->req, $this->res)
-                ));
+                $viewdata = $controller->{ $action }($this->req, $this->res);
+
+                if (!$this->res->getStatusCode()) {
+                    $this->res->setStatusCode(Status::OK);
+                }
+
+                if (!$this->res->getContent()) {
+                    $this->res->setContent($this->renderer->render(
+                        $this,
+                        sprintf('%s%s.%s', $views, $action, $format),
+                         $viewdata ?: []
+                    ));
+                }
             }
         }
 

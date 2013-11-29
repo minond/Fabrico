@@ -3,6 +3,7 @@
 namespace Fabrico\Command\StdCommands;
 
 use Fabrico\Command\Command;
+use Efficio\Http\RuleBook;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\TableHelper;
@@ -28,7 +29,14 @@ class RoutesCommand extends Command
         $table = $app->getHelperSet()->get('table');
         $table->setLayout(TableHelper::LAYOUT_BORDERLESS);
 
-        foreach ($this->conf->get('routes') as $url => $params) {
+        $rules = new RuleBook;
+        $rules->load($this->conf->get('routes'), true);
+
+        // foreach ($this->conf->get('routes') as $url => $params) {
+        foreach ($rules->all() as $rule) {
+            $template = $rule->getTemplate();
+            $params = $rule->getInformation();
+
             $method = '*';
             $resource = '';
 
@@ -54,7 +62,7 @@ class RoutesCommand extends Command
                 json_encode($params)
             );
 
-            $table->addRow([ $generator, strtolower($method), $url, $info ]);
+            $table->addRow([ $generator, strtolower($method), $template, $info ]);
         }
 
         $table->render($output);
