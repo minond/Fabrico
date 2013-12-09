@@ -20,27 +20,27 @@ class {clazzes}
 
     public function edit(Request $req, Response $res)
     {
-        return [ '{singular}' => {clazz}::find($req->id) ];
+        return [ '{singular}' => {clazz}::find($req->param->id) ];
     }
 
     public function create(Request $req, Response $res)
     {
-        ${singular} = {clazz}::create($req->{singular});
+        ${singular} = {clazz}::create($req->param->{singular});
         ${singular}->save();
         header('Location: /{plural}');
     }
 
     public function update(Request $req, Response $res)
     {
-        ${singular} = {clazz}::find($req->id);
-        ${singular}->update($req->{singular});
+        ${singular} = {clazz}::find($req->param->id);
+        ${singular}->update($req->param->{singular});
         ${singular}->save();
         header('Location: /{plural}');
     }
 
     public function delete(Request $req, Response $res)
     {
-        ${singular} = {clazz}::find($req->id);
+        ${singular} = {clazz}::find($req->param->id);
         ${singular}->delete();
         header('Location: /{plural}');
     }

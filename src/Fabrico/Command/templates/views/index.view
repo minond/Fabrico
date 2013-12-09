@@ -10,7 +10,8 @@
         <li>
             <span>{{ {single} }}</span> -
             <a href="{{ edit_{single}_path({single}) }}">edit</a> |
-            <a href="{{ delete_{single}_path({single}) }}">delete</a>
+            <a href="{{ delete_{single}_path({single}) }}"
+                onclick="return confirm('Are you sure?');">delete</a>
         </li>
     {% endfor %}
     </ul>
