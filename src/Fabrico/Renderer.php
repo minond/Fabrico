@@ -5,6 +5,7 @@ namespace Fabrico;
 use Closure;
 use Fabrico\Application;
 use Fabrico\Renderer\Handler;
+use Fabrico\Error\Renderer\InvalidHandlerException;
 use Fabrico\Error\Renderer\InvalidExtentionException;
 use Fabrico\Error\Renderer\NoViewsFoundException;
 use Fabrico\Error\Renderer\MultipleViewsFoundException;
@@ -54,35 +55,41 @@ class Renderer
      */
     public function render(Application $app, $file, array $data = [])
     {
-        $template = $this->generateFileSearchString($file, array_keys($this->extension_map));
+        $template = $this->generateFileSearchString($file,
+            array_keys($this->extension_map));
+
+        $content = '';
         $files = glob($template, GLOB_BRACE);
         $filec = count($files);
-        $content = '';
 
-        if ($filec === 1) {
-            $file = array_pop($files);
-            $ext = $this->parseFileExtension($file);
-
-            if (isset($this->extension_map[ $ext ])) {
-                $handler = $this->extension_map[ $ext ];
-
-                if (is_string($handler) && class_exists($handler)) {
-                    $handler = new $handler;
-                    $this->extension_map[ $ext ] = $handler;
-                }
-
-                if ($handler instanceof Handler) {
-                    $content = $handler->render($app, $file, $data);
-                } else {
-                    $content = call_user_func($handler, $app, $file, $data);
-                }
-            } else {
-                throw new InvalidExtentionException($ext);
-            }
-        } else if ($filec === 0) {
+        // do we have just one view file?
+        if ($filec === 0) {
             throw new NoViewsFoundException($template);
-        } else {
+        } else if ($filec !== 1) {
             throw new MultipleViewsFoundException($files);
+        }
+
+        $file = array_pop($files);
+        $ext = $this->parseFileExtension($file);
+
+        // valid extension?
+        if (!isset($this->extension_map[ $ext ])) {
+            throw new InvalidExtentionException($ext);
+        }
+
+        $handler = $this->extension_map[ $ext ];
+
+        // has the handler been used before? if not, create a new one
+        if (is_string($handler) && class_exists($handler)) {
+            $handler = new $handler;
+        }
+
+        if ($handler instanceof Handler) {
+            $content = $handler->render($app, $file, $data);
+        } else if (is_callable($handler)) {
+            $content = call_user_func($handler, $app, $file, $data);
+        } else {
+            throw new InvalidHandlerException($handler);
         }
 
         return $content;
