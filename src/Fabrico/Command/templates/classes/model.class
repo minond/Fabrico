@@ -2,6 +2,8 @@
 
 namespace {package}\Model;
 
+use Fabrico\Model\Model;
+
 class {clazz} extends Model
 {
     {properties}
