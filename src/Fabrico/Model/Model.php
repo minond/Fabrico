@@ -15,7 +15,7 @@ use Efficio\Dataset\Storage\Model\FileStorage;
 // --------------------------------------
 
 Application::call(function() {
-    $key = 'db:' . FABRICO_APP_ENV;
+    $key = 'db:' . getenv('APP_ENV');
 
     switch ($this->conf->get("$key:type")) {
         case 'file':
