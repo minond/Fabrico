@@ -28,9 +28,17 @@ class ServerCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $env = getenv('APP_ENV');
         $addr = $input->getOption('addr');
         $port = $input->getOption('port');
         $router = $input->getOption('router');
+        $relfile = str_replace(__dir__, '', $router);
+
+        $output->writeln('=> starting php built in server');
+        $output->writeln("=> environment is <info>$env</info>");
+        $output->writeln("=> server bound to <info>$addr</info>:<info>$port</info>");
+        $output->writeln("=> router file <info>$relfile</info>");
+
         `php -S $addr:$port $router`;
     }
 }

@@ -1,15 +1,9 @@
 <?php
 
-namespace Fabrico\Runtime\Setup\Server;
-
 $uri = $_SERVER['REQUEST_URI'];
 $headers = [
-    'css' => [
-        'Content-Type' => 'text/css',
-    ],
-    'js' => [
-        'Content-Type' => 'application/javascript',
-    ],
+    'css' => [ 'Content-Type' => 'text/css' ],
+    'js' => [ 'Content-Type' => 'application/javascript' ],
 ];
 
 // resource?
