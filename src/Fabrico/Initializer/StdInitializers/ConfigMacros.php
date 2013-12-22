@@ -26,7 +26,7 @@ class ConfigMacros extends JitInitializer
     ];
 
     protected static $action_index_template = <<<ROUTE
-/{model}.?{format?}:
+/{model}.?{format:json?}:
   controller: {clazz}
   action: index
   method: GET
