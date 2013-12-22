@@ -1,26 +1,22 @@
 <?php
 
+// router for php built in server
+require 'clioutput.php';
+
+// routing info
 $uri = $_SERVER['REQUEST_URI'];
-$headers = [
-    'css' => [ 'Content-Type' => 'text/css' ],
-    'js' => [ 'Content-Type' => 'application/javascript' ],
-];
+stdout("%s $uri", [yellow('ROUTING')]);
 
-// resource?
+// static resource?
 if (strpos($uri, '/public') === 0) {
-    $ext = explode('.', $uri);
-    $ext = array_pop($ext);
-
-    // do we have headers for this file type?
-    if (isset($headers[ $ext ])) {
-        foreach ($headers[ $ext ] as $header => $value) {
-            header("$header: $value");
-        }
-    }
-
-    echo file_get_contents(".$uri");
+    // for file types php can handle out of the box see documentation
+    // http://php.net/manual/en/features.commandline.webserver.php
+    stdout("%s $uri", [green('RESOURCE')]);
+    return false;
 } else {
-    chdir('scripts');
-    require 'http.php';
+    $app = require 'scripts/http.php';
+    $res = $app->getResponse();
+    $ret = $res->getStatusCode();
+    stdout("%s [%s] $uri", [green('PROCESSED'), $ret]);
 }
 

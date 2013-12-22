@@ -212,10 +212,20 @@ class Application
             // defaults
             $route = array_merge([
                 'format' => 'html',
+
+                // can be a static resource
+                'directory' => '',
+                'file' => '',
+
+                // or an action call
+                'action' => '',
+                'controller' => '',
                 'namespace' => $this->conf->get('app:namespace'),
             ], $route);
 
             // route info
+            $directory = $route['directory'];
+            $file = $route['file'];
             $format = $route['format'];
             $action = $route['action'];
             $namespace = $route['namespace'];

@@ -39,7 +39,8 @@ class ServerCommand extends Command
         $output->writeln("=> server bound to <info>$addr</info>:<info>$port</info>");
         $output->writeln("=> router file <info>$relfile</info>");
 
-        `php -S $addr:$port $router`;
+        // to get stdout
+        passthru("php -S $addr:$port $router");
     }
 }
 
