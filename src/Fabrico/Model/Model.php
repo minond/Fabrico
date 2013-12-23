@@ -17,6 +17,8 @@ use Efficio\Dataset\Storage\Model\FileStorage;
 Application::call(function() {
     $key = 'db:' . getenv('APP_ENV');
 
+    // class declaration in conditional statement? yeah. I do what ever the
+    // fuck I want, bitch
     switch ($this->conf->get("$key:type")) {
         case 'file':
             class Model extends BaseModel
@@ -24,10 +26,7 @@ Application::call(function() {
                 use FileStorage;
             }
 
-            Model::setDirectory(
-                $this->conf->get("$key:flat")
-            );
-
+            Model::setDirectory($this->conf->get("$key:flat"));
             break;
 
         case 'pdo':
