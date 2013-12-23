@@ -5,14 +5,18 @@
 
     "require": {
         "php": ">=5.4.0",
+        "twig/twig": "1.14.*@dev",
         "symfony/yaml": "2.3.3",
         "symfony/console": "v2.3.7",
+        "components/normalize.css": "v2.1.2",
+        "components/modernizr": "2.6.2",
         "minond/utilitatis": "dev-master",
         "minond/model": "dev-master",
         "minond/http": "dev-master",
         "minond/event": "dev-master",
         "minond/configurare": "dev-master",
         "minond/cache": "dev-master"
+
     },
 
     "require-dev": {
