@@ -19,17 +19,23 @@
 
     },
 
-    "require-dev": {
-        "phpunit/phpunit": "3.8.*@dev",
-        "minond/nice_error": "dev-master",
-        "minond/profiler": "dev-master"
-    },
-
 
     "autoload": {
         "psr-0": {
             "Fabrico": "src/"
         }
+    },
+
+    "suggest": {
+        "phpunit/phpunit": "for unit tests",
+        "minond/nice_error": "for better error output",
+        "minond/profiler": "for basic profiling needs"
+    },
+
+    "require-dev": {
+        "phpunit/phpunit": "3.8.*@dev",
+        "minond/nice_error": "dev-master",
+        "minond/profiler": "dev-master"
     },
 
     "config": {
