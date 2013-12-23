@@ -24,9 +24,14 @@
         "minond/profiler": "dev-master"
     },
 
+
     "autoload": {
         "psr-0": {
             "Fabrico": "src/"
         }
+    },
+
+    "config": {
+        "component-dir": "public/vendor/"
     }
 }
