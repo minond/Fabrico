@@ -14,8 +14,7 @@ if (strpos($uri, '/public') === 0) {
     stdout("%s $uri", [green('RESOURCE')]);
     return false;
 } else {
-    $app = require 'scripts/http.php';
-    $res = $app->getResponse();
+    $res = require 'scripts/http.php';
     $ret = $res->getStatusCode();
     stdout("%s [%s] $uri", [green('PROCESSED'), $ret]);
 }

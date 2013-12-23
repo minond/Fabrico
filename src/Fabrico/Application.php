@@ -32,16 +32,6 @@ class Application
     protected $conf;
 
     /**
-     * @param Response
-     */
-    protected $res;
-
-    /**
-     * @param Request
-     */
-    protected $req;
-
-    /**
      * @var RuleBook
      */
     protected $rules;
@@ -90,38 +80,6 @@ class Application
     public function setConfiguration(Configuration $conf)
     {
         $this->conf = $conf;
-    }
-
-    /**
-     * @return Response
-     */
-    public function getResponse()
-    {
-        return $this->res;
-    }
-
-    /**
-     * @param Response $res
-     */
-    public function setResponse(Response $res)
-    {
-        $this->res = $res;
-    }
-
-    /**
-     * @return Request
-     */
-    protected function getRequest()
-    {
-        return $this->req;
-    }
-
-    /**
-     * @param Request $req
-     */
-    public function setRequest(Request $req)
-    {
-        $this->req = $req;
     }
 
     /**
@@ -203,18 +161,22 @@ class Application
 
     /**
      * handle a request
+     * @param Request $req
+     * @param Response $res
+     * @return boolean success
      */
-    public function route()
+    public function route(Request $req, Response $res)
     {
-        $found = false;
+        $ok = false;
+        $route = $this->rules->matching($req, true);
 
-        if ($route = $this->rules->matching($this->req, true)) {
+        if ($route) {
             // defaults
             $route = array_merge([
                 'format' => 'html',
 
                 // can be a static resource
-                'directory' => '',
+                'base' => '',
                 'file' => '',
 
                 // or an action call
@@ -223,42 +185,86 @@ class Application
                 'namespace' => $this->conf->get('app:namespace'),
             ], $route);
 
-            // route info
-            $directory = $route['directory'];
-            $file = $route['file'];
-            $format = $route['format'];
-            $action = $route['action'];
-            $namespace = $route['namespace'];
-            $controller = $route['controller'];
-
-            // views holder and controller name
-            $views = sprintf('views/%s/', strtolower($controller));
-            $controller = sprintf('%s\Controller\%s', $namespace, $controller);
-
-            // valid controller and action?
-            $found = class_exists($controller) &&
-                method_exists($controller, $action) &&
-                is_callable([ $controller, $action ]);
-
-            if ($found) {
-                $controller = new $controller;
-                $viewdata = $controller->{ $action }($this->req, $this->res);
-
-                if (!$this->res->getStatusCode()) {
-                    $this->res->setStatusCode(Status::OK);
-                }
-
-                if (!$this->res->getContent()) {
-                    $this->res->setContent($this->renderer->render(
-                        $this,
-                        sprintf('%s%s.%s', $views, $action, $format),
-                         $viewdata ?: []
-                    ));
-                }
+            if ($route['file']) {
+                // file request
+                $ok = $this->runFileRequest($route, $req, $res);
+            } else {
+                // action request
+                $ok = $this->runActionRequest($route, $req, $res);
             }
         }
 
-        return $found;
+        return $ok;
+    }
+
+    /**
+     * get a static file
+     * @param array $route
+     * @param Request $req
+     * @param Response $res
+     * @return boolean, action found and called
+     */
+    private function runFileRequest(array $route, Request $req, Response $res)
+    {
+        $file = $route['file'];
+        $base = $route['base'];
+        $frmt = $route['format'];
+
+        $path = $base . DIRECTORY_SEPARATOR . $file . ($frmt ? ".$frmt" : '');
+        $ok = file_exists($file);
+
+        if ($ok) {
+            $res->setContent(file_get_contents($path));
+        }
+        else echo $path;
+
+        return $ok;
+    }
+
+    /**
+     * call a controller function
+     * @param array $route
+     * @param Request $req
+     * @param Response $res
+     * @return boolean, action found and called
+     */
+    private function runActionRequest(array $route, Request $req, Response $res)
+    {
+        $ok = false;
+
+        // route info
+        $format = $route['format'];
+        $action = $route['action'];
+        $namespace = $route['namespace'];
+        $controller = $route['controller'];
+
+        // views holder and controller name
+        $views = sprintf('views/%s/', strtolower($controller));
+        $controller = sprintf('%s\Controller\%s', $namespace, $controller);
+
+        // valid controller and action?
+        $ok = class_exists($controller) &&
+            method_exists($controller, $action) &&
+            is_callable([ $controller, $action ]);
+
+        if ($ok) {
+            $controller = new $controller;
+            $viewdata = $controller->{ $action }($req, $res);
+
+            if (!$res->getStatusCode()) {
+                $res->setStatusCode(Status::OK);
+            }
+
+            if (!$res->getContent()) {
+                $res->setContent($this->renderer->render(
+                    $this,
+                    sprintf('%s%s.%s', $views, $action, $format),
+                     $viewdata ?: []
+                ));
+            }
+        }
+
+        return $ok;
     }
 }
 
