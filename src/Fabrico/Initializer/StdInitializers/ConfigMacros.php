@@ -155,7 +155,7 @@ ROUTE;
 
                 foreach ($imports as $import => $mergedata) {
                     $data = $this->load($import, $mergedata);
-                    $obj = array_merge($obj, $data);
+                    $obj = array_merge_recursive($obj, $data);
                 }
             }
 
