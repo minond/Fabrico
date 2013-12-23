@@ -39,6 +39,7 @@
     },
 
     "config": {
+        "bin-dir": "bin",
         "component-dir": "public/vendor/"
     }
 }
