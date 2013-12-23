@@ -1,0 +1,23 @@
+#!/usr/bin/php
+<?php
+
+namespace Fabrico\Runtime\Setup\Cli;
+
+use Fabrico\Command\Command;
+use Symfony\Component\Console\Application;
+
+$app = require 'scripts/app.php';
+$conf = $app->getConfiguration();
+$console = new Application();
+
+foreach ($conf->get('app:cli:commands') as $clazz) {
+    $command = new $clazz;
+    $console->add($command);
+
+    if ($command instanceof Command) {
+        $command->setConfiguration($conf);
+    }
+}
+
+$console->run();
+

@@ -23,8 +23,15 @@
     "autoload": {
         "psr-0": {
             "Fabrico": "src/"
-        }
+        },
+        "files": [
+            "scripts/env.php"
+        ]
     },
+
+    "bin": [
+        "bin/console"
+    ],
 
     "suggest": {
         "phpunit/phpunit": "for unit tests",
