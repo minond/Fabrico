@@ -211,7 +211,7 @@ class Application
         $frmt = $route['format'];
 
         $path = $base . DIRECTORY_SEPARATOR . $file . ($frmt ? ".$frmt" : '');
-        $ok = file_exists($file);
+        $ok = file_exists($path);
 
         if ($ok) {
             $res->setContent(file_get_contents($path));
