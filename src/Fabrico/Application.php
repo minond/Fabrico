@@ -216,7 +216,6 @@ class Application
         if ($ok) {
             $res->setContent(file_get_contents($path));
         }
-        else echo $path;
 
         return $ok;
     }
