@@ -39,6 +39,7 @@ class RoutesCommand extends Command
 
             $method = '*';
             $resource = '';
+            $generator = '';
 
             if (isset($params['method'])) {
                 $method = $params['method'];
@@ -59,7 +60,7 @@ class RoutesCommand extends Command
             $info = str_replace(
                 [ '":"', '","', '{"', '"}' ],
                 [ ': ', ', ', '', '' ],
-                json_encode($params)
+                json_encode($params, JSON_UNESCAPED_SLASHES)
             );
 
             $table->addRow([ $generator, strtolower($method), $template, $info ]);

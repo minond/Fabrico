@@ -55,6 +55,7 @@ class ModelScaffoldingCommand extends GeneratorCommand
         $clazz = $this->word->classicalCase($name);
         $plural = $this->word->pluralize($name);
         $clazzes = $this->word->pluralize($clazz);
+        $clazzes = ucwords($clazzes);
 
         // controller class file
         $this->createFile(
