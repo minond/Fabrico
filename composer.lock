@@ -3,20 +3,194 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "6d419254cfda613bd91d4c797be73aee",
+    "hash": "4858711fa44e4d47971bd18a3b070f92",
     "packages": [
         {
-            "name": "minond/cache",
-            "version": "dev-master",
+            "name": "components/modernizr",
+            "version": "2.6.2",
             "source": {
                 "type": "git",
-                "url": "https://github.com/minond/Cache.git",
-                "reference": "4af714a6ff0caf9f06d2d867a2cbdae87fd84af7"
+                "url": "https://github.com/components/modernizr.git",
+                "reference": "c470050f9906b1197ddaa7aace41f73eba5f4ecf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Cache/zipball/4af714a6ff0caf9f06d2d867a2cbdae87fd84af7",
-                "reference": "4af714a6ff0caf9f06d2d867a2cbdae87fd84af7",
+                "url": "https://api.github.com/repos/components/modernizr/zipball/c470050f9906b1197ddaa7aace41f73eba5f4ecf",
+                "reference": "c470050f9906b1197ddaa7aace41f73eba5f4ecf",
+                "shasum": ""
+            },
+            "require": {
+                "robloach/component-installer": "*"
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "scripts": [
+                        "modernizr.js"
+                    ],
+                    "shim": {
+                        "exports": "window.Modernizr"
+                    }
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Modernizr",
+                    "homepage": "http://modernizr.com"
+                },
+                {
+                    "name": "Faruk Ates"
+                },
+                {
+                    "name": "Paul Irish"
+                },
+                {
+                    "name": "Alex Sexton"
+                },
+                {
+                    "name": "Ryan Seddon"
+                },
+                {
+                    "name": "Alexander Farkas"
+                },
+                {
+                    "name": "Ben Alman"
+                },
+                {
+                    "name": "Stu Cox"
+                }
+            ],
+            "description": "Modernizr is a JavaScript library that detects HTML5 and CSS3 features in the user's browser.",
+            "homepage": "http://modernizr.com",
+            "keywords": [
+                "CSS3",
+                "HTML5",
+                "browser",
+                "feature detection"
+            ],
+            "time": "2013-03-31 12:34:31"
+        },
+        {
+            "name": "components/normalize.css",
+            "version": "2.1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/components/normalize.css.git",
+                "reference": "444055467d693c67923643a0f593eff8a7afc588"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/components/normalize.css/zipball/444055467d693c67923643a0f593eff8a7afc588",
+                "reference": "444055467d693c67923643a0f593eff8a7afc588",
+                "shasum": ""
+            },
+            "require": {
+                "robloach/component-installer": "*"
+            },
+            "type": "component",
+            "extra": {
+                "component": {
+                    "name": "normalize-css",
+                    "styles": [
+                        "normalize.css"
+                    ]
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Normalize.css is a customisable CSS file that makes browsers render all elements more consistently and in line with modern standards.",
+            "homepage": "http://necolas.github.com/normalize.css/",
+            "time": "2013-10-24 03:39:15"
+        },
+        {
+            "name": "kriswallsmith/assetic",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kriswallsmith/assetic.git",
+                "reference": "5e519fd750ea54a035386562ae03716ffba7014c"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/5e519fd750ea54a035386562ae03716ffba7014c",
+                "reference": "5e519fd750ea54a035386562ae03716ffba7014c",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.1",
+                "symfony/process": "~2.1"
+            },
+            "require-dev": {
+                "cssmin/cssmin": "*",
+                "joliclic/javascript-packer": "*",
+                "kamicane/packager": "*",
+                "leafo/lessphp": "*",
+                "leafo/scssphp": "*",
+                "leafo/scssphp-compass": "*",
+                "mrclay/minify": "*",
+                "phpunit/phpunit": "~3.7",
+                "ptachoire/cssembed": "*",
+                "twig/twig": "~1.6"
+            },
+            "suggest": {
+                "leafo/lessphp": "Assetic provides the integration with the lessphp LESS compiler",
+                "leafo/scssphp": "Assetic provides the integration with the scssphp SCSS compiler",
+                "leafo/scssphp-compass": "Assetic provides the integration with the SCSS compass plugin",
+                "ptachoire/cssembed": "Assetic provides the integration with phpcssembed to embed data uris",
+                "twig/twig": "Assetic provides the integration with the Twig templating engine"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.2-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Assetic": "src/"
+                },
+                "files": [
+                    "src/functions.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Kris Wallsmith",
+                    "email": "kris.wallsmith@gmail.com",
+                    "homepage": "http://kriswallsmith.net/"
+                }
+            ],
+            "description": "Asset Management for PHP",
+            "homepage": "https://github.com/kriswallsmith/assetic",
+            "keywords": [
+                "assets",
+                "compression",
+                "minification"
+            ],
+            "time": "2013-12-14 01:45:39"
+        },
+        {
+            "name": "minond/cache",
+            "version": "v13.12",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/minond/Cache.git",
+                "reference": "02445ab15bdf79a3e13e12c8195587c49cdf2d88"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/minond/Cache/zipball/02445ab15bdf79a3e13e12c8195587c49cdf2d88",
+                "reference": "02445ab15bdf79a3e13e12c8195587c49cdf2d88",
                 "shasum": ""
             },
             "require": {
@@ -32,6 +206,9 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
             "authors": [
                 {
                     "name": "Marcos Minond",
@@ -39,25 +216,25 @@
                 }
             ],
             "description": "Cache",
-            "time": "2013-08-18 00:27:59"
+            "time": "2013-12-25 21:13:53"
         },
         {
             "name": "minond/configurare",
-            "version": "dev-master",
+            "version": "v13.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Configurare.git",
-                "reference": "2447ff8c7739fa14269d385c72192608566b9c64"
+                "reference": "d2c5dab1207aa1e8416a20aa2010c1005c71f228"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Configurare/zipball/2447ff8c7739fa14269d385c72192608566b9c64",
-                "reference": "2447ff8c7739fa14269d385c72192608566b9c64",
+                "url": "https://api.github.com/repos/minond/Configurare/zipball/d2c5dab1207aa1e8416a20aa2010c1005c71f228",
+                "reference": "d2c5dab1207aa1e8416a20aa2010c1005c71f228",
                 "shasum": ""
             },
             "require": {
-                "minond/cache": "dev-master",
-                "minond/utilitatis": "dev-master",
+                "minond/cache": "v13.12",
+                "minond/utilitatis": "v13.12",
                 "php": ">=5.4.0",
                 "symfony/yaml": "2.3.3"
             },
@@ -71,6 +248,9 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
             "authors": [
                 {
                     "name": "Marcos Minond",
@@ -78,7 +258,7 @@
                 }
             ],
             "description": "Configuration management",
-            "time": "2013-11-20 04:20:45"
+            "time": "2013-12-25 21:20:30"
         },
         {
             "name": "minond/event",
@@ -122,15 +302,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Http.git",
-                "reference": "661789ac248cc845afdff53c9a628ed8f7aef230"
+                "reference": "3140a942389d7da3db8e9114d295cc742378f35e"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Http/zipball/661789ac248cc845afdff53c9a628ed8f7aef230",
-                "reference": "661789ac248cc845afdff53c9a628ed8f7aef230",
+                "url": "https://api.github.com/repos/minond/Http/zipball/3140a942389d7da3db8e9114d295cc742378f35e",
+                "reference": "3140a942389d7da3db8e9114d295cc742378f35e",
                 "shasum": ""
             },
             "require": {
+                "minond/utilitatis": "v13.12",
                 "php": ">=5.4.0"
             },
             "require-dev": {
@@ -150,7 +331,7 @@
                 }
             ],
             "description": "Http helpers",
-            "time": "2013-10-02 01:14:12"
+            "time": "2013-12-28 22:24:53"
         },
         {
             "name": "minond/model",
@@ -158,16 +339,16 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Model.git",
-                "reference": "f85bdf0258919680405dc635c235fc619ced6259"
+                "reference": "2da3f396a7dbca736f53d0f614e8b26148df2842"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Model/zipball/f85bdf0258919680405dc635c235fc619ced6259",
-                "reference": "f85bdf0258919680405dc635c235fc619ced6259",
+                "url": "https://api.github.com/repos/minond/Model/zipball/2da3f396a7dbca736f53d0f614e8b26148df2842",
+                "reference": "2da3f396a7dbca736f53d0f614e8b26148df2842",
                 "shasum": ""
             },
             "require": {
-                "minond/utilitatis": "dev-master",
+                "minond/utilitatis": "v13.12",
                 "php": ">=5.4.0"
             },
             "require-dev": {
@@ -187,20 +368,20 @@
                 }
             ],
             "description": "Object models",
-            "time": "2013-11-17 22:03:29"
+            "time": "2013-12-28 22:24:18"
         },
         {
             "name": "minond/utilitatis",
-            "version": "dev-master",
+            "version": "v13.12",
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Utilitatis.git",
-                "reference": "ccaace599fa2e80a113276bf6d059fe7dddc7c05"
+                "reference": "30dcb589cd8337832261aab2ec247659679eed20"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Utilitatis/zipball/ccaace599fa2e80a113276bf6d059fe7dddc7c05",
-                "reference": "ccaace599fa2e80a113276bf6d059fe7dddc7c05",
+                "url": "https://api.github.com/repos/minond/Utilitatis/zipball/30dcb589cd8337832261aab2ec247659679eed20",
+                "reference": "30dcb589cd8337832261aab2ec247659679eed20",
                 "shasum": ""
             },
             "require": {
@@ -216,6 +397,9 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
             "authors": [
                 {
                     "name": "Marcos Minond",
@@ -223,7 +407,152 @@
                 }
             ],
             "description": "Helper functions and classes",
-            "time": "2013-11-12 03:12:25"
+            "time": "2013-12-25 21:13:48"
+        },
+        {
+            "name": "robloach/component-installer",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/RobLoach/component-installer.git",
+                "reference": "c2e456e7644885f786169e52f590719aa5a8a7d8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/RobLoach/component-installer/zipball/c2e456e7644885f786169e52f590719aa5a8a7d8",
+                "reference": "c2e456e7644885f786169e52f590719aa5a8a7d8",
+                "shasum": ""
+            },
+            "require": {
+                "composer-plugin-api": "1.0.0",
+                "kriswallsmith/assetic": "1.*",
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "composer/composer": "1.*"
+            },
+            "type": "composer-installer",
+            "extra": {
+                "class": "ComponentInstaller\\Installer"
+            },
+            "autoload": {
+                "psr-0": {
+                    "ComponentInstaller": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Loach",
+                    "email": "robloach@gmail.com",
+                    "homepage": "http://robloach.net"
+                }
+            ],
+            "description": "Allows installation of Components via Composer.",
+            "time": "2013-09-08 14:10:00"
+        },
+        {
+            "name": "symfony/console",
+            "version": "v2.3.7",
+            "target-dir": "Symfony/Component/Console",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Console.git",
+                "reference": "00848d3e13cf512e77c7498c2b3b0192f61f4b18"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/00848d3e13cf512e77c7498c2b3b0192f61f4b18",
+                "reference": "00848d3e13cf512e77c7498c2b3b0192f61f4b18",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "require-dev": {
+                "symfony/event-dispatcher": "~2.1"
+            },
+            "suggest": {
+                "symfony/event-dispatcher": ""
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.3-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Console\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Console Component",
+            "homepage": "http://symfony.com",
+            "time": "2013-11-13 21:27:40"
+        },
+        {
+            "name": "symfony/process",
+            "version": "dev-master",
+            "target-dir": "Symfony/Component/Process",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/Process.git",
+                "reference": "c7719dac733174c09d1725246c382abfa0915f70"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/c7719dac733174c09d1725246c382abfa0915f70",
+                "reference": "c7719dac733174c09d1725246c382abfa0915f70",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.5-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Symfony\\Component\\Process\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Symfony Community",
+                    "homepage": "http://symfony.com/contributors"
+                }
+            ],
+            "description": "Symfony Process Component",
+            "homepage": "http://symfony.com",
+            "time": "2013-12-28 08:12:58"
         },
         {
             "name": "symfony/yaml",
@@ -271,95 +600,69 @@
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
             "time": "2013-07-21 12:12:18"
+        },
+        {
+            "name": "twig/twig",
+            "version": "v1.14.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/fabpot/Twig.git",
+                "reference": "ca445842fcea4f844d68203ffa2d00f5e3cdea64"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/ca445842fcea4f844d68203ffa2d00f5e3cdea64",
+                "reference": "ca445842fcea4f844d68203ffa2d00f5e3cdea64",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.2.4"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.14-dev"
+                }
+            },
+            "autoload": {
+                "psr-0": {
+                    "Twig_": "lib/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Fabien Potencier",
+                    "email": "fabien@symfony.com"
+                },
+                {
+                    "name": "Armin Ronacher",
+                    "email": "armin.ronacher@active-4.com"
+                }
+            ],
+            "description": "Twig, the flexible, fast, and secure template language for PHP",
+            "homepage": "http://twig.sensiolabs.org",
+            "keywords": [
+                "templating"
+            ],
+            "time": "2013-10-30 08:20:53"
         }
     ],
     "packages-dev": [
-        {
-            "name": "minond/nice_error",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/minond/NiceError.git",
-                "reference": "5d3228468c95a20f7ed2f0e2712f9746011fd70b"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/minond/NiceError/zipball/5d3228468c95a20f7ed2f0e2712f9746011fd70b",
-                "reference": "5d3228468c95a20f7ed2f0e2712f9746011fd70b",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "util": "src/"
-                },
-                "files": [
-                    "autorun.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Marcos Minond",
-                    "email": "minond.marcos@gmail.com"
-                }
-            ],
-            "description": "Nicer error output",
-            "time": "2013-08-26 02:01:58"
-        },
-        {
-            "name": "minond/profiler",
-            "version": "dev-master",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/minond/Profiler.git",
-                "reference": "7b0c24c5f8214f5199f84a355de1d2d4817c3cbf"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/minond/Profiler/zipball/7b0c24c5f8214f5199f84a355de1d2d4817c3cbf",
-                "reference": "7b0c24c5f8214f5199f84a355de1d2d4817c3cbf",
-                "shasum": ""
-            },
-            "require": {
-                "php": ">=5.3.0"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "util": "src/"
-                },
-                "files": [
-                    "profiler.php"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "authors": [
-                {
-                    "name": "Marcos Minond",
-                    "email": "minond.marcos@gmail.com"
-                }
-            ],
-            "description": "PHP profiler",
-            "time": "2013-08-04 19:28:59"
-        }
+
     ],
     "aliases": [
 
     ],
     "minimum-stability": "dev",
     "stability-flags": {
-        "minond/utilitatis": 20,
+        "twig/twig": 20,
         "minond/model": 20,
         "minond/http": 20,
-        "minond/event": 20,
-        "minond/configurare": 20,
-        "minond/cache": 20,
-        "minond/nice_error": 20,
-        "minond/profiler": 20
+        "minond/event": 20
     },
     "platform": {
         "php": ">=5.4.0"
