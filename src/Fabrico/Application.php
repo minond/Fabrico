@@ -254,7 +254,9 @@ class Application
                 $res->setStatusCode(Status::OK);
             }
 
-            if (!$res->getContent()) {
+            // content already set: getConfiguration returns something
+            // redirect: Location header is set
+            if (!$res->getContent() && !isset($res->header['Location'])) {
                 $res->setContent($this->renderer->render(
                     $this,
                     sprintf('%s%s.%s', $views, $action, $format),

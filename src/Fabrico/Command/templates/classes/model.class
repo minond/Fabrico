@@ -8,4 +8,3 @@ class {clazz} extends Model
 {
     {properties}
 }
-

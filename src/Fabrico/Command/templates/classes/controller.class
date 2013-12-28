@@ -27,7 +27,7 @@ class {clazzes}
     {
         ${singular} = {clazz}::create($req->param->{singular});
         ${singular}->save();
-        header('Location: /{plural}');
+        $res->header['Location'] = '/{plural}';
     }
 
     public function update(Request $req, Response $res)
@@ -35,14 +35,13 @@ class {clazzes}
         ${singular} = {clazz}::find($req->param->id);
         ${singular}->update($req->param->{singular});
         ${singular}->save();
-        header('Location: /{plural}');
+        $res->header['Location'] = '/{plural}';
     }
 
     public function delete(Request $req, Response $res)
     {
         ${singular} = {clazz}::find($req->param->id);
         ${singular}->delete();
-        header('Location: /{plural}');
+        $res->header['Location'] = '/{plural}';
     }
 }
-

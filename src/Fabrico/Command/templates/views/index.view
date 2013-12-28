@@ -1,5 +1,7 @@
 {% extends "views/layouts/base.html.twig" %}
 
+{% set title = '{title}' %}
+
 {% block body %}
     <h2>{title}</h2>
 
