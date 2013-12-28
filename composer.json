@@ -10,15 +10,14 @@
         "symfony/console": "v2.3.7",
         "components/normalize.css": "v2.1.2",
         "components/modernizr": "2.6.2",
-        "minond/utilitatis": "dev-master",
+        "minond/utilitatis": "v13.12",
         "minond/model": "dev-master",
         "minond/http": "dev-master",
         "minond/event": "dev-master",
-        "minond/configurare": "dev-master",
-        "minond/cache": "dev-master"
+        "minond/configurare": "v13.12",
+        "minond/cache": "v13.12"
 
     },
-
 
     "autoload": {
         "psr-0": {
