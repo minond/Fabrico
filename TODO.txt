@@ -1,0 +1,3 @@
+Controller methods:
+    respond_with
+    redirect_to
