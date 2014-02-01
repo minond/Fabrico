@@ -17,7 +17,7 @@ class ViewConfigCommand extends Command
 {
     protected function configure()
     {
-        $this->setName('config');
+        $this->setName('config:view');
         $this->setDescription('View application configuration');
 
         $this->addArgument(

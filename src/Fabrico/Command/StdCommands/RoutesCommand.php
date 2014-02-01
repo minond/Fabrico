@@ -15,7 +15,7 @@ class RoutesCommand extends Command
 {
     protected function configure()
     {
-        $this->setName('routes');
+        $this->setName('config:routes');
         $this->setDescription('View application routes');
     }
 
