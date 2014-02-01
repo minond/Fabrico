@@ -3,7 +3,7 @@
         "This file locks the dependencies of your project to a known state",
         "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
     ],
-    "hash": "4858711fa44e4d47971bd18a3b070f92",
+    "hash": "456ebe03a0025754b3fc11117797a017",
     "packages": [
         {
             "name": "components/modernizr",
@@ -114,12 +114,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/kriswallsmith/assetic.git",
-                "reference": "5e519fd750ea54a035386562ae03716ffba7014c"
+                "reference": "9ca50832eee550b4f805032ff55b1f013e95d769"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/5e519fd750ea54a035386562ae03716ffba7014c",
-                "reference": "5e519fd750ea54a035386562ae03716ffba7014c",
+                "url": "https://api.github.com/repos/kriswallsmith/assetic/zipball/9ca50832eee550b4f805032ff55b1f013e95d769",
+                "reference": "9ca50832eee550b4f805032ff55b1f013e95d769",
                 "shasum": ""
             },
             "require": {
@@ -134,6 +134,7 @@
                 "leafo/scssphp": "*",
                 "leafo/scssphp-compass": "*",
                 "mrclay/minify": "*",
+                "patchwork/jsqueeze": "*",
                 "phpunit/phpunit": "~3.7",
                 "ptachoire/cssembed": "*",
                 "twig/twig": "~1.6"
@@ -142,6 +143,7 @@
                 "leafo/lessphp": "Assetic provides the integration with the lessphp LESS compiler",
                 "leafo/scssphp": "Assetic provides the integration with the scssphp SCSS compiler",
                 "leafo/scssphp-compass": "Assetic provides the integration with the SCSS compass plugin",
+                "patchwork/jsqueeze": "Assetic provides the integration with the JSqueeze JavaScript compressor",
                 "ptachoire/cssembed": "Assetic provides the integration with phpcssembed to embed data uris",
                 "twig/twig": "Assetic provides the integration with the Twig templating engine"
             },
@@ -177,24 +179,24 @@
                 "compression",
                 "minification"
             ],
-            "time": "2013-12-14 01:45:39"
+            "time": "2014-01-24 15:54:04"
         },
         {
             "name": "minond/cache",
-            "version": "v13.12",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Cache.git",
-                "reference": "02445ab15bdf79a3e13e12c8195587c49cdf2d88"
+                "reference": "f3b77d80ac6794a5d713864f722b44d646e3aebd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Cache/zipball/02445ab15bdf79a3e13e12c8195587c49cdf2d88",
-                "reference": "02445ab15bdf79a3e13e12c8195587c49cdf2d88",
+                "url": "https://api.github.com/repos/minond/Cache/zipball/f3b77d80ac6794a5d713864f722b44d646e3aebd",
+                "reference": "f3b77d80ac6794a5d713864f722b44d646e3aebd",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": ">=5.4.0"
             },
             "require-dev": {
                 "satooshi/php-coveralls": "dev-master"
@@ -216,27 +218,27 @@
                 }
             ],
             "description": "Cache",
-            "time": "2013-12-25 21:13:53"
+            "time": "2014-01-31 06:00:43"
         },
         {
             "name": "minond/configurare",
-            "version": "v13.12",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Configurare.git",
-                "reference": "d2c5dab1207aa1e8416a20aa2010c1005c71f228"
+                "reference": "9816facc85f1943e18e20c6cbe1638e43533e8bb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Configurare/zipball/d2c5dab1207aa1e8416a20aa2010c1005c71f228",
-                "reference": "d2c5dab1207aa1e8416a20aa2010c1005c71f228",
+                "url": "https://api.github.com/repos/minond/Configurare/zipball/9816facc85f1943e18e20c6cbe1638e43533e8bb",
+                "reference": "9816facc85f1943e18e20c6cbe1638e43533e8bb",
                 "shasum": ""
             },
             "require": {
-                "minond/cache": "v13.12",
-                "minond/utilitatis": "v13.12",
+                "minond/cache": "1.*",
+                "minond/utilitatis": "1.*",
                 "php": ">=5.4.0",
-                "symfony/yaml": "2.3.3"
+                "symfony/yaml": "2.*"
             },
             "require-dev": {
                 "satooshi/php-coveralls": "dev-master"
@@ -258,20 +260,20 @@
                 }
             ],
             "description": "Configuration management",
-            "time": "2013-12-25 21:20:30"
+            "time": "2014-02-01 19:29:35"
         },
         {
             "name": "minond/event",
-            "version": "dev-master",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Event.git",
-                "reference": "f77ecabd36f0ab215536fe1ac76d12c3becf0743"
+                "reference": "9c973c34a53d0f70aa9e9fa5ffee69f01915fc1a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Event/zipball/f77ecabd36f0ab215536fe1ac76d12c3becf0743",
-                "reference": "f77ecabd36f0ab215536fe1ac76d12c3becf0743",
+                "url": "https://api.github.com/repos/minond/Event/zipball/9c973c34a53d0f70aa9e9fa5ffee69f01915fc1a",
+                "reference": "9c973c34a53d0f70aa9e9fa5ffee69f01915fc1a",
                 "shasum": ""
             },
             "require": {
@@ -287,6 +289,9 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
             "authors": [
                 {
                     "name": "Marcos Minond",
@@ -294,24 +299,24 @@
                 }
             ],
             "description": "Events and signals",
-            "time": "2013-08-18 00:23:44"
+            "time": "2014-01-31 06:13:20"
         },
         {
             "name": "minond/http",
-            "version": "dev-master",
+            "version": "v1.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Http.git",
-                "reference": "3140a942389d7da3db8e9114d295cc742378f35e"
+                "reference": "93f53a9b7e689ad2d3e227d48dc386a54b1e3b16"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Http/zipball/3140a942389d7da3db8e9114d295cc742378f35e",
-                "reference": "3140a942389d7da3db8e9114d295cc742378f35e",
+                "url": "https://api.github.com/repos/minond/Http/zipball/93f53a9b7e689ad2d3e227d48dc386a54b1e3b16",
+                "reference": "93f53a9b7e689ad2d3e227d48dc386a54b1e3b16",
                 "shasum": ""
             },
             "require": {
-                "minond/utilitatis": "v13.12",
+                "minond/utilitatis": "1.*",
                 "php": ">=5.4.0"
             },
             "require-dev": {
@@ -324,6 +329,9 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
             "authors": [
                 {
                     "name": "Marcos Minond",
@@ -331,24 +339,24 @@
                 }
             ],
             "description": "Http helpers",
-            "time": "2013-12-28 22:24:53"
+            "time": "2014-02-01 19:29:59"
         },
         {
             "name": "minond/model",
-            "version": "dev-master",
+            "version": "v1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Model.git",
-                "reference": "2da3f396a7dbca736f53d0f614e8b26148df2842"
+                "reference": "bf4b26473acab69af8704512e4f1c08de1cc68cb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Model/zipball/2da3f396a7dbca736f53d0f614e8b26148df2842",
-                "reference": "2da3f396a7dbca736f53d0f614e8b26148df2842",
+                "url": "https://api.github.com/repos/minond/Model/zipball/bf4b26473acab69af8704512e4f1c08de1cc68cb",
+                "reference": "bf4b26473acab69af8704512e4f1c08de1cc68cb",
                 "shasum": ""
             },
             "require": {
-                "minond/utilitatis": "v13.12",
+                "minond/utilitatis": "1.*",
                 "php": ">=5.4.0"
             },
             "require-dev": {
@@ -361,6 +369,9 @@
                 }
             },
             "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-2.0+"
+            ],
             "authors": [
                 {
                     "name": "Marcos Minond",
@@ -368,20 +379,20 @@
                 }
             ],
             "description": "Object models",
-            "time": "2013-12-28 22:24:18"
+            "time": "2014-02-01 19:30:01"
         },
         {
             "name": "minond/utilitatis",
-            "version": "v13.12",
+            "version": "v1.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/minond/Utilitatis.git",
-                "reference": "30dcb589cd8337832261aab2ec247659679eed20"
+                "reference": "bfe1ae7105a8f10524f6f7d1dbb9c1dff180beef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/minond/Utilitatis/zipball/30dcb589cd8337832261aab2ec247659679eed20",
-                "reference": "30dcb589cd8337832261aab2ec247659679eed20",
+                "url": "https://api.github.com/repos/minond/Utilitatis/zipball/bfe1ae7105a8f10524f6f7d1dbb9c1dff180beef",
+                "reference": "bfe1ae7105a8f10524f6f7d1dbb9c1dff180beef",
                 "shasum": ""
             },
             "require": {
@@ -407,7 +418,7 @@
                 }
             ],
             "description": "Helper functions and classes",
-            "time": "2013-12-25 21:13:48"
+            "time": "2014-01-31 05:51:30"
         },
         {
             "name": "robloach/component-installer",
@@ -456,17 +467,17 @@
         },
         {
             "name": "symfony/console",
-            "version": "v2.3.7",
+            "version": "dev-master",
             "target-dir": "Symfony/Component/Console",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Console.git",
-                "reference": "00848d3e13cf512e77c7498c2b3b0192f61f4b18"
+                "reference": "47e82eadf64a81e0a778c7249c7292987f1bfcff"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Console/zipball/00848d3e13cf512e77c7498c2b3b0192f61f4b18",
-                "reference": "00848d3e13cf512e77c7498c2b3b0192f61f4b18",
+                "url": "https://api.github.com/repos/symfony/Console/zipball/47e82eadf64a81e0a778c7249c7292987f1bfcff",
+                "reference": "47e82eadf64a81e0a778c7249c7292987f1bfcff",
                 "shasum": ""
             },
             "require": {
@@ -481,7 +492,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3-dev"
+                    "dev-master": "2.5-dev"
                 }
             },
             "autoload": {
@@ -505,7 +516,7 @@
             ],
             "description": "Symfony Console Component",
             "homepage": "http://symfony.com",
-            "time": "2013-11-13 21:27:40"
+            "time": "2014-01-24 14:36:35"
         },
         {
             "name": "symfony/process",
@@ -514,12 +525,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Process.git",
-                "reference": "c7719dac733174c09d1725246c382abfa0915f70"
+                "reference": "c36d6be7af8582113f2ccad1e1482488184f5f74"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Process/zipball/c7719dac733174c09d1725246c382abfa0915f70",
-                "reference": "c7719dac733174c09d1725246c382abfa0915f70",
+                "url": "https://api.github.com/repos/symfony/Process/zipball/c36d6be7af8582113f2ccad1e1482488184f5f74",
+                "reference": "c36d6be7af8582113f2ccad1e1482488184f5f74",
                 "shasum": ""
             },
             "require": {
@@ -552,21 +563,21 @@
             ],
             "description": "Symfony Process Component",
             "homepage": "http://symfony.com",
-            "time": "2013-12-28 08:12:58"
+            "time": "2014-01-24 14:36:35"
         },
         {
             "name": "symfony/yaml",
-            "version": "v2.3.3",
+            "version": "dev-master",
             "target-dir": "Symfony/Component/Yaml",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/Yaml.git",
-                "reference": "3837ccd0830ef44ed5c5844403bf6f69f7998758"
+                "reference": "9921872611710df49cf035c259e5a461ea2d0f8c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/Yaml/zipball/3837ccd0830ef44ed5c5844403bf6f69f7998758",
-                "reference": "3837ccd0830ef44ed5c5844403bf6f69f7998758",
+                "url": "https://api.github.com/repos/symfony/Yaml/zipball/9921872611710df49cf035c259e5a461ea2d0f8c",
+                "reference": "9921872611710df49cf035c259e5a461ea2d0f8c",
                 "shasum": ""
             },
             "require": {
@@ -575,7 +586,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.3-dev"
+                    "dev-master": "2.5-dev"
                 }
             },
             "autoload": {
@@ -599,20 +610,20 @@
             ],
             "description": "Symfony Yaml Component",
             "homepage": "http://symfony.com",
-            "time": "2013-07-21 12:12:18"
+            "time": "2014-01-07 13:29:57"
         },
         {
             "name": "twig/twig",
-            "version": "v1.14.2",
+            "version": "dev-master",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fabpot/Twig.git",
-                "reference": "ca445842fcea4f844d68203ffa2d00f5e3cdea64"
+                "reference": "5fd4db64de8398dedf5fcde3ec9c0dfdc910c81b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fabpot/Twig/zipball/ca445842fcea4f844d68203ffa2d00f5e3cdea64",
-                "reference": "ca445842fcea4f844d68203ffa2d00f5e3cdea64",
+                "url": "https://api.github.com/repos/fabpot/Twig/zipball/5fd4db64de8398dedf5fcde3ec9c0dfdc910c81b",
+                "reference": "5fd4db64de8398dedf5fcde3ec9c0dfdc910c81b",
                 "shasum": ""
             },
             "require": {
@@ -621,7 +632,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.14-dev"
+                    "dev-master": "1.15-dev"
                 }
             },
             "autoload": {
@@ -648,7 +659,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2013-10-30 08:20:53"
+            "time": "2014-01-31 15:13:11"
         }
     ],
     "packages-dev": [
@@ -658,12 +669,9 @@
 
     ],
     "minimum-stability": "dev",
-    "stability-flags": {
-        "twig/twig": 20,
-        "minond/model": 20,
-        "minond/http": 20,
-        "minond/event": 20
-    },
+    "stability-flags": [
+
+    ],
     "platform": {
         "php": ">=5.4.0"
     },
