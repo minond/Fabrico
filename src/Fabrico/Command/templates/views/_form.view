@@ -2,5 +2,5 @@
 {fields}
     <br>
     <input type="submit" value="Save {single}" />
-    <input type="button" value="Cancel" onclick="window.location = '{{ {plural}_path() }}'" />
+    <a href="{{ {plural}_path() }}">Cancel</a>
 </form>
