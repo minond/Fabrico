@@ -1,1 +1,4 @@
-Model generate should create unit tests
+Model generator should create unit tests
+Model generator should include property annotations
+    http://www.phpdoc.org/docs/latest/references/phpdoc/tags/property.html
+    http://www.phpdoc.org/docs/latest/references/phpdoc/tags/property-write.html
