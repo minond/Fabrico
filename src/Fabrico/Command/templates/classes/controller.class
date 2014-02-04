@@ -2,46 +2,45 @@
 
 namespace {package}\Controller;
 
-use Efficio\Http\Request;
-use Efficio\Http\Response;
 use {package}\Model\{clazz};
+use Fabrico\Controller\CrudController;
 
-class {clazzes}
+class {clazzes} extends CrudController
 {
-    public function index(Request $req, Response $res)
+    public function index()
     {
-        return [ '{plural}' => {clazz}::all() ];
+        $this->resource({clazz}::all());
     }
 
-    public function add(Request $req, Response $res)
+    public function add()
     {
-        return [ '{singular}' => new {clazz} ];
+        $this->resource(new {clazz});
     }
 
-    public function edit(Request $req, Response $res)
+    public function edit()
     {
-        return [ '{singular}' => {clazz}::find($req->param->id) ];
+        $this->resource({clazz}::find($this->req->param->id));
     }
 
-    public function create(Request $req, Response $res)
+    public function create()
     {
-        ${singular} = {clazz}::create($req->param->{singular});
+        ${singular} = {clazz}::create($this->req->param->{singular});
         ${singular}->save();
-        $res->header['Location'] = '/{plural}';
+        $this->redirectTo('/{plural}');
     }
 
-    public function update(Request $req, Response $res)
+    public function update()
     {
-        ${singular} = {clazz}::find($req->param->id);
-        ${singular}->update($req->param->{singular});
+        ${singular} = {clazz}::find($this->req->param->id);
+        ${singular}->update($this->req->param->{singular});
         ${singular}->save();
-        $res->header['Location'] = '/{plural}';
+        $this->redirectTo('/{plural}');
     }
 
-    public function delete(Request $req, Response $res)
+    public function delete()
     {
-        ${singular} = {clazz}::find($req->param->id);
+        ${singular} = {clazz}::find($this->req->param->id);
         ${singular}->delete();
-        $res->header['Location'] = '/{plural}';
+        $this->redirectTo('/{plural}');
     }
 }

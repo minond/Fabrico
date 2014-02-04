@@ -255,7 +255,8 @@ class Application
                 $controller->setResponse($res);
             }
 
-            $viewdata = $controller->{ $action }($req, $res);
+            $viewdata = $controller->{ $action }($req, $res) ?:
+                $controller->resource;
 
             if (!$res->getStatusCode()) {
                 $res->setStatusCode(Status::OK);
