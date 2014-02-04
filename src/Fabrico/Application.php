@@ -15,6 +15,7 @@ use Efficio\Cache\RuntimeCache;
 use Efficio\Utilitatis\Word;
 use Twig_Environment as TwigEnv;
 use Twig_Loader_Filesystem as TwigFs;
+use Fabrico\Controller\BaseController;
 use Fabrico\Initializer\JitInitializer;
 use Fabrico\Error\Renderer\NoViewsFoundException;
 
@@ -248,6 +249,12 @@ class Application
 
         if ($ok) {
             $controller = new $controller;
+
+            if ($controller instanceof BaseController) {
+                $controller->setRequest($req);
+                $controller->setResponse($res);
+            }
+
             $viewdata = $controller->{ $action }($req, $res);
 
             if (!$res->getStatusCode()) {
