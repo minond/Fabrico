@@ -275,38 +275,5 @@ class Application
 
         return $ok;
     }
-
-    /**
-     * normalizes routes from application's config/routes. changes:
-     *
-     * <code>
-     *   - url: controller_name#action_name
-     *     to ->
-     *   - url:
-     *       # NOTE: note the case conversion:
-     *       controller: ControllerName
-     *       action: actionName
-     * </code>
-     *
-     * @param array $routes
-     * @return array
-     */
-    public static function normalizeRoutes(array $routes)
-    {
-        $word = new Word;
-
-        foreach ($routes as & $route) {
-            if (is_string($route)) {
-                list($controller, $action) = explode('#', $route);
-                $controller = $word->classicalCase($controller);
-                $action = $word->camelCase($action);
-                $route = [ 'controller' => $controller, 'action' => $action ];
-            }
-
-            unset($route);
-        }
-
-        return $routes;
-    }
 }
 
