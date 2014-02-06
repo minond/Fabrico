@@ -195,7 +195,27 @@ class Application
             }
         }
 
+        $this->setResponseContentType($res, $route['format']);
         return $ok;
+    }
+
+    /**
+     * check a route's format property and updates the response's content type
+     * @param Response & $res
+     * @param string $format
+     */
+    private function setResponseContentType(Response & $res, $format)
+    {
+        switch ($format) {
+            case 'txt':
+                $res->setContentType(Response::TEXT);
+                break;
+
+            case 'html':
+            default:
+                $res->setContentType(Response::HTML);
+                break;
+        }
     }
 
     /**
