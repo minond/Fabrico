@@ -1,6 +1,8 @@
 <?php
 
 // default configuration
-// xxx or?
-getenv('APP_ENV') !== false ?: putenv("APP_ENV=development");
+if (getenv('APP_ENV') === false) {
+    putenv('NICE_ERRORS=1');
+    putenv('APP_ENV=development');
+}
 
