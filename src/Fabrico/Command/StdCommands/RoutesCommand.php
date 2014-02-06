@@ -69,4 +69,3 @@ class RoutesCommand extends Command
         $table->render($output);
     }
 }
-

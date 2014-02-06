@@ -15,4 +15,3 @@ interface Initializer
      */
     public function terminate();
 }
-

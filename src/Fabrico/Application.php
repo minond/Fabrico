@@ -142,7 +142,7 @@ class Application
 
             if (class_exists($project_init)) {
                 $init = $project_init;
-            } else if (class_exists($standard_init)) {
+            } elseif (class_exists($standard_init)) {
                 $init = $standard_init;
             }
 
@@ -268,7 +268,7 @@ class Application
                 $res->setContent($this->renderer->render(
                     $this,
                     sprintf('%s%s.%s', $views, $action, $format),
-                     $viewdata ?: []
+                    $viewdata ?: []
                 ));
             }
         }
@@ -276,4 +276,3 @@ class Application
         return $ok;
     }
 }
-

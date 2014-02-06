@@ -39,8 +39,9 @@ class Renderer
      */
     public function handlers(array $handlers, $overwrite = false)
     {
-        foreach ($handlers as $ext => $handler)
+        foreach ($handlers as $ext => $handler) {
             $this->handler($ext, $handler, $overwrite);
+        }
     }
 
     /**
@@ -55,8 +56,10 @@ class Renderer
      */
     public function render(Application $app, $file, array $data = [])
     {
-        $template = $this->generateFileSearchString($file,
-            array_keys($this->extension_map));
+        $template = $this->generateFileSearchString(
+            $file,
+            array_keys($this->extension_map)
+        );
 
         $content = '';
         $files = glob($template, GLOB_BRACE);
@@ -65,7 +68,7 @@ class Renderer
         // do we have just one view file?
         if ($filec === 0) {
             throw new NoViewsFoundException($template);
-        } else if ($filec !== 1) {
+        } elseif ($filec !== 1) {
             throw new MultipleViewsFoundException($files);
         }
 
@@ -86,7 +89,7 @@ class Renderer
 
         if ($handler instanceof Handler) {
             $content = $handler->render($app, $file, $data);
-        } else if (is_callable($handler)) {
+        } elseif (is_callable($handler)) {
             $content = call_user_func($handler, $app, $file, $data);
         } else {
             throw new InvalidHandlerException($handler);
@@ -102,7 +105,7 @@ class Renderer
      */
     protected function generateFileSearchString($file, array $extensions = [])
     {
-        return sprintf('%s{%s}', $file, implode('', array_map(function($ext) {
+        return sprintf('%s{%s}', $file, implode('', array_map(function ($ext) {
             return sprintf(',.%s', $ext);
         }, $extensions)));
     }
@@ -116,4 +119,3 @@ class Renderer
         return substr($file, strrpos($file, '.') + 1);
     }
 }
-

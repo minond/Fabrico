@@ -18,8 +18,13 @@ class ServerCommand extends Command
         $this->setDescription('Start php\'s built in server');
         $this->addOption('addr', 'ar', InputOption::VALUE_OPTIONAL, 'Server address', '0.0.0.0');
         $this->addOption('port', 'p', InputOption::VALUE_OPTIONAL, 'Server port', '8080');
-        $this->addOption('router', 'r', InputOption::VALUE_OPTIONAL, 'Router script',
-            sprintf('%s/../scripts/router.php', __dir__));
+        $this->addOption(
+            'router',
+            'r',
+            InputOption::VALUE_OPTIONAL,
+            'Router script',
+            sprintf('%s/../scripts/router.php', __dir__)
+        );
     }
 
     /**
@@ -43,4 +48,3 @@ class ServerCommand extends Command
         passthru("php -S $addr:$port $router");
     }
 }
-

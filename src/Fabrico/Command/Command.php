@@ -23,4 +23,3 @@ abstract class Command extends BaseCommand
         $this->conf = $conf;
     }
 }
-

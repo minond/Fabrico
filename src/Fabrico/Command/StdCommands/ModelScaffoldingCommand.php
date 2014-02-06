@@ -138,7 +138,8 @@ class ModelScaffoldingCommand extends GeneratorCommand
     protected function generateController($namespace, $clazzes, $clazz, $single, $plural)
     {
         return $this->merger->merge(
-            $this->getTemplate('classes/controller.class'), [
+            $this->getTemplate('classes/controller.class'),
+            [
                 'package' => $namespace,
                 'clazzes' => $clazzes,
                 'clazz' => $clazz,
@@ -220,7 +221,7 @@ class ModelScaffoldingCommand extends GeneratorCommand
      */
     protected function generateModel($namespace, $name, array $fields)
     {
-        $properties = array_map(function($field) {
+        $properties = array_map(function ($field) {
             $info = explode(':', $field);
             $field = array_shift($info);
             $type = count($info) ? array_shift($info) : static::DEFAULT_TYPE;
@@ -236,7 +237,8 @@ class ModelScaffoldingCommand extends GeneratorCommand
             }
 
             return $this->merger->merge(
-                $this->getTemplate('classes/protected.property'), [
+                $this->getTemplate('classes/protected.property'),
+                [
                     'property' => $field,
                     'value' => $value,
                     'var' => $type,
@@ -245,7 +247,8 @@ class ModelScaffoldingCommand extends GeneratorCommand
         }, $fields);
 
         return $this->merger->merge(
-            $this->getTemplate('classes/model.class'), [
+            $this->getTemplate('classes/model.class'),
+            [
                 'package' => $namespace,
                 'clazz' => $name,
                 'properties' => trim(implode(PHP_EOL, $properties)),
@@ -253,4 +256,3 @@ class ModelScaffoldingCommand extends GeneratorCommand
         );
     }
 }
-

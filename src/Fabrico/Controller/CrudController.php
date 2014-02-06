@@ -29,4 +29,3 @@ abstract class CrudController extends BaseController
      */
     const DELETE_ACTION = 'delete';
 }
-

@@ -52,4 +52,3 @@ function colorstr($color, $str)
 {
     return sprintf("\033[%sm%s\033[0m", $color, $str);
 }
-

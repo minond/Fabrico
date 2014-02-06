@@ -72,7 +72,7 @@ class GeneratorCommand extends Command
     {
         if (is_dir($path)) {
             $this->ok($path, $output);
-        } else if (mkdir($path, 0777, true)) {
+        } elseif (mkdir($path, 0777, true)) {
             $this->ok($path, $output);
         } else {
             $this->err("creating $path", $output);
@@ -107,4 +107,3 @@ class GeneratorCommand extends Command
         }
     }
 }
-

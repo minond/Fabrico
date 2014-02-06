@@ -85,7 +85,7 @@ ROUTE;
         // #resource Task (all actions)
         // #resource Task index
         // #resource Task index add edit (etc.)
-        $conf->registerMacroPreParser('/#resource (.+)/', function($matches, $raw) {
+        $conf->registerMacroPreParser('/#resource (.+)/', function ($matches, $raw) {
             $word = new Word;
             $merger = new Merger;
             $models = (array) array_pop($matches);
@@ -119,7 +119,7 @@ ROUTE;
         });
 
         // yaml import file comments
-        $conf->registerMacroPreParser('/#import (.+)/', function($matches, $raw) {
+        $conf->registerMacroPreParser('/#import (.+)/', function ($matches, $raw) {
             $confs = [];
 
             foreach ($matches[0] as $index => $macro) {
@@ -143,12 +143,16 @@ ROUTE;
                 $raw = str_replace($macro, '', $raw);
             }
 
-            return !count($confs) ? $raw : sprintf('~imports: %s%s%s',
-                json_encode($confs), PHP_EOL, $raw);
+            return !count($confs) ? $raw : sprintf(
+                '~imports: %s%s%s',
+                json_encode($confs),
+                PHP_EOL,
+                $raw
+            );
         });
 
         // import extras
-        $conf->registerMacroPostParser(function(& $obj) {
+        $conf->registerMacroPostParser(function (& $obj) {
             if (isset($obj['~imports'])) {
                 $imports = $obj['~imports'];
                 unset($obj['~imports']);
@@ -163,4 +167,3 @@ ROUTE;
         });
     }
 }
-

@@ -26,4 +26,3 @@ class TwigHandler implements Handler
         return $template->render($data);
     }
 }
-

@@ -18,4 +18,3 @@ if (strpos($uri, '/public') === 0) {
     $ret = $res->getStatusCode();
     stdout("%s [%s] $uri", [green('PROCESSED'), $ret]);
 }
-

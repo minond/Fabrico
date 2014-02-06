@@ -27,13 +27,15 @@ class ViewConfigCommand extends Command
         );
 
         $this->addOption(
-            'php', 'p',
+            'php',
+            'p',
             InputOption::VALUE_NONE,
             'Output as php'
         );
 
         $this->addOption(
-            'json', 'j',
+            'json',
+            'j',
             InputOption::VALUE_NONE,
             'Output as json'
         );
@@ -52,7 +54,7 @@ class ViewConfigCommand extends Command
 
             if ($input->getOption('php')) {
                 $val = var_export($val, true);
-            } else if ($input->getOption('json')) {
+            } elseif ($input->getOption('json')) {
                 $val = json_encode($val, JSON_PRETTY_PRINT);
             } else {
                 $val = Yaml::dump($val, 100, 2);
@@ -69,4 +71,3 @@ class ViewConfigCommand extends Command
         }
     }
 }
-

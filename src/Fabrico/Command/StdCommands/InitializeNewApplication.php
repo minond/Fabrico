@@ -43,10 +43,12 @@ class InitializeNewApplication extends Command
         $files = array_merge($files, glob('src/*/*/*'));
         $files = array_merge($files, glob('tests/*/*/*'));
 
-        foreach ($files as $file)
+        foreach ($files as $file) {
             file_put_contents($file, str_replace($ns, $name, file_get_contents($file)));
+        }
 
-        foreach ([ 'src', 'tests' ] as $dir)
+        foreach ([ 'src', 'tests' ] as $dir) {
             rename("$dir/$ns", "$dir/$name");
+        }
     }
 }

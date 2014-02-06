@@ -17,4 +17,3 @@ interface Handler
      */
     public function render(Application & $app, $file, array $data = []);
 }
-

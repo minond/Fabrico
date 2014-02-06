@@ -17,9 +17,12 @@ class Config extends JitInitializer
 
         // @ProjectBase, @Crud: lib/Crud/configuration
         // from configuration
-        $conf->registerPathParser('/^@(\w+)/', function($match, $path) use(& $conf) {
-            return str_replace($match[0], sprintf('../lib/%s/' . $conf->getDirectory(), $match[1]), $path);
+        $conf->registerPathParser('/^@(\w+)/', function ($match, $path) use (& $conf) {
+            return str_replace(
+                $match[0],
+                sprintf('../lib/%s/' . $conf->getDirectory(), $match[1]),
+                $path
+            );
         });
     }
 }
-

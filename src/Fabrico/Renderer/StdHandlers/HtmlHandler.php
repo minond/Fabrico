@@ -18,4 +18,3 @@ class HtmlHandler implements Handler
         return file_get_contents($file);
     }
 }
-

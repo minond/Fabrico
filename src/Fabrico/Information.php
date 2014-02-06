@@ -9,4 +9,3 @@ class Information
 {
     const VERSION = 'DEV';
 }
-

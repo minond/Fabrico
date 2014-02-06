@@ -59,7 +59,7 @@ abstract class BaseController
     protected function resource($resource)
     {
         $key = 0;
-        $base_class_name = function($full_class) {
+        $base_class_name = function ($full_class) {
             $parts = explode('\\', $full_class);
             return array_pop($parts);
         };
@@ -68,7 +68,7 @@ abstract class BaseController
             $word = new Word;
             $model = $base_class_name($resource->collectionOf());
             $key = strtolower($word->pluralize($model));
-        } else if ($resource instanceof Model) {
+        } elseif ($resource instanceof Model) {
             $model = $base_class_name(get_class($resource));
             $key = strtolower($model);
         }
@@ -76,4 +76,3 @@ abstract class BaseController
         $this->resource = [ $key => $resource ];
     }
 }
-

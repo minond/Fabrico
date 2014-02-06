@@ -43,27 +43,33 @@ class Twig extends JitInitializer
 
             // add_task_path()
             $this->twig->addFunction(
-                $this->urlGenerator(Crud::ADD_ACTION, $model, $models));
+                $this->urlGenerator(Crud::ADD_ACTION, $model, $models)
+            );
 
             // edit_task_path(task)
             $this->twig->addFunction(
-                $this->urlGenerator(Crud::EDIT_ACTION, $model, $models, true));
+                $this->urlGenerator(Crud::EDIT_ACTION, $model, $models, true)
+            );
 
             // create_task_path
             $this->twig->addFunction(
-                $this->urlGenerator(Crud::CREATE_ACTION, $model, $models));
+                $this->urlGenerator(Crud::CREATE_ACTION, $model, $models)
+            );
 
             // update_task_path(task)
             $this->twig->addFunction(
-                $this->urlGenerator(Crud::UPDATE_ACTION, $model, $models, true));
+                $this->urlGenerator(Crud::UPDATE_ACTION, $model, $models, true)
+            );
 
             // delete_task_path(task)
             $this->twig->addFunction(
-                $this->urlGenerator(Crud::DELETE_ACTION, $model, $models, true));
+                $this->urlGenerator(Crud::DELETE_ACTION, $model, $models, true)
+            );
 
             // tasks_path
             $this->twig->addFunction(new Twig_SimpleFunction(
-                sprintf('%s_path', $models), function() use ($models) {
+                sprintf('%s_path', $models),
+                function () use ($models) {
                     return sprintf('/%s', $models);
                 }
             ));
@@ -82,12 +88,11 @@ class Twig extends JitInitializer
     {
         return new Twig_SimpleFunction(
             sprintf('%s_%s_path', $action, $model),
-            $id ? function($obj) use ($action, $models) {
+            $id ? function ($obj) use ($action, $models) {
                 return sprintf('/%s/%s/%s', $models, $action, $obj->id);
-            } : function() use ($action, $models) {
+            } : function () use ($action, $models) {
                 return sprintf('/%s/%s', $models, $action);
             }
         );
     }
 }
-

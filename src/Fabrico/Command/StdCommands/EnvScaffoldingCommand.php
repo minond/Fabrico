@@ -20,7 +20,8 @@ class EnvScaffoldingCommand extends GeneratorCommand
         $this->setDescription('Generated template enviroment configuration');
 
         $this->addOption(
-            'apache', 'a',
+            'apache',
+            'a',
             InputOption::VALUE_NONE,
             'Generate Apache configuration'
         );
@@ -48,4 +49,3 @@ class EnvScaffoldingCommand extends GeneratorCommand
         }
     }
 }
-
