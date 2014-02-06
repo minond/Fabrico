@@ -2,6 +2,10 @@
 
 {% block body %}
     <h2>Edit {single}</h2>
-    {% include "views/{plural}/_form.html.twig" %}
+    <form action="{{ update_{single}_path({single}) }}" method="POST">
+        {% include "views/{plural}/_form.html.twig" %}
+        <input type="submit" value="Update {single}" />
+        <a href="{{ {plural}_path() }}">Cancel</a>
+    </form>
 {% endblock %}
 

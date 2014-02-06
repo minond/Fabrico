@@ -211,6 +211,10 @@ class Application
                 $res->setContentType(Response::TEXT);
                 break;
 
+            case 'json':
+                $res->setContentType(Response::JSON);
+                break;
+
             case 'html':
             default:
                 $res->setContentType(Response::HTML);

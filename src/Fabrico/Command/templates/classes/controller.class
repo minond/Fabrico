@@ -7,40 +7,7 @@ use Fabrico\Controller\CrudController;
 
 class {clazzes} extends CrudController
 {
-    public function index()
-    {
-        $this->resource({clazz}::all());
-    }
-
-    public function add()
-    {
-        $this->resource(new {clazz});
-    }
-
-    public function edit()
-    {
-        $this->resource({clazz}::find($this->req->param->id));
-    }
-
-    public function create()
-    {
-        ${singular} = {clazz}::create($this->req->param->{singular});
-        ${singular}->save();
-        $this->redirectTo('/{plural}');
-    }
-
-    public function update()
-    {
-        ${singular} = {clazz}::find($this->req->param->id);
-        ${singular}->update($this->req->param->{singular});
-        ${singular}->save();
-        $this->redirectTo('/{plural}');
-    }
-
-    public function delete()
-    {
-        ${singular} = {clazz}::find($this->req->param->id);
-        ${singular}->delete();
-        $this->redirectTo('/{plural}');
-    }
+    protected static $model = '\{package}\Model\{clazz}';
+    protected static $index = '/{plural}';
+    protected static $param = '{singular}';
 }
