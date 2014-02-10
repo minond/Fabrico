@@ -239,7 +239,7 @@ class Application
         $ok = file_exists($path);
 
         if ($ok) {
-            $res->setContent(file_get_contents($path));
+            $res->setContent($this->renderer->render($this, $path));
         }
 
         return $ok;

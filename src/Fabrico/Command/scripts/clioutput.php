@@ -12,7 +12,7 @@ function stdout($msg, array $args = [])
     $stdout = fopen('php://stdout', 'w');
     $tmpl = "[%s] %s:%s %s\n";
 
-    $date = date('D M d H:i:s Y');
+    $date = date(sprintf('D M %2s H:i:s Y', date('j')));
     $addr = $_SERVER['SERVER_NAME'];
     $port = $_SERVER['SERVER_PORT'];
 
