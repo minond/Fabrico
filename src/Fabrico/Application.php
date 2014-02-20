@@ -236,13 +236,9 @@ class Application
         $frmt = $route['format'];
 
         $path = $base . DIRECTORY_SEPARATOR . $file . ($frmt ? ".$frmt" : '');
-        $ok = file_exists($path);
+        $res->setContent($this->renderer->render($this, $path));
 
-        if ($ok) {
-            $res->setContent($this->renderer->render($this, $path));
-        }
-
-        return $ok;
+        return true;
     }
 
     /**
