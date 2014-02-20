@@ -177,7 +177,7 @@ class Application
                 'format' => 'html',
 
                 // can be a static resource
-                'base' => '',
+                'base' => 'views',
                 'file' => '',
 
                 // or an action call
