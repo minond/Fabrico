@@ -1,6 +1,6 @@
 {
     "name": "minond/fabrico",
-    "description": "Small PHP framework",
+    "description": "PHP framework",
     "minimum-stability": "dev",
 
     "require": {
@@ -8,8 +8,6 @@
         "twig/twig": "1.*",
         "symfony/yaml": "2.*",
         "symfony/console": "2.*",
-        "components/normalize.css": "2.*",
-        "components/modernizr": "2.*",
         "minond/utilitatis": "1.*",
         "minond/model": "1.*",
         "minond/http": "1.*",
@@ -42,7 +40,6 @@
     },
 
     "config": {
-        "bin-dir": "bin",
-        "component-dir": "public/vendor/"
+        "bin-dir": "bin"
     }
 }
