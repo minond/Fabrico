@@ -72,39 +72,39 @@ class ModelScaffoldingCommand extends GeneratorCommand
         );
 
         // views
-        $this->createDirectory(sprintf('views/%s', $plural), $output);
+        $this->createDirectory(sprintf('app/views/%s', $plural), $output);
 
         // index page
         $this->createFile(
-            sprintf('views/%s/index.html.twig', $plural),
+            sprintf('app/views/%s/index.html.twig', $plural),
             $this->generateView('index', $clazzes, $name, $plural),
             $output
         );
 
         // index json page
         $this->createFile(
-            sprintf('views/%s/index.json.php', $plural),
+            sprintf('app/views/%s/index.json.php', $plural),
             $this->generateView('index.json', $clazzes, $name, $plural),
             $output
         );
 
         // add page
         $this->createFile(
-            sprintf('views/%s/add.html.twig', $plural),
+            sprintf('app/views/%s/add.html.twig', $plural),
             $this->generateView('add', $clazzes, $name, $plural),
             $output
         );
 
         // edit page
         $this->createFile(
-            sprintf('views/%s/edit.html.twig', $plural),
+            sprintf('app/views/%s/edit.html.twig', $plural),
             $this->generateView('edit', $clazzes, $name, $plural),
             $output
         );
 
         // form template for add and edit pages
         $this->createFile(
-            sprintf('views/%s/_form.html.twig', $plural),
+            sprintf('app/views/%s/_form.html.twig', $plural),
             $this->generateView('_form', $clazzes, $name, $plural, [
                 'fields' => $this->generateFormFields($name, $fields),
             ]),

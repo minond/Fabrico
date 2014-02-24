@@ -1,9 +1,9 @@
-{% extends "views/layouts/base.html.twig" %}
+{% extends "app/views/layouts/base.html.twig" %}
 
 {% block body %}
     <h2>Add {single}</h2>
     <form action="{{ create_{single}_path() }}" method="POST">
-        {% include "views/{plural}/_form.html.twig" %}
+        {% include "app/views/{plural}/_form.html.twig" %}
         <input type="submit" value="Save {single}" />
         <a href="{{ {plural}_path() }}">Cancel</a>
     </form>

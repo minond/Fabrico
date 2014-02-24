@@ -177,7 +177,7 @@ class Application
                 'format' => 'html',
 
                 // can be a static resource
-                'base' => 'views',
+                'base' => 'app/views',
                 'file' => '',
 
                 // or an action call
@@ -259,7 +259,7 @@ class Application
         $controller = $route['controller'];
 
         // views holder and controller name
-        $views = sprintf('views/%s/', strtolower($controller));
+        $views = sprintf('app/views/%s/', strtolower($controller));
         $controller = sprintf('%s\Controller\%s', $namespace, $controller);
 
         // valid controller and action?
