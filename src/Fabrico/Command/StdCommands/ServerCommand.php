@@ -14,7 +14,7 @@ class ServerCommand extends Command
 {
     protected function configure()
     {
-        $this->setName('server:start');
+        $this->setName('server');
         $this->setDescription('Start php\'s built in server');
         $this->addOption('addr', 'ar', InputOption::VALUE_OPTIONAL, 'Server address', '0.0.0.0');
         $this->addOption('port', 'p', InputOption::VALUE_OPTIONAL, 'Server port', '8080');
