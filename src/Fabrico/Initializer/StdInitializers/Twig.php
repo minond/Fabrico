@@ -36,8 +36,8 @@ class Twig extends JitInitializer
      */
     public function initialize()
     {
-        foreach (glob('src/*/Model/*.php') as $model) {
-            preg_match('/src\/.+\/Model\/(.+).php/', $model, $model);
+        foreach (glob('app/models/*.php') as $model) {
+            preg_match('/app\/models\/(.+).php/', $model, $model);
             $model = strtolower(array_pop($model));
             $models = $this->word->pluralize($model);
 

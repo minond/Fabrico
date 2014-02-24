@@ -9,7 +9,7 @@ use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * initializes a new application
- * - renames default namespaced directory in src and tests dirs
+ * - renames default namespaced directory in the app and tests dirs
  * - replaces all 'MyApplication' namespaces
  * - updates build.xml file's project name
  * - updates app.yml configuration file
@@ -40,14 +40,14 @@ class InitializeNewApplication extends Command
 
         $files = array_merge($files, [ 'build.xml', 'composer.json' ]);
         $files = array_merge($files, glob('config/*'));
-        $files = array_merge($files, glob('src/*/*/*'));
-        $files = array_merge($files, glob('tests/*/*/*'));
+        $files = array_merge($files, glob('app/*/*'));
+        $files = array_merge($files, glob('tests/*/*'));
 
         foreach ($files as $file) {
             file_put_contents($file, str_replace($ns, $name, file_get_contents($file)));
         }
 
-        foreach ([ 'src', 'tests' ] as $dir) {
+        foreach ([ 'app', 'tests' ] as $dir) {
             rename("$dir/$ns", "$dir/$name");
         }
     }
