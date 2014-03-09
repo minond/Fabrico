@@ -59,14 +59,14 @@ class ModelScaffoldingCommand extends GeneratorCommand
 
         // controller class file
         $this->createFile(
-            sprintf('app/server/controllers/%s.php', $clazzes),
+            sprintf('app/controllers/%s.php', $clazzes),
             $this->generateController($ns, $clazzes, $clazz, $single, $plural),
             $output
         );
 
         // model class file
         $this->createFile(
-            sprintf('app/server/models/%s.php', $clazz),
+            sprintf('app/models/%s.php', $clazz),
             $this->generateModel($ns, $clazz, $fields),
             $output
         );
