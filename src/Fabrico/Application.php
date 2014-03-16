@@ -3,21 +3,15 @@
 namespace Fabrico;
 
 use Closure;
-use StdClass;
-use Exception;
 use RuntimeException;
 use Efficio\Http\Request;
 use Efficio\Http\Response;
 use Efficio\Http\Status;
 use Efficio\Http\RuleBook;
 use Efficio\Configurare\Configuration;
-use Efficio\Cache\RuntimeCache;
 use Efficio\Utilitatis\Word;
-use Twig_Environment as TwigEnv;
-use Twig_Loader_Filesystem as TwigFs;
 use Fabrico\Controller\BaseController;
 use Fabrico\Initializer\JitInitializer;
-use Fabrico\Error\Renderer\NoViewsFoundException;
 
 class Application
 {
@@ -188,7 +182,7 @@ class Application
 
             if ($route['file']) {
                 // file request
-                $ok = $this->runFileRequest($route, $req, $res);
+                $ok = $this->runFileRequest($route, $res);
             } else {
                 // action request
                 $ok = $this->runActionRequest($route, $req, $res);
@@ -225,11 +219,10 @@ class Application
     /**
      * get a static file
      * @param array $route
-     * @param Request $req
      * @param Response $res
      * @return boolean, action found and called
      */
-    private function runFileRequest(array $route, Request $req, Response $res)
+    private function runFileRequest(array $route, Response $res)
     {
         $file = $route['file'];
         $base = $route['base'];

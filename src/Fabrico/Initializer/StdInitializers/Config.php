@@ -3,7 +3,6 @@
 namespace Fabrico\Initializer\StdInitializers;
 
 use Fabrico\Initializer\JitInitializer;
-use Efficio\Utilitatis\Word;
 
 /**
  * configuration object modifications

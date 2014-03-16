@@ -5,9 +5,6 @@ namespace Fabrico\Model;
 use PDO;
 use Exception;
 use Fabrico\Application;
-use Efficio\Dataset\Model as BaseModel;
-use Efficio\Dataset\Storage\Model\DatabaseStorage;
-use Efficio\Dataset\Storage\Model\FileStorage;
 
 // --------------------------------------
 // lasciate ogne speranza, voi ch'intrate

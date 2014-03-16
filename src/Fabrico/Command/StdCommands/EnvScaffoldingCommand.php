@@ -37,7 +37,7 @@ class EnvScaffoldingCommand extends GeneratorCommand
         $apache = $input->getOption('apache');
 
         if ($apache) {
-            $output->write($config = $merger->merge(
+            $output->write($merger->merge(
                 $this->getTemplate('env/apache.conf'),
                 [
                     'directory' => basename(getcwd()),

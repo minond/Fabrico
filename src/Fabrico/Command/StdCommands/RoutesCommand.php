@@ -38,17 +38,11 @@ class RoutesCommand extends Command
             $params = $rule->getInformation();
 
             $method = '*';
-            $resource = '';
             $generator = '';
 
             if (isset($params['method'])) {
                 $method = $params['method'];
                 unset($params['method']);
-            }
-
-            if (isset($params['_resource'])) {
-                $resource = $params['_resource'];
-                unset($params['_resource']);
             }
 
             if (isset($params['_generator'])) {
