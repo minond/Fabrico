@@ -1,0 +1,12 @@
+#!/bin/bash
+
+selenium=selenium-server-standalone-2.37.0.jar
+dest=bin/
+
+# http://docs.seleniumhq.org/download/
+if [ ! -f $dest/$selenium ]; then
+    wget http://selenium.googlecode.com/files/$selenium -P $dest
+fi
+
+java -jar $dest/$selenium
+
