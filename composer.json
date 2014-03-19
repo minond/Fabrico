@@ -29,7 +29,8 @@
     },
 
     "bin": [
-        "bin/console"
+        "bin/console",
+        "bin/selenium"
     ],
 
     "suggest": {
