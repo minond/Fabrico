@@ -23,7 +23,8 @@
             "Fabrico": "src/"
         },
         "files": [
-            "scripts/env.php"
+            "scripts/env.php",
+            "scripts/app.php"
         ]
     },
 

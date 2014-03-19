@@ -1,7 +1,7 @@
 <?php
 
 // router for php built in server
-require 'clioutput.php';
+require 'cli.php';
 
 // routing info
 $uri = $_SERVER['REQUEST_URI'];
@@ -14,7 +14,7 @@ if (strpos($uri, '/public') === 0 || strpos($uri, '/app/assets') === 0) {
     CLI::stdout("%s $uri", [CLI::green('RESOURCE')]);
     return false;
 } else {
-    $res = require 'scripts/http.php';
+    $res = require __DIR__ . '/route.php';
     $ret = $res->getStatusCode();
     CLI::stdout("%s [%s] $uri", [CLI::green('PROCESSED'), $ret]);
 }

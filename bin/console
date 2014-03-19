@@ -4,9 +4,12 @@
 namespace Fabrico\Runtime\Setup\Cli;
 
 use Fabrico\Command\Command;
+use Fabrico\Runtime\Instance;
 use Symfony\Component\Console\Application;
 
-$app = require 'scripts/app.php';
+require 'vendor/autoload.php';
+
+$app = Instance::create();
 $conf = $app->getConfiguration();
 $console = new Application();
 

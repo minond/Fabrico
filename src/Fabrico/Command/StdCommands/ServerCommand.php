@@ -23,7 +23,7 @@ class ServerCommand extends Command
             'r',
             InputOption::VALUE_OPTIONAL,
             'Router script',
-            sprintf('%s/../scripts/router.php', __dir__)
+            sprintf('%s/../../../../scripts/server.php', __dir__)
         );
     }
 
